@@ -1,9 +1,7 @@
 name          kxk
 version       0.1.0
-description   kodis extension kit
-main          index.js
-scripts
-              test  echo "Error: no test specified" && exit 1
+description   kodi's extension kit
+main          js/main.js
 repository
               type  git
               url   git+https://github.com/monsterkodi/kxk.git
@@ -12,3 +10,5 @@ license       Unlicense
 bugs
               url  https://github.com/monsterkodi/kxk/issues
 homepage      https://github.com/monsterkodi/kxk#readme
+dependencies
+              opener  ^1.4.3
