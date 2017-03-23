@@ -4,10 +4,12 @@
 # 000  000    000 000   000  000   
 # 000   000  000   000  000   000  
 
-_      = require 'lodash'
-os     = require 'os'
-path   = require 'path'
-crypto = require 'crypto'
+_       = require 'lodash'
+os      = require 'os'
+fs      = require 'fs'
+path    = require 'path'
+process = require 'process'
+crypto  = require 'crypto'
 
 module.exports =
 
@@ -70,6 +72,20 @@ module.exports =
         v = Math.max(v, r1) if r1?
         v = Math.min(v, r2) if r2?
         v
+
+    absMax: (a,b) -> if Math.abs(a) >= Math.abs(b) then a else b
+    absMin: (a,b) -> if Math.abs(a)  < Math.abs(b) then a else b
+        
+    randInt: (r) -> Math.floor Math.random() * r
+        
+    shortCount: (v) ->
+        v = parseInt v
+        switch
+            when v > 999999 then "#{Math.floor v/1000000}M"
+            when v > 999    then "#{Math.floor v/1000}k"
+            else                 "#{v}"
+       
+    rad2deg: (r) -> 180 * r / Math.PI
             
     # 00000000    0000000   000000000  000   000
     # 000   000  000   000     000     000   000
@@ -127,6 +143,15 @@ module.exports =
         p = p.replace /\#/g, "%23"
         p = p.replace /\&/g, "%26"
         p = p.replace /\'/g, "%27"
+
+    splitFilePos: (file) -> # file.txt:22:33 --> ['file.txt', [33, 22]]
+        split = file.split ':'
+        line = parseInt split[1] if split.length > 1
+        clmn = parseInt split[2] if split.length > 2
+        p = [0, 0]
+        p[0] = clmn     if Number.isInteger clmn
+        p[1] = line - 1 if Number.isInteger line
+        [split[0], p]
             
     #  0000000   0000000   0000000
     # 000       000       000     

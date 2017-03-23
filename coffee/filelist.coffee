@@ -4,7 +4,9 @@
 # 000       000  000      000       000      000       000     000     
 # 000       000  0000000  00000000  0000000  000  0000000      000     
 
-fs = require 'fs'
+log  = require './log'
+path = require 'path'
+fs   = require 'fs'
 
 fileList = (paths, opt={ignoreHidden: true, logError: true}) ->
     files = []
@@ -28,7 +30,7 @@ fileList = (paths, opt={ignoreHidden: true, logError: true}) ->
                 files.push p
         catch err
             if opt.logError
-                log '[ERROR] tools.fileList.error:', err
+                log "[ERROR] kxk.fileList: #{err}"
     files
 
 module.exports = fileList
