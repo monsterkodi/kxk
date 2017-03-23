@@ -4,8 +4,8 @@
 #000        000   000       000
 #000         0000000   0000000 
 
-{clamp} = require './tools'
-log  = require './log'
+{clamp} = require './kxk'
+log     = require './log'
 
 class Pos
 
