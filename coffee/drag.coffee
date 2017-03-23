@@ -6,9 +6,8 @@
 
 _ = require 'lodash'
 
-{def} = require './tools'
+{def} = require './kxk'
 pos   = require './pos'
-log   = require './log'
 
 error = -> console.error "ERROR: " + ([].slice.call arguments, 0).join " "
     
