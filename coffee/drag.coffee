@@ -4,10 +4,8 @@
 # 000   000  000   000  000   000  000   000
 # 0000000    000   000  000   000   0000000 
 
-_ = require 'lodash'
-
-{def} = require './kxk'
-pos   = require './pos'
+pos = require './pos'
+_   = require 'lodash'
 
 error = -> console.error "ERROR: " + ([].slice.call arguments, 0).join " "
     
@@ -15,6 +13,7 @@ class Drag
 
     constructor: (cfg) ->
         
+        {def} = require './kxk'
         _.extend @, def cfg,
                 target  : null
                 handle  : null
@@ -27,11 +26,11 @@ class Drag
         if typeof @target is 'string'
             t = document.getElementById @target
             if not t?
-                error 'cant find drag target with id', @target
+                error "can't find drag target with id", @target
                 return
             @target = t
         if not @target?
-            error 'cant find drag target'
+            error "can't find drag target"
             return
 
         @dragging  = false

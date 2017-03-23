@@ -4,9 +4,6 @@
 #000        000   000       000
 #000         0000000   0000000 
 
-{clamp} = require './kxk'
-log     = require './log'
-
 class Pos
 
     constructor: (@x, @y) ->
@@ -100,6 +97,7 @@ class Pos
         @
 
     clamp: (lower, upper) ->
+        {clamp} = require './kxk'
         if lower? and upper?            
             @x = clamp(lower.x, upper.x, @x)
             @y = clamp(lower.y, upper.y, @y)

@@ -4,11 +4,12 @@
 # 000  000    000 000   000  000   
 # 000   000  000   000  000   000  
 
-_    = require 'lodash'
-path = require 'path'
+_      = require 'lodash'
+path   = require 'path'
+crypto = require 'crypto'
 
 module.exports =
-    
+
     str:      require './str'
     log:      require './log'
     pos:      require './pos'
@@ -21,7 +22,7 @@ module.exports =
     keyinfo:  require './keyinfo'
     history:  require './history'
     fileList: require './fileList'
-
+    
     # 0000000    000   0000000  000000000
     # 000   000  000  000          000   
     # 000   000  000  000          000   
@@ -186,7 +187,10 @@ module.exports =
 if not String.prototype.splice
     String.prototype.splice = (start, delCount, newSubStr='') ->
         @slice(0, start) + newSubStr + @slice(start + Math.abs(delCount))
+if not String.prototype.strip
     String.prototype.strip = String.prototype.trim
+if not String.prototype.hash
+    String.prototype.hash = -> crypto.createHash('md5').update(@.valueOf(), 'utf8').digest('hex')
 
 #  0000000   00000000   00000000    0000000   000   000
 # 000   000  000   000  000   000  000   000   000 000 
