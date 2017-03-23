@@ -11,6 +11,8 @@ module.exports =
     
     str:     require './str'
     log:     require './log'
+    pos:     require './pos'
+    drag:    require './drag'
     elem:    require './elem'
     store:   require './store'
     prefs:   require './prefs'
