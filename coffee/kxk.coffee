@@ -9,16 +9,18 @@ path = require 'path'
 
 module.exports =
     
-    str:     require './str'
-    log:     require './log'
-    pos:     require './pos'
-    drag:    require './drag'
-    elem:    require './elem'
-    store:   require './store'
-    prefs:   require './prefs'
-    about:   require './about'
-    keyinfo: require './keyinfo'
-    history: require './history'
+    str:      require './str'
+    log:      require './log'
+    pos:      require './pos'
+    drag:     require './drag'
+    elem:     require './elem'
+    post:     require './post'
+    store:    require './store'
+    prefs:    require './prefs'
+    about:    require './about'
+    keyinfo:  require './keyinfo'
+    history:  require './history'
+    fileList: require './fileList'
 
     # 0000000    000   0000000  000000000
     # 000   000  000  000          000   
@@ -116,6 +118,8 @@ module.exports =
         
     swapExt: (p, ext) -> path.join(path.dirname(p), path.basename(p, path.extname(p))) + ext
 
+    escapePath: (p) -> p.replace /([\`"])/g, '\\$1'
+
     encodePath: (p) ->
         p = encodeURI p
         p = p.replace /\#/g, "%23"
@@ -184,3 +188,12 @@ if not String.prototype.splice
         @slice(0, start) + newSubStr + @slice(start + Math.abs(delCount))
     String.prototype.strip = String.prototype.trim
 
+#  0000000   00000000   00000000    0000000   000   000
+# 000   000  000   000  000   000  000   000   000 000 
+# 000000000  0000000    0000000    000000000    00000  
+# 000   000  000   000  000   000  000   000     000   
+# 000   000  000   000  000   000  000   000     000   
+
+if not Array.prototype.reversed
+    Array.prototype.reversed = ->
+        _.clone(@).reverse()
