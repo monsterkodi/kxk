@@ -1,12 +1,22 @@
-# 00     00   0000000   000  000   000
-# 000   000  000   000  000  0000  000
-# 000000000  000000000  000  000 0 000
-# 000 0 000  000   000  000  000  0000
-# 000   000  000   000  000  000   000
+# 000   000  000   000  000   000  
+# 000  000    000 000   000  000   
+# 0000000      00000    0000000    
+# 000  000    000 000   000  000   
+# 000   000  000   000  000   000  
+
+_    = require 'lodash'
+path = require 'path'
 
 module.exports =
     
-    about: require './about'
+    str:     require './str'
+    log:     require './log'
+    elem:    require './elem'
+    store:   require './store'
+    prefs:   require './prefs'
+    about:   require './about'
+    keyinfo: require './keyinfo'
+    history: require './history'
 
     # 0000000    000   0000000  000000000
     # 000   000  000  000          000   
@@ -77,7 +87,7 @@ module.exports =
     fileExists: (file) ->
         try
             if fs.statSync(file).isFile()
-                fs.accessSync file, fs.R_OK #| fs.W_OK
+                fs.accessSync file, fs.R_OK
                 return true
         catch error
             return false
@@ -103,6 +113,12 @@ module.exports =
         r
         
     swapExt: (p, ext) -> path.join(path.dirname(p), path.basename(p, path.extname(p))) + ext
+
+    encodePath: (p) ->
+        p = encodeURI p
+        p = p.replace /\#/g, "%23"
+        p = p.replace /\&/g, "%26"
+        p = p.replace /\'/g, "%27"
             
     #  0000000   0000000   0000000
     # 000       000       000     
@@ -146,6 +162,14 @@ module.exports =
 
     sw: () -> document.body.clientWidth
     sh: () -> document.body.clientHeight
+
+    #  0000000   0000000  00000000   000  00000000   000000000  
+    # 000       000       000   000  000  000   000     000     
+    # 0000000   000       0000000    000  00000000      000     
+    #      000  000       000   000  000  000           000     
+    # 0000000    0000000  000   000  000  000           000     
+    
+    osascript: (script) -> ( "-e \"#{l.replace(/\"/g, "\\\"")}\"" for l in script.split("\n") ).join(" ")
 
 #  0000000  000000000  00000000   000  000   000   0000000 
 # 000          000     000   000  000  0000  000  000      

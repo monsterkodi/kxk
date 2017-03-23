@@ -1,7 +1,7 @@
 name          kxk
 version       0.1.2
 description   kodi's extension kit
-main          js/main.js
+main          js/kxk.js
 repository
               type  git
               url   git+https://github.com/monsterkodi/kxk.git
@@ -12,6 +12,7 @@ bugs
 homepage      https://github.com/monsterkodi/kxk#readme
 dependencies
               fs-extra        ^2.1.2
+              keycode         ^2.1.8
               lodash          ^4.17.4
               noon            ^1.0.14
               opener          ^1.4.3
