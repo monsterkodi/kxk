@@ -1,5 +1,5 @@
 name          kxk
-version       0.2.5
+version       0.2.6
 description   kodi's extension kit
 main          js/kxk.js
 repository
