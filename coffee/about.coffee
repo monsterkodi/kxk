@@ -5,7 +5,6 @@
 # 000   000  000   000  000   000  000   000     000     
 # 000   000  0000000     0000000    0000000      000     
 
-pkg      = require '../../package.json'
 electron = require 'electron'
 opener   = require 'opener'
 
@@ -15,9 +14,17 @@ ipc      = electron.ipcMain
 class About
     
     @win = null
+    @url = null
 
     @show: (opt) ->
-                
+        
+        About.url = opt?.url
+        if not About.url? and opt?.pkg?.repository?.url
+            url = opt.pkg.repository.url
+            url = url.slice 4 if url.startsWith "git+" 
+            url = url.slice 0, url.length-4 if url.endsWith ".git" 
+            About.url = url
+        
         win = new Browser
             backgroundColor: opt?.background ? '#222'
             preloadWindow:   true
@@ -35,7 +42,7 @@ class About
             width:           opt?.size ? 400
             height:          opt?.size ? 400
 
-        version = opt.version ? pkg.version
+        version = opt.version ? opt?.pkg?.version
         html = """
             <style type="text/css">
                 body {
@@ -76,7 +83,7 @@ class About
                 var electron = require('electron');
                 var ipc = electron.ipcRenderer;
                 var l = document.getElementById('version');
-                l.onclick   = function () { ipc.send('openRepoURL'); }
+                l.onclick   = function () { ipc.send('openURL'); }
                 var a = document.getElementById('about');
                 a.onclick   = function () { ipc.send('closeAbout'); }
                 a.onkeydown = function () { ipc.send('closeAbout'); }
@@ -99,10 +106,6 @@ class About
         About.win?.close()
         About.win = null
         
-    @openRepoURL: ->
-        url = pkg.repository.url
-        url = url.slice 4 if url.startsWith "git+" 
-        url = url.slice 0, url.length-4 if url.endsWith ".git" 
-        opener url 
+    @openURL: -> if About.url? then opener About.url 
 
 module.exports = About.show
