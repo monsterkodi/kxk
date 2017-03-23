@@ -5,6 +5,7 @@
 # 000   000  000   000  000   000  
 
 _      = require 'lodash'
+os     = require 'os'
 path   = require 'path'
 crypto = require 'crypto'
 
