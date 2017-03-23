@@ -92,8 +92,8 @@ class About
             </script>
         """
 
-        ipc.on 'openRepoURL', About.openRepoURL
-        ipc.on 'closeAbout',  About.closeAbout
+        ipc.on 'openURL',    About.openURL
+        ipc.on 'closeAbout', About.closeAbout
 
         win.loadURL "data:text/html;charset=utf-8," + encodeURI(html) 
         win.on 'ready-to-show', -> win.show()
@@ -101,7 +101,7 @@ class About
         win
 
     @closeAbout: -> 
-        ipc.removeAllListeners 'openRepoURL'
+        ipc.removeAllListeners 'openURL'
         ipc.removeAllListeners 'closeAbout'
         About.win?.close()
         About.win = null
