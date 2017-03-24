@@ -39,8 +39,8 @@ class About
             maximizable:     false
             webPreferences:
                 webSecurity: false
-            width:           opt?.size ? 400
-            height:          opt?.size ? 400
+            width:           opt?.size ? 300
+            height:          opt?.size ? 300
 
         version = opt.version ? opt?.pkg?.version
         html = """

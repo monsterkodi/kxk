@@ -1,6 +1,6 @@
 name          kxk
-version       0.2.6
-description   kodi's extension kit
+version       0.3.0
+description   kodi's tool kit
 main          js/kxk.js
 repository
               type  git
