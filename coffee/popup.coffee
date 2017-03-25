@@ -4,8 +4,8 @@
 # 000        000   000  000        000   000  000      
 # 000         0000000   000         0000000   000      
 
-keyinfo = require './keyinfo'
-elem    = require './elem'
+keyinfo  = require './keyinfo'
+elem     = require './elem'
 
 class Popup
     

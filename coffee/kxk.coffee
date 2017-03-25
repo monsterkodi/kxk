@@ -12,19 +12,6 @@ process = require 'process'
 crypto  = require 'crypto'
 
 module.exports =
-
-    str:      require './str'
-    log:      require './log'
-    pos:      require './pos'
-    drag:     require './drag'
-    elem:     require './elem'
-    post:     require './post'
-    store:    require './store'
-    prefs:    require './prefs'
-    about:    require './about'
-    keyinfo:  require './keyinfo'
-    history:  require './history'
-    fileList: require './fileList'
     
     # 0000000    000   0000000  000000000
     # 000   000  000  000          000   
@@ -227,3 +214,18 @@ if not String.prototype.hash
 if not Array.prototype.reversed
     Array.prototype.reversed = ->
         _.clone(@).reverse()
+
+module.exports.post        = require './post'
+module.exports.str         = require './str'
+module.exports.log         = require './log'
+module.exports.pos         = require './pos'
+module.exports.drag        = require './drag'
+module.exports.elem        = require './elem'
+module.exports.store       = require './store'
+module.exports.prefs       = require './prefs'
+module.exports.about       = require './about'
+module.exports.keyinfo     = require './keyinfo'
+module.exports.history     = require './history'
+module.exports.fileList    = require './fileList'
+module.exports.popup       = require './popup'
+module.exports.popupWindow = require './popupWindow'

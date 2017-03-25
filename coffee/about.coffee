@@ -15,7 +15,7 @@ class About
     
     @win = null
     @url = null
-
+    
     @show: (opt) ->
         
         About.url = opt?.url

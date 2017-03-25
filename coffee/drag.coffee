@@ -4,8 +4,9 @@
 # 000   000  000   000  000   000  000   000
 # 0000000    000   000  000   000   0000000 
 
-pos = require './pos'
-_   = require 'lodash'
+{def} = require './kxk'
+pos   = require './pos'
+_     = require 'lodash'
 
 error = -> console.error "ERROR: " + ([].slice.call arguments, 0).join " "
     
@@ -13,7 +14,6 @@ class Drag
 
     constructor: (cfg) ->
         
-        {def} = require './kxk'
         _.extend @, def cfg,
                 target  : null
                 handle  : null
