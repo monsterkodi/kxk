@@ -25,13 +25,12 @@ class Store
         @timeout = opt?.timeout ? 1000
         @changes = []
         
-        try
-            @data = noon.load @file
-            @watcher = chokidar.watch @file
-        catch err
-            @data = {}
-
-        @watcher?.on 'change', @onFileChange
+        fs.remove @file + ".lock" if opt?
+        
+        @loadData()
+        
+        @watcher = chokidar.watch @file
+        @watcher.on 'change', @onFileChange
         
         @data = _.defaults @data, opt.defaults if opt?.defaults?
 
@@ -90,6 +89,12 @@ class Store
         @data = noon.load @file
         for c in @changes
             Store.setKeypathValue @data, c.keypath, c.value
+    
+    loadData: ->
+        try
+            @data = noon.load @file
+        catch err
+            @data = {}
         
     #  0000000   0000000   000   000  00000000
     # 000       000   000  000   000  000     
@@ -106,7 +111,7 @@ class Store
             return
         fs.ensureFileSync lockFile
         @timer = null
-        @data = noon.load @file
+        @loadData()
         for c in @changes
             Store.setKeypathValue @data, c.keypath, c.value
         @changes = []

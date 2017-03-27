@@ -5,7 +5,11 @@
 #0000000   0000000    0000000 
 
 str  = require './str'
+post = require './post'
 
-log = -> console.log (str(s) for s in [].slice.call arguments, 0).join " "
+log = -> 
+    s = (str(s) for s in [].slice.call arguments, 0).join " "
+    console.log s
+    post.emit 'log', s
 
 module.exports = log
