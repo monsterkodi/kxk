@@ -4,6 +4,7 @@
 # 000        000   000  000       000            000
 # 000        000   000  00000000  000       0000000 
 
+log      = require './log'
 Store    = require './store' 
 electron = require 'electron'
 
@@ -19,6 +20,6 @@ class Prefs
     @get:  (key, value) -> @store.get key, value
     @set:  (key, value) -> @store.set key, value
     @del:  (key, value) -> @store.del key
-    @save: (cb)         -> @store.save cb
+    @save:              -> @store.save()
         
 module.exports = Prefs

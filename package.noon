@@ -1,5 +1,5 @@
 name          kxk
-version       0.3.1
+version       0.4.0
 description   kodi's tool kit
 main          js/kxk.js
 repository
@@ -11,6 +11,7 @@ bugs
               url  https://github.com/monsterkodi/kxk/issues
 homepage      https://github.com/monsterkodi/kxk#readme
 dependencies
+              chokidar        ^1.6.1
               fs-extra        ^2.1.2
               keycode         ^2.1.8
               lodash          ^4.17.4

@@ -3,17 +3,22 @@
 # 000000000  000  0000000      000     000   000  0000000      00000  
 # 000   000  000       000     000     000   000  000   000     000   
 # 000   000  000  0000000      000      0000000   000   000     000   
-
-{last} = require './main'
-_      = require 'lodash'
+{
+last,
+def} = require './kxk'
+_    = require 'lodash'
 
 class History
     
-    constructor: (@list=[]) ->
+    constructor: (opt) ->
+        @opt  = def opt, list: [], maxLength: 100
+        @list = opt.list
         
     add: (i) ->
         _.pull @list, i
         @list.push i
+        if @list.length > @opt.maxLength
+            @list.shift()
         
     previous: ->
         if @list.length > 1 then @list[@list.length-2]
