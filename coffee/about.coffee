@@ -101,6 +101,8 @@ class About
         win
 
     @closeAbout: -> 
+        electron = require 'electron'
+        ipc      = electron.ipcMain
         ipc.removeAllListeners 'openURL'
         ipc.removeAllListeners 'closeAbout'
         About.win?.close()
