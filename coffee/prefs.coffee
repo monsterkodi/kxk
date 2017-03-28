@@ -6,13 +6,13 @@
 
 log      = require './log'
 Store    = require './store' 
-electron = require 'electron'
 
 class Prefs
     
     @store = null
     
     @init: (defs={}) -> 
+        electron = require 'electron'
         app = electron.app ? electron.remote.app
         file = "#{app.getPath('userData')}/prefs.noon"
         @store = new Store file:file, defaults:defs

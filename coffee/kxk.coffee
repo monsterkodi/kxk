@@ -98,7 +98,7 @@ module.exports =
             if fs.statSync(file).isFile()
                 fs.accessSync file, fs.R_OK
                 return true
-        catch error
+        catch 
             return false
 
     dirExists: (dir) ->

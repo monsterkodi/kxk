@@ -22,6 +22,7 @@ class Scheme
     
     @set: (scheme) ->
         scheme = path.basename scheme, '.css'
+        prefs.set 'scheme', scheme
         link =$ 'style-link' 
         newlink = elem 'link', 
             href: "css/#{scheme}.css"
@@ -29,7 +30,6 @@ class Scheme
             type: 'text/css'
             id:   'style-link'
         link.parentNode.replaceChild newlink, link
-        prefs.set 'scheme', scheme
         post.emit 'schemeChanged', scheme
         
 module.exports = Scheme

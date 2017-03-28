@@ -8,8 +8,6 @@ keyinfo,
 elem } = require './kxk'
 _      = require 'lodash'
 
-electron = require 'electron'
-
 class PopupWindow
     
     @win   = null
@@ -23,6 +21,9 @@ class PopupWindow
     # 0000000   000   000   0000000   00     00  
     
     @show: (opt) ->
+        
+        electron = require 'electron'
+        
         PopupWindow.close()
         PopupWindow.opt = opt        
         popupOpt = 
@@ -68,7 +69,6 @@ class PopupWindow
         win.loadURL "data:text/html;charset=utf-8," + encodeURI html
 
         win.on 'blur', PopupWindow.close
-        # win.on 'close', -> PopupWindow.win = null; PopupWindow.close()
         win.on 'ready-to-show', -> win.show()
             
         PopupWindow.win = win
@@ -83,7 +83,7 @@ class PopupWindow
                 break
         
     @close: -> 
-        
+        electron = require 'electron'
         electron.ipcRenderer.removeListener 'popupItem',  PopupWindow.onPopupItem
         electron.ipcRenderer.removeListener 'popupClose', PopupWindow.close
         
@@ -100,7 +100,7 @@ class PopupWindow
         @items = elem class: 'popupWindow', tabindex: 1
         @targetWinID = opt.winID
         for item in opt.items
-            # continue if item.hide
+            continue if item.hide
             div = elem class: 'popupItem', text: item.text
             div.item = item
             div.addEventListener 'click', @onClick
@@ -122,6 +122,7 @@ class PopupWindow
                           @items.getBoundingClientRect().height
         
     close: =>
+        electron = require 'electron'
         @items?.removeEventListener 'keydown',   @onKeyDown
         @items?.removeEventListener 'focusout',  @onFocusOut
         @items?.removeEventListener 'mouseover', @onHover
@@ -129,7 +130,6 @@ class PopupWindow
         delete @items
         targetWin = electron.remote.BrowserWindow.fromId @targetWinID
         targetWin.webContents.send 'popupClose'
-        # @getWin()?.close()
 
     getWin: -> require('electron').remote.getCurrentWindow()
 
@@ -140,12 +140,14 @@ class PopupWindow
         @selected.classList.add 'selected'
         
     activate: (item) ->
+        electron = require 'electron'
         targetWin = electron.remote.BrowserWindow.fromId @targetWinID
         targetWin.webContents.send 'popupItem', item.item.ipc ? item.item.text
         @close()
      
     onHover: (event) => @select event.target   
     onKeyDown: (event) =>
+        electron = require 'electron'
         {mod, key, combo} = keyinfo.forEvent event
         switch combo
             when 'end', 'page down' then return @select @items.lastChild

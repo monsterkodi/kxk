@@ -27,7 +27,7 @@ class Store
         
         fs.remove @file + ".lock" if opt?
         
-        @loadData()
+        @data = @loadData()
         
         @watcher = chokidar.watch @file
         @watcher.on 'change', @onFileChange
@@ -86,15 +86,16 @@ class Store
         @data = {}
     
     onFileChange: => 
-        @data = noon.load @file
+        data = loadData()
         for c in @changes
-            Store.setKeypathValue @data, c.keypath, c.value
+            Store.setKeypathValue data, c.keypath, c.value
+        @data = data
     
     loadData: ->
         try
-            @data = noon.load @file
+            noon.load @file
         catch err
-            @data = {}
+            {}
         
     #  0000000   0000000   000   000  00000000
     # 000       000   000  000   000  000     
@@ -111,9 +112,10 @@ class Store
             return
         fs.ensureFileSync lockFile
         @timer = null
-        @loadData()
+        data = @loadData()
         for c in @changes
-            Store.setKeypathValue @data, c.keypath, c.value
+            Store.setKeypathValue data, c.keypath, c.value
+        @data = data
         @changes = []
         str = noon.stringify @data, {indent: 2, maxalign: 8}
         @watcher.unwatch @file

@@ -5,11 +5,7 @@
 # 000   000  000   000  000   000  000   000     000     
 # 000   000  0000000     0000000    0000000      000     
 
-electron = require 'electron'
-opener   = require 'opener'
-
-Browser  = electron.BrowserWindow
-ipc      = electron.ipcMain
+opener = require 'opener'
 
 class About
     
@@ -17,7 +13,11 @@ class About
     @url = null
     
     @show: (opt) ->
-        
+
+        electron = require 'electron'
+        Browser  = electron.BrowserWindow
+        ipc      = electron.ipcMain
+                
         About.url = opt?.url
         if not About.url? and opt?.pkg?.repository?.url
             url = opt.pkg.repository.url
