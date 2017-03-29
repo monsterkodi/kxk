@@ -86,7 +86,7 @@ class Store
         @data = {}
     
     onFileChange: => 
-        data = loadData()
+        data = @loadData()
         for c in @changes
             Store.setKeypathValue data, c.keypath, c.value
         @data = data
