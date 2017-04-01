@@ -139,17 +139,6 @@ module.exports =
         p[0] = clmn     if Number.isInteger clmn
         p[1] = line - 1 if Number.isInteger line
         [split[0], p]
-
-    packagePath: (p) ->
-        while p.length and p not in ['.', '/']            
-            if fs.existsSync path.join p, 'package.noon'
-                return resolve p
-            if fs.existsSync path.join p, 'package.json'
-                return resolve p
-            if fs.existsSync path.join p, '.git'
-                return resolve p
-            p = path.dirname p
-        null
             
     #  0000000   0000000   0000000
     # 000       000       000     
@@ -238,6 +227,7 @@ module.exports.about       = require './about'
 module.exports.keyinfo     = require './keyinfo'
 module.exports.history     = require './history'
 module.exports.fileList    = require './fileList'
+module.exports.packagePath = require './packagePath'
 module.exports.popup       = require './popup'
 module.exports.popupWindow = require './popupWindow'
 module.exports.scheme      = require './scheme'
