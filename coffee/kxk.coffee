@@ -5,9 +5,6 @@
 # 000   000  000   000  000   000  
 
 _       = require 'lodash'
-os      = require 'os'
-fs      = require 'fs'
-path    = require 'path'
 process = require 'process'
 crypto  = require 'crypto'
 
@@ -155,8 +152,7 @@ module.exports.log         = require './log'
 module.exports.pos         = require './pos'
 module.exports.drag        = require './drag'
 module.exports.elem        = require './elem'
-kxkPath = require './path'
-module.exports[k] = kxkPath[k] for k in Objects.keys kxkPath
+module.exports[k]          = require('./path')[k] for k in Object.keys require './path' 
 module.exports.store       = require './store'
 module.exports.prefs       = require './prefs'
 module.exports.fileList    = require './fileList'

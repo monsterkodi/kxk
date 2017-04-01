@@ -5,13 +5,16 @@
 # 000        000   000     000     000   000
 
 path = require 'path'
+os   = require 'os'
+fs   = require 'fs'
 
-unresolve = (p) -> p.replace os.homedir(), "~"    
 fileName  = (p) -> path.basename p, path.extname p
 extName   = (p) -> path.extname(p).slice 1
 splitExt  = (p) -> path.join path.dirname(p), fileName p
-swapExt   = (p, ext) -> splitExt(p) + ext    
-resolve   =   (p) -> 
+swapExt   = (p, ext) -> splitExt(p) + ext
+
+unresolve = (p) -> p.replace os.homedir(), "~"    
+resolve   = (p) -> 
     i = p.indexOf '$'
     while i >= 0
         for k,v of process.env
@@ -67,11 +70,11 @@ splitFilePos = (file) -> # file.txt:22:33 --> ['file.txt', [33, 22]]
     [split[0], p]
 
 module.exports = 
-    unresolve   : unresolve
     fileName    : fileName
     extName     : extName
     splitExt    : splitExt
     swapExt     : swapExt
+    unresolve   : unresolve
     resolve     : resolve
     fileExists  : fileExists
     dirExists   : dirExists
