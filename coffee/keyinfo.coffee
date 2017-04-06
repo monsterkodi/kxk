@@ -13,7 +13,7 @@ class Keyinfo
     
     @isModifier: (keyname) -> keyname in @modifierNames
 
-    @modifiersForEvent: (event) => 
+    @modifiersForEvent: (event) -> 
         mods = []
         mods.push 'command' if event.metaKey
         mods.push 'alt'     if event.altKey
@@ -32,7 +32,7 @@ class Keyinfo
             return @join @modifiersForEvent(event), key
         return ""
 
-    @keynameForEvent: (event) => 
+    @keynameForEvent: (event) -> 
         name = keycode event
         return "" if name in ["left command", "right command", "ctrl", "alt", "shift"]
         name

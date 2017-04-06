@@ -1,6 +1,6 @@
 coffee
 test
-img
+*.pxm
 .gitignore
 Icon?
 package.noon
