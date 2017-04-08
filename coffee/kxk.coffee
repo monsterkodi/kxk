@@ -114,6 +114,10 @@ module.exports =
     sw: () -> document.body.clientWidth
     sh: () -> document.body.clientHeight
 
+    stopEvent: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+    
     #  0000000   0000000  00000000   000  00000000   000000000  
     # 000       000       000   000  000  000   000     000     
     # 0000000   000       0000000    000  00000000      000     
