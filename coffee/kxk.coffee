@@ -18,9 +18,9 @@ module.exports =
 
     def: (c,d) ->
         if c?
-            _.defaults(_.clone(c), d)
+            _.defaults _.clone(c), d
         else if d?
-            _.clone(d)
+            _.clone d
         else
             {}
 
@@ -83,13 +83,15 @@ module.exports =
             if r?.selectorText == selector
                 document.styleSheets[0].deleteRule i
         document.styleSheets[0].insertRule "#{selector} { #{rule} }", document.styleSheets[0].cssRules.length
-    
+        return
+        
     setStyle: (selector, key, value, ssid=0) ->
         for rule in document.styleSheets[ssid].cssRules
             if rule.selectorText == selector
                 rule.style[key] = value
                 return
         document.styleSheets[ssid].insertRule "#{selector} { #{key}: #{value} }", document.styleSheets[ssid].cssRules.length
+        return
 
     getStyle: (selector, key, value, ssid=0) ->
         for rule in document.styleSheets[ssid].cssRules
@@ -109,14 +111,16 @@ module.exports =
         else
             document.getElementById idOrClass
 
-    childIndex: (e) -> Array.prototype.indexOf.call(e.parentNode.childNodes, e)
+    childIndex: (e) -> Array.prototype.indexOf.call e.parentNode.childNodes, e 
 
     sw: () -> document.body.clientWidth
     sh: () -> document.body.clientHeight
 
     stopEvent: (event) ->
-        event.preventDefault()
-        event.stopPropagation()
+        if event?
+            event.preventDefault?()
+            event.stopPropagation?()
+        event
     
     #  0000000   0000000  00000000   000  00000000   000000000  
     # 000       000       000   000  000  000   000     000     
@@ -147,12 +151,12 @@ if not String.prototype.hash
 # 000   000  000   000  000   000  000   000     000   
 
 if not Array.prototype.reversed
-    Array.prototype.reversed = ->
-        _.clone(@).reverse()
+    Array.prototype.reversed = -> _.clone(@).reverse()
 
 module.exports.post        = require './post'
 module.exports.str         = require './str'
 module.exports.log         = require './log'
+module.exports.error       = require './error'
 module.exports.pos         = require './pos'
 module.exports.drag        = require './drag'
 module.exports.elem        = require './elem'
