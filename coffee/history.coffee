@@ -4,7 +4,6 @@
 # 000   000  000       000     000     000   000  000   000     000   
 # 000   000  000  0000000      000      0000000   000   000     000   
 {
-last,
 def} = require './kxk'
 _    = require 'lodash'
 
@@ -24,6 +23,6 @@ class History
         if @list.length > 1 then @list[@list.length-2]
         else null
     
-    current: -> last @list
+    current: -> _.last @list
             
 module.exports = History

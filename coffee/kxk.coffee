@@ -24,38 +24,15 @@ module.exports =
         else
             {}
 
-    #  0000000   00000000   00000000    0000000   000   000
-    # 000   000  000   000  000   000  000   000   000 000 
-    # 000000000  0000000    0000000    000000000    00000  
-    # 000   000  000   000  000   000  000   000     000   
-    # 000   000  000   000  000   000  000   000     000   
-
-    last:  (a) -> 
-        if not _.isArray a
-            return a
-        if a?.length
-            return a[a.length-1]
-        null
-        
-    first: (a) ->
-        if not _.isArray a
-            return a
-        if a?.length
-            return a[0]
-        null
-
     # 000   000   0000000   000      000   000  00000000
     # 000   000  000   000  000      000   000  000     
     #  000 000   000000000  000      000   000  0000000 
     #    000     000   000  000      000   000  000     
     #     0      000   000  0000000   0000000   00000000
 
-    clamp: (r1, r2, v) ->
-        if r1 > r2
-            [r1,r2] = [r2,r1]
-        v = Math.max(v, r1) if r1?
-        v = Math.min(v, r2) if r2?
-        v
+    clamp: (r1, r2, v) -> _.clamp v, r1, r2
+    last:  (a) -> _.last a
+    first: (a) -> _.first a
 
     absMax: (a,b) -> if Math.abs(a) >= Math.abs(b) then a else b
     absMin: (a,b) -> if Math.abs(a)  < Math.abs(b) then a else b

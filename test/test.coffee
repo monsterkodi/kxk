@@ -5,7 +5,6 @@
 #    000     00000000  0000000      000     
 {
 fileList,
-last,
 log}   = require '../coffee/kxk'
 _      = require 'lodash'
 assert = require 'assert'
