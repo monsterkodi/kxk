@@ -83,10 +83,13 @@ module.exports =
     # 0000000     0000000   000   000
         
     $: (idOrClass, e=document) -> 
-        if idOrClass[0] in ['.', "#"] or e != document
-            e.querySelector idOrClass
+        if _.isString idOrClass
+            if idOrClass[0] in ['.', "#"] or e != document
+                e.querySelector idOrClass
+            else
+                document.getElementById idOrClass
         else
-            document.getElementById idOrClass
+            idOrClass
 
     childIndex: (e) -> Array.prototype.indexOf.call e.parentNode.childNodes, e 
 
