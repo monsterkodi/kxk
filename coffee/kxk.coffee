@@ -75,7 +75,7 @@ module.exports =
     getStyle: (selector, key, value, ssid=0) ->
         for rule in document.styleSheets[ssid].cssRules
             if rule.selectorText == selector
-                return rule.style[key]
+                return rule.style[key] if rule.style[key]?.length
         return value
                 
     # 0000000     0000000   00     00
