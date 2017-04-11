@@ -4,13 +4,20 @@
 # 000  000    000 000   000  000   
 # 000   000  000   000  000   000  
 
-_       = require 'lodash'
 process = require 'process'
 crypto  = require 'crypto'
+_       = require 'lodash'
+path    = require 'path'
+fs      = require 'fs'
+os      = require 'os'
 
 module.exports =
     
     _:_
+    os:os
+    fs:fs
+    path:path
+    process:process
     
     # 0000000    000   0000000  000000000
     # 000   000  000  000          000   
