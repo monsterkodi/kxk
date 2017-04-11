@@ -13,8 +13,8 @@ elem = (typ, opt) ->
         opt = typ 
         typ = opt.typ
         
-    opt = {}    if not opt?
-    typ = 'div' if not typ?
+    opt ?= {}   
+    typ ?= 'div'
 
     e = document.createElement typ
     
