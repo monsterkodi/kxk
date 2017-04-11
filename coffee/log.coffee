@@ -6,6 +6,7 @@
 
 {str, post} = require './kxk'
 
+os      = require 'os'
 sutil   = require 'stack-utils'
 process = require 'process'
 sorcery = require 'sorcery'
@@ -21,7 +22,7 @@ log = ->
     try # something fancy. might be too slow though ...
         f = stack.capture(2)[1]
         l = sorcery.loadSync(f.getFileName()).trace(f.getLineNumber(), f.getFunctionName())
-        p = l.source ? f.getFileName()
+        p = (l.source ? f.getFileName()).replace os.homedir(), "~"
         n = l.line ? f.getLineNumber()
         m = f.getFunctionName()
         s = "#{p}:#{n} ⦿ #{m} ▸ #{s}"
