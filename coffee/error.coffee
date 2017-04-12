@@ -4,13 +4,30 @@
 # 000       000   000  000   000  000   000  000   000  
 # 00000000  000   000  000   000   0000000   000   000  
 
-str  = require './str'
-post = require './post'
+{str, post} = require './kxk'
 
-error = -> 
+os      = require 'os'
+sutil   = require 'stack-utils'
+process = require 'process'
+sorcery = require 'sorcery'
+
+stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
+
+error = ->
     s = '[ERROR] ' + (str(s) for s in [].slice.call arguments, 0).join " "
-    console.error s
+        
     post.emit 'error', s
-    post.emit 'log', s
+    console.error s
+    
+    try # something fancy. might be too slow though ...
+        f = stack.capture(2)[1]
+        l = sorcery.loadSync(f.getFileName()).trace(f.getLineNumber(), f.getFunctionName())
+        p = (l.source ? f.getFileName()).replace os.homedir(), "~"
+        n = l.line ? f.getLineNumber()
+        m = f.getFunctionName()
+        s = "#{p}:#{n} ⦿ #{m} ▸ #{s}"
+        post.emit 'slog', s 
+    catch err
+        post.emit 'slog', " ▸ #{s} #{err}"
 
 module.exports = error
