@@ -13,7 +13,7 @@ extName   = (p) -> path.extname(p).slice 1
 splitExt  = (p) -> path.join path.dirname(p), fileName p
 swapExt   = (p, ext) -> splitExt(p) + ext
 
-unresolve = (p) -> p.replace os.homedir(), "~"    
+unresolve = (p) -> p.replace os.homedir(), "~"
 resolve   = (p) -> 
     i = p.indexOf '$'
     while i >= 0
@@ -25,6 +25,7 @@ resolve   = (p) ->
     path.normalize path.resolve p.replace /^\~/, process.env.HOME
     
 fileExists = (file) ->
+    file = resolve file
     try
         if fs.statSync(file).isFile()
             fs.accessSync file, fs.R_OK
@@ -33,6 +34,7 @@ fileExists = (file) ->
         return false
 
 dirExists = (dir) ->
+    dir = resolve dir
     try
         if fs.statSync(dir).isDirectory()
             fs.accessSync dir, fs.R_OK
@@ -41,6 +43,7 @@ dirExists = (dir) ->
         return false
                                                       
 relative = (absolute, to) ->
+    absolute = resolve absolute
     return absolute if not absolute?.startsWith '/'
     d = path.normalize path.resolve to.replace /\~/, process.env.HOME
     r = path.relative d, absolute
