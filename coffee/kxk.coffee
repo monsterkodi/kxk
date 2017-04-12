@@ -7,8 +7,9 @@
 process = require 'process'
 crypto  = require 'crypto'
 _       = require 'lodash'
+noon    = require 'noon'
 path    = require 'path'
-fs      = require 'fs'
+fs      = require 'fs-extra'
 os      = require 'os'
 
 module.exports =
@@ -17,6 +18,7 @@ module.exports =
     os:os
     fs:fs
     path:path
+    noon:noon
     process:process
     
     # 0000000    000   0000000  000000000
