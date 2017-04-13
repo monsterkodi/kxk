@@ -4,31 +4,34 @@
 #000      000   000  000   000
 #0000000   0000000    0000000 
 
-{str, post} = require './kxk'
-
-os      = require 'os'
+{str, post, os, process
+}       = require './kxk'
 sutil   = require 'stack-utils'
-process = require 'process'
 sorcery = require 'sorcery'
+stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
-stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
-
+slog = (s) ->
+    try # something fancy. might be too slow though ...
+        f = stack.capture(3)[1]
+        if magic = sorcery.loadSync(f.getFileName())
+            info = magic.trace(f.getLineNumber(), f.getFunctionName())
+        else
+            info = source: f.getFileName(), line: f.getLineNumber()
+        p = info.source.replace os.homedir(), "~"
+        m = f.getFunctionName()
+        s = "#{p}:#{info.line} ⦿ #{m} ▸ #{s}"
+        post.emit 'slog', s 
+    catch err
+        post.emit 'slog', " ▸ #{s}"
+        
 log = ->
     s = (str(s) for s in [].slice.call arguments, 0).join " " 
     
     post.emit 'log', s
     console.log s
+    slog s
     
-    try # something fancy. might be too slow though ...
-        f = stack.capture(2)[1]
-        l = sorcery.loadSync(f.getFileName()).trace(f.getLineNumber(), f.getFunctionName())
-        p = (l.source ? f.getFileName()).replace os.homedir(), "~"
-        n = l.line ? f.getLineNumber()
-        m = f.getFunctionName()
-        s = "#{p}:#{n} ⦿ #{m} ▸ #{s}"
-        post.emit 'slog', s 
-    catch err
-        post.emit 'slog', " ▸ #{s} #{err}"
+log.slog = slog
 
 module.exports = log
 
