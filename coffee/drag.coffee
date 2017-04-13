@@ -3,12 +3,10 @@
 # 000   000  0000000    000000000  000  0000
 # 000   000  000   000  000   000  000   000
 # 0000000    000   000  000   000   0000000 
-{
-def,
-error
+
+{ def, error, _
 }   = require './kxk'
 pos = require './pos'
-_   = require 'lodash'
 
 class Drag
 
@@ -51,6 +49,7 @@ class Drag
 
         document.addEventListener 'mousemove', @dragMove
         document.addEventListener 'mouseup',   @dragUp
+        @
 
     dragMove: (event) =>
 
@@ -64,6 +63,7 @@ class Drag
             @onMove this, event
 
         @lastPos = @pos
+        @
                 
     dragUp: (event) => @dragStop event
 
@@ -76,12 +76,14 @@ class Drag
         delete @startPos
         @onStop this, event if @onStop? and event?
         @dragging = false
+        @
 
     activate: =>
         
         return if @listening
         @listening = true
         @handle.addEventListener 'mousedown', @dragStart
+        @
 
     deactivate: =>
 
@@ -89,5 +91,6 @@ class Drag
         @handle.removeEventListener 'mousedown', @dragStart
         @listening = false
         @dragStop() if @dragging
+        @
 
 module.exports = Drag

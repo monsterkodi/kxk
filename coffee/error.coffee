@@ -4,11 +4,9 @@
 # 000       000   000  000   000  000   000  000   000  
 # 00000000  000   000  000   000   0000000   000   000  
 
-{str, post} = require './kxk'
+{str, post, os, process} = require './kxk'
 
-os      = require 'os'
 sutil   = require 'stack-utils'
-process = require 'process'
 sorcery = require 'sorcery'
 
 stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
