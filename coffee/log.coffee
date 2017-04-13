@@ -11,8 +11,9 @@ sorcery = require 'sorcery'
 stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
 slog = (s) ->
-    try # something fancy. might be too slow though ...
-        f = stack.capture(3)[1]
+    
+    try # fancy log with source-mapped files and line numbers
+        f = stack.capture()[2]
         if magic = sorcery.loadSync(f.getFileName())
             info = magic.trace(f.getLineNumber(), f.getFunctionName())
         else
@@ -23,14 +24,15 @@ slog = (s) ->
         post.emit 'slog', s 
     catch err
         post.emit 'slog', " ▸ #{s}"
-        
+
 log = ->
+    
     s = (str(s) for s in [].slice.call arguments, 0).join " " 
     
     post.emit 'log', s
     console.log s
     slog s
-    
+
 log.slog = slog
 
 module.exports = log
