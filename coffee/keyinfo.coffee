@@ -32,7 +32,7 @@ class Keyinfo
                     
     @comboForEvent: (event) =>
         
-        join: -> 
+        join = -> 
             args = [].slice.call arguments, 0
             args = args.filter (e) -> e.length
             args.join '+'
@@ -49,7 +49,7 @@ class Keyinfo
 
     @characterForEvent: (event) ->
         ansi = ansiKey event 
-        return null if not ansi? or ansi.length != 1
+        return null if not ansi? or ansi.length != 1 or @modifiersForEvent(event) not in ["", "shift"]
         ansi
         
     @short: (combo) ->
