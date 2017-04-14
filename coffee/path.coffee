@@ -22,7 +22,7 @@ resolve   = (p) ->
                 p = p.slice(0, i) + v + p.slice(i+k.length+1)
                 i = p.indexOf '$'
                 break
-    path.normalize path.resolve p.replace /^\~/, process.env.HOME
+    path.normalize path.resolve p.replace /^\~/, os.homedir()
     
 fileExists = (file) ->
     file = resolve file

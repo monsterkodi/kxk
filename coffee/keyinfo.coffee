@@ -5,6 +5,7 @@
 # 000   000  00000000     000     000   000  000   000  000   000  00000000
 
 keycode = require 'keycode'
+ansiKey = require 'ansi-keycode'
 
 class Keyinfo
     
@@ -37,10 +38,16 @@ class Keyinfo
         return "" if name in ["left command", "right command", "ctrl", "alt", "shift"]
         name
 
+    @characterForEvent: (event) ->
+        ansi = ansiKey event 
+        return null if not ansi? or ansi.length != 1
+        ansi
+
     @forEvent: (event) =>
         mod:   @modifiersForEvent event
-        key:   @keynameForEvent event
-        combo: @comboForEvent event
+        key:   @keynameForEvent   event
+        combo: @comboForEvent     event
+        char:  @characterForEvent event
         
     @short: (combo) ->
         for i in [0...@modifierNames.length]
