@@ -11,7 +11,7 @@ fs   = require 'fs'
 fileName  = (p) -> path.basename p, path.extname p
 extName   = (p) -> path.extname(p).slice 1
 splitExt  = (p) -> path.join path.dirname(p), fileName p
-swapExt   = (p, ext) -> splitExt(p) + ext
+swapExt   = (p, ext) -> splitExt(p) + (ext.startsWith('.') and ext or ".#{ext}")
 
 unresolve = (p) -> p.replace os.homedir(), "~"
 resolve   = (p) -> 

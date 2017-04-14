@@ -3,35 +3,31 @@
 # 0000000      000     000   000  0000000    0000000   
 #      000     000     000   000  000   000  000       
 # 0000000      000      0000000   000   000  00000000  
-{
-fileExists
+
+{ fileExists, setKeypath, getKeypath, noon, post, path, fs, log, _
 }        = require './kxk'
-log      = require './log'
-_        = require 'lodash'
-fs       = require 'fs-extra'
-noon     = require 'noon'
-path     = require 'path'
 chokidar = require 'chokidar'
 atomic   = require 'write-file-atomic'
+electron = require 'electron'
 
 class Store
     
     constructor: (opt) ->
+
+        @app  = electron.app
+        @name = opt?.name
+        @sep  = opt?.separator ? ':'
         
-        @timer   = null
-        @watcher = null
-        @file    = opt?.file
-        @sep     = opt?.separator ? ':'
-        @timeout = opt?.timeout ? 1000
-        @changes = []
-        
-        fs.remove @file + ".lock" if opt?
-        
+        if @app
+            @timer   = null
+            @watcher = null
+            @file    = opt?.file ? (@app? and "#{app.getPath('userData')}/#{@name}.noon")
+            @timeout = opt?.timeout ? 1000
+            @changes = []
+            @watcher = chokidar.watch @file
+            @watcher.on 'change', @onFileChange
+                
         @data = @loadData()
-        
-        @watcher = chokidar.watch @file
-        @watcher.on 'change', @onFileChange
-        
         @data = _.defaults @data, opt.defaults if opt?.defaults?
 
     #  0000000   00000000  000000000
@@ -43,12 +39,7 @@ class Store
     get: (key, value) ->
         return value if not key?.split?
         keypath = key.split @sep
-        object = @data
-        while keypath.length
-            object = object[keypath.shift()]
-            if not object?
-                return value
-        object ? value
+        getKeypath @data, keypath, value
          
     #  0000000  00000000  000000000  
     # 000       000          000     
@@ -58,44 +49,47 @@ class Store
     
     set: (key, value) ->
         return if not key?.split?
-        clearTimeout @timer if @timer
-        @timer = setTimeout @save, @timeout
-        keypath = key.split @sep
-        @changes.push keypath: keypath, value: value
-        Store.setKeypathValue @data, keypath, value
-
-    @setKeypathValue: (object, keypath, value) ->
-        keypath = _.clone keypath
-        while keypath.length > 1
-            k = keypath.shift()
-            if not object[k]?
-                object = object[k] = {}
-            else
-                object = object[k]
-                
-        if (keypath.length == 1) and object?
-            if value?
-                object[keypath[0]] = value
-            else
-                delete object[keypath[0]]
+        
+        setKeypath @data, keypath, value
+        
+        if @app
+            clearTimeout @timer if @timer
+            @timer = setTimeout @save, @timeout
+            keypath = key.split @sep
+            @changes.push keypath: keypath, value: value
+        else
+            post.emit 'store', @name, 'set', key, value
                     
-    del: (key, value) -> @set key
+    del: (key) -> @set key
     
     clear: ->
-        clearTimeout @timer if @timer
+        
         @data = {}
-    
-    onFileChange: => 
-        data = @loadData()
-        for c in @changes
-            Store.setKeypathValue data, c.keypath, c.value
-        @data = data
+        
+        if @app
+            clearTimeout @timer if @timer
+            post.toAllWins 'store', @name, 'clear'
+        else
+            post.toAll 'store', @name, 'clear'
+        
+    # 000       0000000    0000000   0000000    
+    # 000      000   000  000   000  000   000  
+    # 000      000   000  000000000  000   000  
+    # 000      000   000  000   000  000   000  
+    # 0000000   0000000   000   000  0000000    
     
     loadData: ->
-        try
-            noon.load @file
-        catch err
-            {}
+        
+        if @app
+            log "loadData from file #{@file}"
+            try
+                noon.load @file
+            catch err
+                error "can't load store file #{@file}"
+                {}
+        else
+            log 'loadData from main'
+            @data = post.sendSync 'store', @name, 'loadData'
         
     #  0000000   0000000   000   000  00000000
     # 000       000   000  000   000  000     
@@ -123,4 +117,16 @@ class Store
         @watcher.add @file
         fs.remove lockFile
         
+    # 000   000   0000000   000000000   0000000  000   000    
+    # 000 0 000  000   000     000     000       000   000    
+    # 000000000  000000000     000     000       000000000    
+    # 000   000  000   000     000     000       000   000    
+    # 00     00  000   000     000      0000000  000   000    
+        
+    onFileChange: => 
+        data = @loadData()
+        for c in @changes
+            Store.setKeypathValue data, c.keypath, c.value
+        @data = data
+
 module.exports = Store

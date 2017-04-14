@@ -4,6 +4,7 @@
 # 000  000    000 000   000  000   
 # 000   000  000   000  000   000  
 
+childp  = require 'child_process'
 process = require 'process'
 crypto  = require 'crypto'
 _       = require 'lodash'
@@ -20,6 +21,7 @@ module.exports =
     path:path
     noon:noon
     process:process
+    childp:childp
     
     # 0000000    000   0000000  000000000
     # 000   000  000  000          000   
@@ -35,6 +37,28 @@ module.exports =
         else
             {}
 
+    setKeypath: (object, keypath, value) ->
+        keypath = _.clone keypath
+        while keypath.length > 1
+            k = keypath.shift()
+            if not object[k]?
+                object = object[k] = {}
+            else
+                object = object[k]
+                
+        if (keypath.length == 1) and object?
+            if value?
+                object[keypath[0]] = value
+            else
+                delete object[keypath[0]]
+
+    getKeypath: (object, keypath, value) ->
+        while keypath.length
+            object = object[keypath.shift()]
+            if not object?
+                return value
+        object ? value
+    
     # 000   000   0000000   000      000   000  00000000
     # 000   000  000   000  000      000   000  000     
     #  000 000   000000000  000      000   000  0000000 
@@ -144,7 +168,7 @@ if not String.prototype.hash
 if not Array.prototype.reversed
     Array.prototype.reversed = -> _.clone(@).reverse()
 
-module.exports.post        = require './post'
+module.exports.post        = require 'ppost'
 module.exports.str         = require './str'
 module.exports.log         = require './log'
 module.exports.error       = require './error'
