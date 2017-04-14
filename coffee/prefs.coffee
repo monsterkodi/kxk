@@ -4,13 +4,15 @@
 # 000        000   000  000       000            000
 # 000        000   000  00000000  000       0000000 
 
-Store = require './store' 
+{store, error} = require './kxk' 
 
 class Prefs
     
     @store = null
     
-    @init: (defs={}) -> @store = new Store name:'prefs', defaults:defs
+    @init: (defs={}) -> 
+        return error 'duplicate prefs init?' if @store?
+        @store = new store 'prefs', defaults:defs
         
     @get:  (key, value) -> @store.get key, value
     @set:  (key, value) -> @store.set key, value
