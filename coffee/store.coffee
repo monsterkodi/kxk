@@ -20,7 +20,6 @@ class Store
         @sep = opt?.separator ? ':'
         
         if @app
-            log "new app store #{@name}"
             @timer   = null
             @watcher = null
             @file    = opt?.file ? (@app? and "#{@app.getPath('userData')}/#{@name}.noon")
@@ -37,13 +36,11 @@ class Store
             
             post.onSync 'store', (name, action, args...) =>
                 return if @name != name
-                # log "app.store.#{@name}.onSync", action, args
                 switch action
                     when 'data' then return @data
     
             post.on 'store', (name, action, args...) =>
                 return if @name != name
-                # log "app.store.#{@name}.on", action, args
                 switch action
                     when 'set'   then @set.apply @, args
                     when 'get'   then @get.apply @, args
@@ -53,13 +50,10 @@ class Store
                 @
                 
         else
-            # log "new win store #{@name}"
             post.on 'store', (name, action, args...) =>
                 return if @name != name
-                # log "win.store.#{@name}.on", action, args if action != 'data'
-                # log 'win.store.#{@name}.on data' if action == 'data'
                 switch action
-                    when 'data' then @data = args
+                    when 'data' then @data = args[0]
                     when 'set'  then setKeypath @data, @keypath(args[0]), args[1]
                     when 'get'  then getKeypath @data, @keypath(args[0]), args[1]
                     when 'del'  then setKeypath @data, @keypath(args[0])
@@ -87,6 +81,7 @@ class Store
     
     set: (key, value) ->
         return if not key?.split?
+        
         setKeypath @data, @keypath(key), value
         
         if @app
@@ -117,15 +112,11 @@ class Store
     
     load: ->
         if @app
-            # log "win store #{@name} load"
-            # log "load from file #{@file}"
             try
                 noon.load @file
             catch err
-                # log "no store at '#{@file}'"
                 {}
         else
-            # log "win store #{@name} load"
             post.fromMain 'store', @name, 'data'
         
     #  0000000   0000000   000   000  00000000
