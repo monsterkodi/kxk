@@ -35,37 +35,40 @@ class Store
                 @data = data
                 post.toAllWins 'store', @name, 'data', @data
             
-            post.onSync 'store', (name, action, args) =>
+            post.onSync 'store', (name, action, args...) =>
                 return if @name != name
-                log "app.store.#{@name}.onSync", name, action, args
+                # log "app.store.#{@name}.onSync", action, args
                 switch action
                     when 'data' then return @data
     
-            post.on 'store', (name, action, args) =>
+            post.on 'store', (name, action, args...) =>
                 return if @name != name
-                log "app.store.#{@name}.on", name, action, args
+                # log "app.store.#{@name}.on", action, args
                 switch action
-                    when 'set'   then @set args[0], args[1]
-                    when 'get'   then @get args[0], args[1]
-                    when 'del'   then @del args[0]
+                    when 'set'   then @set.apply @, args
+                    when 'get'   then @get.apply @, args
+                    when 'del'   then @del.apply @, args
                     when 'clear' then @clear()
                     when 'save'  then @save()
                 @
                 
         else
-            log "new win store #{@name}"
-            post.on 'store', (name, action, args) =>
+            # log "new win store #{@name}"
+            post.on 'store', (name, action, args...) =>
                 return if @name != name
-                log "win.store.#{@name}.on", name, action, args
+                # log "win.store.#{@name}.on", action, args if action != 'data'
+                # log 'win.store.#{@name}.on data' if action == 'data'
                 switch action
                     when 'data' then @data = args
-                    when 'set'  then setKeypath @data, args[0], args[1]
-                    when 'get'  then getKeypath @data, args[0], args[1]
-                    when 'del'  then setKeypath @data, args[0]
+                    when 'set'  then setKeypath @data, @keypath(args[0]), args[1]
+                    when 'get'  then getKeypath @data, @keypath(args[0]), args[1]
+                    when 'del'  then setKeypath @data, @keypath(args[0])
                 
         @data = @load()
         @data = _.defaults @data, opt.defaults if opt?.defaults?
 
+    keypath: (key) -> key.split @sep
+    
     #  0000000   00000000  000000000
     # 000        000          000   
     # 000  0000  0000000      000   
@@ -74,9 +77,7 @@ class Store
         
     get: (key, value) ->
         return value if not key?.split?
-        keypath = key.split @sep
-        
-        getKeypath @data, keypath, value
+        getKeypath @data, @keypath(key), value
          
     #  0000000  00000000  000000000  
     # 000       000          000     
@@ -86,18 +87,15 @@ class Store
     
     set: (key, value) ->
         return if not key?.split?
-        keypath = key.split @sep
-        
-        setKeypath @data, keypath, value
+        setKeypath @data, @keypath(key), value
         
         if @app
             clearTimeout @timer if @timer
             @timer = setTimeout @save, @timeout
-            keypath = key.split @sep
-            @changes.push keypath: keypath, value: value
-            post.toAllWins 'set', @name, 'set', keypath, value
+            @changes.push keypath: @keypath(key), value: value
+            post.toAllWins 'store', @name, 'set', key, value
         else
-            post.emit 'store', @name, 'set', key, value
+            post.toMain 'store', @name, 'set', key, value
                     
     del: (key) -> @set key
     
@@ -119,15 +117,15 @@ class Store
     
     load: ->
         if @app
-            log "win store #{@name} load"
-            log "load from file #{@file}"
+            # log "win store #{@name} load"
+            # log "load from file #{@file}"
             try
                 noon.load @file
             catch err
-                error "can't load store file #{@file}"
+                # log "no store at '#{@file}'"
                 {}
         else
-            log "win store #{@name} load"
+            # log "win store #{@name} load"
             post.fromMain 'store', @name, 'data'
         
     #  0000000   0000000   000   000  00000000
