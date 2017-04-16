@@ -8,18 +8,31 @@
 }        = require './kxk'
 chokidar = require 'chokidar'
 atomic   = require 'write-file-atomic'
-electron = require 'electron'
 
 class Store
     
+    @stores = {}
+    @addStore: (store) ->
+
+        if _.isEmpty @stores
+            post.onGet 'store', (name, action, args...) =>
+                switch action
+                    when 'data' then return @stores[name]?.data
+    
+        @stores[store.name] = store
+
     constructor: (@name, opt) ->
 
         return error 'no name for store?' if not @name
 
+        electron = require 'electron'
         @app = electron.app
         @sep = opt?.separator ? ':'
         
         if @app
+            
+            Store.addStore @
+            
             @timer   = null
             @watcher = null
             @file    = opt?.file ? (@app? and "#{@app.getPath('userData')}/#{@name}.noon")
@@ -32,13 +45,8 @@ class Store
                 for c in @changes
                     setKeypath data, c.keypath, c.value
                 @data = data
-                post.toAllWins 'store', @name, 'data', @data
-            
-            post.onSync 'store', (name, action, args...) =>
-                return if @name != name
-                switch action
-                    when 'data' then return @data
-    
+                post.toWins 'store', @name, 'data', @data
+                
             post.on 'store', (name, action, args...) =>
                 return if @name != name
                 switch action
@@ -88,7 +96,7 @@ class Store
             clearTimeout @timer if @timer
             @timer = setTimeout @save, @timeout
             @changes.push keypath: @keypath(key), value: value
-            post.toAllWins 'store', @name, 'set', key, value
+            post.toWins 'store', @name, 'set', key, value
         else
             post.toMain 'store', @name, 'set', key, value
                     
@@ -100,7 +108,7 @@ class Store
         
         if @app
             clearTimeout @timer if @timer
-            post.toAllWins 'store', @name, 'data', {}
+            post.toWins 'store', @name, 'data', {}
         else
             post.toMain 'store', @name, 'clear'
         
@@ -117,7 +125,7 @@ class Store
             catch err
                 {}
         else
-            post.fromMain 'store', @name, 'data'
+            post.get 'store', @name, 'data'
         
     #  0000000   0000000   000   000  00000000
     # 000       000   000  000   000  000     

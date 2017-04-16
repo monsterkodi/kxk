@@ -10,6 +10,7 @@ crypto  = require 'crypto'
 _       = require 'lodash'
 noon    = require 'noon'
 path    = require 'path'
+post    = require 'ppost'
 fs      = require 'fs-extra'
 os      = require 'os'
 
@@ -18,6 +19,7 @@ module.exports =
     _:_
     os:os
     fs:fs
+    post:post
     path:path
     noon:noon
     process:process
@@ -168,7 +170,6 @@ if not String.prototype.hash
 if not Array.prototype.reversed
     Array.prototype.reversed = -> _.clone(@).reverse()
 
-module.exports.post        = require 'ppost'
 module.exports.str         = require './str'
 module.exports.log         = require './log'
 module.exports.error       = require './error'
