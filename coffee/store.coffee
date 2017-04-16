@@ -36,7 +36,7 @@ class Store
             @timer   = null
             @watcher = null
             @file    = opt?.file ? (@app? and "#{@app.getPath('userData')}/#{@name}.noon")
-            @timeout = opt?.timeout ? 1000
+            @timeout = opt?.timeout ? 4000
             @changes = []
             
             @watcher = chokidar.watch @file

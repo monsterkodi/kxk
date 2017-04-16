@@ -4,9 +4,10 @@
 # 000        000   000     000     000   000
 # 000        000   000     000     000   000
 
-path = require 'path'
-os   = require 'os'
-fs   = require 'fs'
+error = require './error'
+path  = require 'path'
+os    = require 'os'
+fs    = require 'fs'
 
 fileName  = (p) -> path.basename p, path.extname p
 extName   = (p) -> path.extname(p).slice 1
@@ -15,6 +16,7 @@ swapExt   = (p, ext) -> splitExt(p) + (ext.startsWith('.') and ext or ".#{ext}")
 
 unresolve = (p) -> p.replace os.homedir(), "~"
 resolve   = (p) -> 
+    return error "no path to resolve? #{p}" if not p? or p.length == 0
     i = p.indexOf '$'
     while i >= 0
         for k,v of process.env

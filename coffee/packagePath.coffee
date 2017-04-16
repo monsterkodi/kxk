@@ -4,17 +4,18 @@
 # 000        000   000  000       000  000   000   000  000   000  000       000        000   000     000     000   000  
 # 000        000   000   0000000  000   000  000   000   0000000   00000000  000        000   000     000     000   000  
 
-{ resolve, fs, path 
+{ resolve, fileExists, path, log 
 } = require './kxk'
 
 packagePath = (p) ->
     if p?.length?
         while p.length and p not in ['.', '/']            
-            if fs.existsSync path.join p, 'package.noon'
+            # log 'pkgPath', p, path.join p, '.git'
+            if fileExists path.join p, 'package.noon'
                 return resolve p
-            if fs.existsSync path.join p, 'package.json'
+            if fileExists path.join p, 'package.json'
                 return resolve p
-            if fs.existsSync path.join p, '.git'
+            if fileExists path.join p, '.git'
                 return resolve p
             p = path.dirname p
     null
