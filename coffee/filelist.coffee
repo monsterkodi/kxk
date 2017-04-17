@@ -16,10 +16,10 @@ fs   = require 'fs'
 #          if path is absolute, returned files are also absolute
 ###           
     opt:  
-          ignoreHidden: true      # skip files that starts with a dot
-          logError:     true      # print message to console.log if a path doesn't exits
-          depth:        0         # recurse into subdirectories if > 0
-          matchExt:     null      # only include files that match the extension of the option's value
+          ignoreHidden: true # skip files that starts with a dot
+          logError:     true # print message to console.log if a path doesn't exits
+          depth:        0    # recurse into subdirectories if > 0
+          matchExt:     null # only include files that match the extension of the option's value
 ###
 
 fileList = (paths, opt) ->
@@ -34,7 +34,9 @@ fileList = (paths, opt) ->
         if opt.ignoreHidden and path.basename(p).startsWith '.'
             return true
         else if opt.matchExt? 
-            if path.extname(p) != path.extname opt.matchExt
+            if _.isString(opt.matchExt) and path.extname(p) != path.extname opt.matchExt
+                return true
+            else if _.isArray(opt.matchExt) and path.extname(p) not in opt.matchExt
                 return true
         false
     
