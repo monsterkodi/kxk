@@ -74,6 +74,14 @@ splitFilePos = (file) -> # file.txt:22:33 --> ['file.txt', [33, 22]]
     p[1] = line - 1 if Number.isInteger line
     [split[0], p]
 
+joinFilePos = (file, pos) -> # ['file.txt', [33, 22]] --> file.txt:22:33
+    if not pos? or not pos[0] and not pos[1]
+        file
+    else if pos[0]
+        file + ":#{pos[1]+1}:#{pos[0]}"
+    else
+        file + ":#{pos[1]+1}"
+
 module.exports = 
     fileName    : fileName
     extName     : extName
@@ -87,5 +95,6 @@ module.exports =
     escapePath  : escapePath
     encodePath  : encodePath
     splitFilePos: splitFilePos
+    joinFilePos : joinFilePos
     
     

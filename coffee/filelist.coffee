@@ -4,10 +4,8 @@
 # 000       000  000      000       000      000       000     000     
 # 000       000  0000000  00000000  0000000  000  0000000      000     
 
-log  = require './log'
-_    = require 'lodash'
-path = require 'path'
-fs   = require 'fs'
+{ path, fs, splitFilePos, joinFilePos, log, _
+} = require './kxk'
 
 #   synchronous file list
 #
@@ -42,7 +40,7 @@ fileList = (paths, opt) ->
     
     for p in paths
         try
-            [p,l] = p.split ':'
+            [p,pos] = splitFilePos p
             stat = fs.statSync p
             
             if stat.isDirectory()
@@ -65,7 +63,7 @@ fileList = (paths, opt) ->
                                 
                 continue if filter p
                 
-                p += ":#{l}" if l?
+                p = joinFilePos p, pos
                 files.push p
                 
         catch err
