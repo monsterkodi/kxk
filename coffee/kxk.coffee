@@ -84,6 +84,8 @@ module.exports =
             else                 "#{v}"
        
     rad2deg: (r) -> 180 * r / Math.PI
+
+    reversed: (a) -> _.clone(a).reverse()
                         
     #  0000000   0000000   0000000
     # 000       000       000     
@@ -160,15 +162,6 @@ if not String.prototype.strip
     String.prototype.strip = String.prototype.trim
 if not String.prototype.hash
     String.prototype.hash = -> crypto.createHash('md5').update(@.valueOf(), 'utf8').digest('hex')
-
-#  0000000   00000000   00000000    0000000   000   000
-# 000   000  000   000  000   000  000   000   000 000 
-# 000000000  0000000    0000000    000000000    00000  
-# 000   000  000   000  000   000  000   000     000   
-# 000   000  000   000  000   000  000   000     000   
-
-if not Array.prototype.reversed
-    Array.prototype.reversed = -> _.clone(@).reverse()
 
 module.exports.str         = require './str'
 module.exports.log         = require './log'

@@ -34,7 +34,7 @@ class Keyinfo
         
         join = -> 
             args = [].slice.call arguments, 0
-            args = args.filter (e) -> e.length
+            args = args.filter (e) -> e?.length
             args.join '+'
     
         key = keycode event
