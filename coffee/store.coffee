@@ -6,8 +6,11 @@
 
 { fileExists, setKeypath, getKeypath, noon, post, path, fs, log, error, _
 }        = require './kxk'
-chokidar = require 'chokidar'
+# chokidar = require 'chokidar'
 atomic   = require 'write-file-atomic'
+
+# simple key value store with delayed saving to userData folder
+# does sync changes between processes
 
 class Store
     
@@ -34,18 +37,17 @@ class Store
             Store.addStore @
             
             @timer   = null
-            @watcher = null
             @file    = opt?.file ? (@app? and "#{@app.getPath('userData')}/#{@name}.noon")
             @timeout = opt?.timeout ? 4000
             @changes = []
             
-            @watcher = chokidar.watch @file
-            @watcher.on 'change', => 
-                data = @load()
-                for c in @changes
-                    setKeypath data, c.keypath, c.value
-                @data = data
-                post.toWins 'store', @name, 'data', @data
+            # @watcher = chokidar.watch @file
+            # @watcher.on 'change', => 
+                # data = @load()
+                # for c in @changes
+                    # setKeypath data, c.keypath, c.value
+                # @data = data
+                # post.toWins 'store', @name, 'data', @data
                 
             post.on 'store', (name, action, args...) =>
                 return if @name != name
@@ -145,9 +147,9 @@ class Store
             @data = data
             @changes = []
             str = noon.stringify @data, {indent: 2, maxalign: 8}
-            @watcher.unwatch @file
+            # @watcher.unwatch @file
             atomic.sync @file, str
-            @watcher.add @file
+            # @watcher.add @file
         else 
             post.toMain 'store', @name, 'save' 
         

@@ -4,12 +4,13 @@
 # 000        000   000  000        000   000  000      
 # 000         0000000   000         0000000   000      
 
-keyinfo  = require './keyinfo'
-elem     = require './elem'
+{ stopEvent, keyinfo, elem 
+} = require './kxk'
 
 class Popup
     
     constructor: (opt) ->
+        
         @focus = document.activeElement
         @items = elem class: 'popup', tabindex: 3
         @items.style.left = "#{opt.x}px"
@@ -66,7 +67,7 @@ class Popup
             when 'right'            then @select @selected?.nextSibling
             when 'left'             then @select @selected?.previousSibling
             
-        event.stopPropagation()
+        stopEvent event
      
     onClick: (e) => @activate e.target
         
