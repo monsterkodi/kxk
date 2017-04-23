@@ -6,7 +6,7 @@
 
 { fileExists, setKeypath, getKeypath, noon, post, path, fs, log, error, _
 }        = require './kxk'
-# chokidar = require 'chokidar'
+
 atomic   = require 'write-file-atomic'
 
 # simple key value store with delayed saving to userData folder
@@ -39,15 +39,6 @@ class Store
             @timer   = null
             @file    = opt?.file ? (@app? and "#{@app.getPath('userData')}/#{@name}.noon")
             @timeout = opt?.timeout ? 4000
-            @changes = []
-            
-            # @watcher = chokidar.watch @file
-            # @watcher.on 'change', => 
-                # data = @load()
-                # for c in @changes
-                    # setKeypath data, c.keypath, c.value
-                # @data = data
-                # post.toWins 'store', @name, 'data', @data
                 
             post.on 'store', (name, action, args...) =>
                 return if @name != name
@@ -80,6 +71,7 @@ class Store
     #  0000000   00000000     000   
         
     get: (key, value) ->
+        
         return value if not key?.split?
         getKeypath @data, @keypath(key), value
          
@@ -90,14 +82,13 @@ class Store
     # 0000000   00000000     000     
     
     set: (key, value) ->
-        return if not key?.split?
         
+        return if not key?.split?
         setKeypath @data, @keypath(key), value
         
         if @app
-            clearTimeout @timer if @timer
+            clearTimeout @timer
             @timer = setTimeout @save, @timeout
-            @changes.push keypath: @keypath(key), value: value
             post.toWins 'store', @name, 'set', key, value
         else
             post.toMain 'store', @name, 'set', key, value
@@ -138,18 +129,15 @@ class Store
     save: =>
         if @app
             return if not @file
+            return if _.isEmpty @data
+            
             clearTimeout @timer
-    
             @timer = null
-            data = @load()
-            for c in @changes
-                setKeypath data, c.keypath, c.value
-            @data = data
-            @changes = []
-            str = noon.stringify @data, {indent: 2, maxalign: 8}
-            # @watcher.unwatch @file
-            atomic.sync @file, str
-            # @watcher.add @file
+            
+            try
+                atomic.sync @file, noon.stringify @data, {indent: 2, maxalign: 8}
+            catch err
+                error "can't save store to file '#{@file}:", err
         else 
             post.toMain 'store', @name, 'save' 
         
