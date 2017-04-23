@@ -39,7 +39,7 @@ class Stash
     #  0000000   00000000     000   
         
     get: (key, value) ->
-        
+        error 'stash.get -- invalid key', key if not key?.split?
         return value if not key?.split?
         getKeypath @data, @keypath(key), value
          
@@ -51,7 +51,7 @@ class Stash
     
     set: (key, value) ->
         
-        return if not key?.split?
+        return error 'stash.set -- invalid key', key if not key?.split?
         setKeypath @data, @keypath(key), value
         
         clearTimeout @timer if @timer

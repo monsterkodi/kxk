@@ -17,7 +17,7 @@
           ignoreHidden: true # skip files that starts with a dot
           logError:     true # print message to console.log if a path doesn't exits
           depth:        0    # recurse into subdirectories if > 0
-          matchExt:     null # only include files that match the extension of the option's value
+          matchExt:     null # string or list of strings to match
 ###
 
 fileList = (paths, opt) ->

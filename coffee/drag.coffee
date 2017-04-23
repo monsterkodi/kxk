@@ -4,9 +4,8 @@
 # 000   000  000   000  000   000  000   000
 # 0000000    000   000  000   000   0000000 
 
-{ def, error, _
-}   = require './kxk'
-pos = require './pos'
+{ def, pos, stopEvent, error, log, $, _
+} = require './kxk'
 
 class Drag
 
@@ -21,76 +20,100 @@ class Drag
                 active  : true
                 cursor  : 'move'
 
-        if typeof @target is 'string'
-            t = document.getElementById @target
+        if _.isString @target
+            t =$ @target
             if not t?
-                error "Drag.constructor -- can't find drag target with id", @target
-                return
+                return error "Drag -- can't find drag target with id", @target
             @target = t
+            
         if not @target?
-            error "Drag.constructor -- can't find drag target"
-            return
-
+            return error "Drag -- can't find drag target"
+        
+        error "Drag -- onStart not a function?" if @onStart? and not _.isFunction @onStart
+        error "Drag -- onMove not a function?" if @onMove? and not _.isFunction @onMove
+        error "Drag -- onEnd not a function?" if @onEnd? and not _.isFunction @onEnd
+                
         @dragging  = false
         @listening = false
-        @handle    = document.getElementById(@handle) if typeof @handle  is 'string'
-        @handle    = @target if not @handle?
+        @handle    = $(@handle) if _.isString @handle
+        @handle   ?= @target
         @activate() if @active
 
+    #  0000000  000000000   0000000   00000000   000000000  
+    # 000          000     000   000  000   000     000     
+    # 0000000      000     000000000  0000000       000     
+    #      000     000     000   000  000   000     000     
+    # 0000000      000     000   000  000   000     000     
+    
     dragStart: (event) =>
-        return if @dragging or not @listening
-        @dragging = true
-        @startPos = pos event
-        @pos      = pos event
-        @onStart @, event if @onStart?
-        @lastPos  = pos event
-                
-        event.preventDefault()
-
-        document.addEventListener 'mousemove', @dragMove
-        document.addEventListener 'mouseup',   @dragUp
+        
+        if not @dragging and @listening
+            @dragging = true
+            @startPos = pos event
+            @pos      = pos event
+            @onStart? @, event 
+            @lastPos  = pos event
+                    
+            stopEvent event
+    
+            document.addEventListener 'mousemove', @dragMove
+            document.addEventListener 'mouseup',   @dragUp
         @
 
+    # 00     00   0000000   000   000  00000000  
+    # 000   000  000   000  000   000  000       
+    # 000000000  000   000   000 000   0000000   
+    # 000 0 000  000   000     000     000       
+    # 000   000   0000000       0      00000000  
+    
     dragMove: (event) =>
 
-        return if not @dragging
-
-        @pos   = pos event
-        @delta = @lastPos.to @pos
-        @deltaSum = @startPos.to @pos
-        
-        if @onMove?
-            @onMove this, event
-
-        @lastPos = @pos
+        if @dragging
+            @pos = pos event
+            @delta    = @lastPos.to @pos
+            @deltaSum = @startPos.to @pos
+            @onMove? @, event 
+            @lastPos = @pos
         @
                 
     dragUp: (event) => @dragStop event
 
+    #  0000000  000000000   0000000   00000000   
+    # 000          000     000   000  000   000  
+    # 0000000      000     000   000  00000000   
+    #      000     000     000   000  000        
+    # 0000000      000      0000000   000        
+    
     dragStop: (event) =>
 
-        return if not @dragging
-        document.removeEventListener 'mousemove', @dragMove
-        document.removeEventListener 'mouseup',   @dragUp
-        delete @lastPos
-        delete @startPos
-        @onStop this, event if @onStop? and event?
-        @dragging = false
+        if @dragging
+            document.removeEventListener 'mousemove', @dragMove
+            document.removeEventListener 'mouseup',   @dragUp
+            delete @lastPos
+            delete @startPos
+            @onStop this, event if @onStop? and event?
+            @dragging = false
         @
 
+    #  0000000    0000000  000000000  000  000   000   0000000   000000000  00000000  
+    # 000   000  000          000     000  000   000  000   000     000     000       
+    # 000000000  000          000     000   000 000   000000000     000     0000000   
+    # 000   000  000          000     000     000     000   000     000     000       
+    # 000   000   0000000     000     000      0      000   000     000     00000000  
+    
     activate: =>
         
-        return if @listening
-        @listening = true
-        @handle.addEventListener 'mousedown', @dragStart
+        if not @listening
+            @listening = true
+            @handle.addEventListener 'mousedown', @dragStart
         @
 
     deactivate: =>
 
-        return if not @listening
-        @handle.removeEventListener 'mousedown', @dragStart
-        @listening = false
-        @dragStop() if @dragging
+        if @listening
+            @handle.removeEventListener 'mousedown', @dragStart
+            @listening = false
+            @dragStop() if @dragging
         @
 
 module.exports = Drag
