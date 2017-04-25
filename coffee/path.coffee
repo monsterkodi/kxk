@@ -65,7 +65,7 @@ encodePath = (p) ->
     p = p.replace /\&/g, "%26"
     p = p.replace /\'/g, "%27"
 
-splitFilePos = (file) -> # file.txt:22:33 --> ['file.txt', [33, 22]]
+splitFilePos = (file) -> # file.txt:10:33 --> ['file.txt', [33, 9]]
     split = file.split ':'
     line = parseInt split[1] if split.length > 1
     clmn = parseInt split[2] if split.length > 2
@@ -74,27 +74,40 @@ splitFilePos = (file) -> # file.txt:22:33 --> ['file.txt', [33, 22]]
     p[1] = line - 1 if Number.isInteger line
     [split[0], p]
 
-joinFilePos = (file, pos) -> # ['file.txt', [33, 22]] --> file.txt:22:33
+joinFilePos = (file, pos) -> # ['file.txt', [33, 9]] --> file.txt:10:33
     if not pos? or not pos[0] and not pos[1]
         file
     else if pos[0]
         file + ":#{pos[1]+1}:#{pos[0]}"
     else
         file + ":#{pos[1]+1}"
+        
+splitFileLine = (fileLine) ->  # file.txt:10 --> ['file.txt', 10]
+    split = fileLine.split ':'
+    line = parseInt split[1] if split.length > 1
+    l = 0
+    l = line if Number.isInteger line
+    [split[0], l]
+    
+joinFileLine  = (file, line) -> # ['file.txt', 10] --> file.txt:10
+    return file if not line?
+    "#{file}:#{line}"
 
 module.exports = 
-    fileName    : fileName
-    extName     : extName
-    splitExt    : splitExt
-    swapExt     : swapExt
-    unresolve   : unresolve
-    resolve     : resolve
-    fileExists  : fileExists
-    dirExists   : dirExists
-    relative    : relative
-    escapePath  : escapePath
-    encodePath  : encodePath
-    splitFilePos: splitFilePos
-    joinFilePos : joinFilePos
+    fileName     : fileName
+    extName      : extName
+    splitExt     : splitExt
+    swapExt      : swapExt
+    unresolve    : unresolve
+    resolve      : resolve
+    fileExists   : fileExists
+    dirExists    : dirExists
+    relative     : relative
+    escapePath   : escapePath
+    encodePath   : encodePath
+    splitFilePos : splitFilePos
+    joinFilePos  : joinFilePos
+    splitFileLine: splitFileLine
+    joinFileLine : joinFileLine
     
     
