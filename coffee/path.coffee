@@ -25,6 +25,8 @@ resolve   = (p) ->
                 i = p.indexOf '$'
                 break
     path.normalize path.resolve p.replace /^\~/, os.homedir()
+
+samePath = (pa, pb) -> resolve(pa) == resolve(pb)
     
 fileExists = (file) ->
     file = resolve file
@@ -99,6 +101,7 @@ joinFileLine  = (file, line, col) -> # 'file.txt', 1, 2 --> file.txt:1:2
 module.exports = 
     fileName     : fileName
     extName      : extName
+    samePath     : samePath
     splitExt     : splitExt
     swapExt      : swapExt
     unresolve    : unresolve
