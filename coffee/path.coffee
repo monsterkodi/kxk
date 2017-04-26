@@ -65,7 +65,7 @@ encodePath = (p) ->
     p = p.replace /\&/g, "%26"
     p = p.replace /\'/g, "%27"
 
-splitFilePos = (file) -> # file.txt:10:33 --> ['file.txt', [33, 9]]
+splitFilePos = (file) -> # file.txt:1:3 --> ['file.txt', [3, 0]]
     split = file.split ':'
     line = parseInt split[1] if split.length > 1
     clmn = parseInt split[2] if split.length > 2
@@ -74,7 +74,7 @@ splitFilePos = (file) -> # file.txt:10:33 --> ['file.txt', [33, 9]]
     p[1] = line - 1 if Number.isInteger line
     [split[0], p]
 
-joinFilePos = (file, pos) -> # ['file.txt', [33, 9]] --> file.txt:10:33
+joinFilePos = (file, pos) -> # ['file.txt', [3, 0]] --> file.txt:1:3
     if not pos? or not pos[0] and not pos[1]
         file
     else if pos[0]
@@ -82,16 +82,19 @@ joinFilePos = (file, pos) -> # ['file.txt', [33, 9]] --> file.txt:10:33
     else
         file + ":#{pos[1]+1}"
         
-splitFileLine = (fileLine) ->  # file.txt:10 --> ['file.txt', 10]
+splitFileLine = (fileLine) ->  # file.txt:1:0 --> ['file.txt', 1, 0]
     split = fileLine.split ':'
     line = parseInt split[1] if split.length > 1
-    l = 0
+    clmn = parseInt split[2] if split.length > 2
+    l = c = 0
     l = line if Number.isInteger line
-    [split[0], l]
+    c = clmn if Number.isInteger clmn
+    [split[0], l, c]
     
-joinFileLine  = (file, line) -> # ['file.txt', 10] --> file.txt:10
+joinFileLine  = (file, line, col) -> # 'file.txt', 1, 2 --> file.txt:1:2
     return file if not line?
-    "#{file}:#{line}"
+    return "#{file}:#{line}" if not col?
+    "#{file}:#{line}:#{col}"
 
 module.exports = 
     fileName     : fileName
