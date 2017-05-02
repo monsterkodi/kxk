@@ -3,13 +3,9 @@
 # 0000000   000       000000000  0000000   000000000  0000000   
 #      000  000       000   000  000       000 0 000  000       
 # 0000000    0000000  000   000  00000000  000   000  00000000  
-{
-prefs,   
-elem,
-post,
-$}   = require './kxk'
-_    = require 'lodash'
-path = require 'path'
+
+{ prefs, elem, post, path, $, _
+} = require './kxk'
 
 class Scheme
     

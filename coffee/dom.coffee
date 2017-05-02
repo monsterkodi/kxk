@@ -17,7 +17,7 @@ module.exports =
     
     upAttr: upAttr
     
-    $: (idOrClass, e=document) -> 
+    $: (idOrClass, e=document) ->
         if _.isString idOrClass
             if idOrClass[0] in ['.', "#"] or e != document
                 e.querySelector idOrClass
