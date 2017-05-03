@@ -49,7 +49,10 @@ class Keyinfo
 
     @characterForEvent: (event) ->
         ansi = ansiKey event 
-        return null if not ansi? or ansi.length != 1 or @modifiersForEvent(event) not in ["", "shift"]
+        return null if not ansi? 
+        return null if ansi.length != 1 
+        return null if @modifiersForEvent(event) not in ["", "shift"]
+        return null if /f\d{1,2}/.test @keynameForEvent event
         ansi
         
     @short: (combo) ->
