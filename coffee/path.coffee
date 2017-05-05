@@ -68,7 +68,7 @@ encodePath = (p) ->
     p = p.replace /\'/g, "%27"
 
 splitFilePos = (file) -> # file.txt:1:3 --> ['file.txt', [3, 0]]
-    split = file.split ':'
+    split = String(file).split ':'
     line = parseInt split[1] if split.length > 1
     clmn = parseInt split[2] if split.length > 2
     p = [0, 0]
@@ -85,7 +85,7 @@ joinFilePos = (file, pos) -> # ['file.txt', [3, 0]] --> file.txt:1:3
         file + ":#{pos[1]+1}"
         
 splitFileLine = (fileLine) ->  # file.txt:1:0 --> ['file.txt', 1, 0]
-    split = fileLine.split ':'
+    split = String(fileLine).split ':'
     line = parseInt split[1] if split.length > 1
     clmn = parseInt split[2] if split.length > 2
     l = c = 0

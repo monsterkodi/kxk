@@ -8,15 +8,15 @@
 } = require './kxk'
 
 packagePath = (p) ->
+    
     if p?.length?
-        while p.length and p not in ['.', '/']            
-            # log 'pkgPath', p, path.join p, '.git'
-            if fileExists path.join p, 'package.noon'
-                return resolve p
-            if fileExists path.join p, 'package.json'
-                return resolve p
-            if fileExists path.join p, '.git'
-                return resolve p
+        
+        while p.length and p not in ['.', '/']
+            
+            if fileExists path.join p, '.git'         then return resolve p
+            if fileExists path.join p, 'package.noon' then return resolve p
+            if fileExists path.join p, 'package.json' then return resolve p
+            
             p = path.dirname p
     null
 
