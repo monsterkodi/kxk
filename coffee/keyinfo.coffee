@@ -20,6 +20,20 @@ class Keyinfo
     @modifierNames = ['shift', 'ctrl', 'alt', 'command']
     @modifierChars = ['⇧', '^', '⌥', '⌘']
     
+    @forCombo: (combo) ->
+        mods = []
+        char = null
+        for c in combo.split '+'
+            if @isModifier c
+                mods.push c 
+            else
+                key = c
+                char = c if c.length == 1 # does this work?
+        mod:   mods.join '+'
+        key:   key
+        combo: combo 
+        char:  char
+    
     @isModifier: (keyname) -> keyname in @modifierNames
 
     @modifiersForEvent: (event) -> 
