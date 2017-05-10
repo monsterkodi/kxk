@@ -13,7 +13,7 @@ stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 slog = (s) ->
     
     try # fancy log with source-mapped files and line numbers
-        f = stack.capture()[2]
+        f = stack.capture()[slog.depth]
         if magic = sorcery.loadSync(f.getFileName())
             info = magic.trace(f.getLineNumber(), f.getFunctionName())
         else
@@ -33,6 +33,7 @@ log = ->
     console.log s
     slog s
 
+slog.depth = 2
 log.slog = slog
 
 module.exports = log
