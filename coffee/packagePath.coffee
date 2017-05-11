@@ -4,7 +4,7 @@
 # 000        000   000  000       000  000   000   000  000   000  000       000        000   000     000     000   000  
 # 000        000   000   0000000  000   000  000   000   0000000   00000000  000        000   000     000     000   000  
 
-{ resolve, fileExists, path, log 
+{ resolve, dirExists, fileExists, path, log 
 } = require './kxk'
 
 packagePath = (p) ->
@@ -13,7 +13,7 @@ packagePath = (p) ->
         
         while p.length and p not in ['.', '/']
             
-            if fileExists path.join p, '.git'         then return resolve p
+            if dirExists  path.join p, '.git'         then return resolve p
             if fileExists path.join p, 'package.noon' then return resolve p
             if fileExists path.join p, 'package.json' then return resolve p
             
