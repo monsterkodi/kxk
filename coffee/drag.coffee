@@ -89,9 +89,9 @@ class Drag
         if @dragging
             document.removeEventListener 'mousemove', @dragMove
             document.removeEventListener 'mouseup',   @dragUp
+            @onStop @, event if @onStop? and event?
             delete @lastPos
             delete @startPos
-            @onStop this, event if @onStop? and event?
             @dragging = false
         @
 
