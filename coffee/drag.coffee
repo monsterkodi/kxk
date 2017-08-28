@@ -45,21 +45,23 @@ class Drag
     #      000     000     000   000  000   000     000     
     # 0000000      000     000   000  000   000     000     
     
-    dragStart: (event) =>
+    start: (p, event) ->
         
         if not @dragging and @listening
             @dragging = true
-            @startPos = pos event
-            @pos      = pos event
-            @onStart? @, event 
-            @lastPos  = pos event
+            @startPos = p
+            @pos      = p
+            @onStart? @, event
+            @lastPos  = p
                     
             stopEvent event
     
             document.addEventListener 'mousemove', @dragMove
             document.addEventListener 'mouseup',   @dragUp
         @
-
+    
+    dragStart: (event) => @start pos(event), event
+        
     # 00     00   0000000   000   000  00000000  
     # 000   000  000   000  000   000  000       
     # 000000000  000   000   000 000   0000000   
