@@ -51,7 +51,12 @@ class Drag
             @dragging = true
             @startPos = p
             @pos      = p
-            @onStart? @, event
+            
+            if 'skip' == @onStart? @, event
+                delete @startPos
+                @dragging = false
+                return @
+                
             @lastPos  = p
                     
             stopEvent event

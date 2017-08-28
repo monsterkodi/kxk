@@ -4,8 +4,7 @@
 #000        000   000       000
 #000         0000000   0000000 
 
-{ clamp
-} = require './kxk'
+{ clamp } = require './kxk'
 
 class Pos
 
