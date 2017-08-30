@@ -74,7 +74,7 @@ class Pos
         s  = ("<x:#{@x} " if @x?) or "<NaN "
         s += ("y:#{@y}>" if @y?) or "NaN>"
 
-    @isPos: (o) -> o.x? and o.y? and Number.isInteger(o.x) and Number.isInteger(o.y)
+    @isPos: (o) -> o.x? and o.y? and Number.isFinite(o.x) and Number.isFinite(o.y)
     
     #_________________________________________________________ destructive
     
@@ -87,7 +87,7 @@ class Pos
         @x *= other.x
         @y *= other.y
         @
-
+        
     add: (other) ->
         @x += other.x
         @y += other.y
