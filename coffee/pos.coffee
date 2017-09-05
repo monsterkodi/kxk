@@ -72,9 +72,10 @@ class Pos
     angle: (o=new Pos(0,1)) ->
         @rad2deg Math.acos @normal().dot o.normal()
         
-    xyperp: -> new Pos -@y, @x
+    perp: -> new Pos -@y, @x
     rotation: (o) -> 
-        d = o.dot @xyperp()
+        d = o.dot @perp()
+        return 0 if d == 0
         s = d > 0 and 1 or -1
         s * @angle o
             
