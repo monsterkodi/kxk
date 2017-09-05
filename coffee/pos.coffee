@@ -60,7 +60,7 @@ class Pos
 
     normal:         -> @copy().normalize()
     length:         -> return Math.sqrt @square()
-    dot:        (o) -> new Pos @x*o.x + @y*o.y
+    dot:        (o) -> @x*o.x + @y*o.y
     square:         -> (@x * @x) + (@y * @y)
     distSquare: (o) -> @minus(o).square()
     dist:       (o) -> Math.sqrt @distSquare(o)
