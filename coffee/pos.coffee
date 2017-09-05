@@ -21,56 +21,69 @@ class Pos
             @y = @x.y
             @x = @x.x
         
-    copy: => new Pos @x, @y
+    copy: -> new Pos @x, @y
 
-    plus: (val) =>
+    plus: (val) ->
         newPos = @copy()
         if val?
             newPos.x += val.x  unless isNaN(val.x)
             newPos.y += val.y  unless isNaN(val.y)
         newPos
 
-    minus: (val) =>
+    minus: (val) ->
         newPos = @copy()
         if val?
             newPos.x -= val.x  unless isNaN(val.x)
             newPos.y -= val.y  unless isNaN(val.y)
         newPos
         
-    times: (val) => @copy().scale val
+    times: (val) -> @copy().scale val
         
     clamped: (lower, upper) => @copy().clamp lower, upper
         
-    to:  (other) => other.minus @
-    mid: (other) => @plus(other).scale 0.5
+    to:  (other) -> other.minus @
+    mid: (other) -> @plus(other).scale 0.5
 
-    min: (val) =>
+    min: (val) ->
         newPos = @copy()
         return newPos unless val?
         newPos.x = val.x  if not isNaN(val.x) and @x > val.x
         newPos.y = val.y  if not isNaN(val.y) and @y > val.y
         newPos
 
-    max: (val) =>
+    max: (val) ->
         newPos = @copy()
         return newPos unless val?
         newPos.x = val.x  if not isNaN(val.x) and @x < val.x
         newPos.y = val.y  if not isNaN(val.y) and @y < val.y
         newPos
 
-    length:         => return Math.sqrt @square()
-    square:         => (@x * @x) + (@y * @y)
-    distSquare: (o) => @minus(o).square()
-    dist:       (o) => Math.sqrt @distSquare(o)
-    equals:     (o) => @x == o?.x and @y == o?.y
+    normal:         -> @copy().normalize()
+    length:         -> return Math.sqrt @square()
+    dot:        (o) -> new Pos @x*o.x + @y*o.y
+    square:         -> (@x * @x) + (@y * @y)
+    distSquare: (o) -> @minus(o).square()
+    dist:       (o) -> Math.sqrt @distSquare(o)
+    equals:     (o) -> @x == o?.x and @y == o?.y
 
-    check: =>
+    deg2rad:    (d) -> Math.PI*d/180.0
+    rad2deg:    (r) -> r*180.0/Math.PI
+    
+    xyperp:         -> new Pos -@y, @x
+    angle: (o) ->
+        thisXY  = @copy().normal()
+        otherXY = o.copy().normal()
+        if thisXY.xyperp().dot otherXY >= 0 
+            return @deg2rad Math.acos thisXY.dot otherXY  
+        -@rad2deg Math.acos thisXY.dot otherXY  
+    
+    check: ->
         newPos = @copy()
         newPos.x = 0 if isNaN(newPos.x)
         newPos.y = 0 if isNaN(newPos.y)
         newPos
 
-    _str: => 
+    _str: -> 
         s  = ("<x:#{@x} " if @x?) or "<NaN "
         s += ("y:#{@y}>" if @y?) or "NaN>"
 
@@ -103,5 +116,13 @@ class Pos
             @x = clamp(lower.x, upper.x, @x)
             @y = clamp(lower.y, upper.y, @y)
         @
+        
+    normalize: ->
+        l = @length()
+        if l
+            l = 1.0/l
+            @x *= l
+            @y *= l
+        @    
 
 module.exports = (x,y) -> new Pos x,y
