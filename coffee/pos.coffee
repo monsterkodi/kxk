@@ -72,15 +72,12 @@ class Pos
     angle: (o=new Pos(0,1)) ->
         @rad2deg Math.acos @normal().dot o.normal()
         
-    xyperp:      -> new Pos -@y, @x
-    xyangle: (o) ->
-        thisXY  = @copy().normal()
-        otherXY = o.copy().normal()
-        if thisXY.xyperp().dot otherXY >= 0 
-            return @deg2rad Math.acos thisXY.dot otherXY  
-        -@rad2deg Math.acos thisXY.dot otherXY  
-    
-        
+    xyperp: -> new Pos -@y, @x
+    rotation: (o) -> 
+        d = o.dot @xyperp()
+        s = d > 0 and 1 or -1
+        s * @angle o
+            
     check: ->
         newPos = @copy()
         newPos.x = 0 if isNaN(newPos.x)
