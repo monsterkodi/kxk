@@ -9,7 +9,7 @@ _ = require 'lodash'
 
 upAttr = (e, attr) ->
     return null if not e?
-    a = e.getAttribute attr
+    a = e.getAttribute? attr
     return a if a != null and a != ''
     upAttr e.parentNode, attr
         
@@ -17,14 +17,16 @@ module.exports =
     
     upAttr: upAttr
     
-    $: (idOrClass, e=document) ->
-        if _.isString idOrClass
-            if idOrClass[0] in ['.', "#"] or e != document
-                e.querySelector idOrClass
+    $: (idOrQueryOrElement, queryOrElement=document) ->
+        if _.isString idOrQueryOrElement
+            if idOrQueryOrElement[0] in ['.', "#"] or queryOrElement != document
+                queryOrElement.querySelector idOrQueryOrElement
             else
-                document.getElementById idOrClass
+                document.getElementById idOrQueryOrElement
+        else if _.isElement(idOrQueryOrElement) and _.isString queryOrElement
+            idOrQueryOrElement.querySelector queryOrElement
         else
-            idOrClass
+            idOrQueryOrElement
 
     childIndex: (e) -> Array.prototype.indexOf.call e.parentNode.childNodes, e 
 
