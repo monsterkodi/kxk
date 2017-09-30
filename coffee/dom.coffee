@@ -7,15 +7,7 @@
 
 _ = require 'lodash'
 
-upAttr = (e, attr) ->
-    return null if not e?
-    a = e.getAttribute? attr
-    return a if a != null and a != ''
-    upAttr e.parentNode, attr
-        
 module.exports =
-    
-    upAttr: upAttr
     
     $: (idOrQueryOrElement, queryOrElement=document) ->
         if _.isString idOrQueryOrElement
@@ -30,6 +22,17 @@ module.exports =
 
     childIndex: (e) -> Array.prototype.indexOf.call e.parentNode.childNodes, e 
 
+    upAttr: (element, attr) ->
+        return null if not element?
+        a = element.getAttribute? attr
+        return a if a != null and a != ''
+        module.exports.upAttr element.parentNode, attr
+
+    upProp: (element, prop) ->
+        return null if not element?
+        return element[prop] if element[prop]?
+        module.exports.upProp element.parentNode, prop
+        
     sw: () -> document.body.clientWidth
     sh: () -> document.body.clientHeight
 

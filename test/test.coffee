@@ -4,7 +4,7 @@
 #    000     000            000     000     
 #    000     00000000  0000000      000     
 {
-fileList,
+fileList, 
 log}   = require '../coffee/kxk'
 _      = require 'lodash'
 assert = require 'assert'
@@ -43,5 +43,4 @@ describe 'fileList', ->
     it "matches extension", ->
         expect fileList 'dir', depth: 3, matchExt: __filename
         .to.eql ['dir/test.coffee', 'dir/level1/test.coffee', 'dir/level1/level2/level2.coffee', 'dir/level1/level2/level3/level3.coffee', 'dir/level1b/level1b.coffee']
-    
-                
+ 
