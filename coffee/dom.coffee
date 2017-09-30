@@ -33,6 +33,13 @@ module.exports =
         return element[prop] if element[prop]?
         module.exports.upProp element.parentNode, prop
         
+    upElem: (element, opt) ->
+        return null if not element?
+        return element if opt?.tag? and opt.tag == element.tagName
+        return element if opt?.prop? and element[opt.prop]?
+        return element if opt?.attr? and element.getAttribute?(opt.attr)?
+        module.exports.upElem element.parentNode, opt
+        
     sw: () -> document.body.clientWidth
     sh: () -> document.body.clientHeight
 
