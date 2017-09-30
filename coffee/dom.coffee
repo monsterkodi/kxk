@@ -23,23 +23,38 @@ module.exports =
     childIndex: (e) -> Array.prototype.indexOf.call e.parentNode.childNodes, e 
 
     upAttr: (element, attr) ->
+        
         return null if not element?
         a = element.getAttribute? attr
         return a if a != null and a != ''
         module.exports.upAttr element.parentNode, attr
 
     upProp: (element, prop) ->
+        
         return null if not element?
         return element[prop] if element[prop]?
         module.exports.upProp element.parentNode, prop
         
     upElem: (element, opt) ->
+        
         return null if not element?
         return element if opt?.tag? and opt.tag == element.tagName
         return element if opt?.prop? and element[opt.prop]?
         return element if opt?.attr? and element.getAttribute?(opt.attr)?
         module.exports.upElem element.parentNode, opt
+
+    downElem: (element, opt) ->
         
+        return null if not element?
+        return element if opt?.tag? and opt.tag == element.tagName
+        if opt?.prop? and element[opt.prop]?
+            return element if not opt?.value? or element[opt.prop] == opt.value
+        if opt?.attr? and element.getAttribute?(opt.attr)?
+            return element if not opt?.value? or element.getAttribute(opt.attr) == opt.value
+        for child in element.children
+            if found = module.exports.downElem child, opt
+                return found
+            
     sw: () -> document.body.clientWidth
     sh: () -> document.body.clientHeight
 
