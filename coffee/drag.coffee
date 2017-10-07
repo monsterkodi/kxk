@@ -75,20 +75,19 @@ class Drag
     dragMove: (event) =>
 
         if @dragging
-            @pos = pos event
+            @pos      = pos event
             @delta    = @lastPos.to @pos
             @deltaSum = @startPos.to @pos
-            @onMove? @, event 
-            @lastPos = @pos
             
             if @constrainKey? and event[@constrainKey]
-        
                 @constrain ?= if Math.abs(@delta.x) >= Math.abs(@delta.y) then pos 1,0 else pos 0,1
                 @delta.x *= @constrain.x
                 @delta.y *= @constrain.y
-                        
             else
                 delete @constrain
+                
+            @onMove? @, event 
+            @lastPos = @pos
         @
                 
     dragUp: (event) => 
