@@ -18,7 +18,6 @@ class Drag
                 onMove  : null
                 onStop  : null
                 active  : true
-                cursor  : 'move'
 
         if _.isString @target
             t =$ @target
@@ -81,9 +80,21 @@ class Drag
             @deltaSum = @startPos.to @pos
             @onMove? @, event 
             @lastPos = @pos
+            
+            if @constrainKey? and event[@constrainKey]
+        
+                @constrain ?= if Math.abs(@delta.x) >= Math.abs(@delta.y) then pos 1,0 else pos 0,1
+                @delta.x *= @constrain.x
+                @delta.y *= @constrain.y
+                        
+            else
+                delete @constrain
         @
                 
-    dragUp: (event) => @dragStop event
+    dragUp: (event) => 
+        
+        delete @constrain
+        @dragStop event
 
     #  0000000  000000000   0000000   00000000   
     # 000          000     000   000  000   000  
