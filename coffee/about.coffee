@@ -56,13 +56,17 @@ class About
                 }
                                 
                 #image {
-                    margin-top:     12%; 
-                    width:          62%; 
-                    height:         62%; 
+                    margin-top:     #{opt?.imageOffset ? '12%'}; 
+                    width:          #{opt?.imageWidth  ? '62%'}; 
+                    height:         #{opt?.imageHeight ? '62%'}; 
                 }
                 
                 #version { 
-                    margin-top:     7%; 
+                    position: absolute;
+                    bottom:         #{opt?.versionOffset  ? '7%'};
+                    left:           0;
+                    right:          0;
+                    text-align:     center;
                     color:          #{opt?.color ? '#333'};
                     font-family:    Verdana, sans-serif;
                     text-decoration: none;
