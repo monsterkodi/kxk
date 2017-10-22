@@ -1,5 +1,5 @@
 name            kxk
-version         0.17.8
+version         0.18.0
 description     kodi's tool kit
 main            js/kxk.js
 repository
@@ -10,6 +10,8 @@ license         Unlicense
 bugs
                 url  https://github.com/monsterkodi/kxk/issues
 homepage        https://github.com/monsterkodi/kxk#readme
+scripts
+                test  mocha -R dot --compilers coffee:coffee-script/register
 dependencies
                 ansi-keycode    0.0.0
                 chokidar        ^1.6.1

@@ -39,7 +39,8 @@ class Pos
         
     times: (val) -> @copy().scale val
         
-    clamped: (lower, upper) => @copy().clamp lower, upper
+    clamped: (lower, upper) -> @copy().clamp lower, upper
+    rounded: (v=1.0) -> new Pos Math.round(@x/v)*v, Math.round(@y/v)*v
         
     to:  (other) -> other.minus @
     mid: (other) -> @plus(other).scale 0.5
@@ -73,10 +74,13 @@ class Pos
         @rad2deg Math.acos @normal().dot o.normal()
         
     perp: -> new Pos -@y, @x
+    
     rotation: (o) -> 
         d = o.dot @perp()
-        return 0 if d == 0
-        s = d > 0 and 1 or -1
+        if Math.abs(d) < 0.0001
+            return 0 if @.dot(o) > 0
+            return 180
+        s = d > 0 and -1 or 1
         s * @angle o
             
     check: ->
@@ -126,5 +130,17 @@ class Pos
             @x *= l
             @y *= l
         @    
+        
+    rotate: (angle) ->
+        angle -= 360 while angle >  360 
+        angle += 360 while angle < -360 
+        return @ if angle == 0
+        rad = @deg2rad angle
+        cos = Math.cos rad
+        sin = Math.sin rad
+        x  = @x
+        @x = cos*@x - sin*@y
+        @y = sin* x + cos*@y
+        @
 
 module.exports = (x,y) -> new Pos x,y
