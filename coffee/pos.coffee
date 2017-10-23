@@ -44,6 +44,7 @@ class Pos
         
     to:  (other) -> other.minus @
     mid: (other) -> @plus(other).scale 0.5
+    interpolate: (other, f) -> @plus @to(other).scale f
 
     min: (val) ->
         newPos = @copy()
