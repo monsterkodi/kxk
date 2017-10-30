@@ -67,9 +67,10 @@ class Pos
     distSquare: (o) -> @minus(o).square()
     dist:       (o) -> Math.sqrt @distSquare(o)
     equals:     (o) -> @x == o?.x and @y == o?.y
-
     deg2rad:    (d) -> Math.PI*d/180.0
     rad2deg:    (r) -> r*180.0/Math.PI
+    
+    isClose:    (o,dist=0.1) -> Math.abs(@x-o.x)+Math.abs(@y-o.y) < dist
     
     angle: (o=new Pos(0,1)) ->
         @rad2deg Math.acos @normal().dot o.normal()
