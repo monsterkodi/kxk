@@ -87,6 +87,7 @@ module.exports =
             else                 "#{v}"
        
     rad2deg: (r) -> 180 * r / Math.PI
+    deg2rad: (d) -> Math.PI * d / 180
 
     reversed: (a) -> _.clone(a).reverse()
                                     
