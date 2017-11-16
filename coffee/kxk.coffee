@@ -69,6 +69,7 @@ module.exports =
     #     0      000   000  0000000   0000000   00000000
 
     clamp: (r1, r2, v) -> _.clamp v, r1, r2
+    fade:  (s,e,v) -> s*(1-v)+e*(v)
     last:  (a) -> _.last a
     first: (a) -> _.first a
     empty: (a) -> _.isEmpty(a) or a == ''
