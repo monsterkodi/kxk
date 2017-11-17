@@ -69,6 +69,13 @@ module.exports =
     #     0      000   000  0000000   0000000   00000000
 
     clamp: (r1, r2, v) -> _.clamp v, r1, r2
+
+    fadeAngles: (a, b, f) ->
+        
+        if      a-b >  180 then a -= 360
+        else if a-b < -180 then a += 360
+        (1-f) * a + f * b
+    
     fade:  (s,e,v) -> s*(1-v)+e*(v)
     last:  (a) -> _.last a
     first: (a) -> _.first a
