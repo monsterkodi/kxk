@@ -67,7 +67,14 @@ encodePath = (p) ->
     p = p.replace /\&/g, "%26"
     p = p.replace /\'/g, "%27"
 
+removeDrive = (file) ->
+    if path.sep == '\\'
+        root = path.parse(file).root
+        return file.slice root.length-1
+    file
+
 splitFilePos = (file) -> # file.txt:1:3 --> ['file.txt', [3, 0]]
+    file = removeDrive file
     split = String(file).split ':'
     line = parseInt split[1] if split.length > 1
     clmn = parseInt split[2] if split.length > 2
