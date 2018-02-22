@@ -68,6 +68,9 @@ fileList = (paths, opt) ->
         catch err
             if opt.logError
                 log "[ERROR] kxk.fileList: #{err}"
+                log "paths:", paths
+                log "opt:", opt
+                
     files
 
 module.exports = fileList
