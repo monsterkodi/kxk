@@ -72,6 +72,7 @@ class Pos
     rad2deg:    (r) -> r*180.0/Math.PI
     
     isClose:    (o,dist=0.1) -> Math.abs(@x-o.x)+Math.abs(@y-o.y) < dist
+    isZero:     (e=0.000001) -> Math.abs(@x)<e and Math.abs(@y)<e
     
     angle: (o=new Pos(0,1)) ->
         @rad2deg Math.acos @normal().dot o.normal()
@@ -81,7 +82,7 @@ class Pos
     rotation: (o) -> 
         d = o.dot @perp()
         if Math.abs(d) < 0.0001
-            return 0 if @.dot(o) > 0
+            return 0 if @dot(o) > 0
             return 180
         s = d > 0 and -1 or 1
         s * @angle o
@@ -99,6 +100,11 @@ class Pos
     @isPos: (o) -> o.x? and o.y? and Number.isFinite(o.x) and Number.isFinite(o.y)
     
     #_________________________________________________________ destructive
+    
+    fade: (o, val) ->
+        @x = @x * (1-val) + o.x * val
+        @y = @y * (1-val) + o.y * val
+        @
     
     scale: (val) ->
         @x *= val
