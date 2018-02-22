@@ -26,7 +26,6 @@ fileList = (paths, opt) ->
     opt.logError     ?= true
     files = []
     paths = [paths] if _.isString paths
-    
     filter = (p) ->
         if opt.ignoreHidden and path.basename(p).startsWith '.'
             return true
@@ -49,15 +48,20 @@ fileList = (paths, opt) ->
                 childdirs = []
                 for p in children
                     ps = fs.statSync p 
-                    if ps.isDirectory() then childdirs.push p
-                    else if ps.isFile() then files.push p if not filter p
+                    if ps.isDirectory() then childdirs.push path.normalize p
+                    else if ps.isFile()
+                        if not filter p
+                            if path.isAbsolute p
+                                files.push path.resolve p
+                            else
+                                files.push path.normalize p 
                                     
                 if opt.depth? and _.isInteger(opt.depth) and opt.depth > 0
                     copt = _.clone opt
                     copt.depth -= 1
                     for d in childdirs
                         files = files.concat fileList d, copt 
-                
+
             else if stat.isFile()
                                 
                 continue if filter p
@@ -70,7 +74,7 @@ fileList = (paths, opt) ->
                 log "[ERROR] kxk.fileList: #{err}"
                 log "paths:", paths
                 log "opt:", opt
-                
+
     files
 
 module.exports = fileList

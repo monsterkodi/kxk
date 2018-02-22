@@ -37,7 +37,8 @@ class Store
             Store.addStore @
             
             @timer   = null
-            @file    = opt?.file ? (@app? and "#{@app.getPath('userData')}/#{@name}.noon")
+            @file    = opt?.file ? (@app? and path.join(@app.getPath('userData'), "#{@name}.noon"))
+            # log "store using file: #{@file}"
             @timeout = opt?.timeout ? 4000
                 
             post.on 'store', (name, action, args...) =>

@@ -29,6 +29,7 @@ resolve   = (p) ->
 samePath = (pa, pb) -> resolve(pa) == resolve(pb)
     
 fileExists = (file) ->
+    return false if not file?
     file = resolve file
     try
         if fs.statSync(file).isFile()
@@ -70,7 +71,8 @@ encodePath = (p) ->
 removeDrive = (file) ->
     if path.sep == '\\'
         root = path.parse(file).root
-        return file.slice root.length-1
+        if root.length
+            return file.slice root.length-1
     file
 
 splitFilePos = (file) -> # file.txt:1:3 --> ['file.txt', [3, 0]]
