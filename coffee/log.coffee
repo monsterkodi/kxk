@@ -4,8 +4,9 @@
 #000      000   000  000   000
 #0000000   0000000    0000000 
 
-{ str, post, os, process } = require './kxk' 
-
+post    = require './ppost' 
+str     = require './str'
+os      = require 'os'
 sutil   = require 'stack-utils'
 sorcery = require 'sorcery'
 

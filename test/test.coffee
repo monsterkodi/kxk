@@ -4,63 +4,176 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ fileList, pos, log, _ } = require '../coffee/kxk'
+{ fileList, splitFileLine, slash, pos, log, _ } = require '../coffee/kxk'
 
 assert = require 'assert'
 chai   = require 'chai'
-path   = require 'path'
 expect = chai.expect
 chai.should()
 
+describe 'slash', ->
+    
+    it 'path', ->
+        
+        expect slash.path "C:\\Back\\Slash\\Crap"
+        .to.eql "C:/Back/Slash/Crap"
+        
+        expect slash.path "C:\\Back\\Slash\\Crap\\..\\..\\To\\The\\..\\Future"
+        .to.eql "C:/Back/To/Future"
+        
+    it 'join', ->
+        
+        expect slash.join 'a', 'b', 'c'
+        .to.eql 'a/b/c'
+        
+        expect slash.join 'C:\\FOO', '.\\BAR', 'that\\sucks'
+        .to.eql 'C:/FOO/BAR/that/sucks'
+
+    it 'home', ->
+        
+        home = "C:/Users/kodi"
+        expect slash.home()
+        .to.eql home
+        
+        expect slash.tilde home
+        .to.eql '~'
+
+        expect slash.tilde home + '/sub'
+        .to.eql '~/sub'
+        
+        expect slash.untilde '~/sub'
+        .to.eql home + '/sub'
+
+    it 'resolve', ->
+        
+        expect slash.resolve '~'
+        .to.eql slash.home()
+
+    it 'relative', ->
+        
+        expect slash.relative 'C:\\test\\some\\path.txt', 'C:\\test\\some\\other\\path'
+        .to.eql '../../path.txt'
+    
+        expect slash.relative 'C:\\some\\path', 'C:/some/path'
+        .to.eql '.'
+    
+    it 'splitDrive', ->
+        
+        expect slash.splitDrive '/some/path'
+        .to.eql ['/some/path', '']
+        
+        expect slash.splitDrive 'c:/some/path'
+        .to.eql ['/some/path', 'c:']
+        
+        expect slash.splitDrive 'c:\\some\\path'
+        .to.eql ['/some/path', 'c:']
+        
+    it 'removeDrive', ->
+        
+        expect slash.removeDrive '/some/path'
+        .to.eql '/some/path'
+
+        expect slash.removeDrive 'c:/some/path'
+        .to.eql '/some/path'
+
+        expect slash.removeDrive 'c:\\some\\path'
+        .to.eql '/some/path'
+
+    it 'splitFileLine', ->
+
+        expect slash.splitFileLine '/some/path'
+        .to.eql ['/some/path', 1, 0]
+        
+        expect slash.splitFileLine '/some/path:123'
+        .to.eql ['/some/path', 123, 0]
+
+        expect slash.splitFileLine '/some/path:123:15'
+        .to.eql ['/some/path', 123, 15]
+
+        expect slash.splitFileLine 'c:/some/path:123'
+        .to.eql ['c:/some/path', 123, 0]
+
+        expect slash.splitFileLine 'c:/some/path:123:15'
+        .to.eql ['c:/some/path', 123, 15]
+
+    it 'splitFilePos', ->
+
+        expect slash.splitFilePos '/some/path'
+        .to.eql ['/some/path', [0, 0]]
+
+        expect slash.splitFilePos '/some/path:123'
+        .to.eql ['/some/path', [0, 122]]
+
+        expect slash.splitFilePos '/some/path:123:15'
+        .to.eql ['/some/path', [15, 122]]
+
+        expect slash.splitFilePos 'c:/some/path:123'
+        .to.eql ['c:/some/path', [0, 122]]
+
+        expect slash.splitFilePos 'c:/some/path:123:15'
+        .to.eql ['c:/some/path', [15, 122]]
+        
 describe 'fileList', ->
 
     it "exists", -> _.isFunction fileList
+    
     it "chdir", ->
         process.chdir "#{__dirname}"
         expect process.cwd()
         .to.eql __dirname
+        
     it "returns an array", -> _.isArray fileList '.'
+    
     it "returns empty array", -> _.isEmpty fileList 'foobar', logError: false
+    
     it "finds this file relative", ->
         expect fileList '.'
         .to.include 'test.coffee'
+        
     it "finds this file absolute", ->
         expect fileList __dirname
-        .to.include __filename
+        .to.include slash.path __filename
+        
     it "lists relative path with dot", ->
         expect fileList('./dir').length
         .to.gt 0
+        
     it "lists relative path without dot", ->
         expect fileList('dir').length
         .to.gt 0
+        
     it "ignores hidden files by default", ->
         expect fileList 'dir'
-        .to.not.include path.normalize 'dir/.konrad.noon'
+        .to.not.include slash.normalize 'dir/.konrad.noon'
+        
     it "includes hidden files", ->
         expect fileList 'dir', 'ignoreHidden': false
-        .to.include path.normalize 'dir/.konrad.noon'
+        .to.include slash.normalize 'dir/.konrad.noon'
+        
     it "doesn't recurse by default", ->
         expect fileList 'dir'
-        .to.eql [path.normalize('dir/test.coffee'), path.normalize('dir/test.js'), path.normalize('dir/test.txt')]
+        .to.eql [slash.normalize('dir/test.coffee'), slash.normalize('dir/test.js'), slash.normalize('dir/test.txt')]
+        
     it "recurses if depth set", ->
         expect fileList 'dir', depth: 2
         .to.eql [
-            path.normalize('dir/test.coffee'), 
-            path.normalize('dir/test.js'), 
-            path.normalize('dir/test.txt'), 
-            path.normalize('dir/level1/test.coffee'), 
-            path.normalize('dir/level1/test.js'), 
-            path.normalize('dir/level1/test.txt'), 
-            path.normalize('dir/level1/level2/level2.coffee'), 
-            path.normalize('dir/level1b/level1b.coffee')]
+            slash.normalize('dir/test.coffee'), 
+            slash.normalize('dir/test.js'), 
+            slash.normalize('dir/test.txt'), 
+            slash.normalize('dir/level1/test.coffee'), 
+            slash.normalize('dir/level1/test.js'), 
+            slash.normalize('dir/level1/test.txt'), 
+            slash.normalize('dir/level1/level2/level2.coffee'), 
+            slash.normalize('dir/level1b/level1b.coffee')]
+            
     it "matches extension", ->
         expect fileList 'dir', depth: 3, matchExt: __filename
         .to.eql [
-            path.normalize('dir/test.coffee'), 
-            path.normalize('dir/level1/test.coffee'), 
-            path.normalize('dir/level1/level2/level2.coffee'), 
-            path.normalize('dir/level1/level2/level3/level3.coffee'), 
-            path.normalize('dir/level1b/level1b.coffee')]
+            slash.normalize('dir/test.coffee'), 
+            slash.normalize('dir/level1/test.coffee'), 
+            slash.normalize('dir/level1/level2/level2.coffee'), 
+            slash.normalize('dir/level1/level2/level3/level3.coffee'), 
+            slash.normalize('dir/level1b/level1b.coffee')]
 
 describe 'pos', ->
 

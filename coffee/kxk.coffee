@@ -5,25 +5,26 @@
 # 000   000  000   000  000   000  
 
 childp  = require 'child_process'
-process = require 'process'
 crypto  = require 'crypto'
 _       = require 'lodash'
+os      = require 'os'
 noon    = require 'noon'
 path    = require 'path'
-# post    = require 'ppost'
-post    = require './ppost'
 fs      = require 'fs-extra'
-os      = require 'os'
+atomic  = require 'write-file-atomic'
+post    = require './ppost'
+
+console.log 'post:', post
 
 module.exports =
     
     _:_
     os:os
     fs:fs
+    atomic:atomic
     post:post
     path:path
     noon:noon
-    process:process
     childp:childp
     
     # 0000000    000   0000000  000000000
@@ -127,6 +128,7 @@ module.exports.str         = require './str'
 module.exports.log         = require './log'
 module.exports.error       = require './error'
 module.exports.pos         = require './pos'
+module.exports.slash       = require './slash'
 module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'
 module.exports[k]          = require('./path')[k] for k in Object.keys require './path' 
 module.exports.drag        = require './drag'

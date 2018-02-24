@@ -4,7 +4,7 @@
 # 000       000  000      000       000      000       000     000     
 # 000       000  0000000  00000000  0000000  000  0000000      000     
 
-{ splitFilePos, joinFilePos, path, fs, log, _ } = require './kxk'
+{ slash, path, fs, log, _ } = require './kxk'
 
 #   synchronous file list
 #
@@ -38,23 +38,23 @@ fileList = (paths, opt) ->
     
     for p in paths
         try
-            [p,pos] = splitFilePos p
+            [p,pos] = slash.splitFilePos p
             stat = fs.statSync p
             
             if stat.isDirectory()
                 
                 children = fs.readdirSync p
-                children = (path.join(p,f) for f in children)
+                children = (slash.join(p,f) for f in children)
                 childdirs = []
                 for p in children
                     ps = fs.statSync p 
-                    if ps.isDirectory() then childdirs.push path.normalize p
+                    if ps.isDirectory() then childdirs.push slash.normalize p
                     else if ps.isFile()
                         if not filter p
                             if path.isAbsolute p
-                                files.push path.resolve p
+                                files.push slash.resolve p
                             else
-                                files.push path.normalize p 
+                                files.push slash.normalize p 
                                     
                 if opt.depth? and _.isInteger(opt.depth) and opt.depth > 0
                     copt = _.clone opt
@@ -66,7 +66,7 @@ fileList = (paths, opt) ->
                                 
                 continue if filter p
                 
-                p = joinFilePos p, pos
+                p = slash.joinFilePos p, pos
                 files.push p
                 
         catch err

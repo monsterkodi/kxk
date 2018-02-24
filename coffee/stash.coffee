@@ -4,9 +4,7 @@
 #      000     000     000   000       000  000   000  
 # 0000000      000     000   000  0000000   000   000  
 
-{ setKeypath, getKeypath, noon, fs, path, log, error, _
-}        = require './kxk'
-atomic   = require 'write-file-atomic'
+{ setKeypath, getKeypath, noon, atomic, fs, path, log, error, _ } = require './kxk'
 
 # simple key value store with delayed saving to userData folder
 # does not sync between processes

@@ -4,10 +4,9 @@
 #      000     000     000   000  000   000  000       
 # 0000000      000      0000000   000   000  00000000  
 
-{ fileExists, setKeypath, getKeypath, noon, post, path, fs, log, error, _
-}        = require './kxk'
+{ fileExists, setKeypath, getKeypath, noon, post, path, fs, log, error, _ } = require './kxk'
 
-atomic   = require 'write-file-atomic'
+atomic = require 'write-file-atomic'
 
 # simple key value store with delayed saving to userData folder
 # does sync changes between processes
