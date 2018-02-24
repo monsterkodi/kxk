@@ -62,6 +62,11 @@ class slash
         [f,l,c] = slash.splitFileLine p
         [f, [c, l-1]]
         
+    @ext:       (p) -> path.extname(p).slice 1
+    @splitExt:  (p) -> [@removeExt(p), slash.ext(p)]
+    @removeExt: (p) -> slash.join path.dirname(p), fileName p
+    @swapExt:   (p, ext) -> slash.removeExt(p) + (ext.startsWith('.') and ext or ".#{ext}")
+        
     #       000   0000000   000  000   000  
     #       000  000   000  000  0000  000  
     #       000  000   000  000  000 0 000  
@@ -89,6 +94,7 @@ class slash
     # 000  0000  000   000  000 0 000  000       
     # 000   000  000   000  000   000  00000000  
     
+    @fileName:   (p) -> path.basename p, path.extname p
     @extname:    (p) -> path.extname p
     @basename:   (p) -> path.extname p
     @isAbsolute: (p) -> path.isAbsolute p
@@ -131,5 +137,18 @@ class slash
         if slash.resolve(to) == rel
             return '.'
         slash.path path.relative slash.resolve(to), rel
+    
+        
+    @fileUrl: (p) -> "file://#{encodePath slash.resolve p}"
+
+    @samePath: (a, b) -> slash.resolve(a) == slash.resolve(b)
+
+    @escape: (p) -> p.replace /([\`"])/g, '\\$1'
+
+    @encode: (p) ->
+        p = encodeURI p
+        p = p.replace /\#/g, "%23"
+        p = p.replace /\&/g, "%26"
+        p = p.replace /\'/g, "%27"
     
 module.exports = slash
