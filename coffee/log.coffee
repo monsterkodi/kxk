@@ -4,6 +4,7 @@
 #000      000   000  000   000
 #0000000   0000000    0000000 
 
+slash   = require './slash'
 post    = require './ppost' 
 str     = require './str'
 os      = require 'os'
@@ -20,7 +21,7 @@ slog = (s) ->
             info = magic.trace(f.getLineNumber(), f.getFunctionName())
         else
             info = source: f.getFileName(), line: f.getLineNumber()
-        p = info.source.replace os.homedir(), "~"
+        p = slash.tilde info.source
         m = f.getFunctionName()
         s = "#{p}:#{info.line} ⦿ #{m} ▸ #{s}"
         post.emit 'slog', s 

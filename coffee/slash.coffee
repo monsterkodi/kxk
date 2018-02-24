@@ -1,8 +1,10 @@
-#  0000000  000       0000000    0000000  000   000    
-# 000       000      000   000  000       000   000    
-# 0000000   000      000000000  0000000   000000000    
-#      000  000      000   000       000  000   000    
-# 0000000   0000000  000   000  0000000   000   000    
+###
+ 0000000  000       0000000    0000000  000   000    
+000       000      000   000  000       000   000    
+0000000   000      000000000  0000000   000000000    
+     000  000      000   000       000  000   000    
+0000000   0000000  000   000  0000000   000   000    
+###
 
 { fs, os, path, log, error, _ } = require './kxk'
 
@@ -12,13 +14,26 @@ class slash
 
     @win: -> path.sep == '\\'
     
+    # 00000000    0000000   000000000  000   000  
+    # 000   000  000   000     000     000   000  
+    # 00000000   000000000     000     000000000  
+    # 000        000   000     000     000   000  
+    # 000        000   000     000     000   000  
+    
     @path: (p) ->
         return error "no path? #{p}" if not p? or p.length == 0
         p = path.normalize p
         p = p.replace slash.reg, '/'
-        # log 'slash.path', p
         p
 
+    #  0000000  00000000   000      000  000000000  
+    # 000       000   000  000      000     000     
+    # 0000000   00000000   000      000     000     
+    #      000  000        000      000     000     
+    # 0000000   000        0000000  000     000     
+    
+    @split: (p) -> slash.path(p).split '/'
+    
     @splitDrive: (p) ->
         
         if slash.win()
@@ -47,6 +62,12 @@ class slash
         [f,l,c] = slash.splitFileLine p
         [f, [c, l-1]]
         
+    #       000   0000000   000  000   000  
+    #       000  000   000  000  0000  000  
+    #       000  000   000  000  000 0 000  
+    # 000   000  000   000  000  000  0000  
+    #  0000000    0000000   000  000   000  
+    
     @join: -> [].map.call(arguments, slash.path).join '/'
     
     @joinFilePos: (file, pos) -> # ['file.txt', [3, 0]] --> file.txt:1:3
@@ -62,8 +83,29 @@ class slash
         return "#{file}:#{line}" if not col?
         "#{file}:#{line}:#{col}"
     
-    @dirname:   (p) -> slash.path path.dirname p
-    @normalize: (p) -> slash.path path.normalize p
+    # 000   000   0000000   00     00  00000000  
+    # 0000  000  000   000  000   000  000       
+    # 000 0 000  000000000  000000000  0000000   
+    # 000  0000  000   000  000 0 000  000       
+    # 000   000  000   000  000   000  00000000  
+    
+    @extname:    (p) -> path.extname p
+    @basename:   (p) -> path.extname p
+    @isAbsolute: (p) -> path.isAbsolute p
+    @dirname:    (p) -> slash.path path.dirname p
+    @normalize:  (p) -> slash.path path.normalize p
+    
+    @fileName  = (p) -> slash.basename p, slash.extname p
+    @extName   = (p) -> slash.extname(p).slice 1
+    @splitExt  = (p) -> slash.join slash.dirname(p), fileName p
+    @swapExt   = (p, ext) -> splitExt(p) + (ext.startsWith('.') and ext or ".#{ext}")
+    
+    # 00     00  000   0000000   0000000    
+    # 000   000  000  000       000         
+    # 000000000  000  0000000   000         
+    # 000 0 000  000       000  000         
+    # 000   000  000  0000000    0000000    
+    
     @home:          -> slash.path os.homedir()
     @tilde:     (p) -> slash.path(p).replace slash.home(), '~'
     @untilde:   (p) -> slash.path(p).replace /^\~/, slash.home()
@@ -85,7 +127,7 @@ class slash
     @relative: (rel, to) ->
         
         rel = slash.resolve rel
-        return rel if not path.isAbsolute rel
+        return rel if not slash.isAbsolute rel
         if slash.resolve(to) == rel
             return '.'
         slash.path path.relative slash.resolve(to), rel

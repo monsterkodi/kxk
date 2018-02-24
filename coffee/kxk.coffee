@@ -14,8 +14,6 @@ fs      = require 'fs-extra'
 atomic  = require 'write-file-atomic'
 post    = require './ppost'
 
-console.log 'post:', post
-
 module.exports =
     
     _:_
