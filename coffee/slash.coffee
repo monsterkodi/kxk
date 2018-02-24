@@ -6,7 +6,7 @@
 0000000   0000000  000   000  0000000   000   000    
 ###
 
-{ fs, os, path, log, error, _ } = require './kxk'
+{ dirExists, fileExists, fs, os, path, log, error, _ } = require './kxk'
 
 class slash
 
@@ -139,7 +139,7 @@ class slash
         slash.path path.relative slash.resolve(to), rel
     
         
-    @fileUrl: (p) -> "file://#{encodePath slash.resolve p}"
+    @fileUrl: (p) -> "file://#{slash.encode slash.resolve p}"
 
     @samePath: (a, b) -> slash.resolve(a) == slash.resolve(b)
 
@@ -150,5 +150,17 @@ class slash
         p = p.replace /\#/g, "%23"
         p = p.replace /\&/g, "%26"
         p = p.replace /\'/g, "%27"
+
+    @pkg: (p) ->
+    
+        if p?.length?
+            
+            while p.length and p not in ['.', '/']
+                
+                if dirExists  slash.join p, '.git'         then return slash.resolve p
+                if fileExists slash.join p, 'package.noon' then return slash.resolve p
+                if fileExists slash.join p, 'package.json' then return slash.resolve p
+                p = slash.dirname p
+        null
     
 module.exports = slash
