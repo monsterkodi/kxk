@@ -6,7 +6,7 @@
 0000000   0000000  000   000  0000000   000   000    
 ###
 
-{ fs, os, path, log, error, _ } = require './kxk'
+{ fs, os, path, empty, log, error, _ } = require './kxk'
 
 class slash
 
@@ -95,18 +95,18 @@ class slash
     # 000  0000  000   000  000 0 000  000       
     # 000   000  000   000  000   000  00000000  
     
-    @fileName:   (p) -> path.basename p, path.extname p
-    @extname:    (p) -> path.extname p
-    @basename:   (p) -> path.extname p
-    @isAbsolute: (p) -> path.isAbsolute p
-    @dirname:    (p) -> slash.path path.dirname p
-    @normalize:  (p) -> slash.path path.normalize p
-    @parse:      (p) -> path.parse p
+    @fileName:   (p)   -> path.basename p, path.extname p
+    @extname:    (p)   -> path.extname p
+    @basename:   (p,e) -> path.basename p,e
+    @isAbsolute: (p)   -> path.isAbsolute p
+    @dirname:    (p)   -> slash.path path.dirname p
+    @normalize:  (p)   -> slash.path path.normalize p
+    @parse:      (p)   -> path.parse p
     
-    @fileName  = (p) -> slash.basename p, slash.extname p
-    @extName   = (p) -> slash.extname(p).slice 1
-    @splitExt  = (p) -> slash.join slash.dirname(p), fileName p
-    @swapExt   = (p, ext) -> splitExt(p) + (ext.startsWith('.') and ext or ".#{ext}")
+    @fileName  = (p)   -> slash.basename p, slash.extname p
+    @extName   = (p)   -> slash.extname(p).slice 1
+    @splitExt  = (p)   -> slash.join slash.dirname(p), fileName p
+    @swapExt   = (p,e) -> splitExt(p) + (e.startsWith('.') and e or ".#{e}")
     
     # 00     00  000   0000000   0000000    
     # 000   000  000  000       000         
@@ -134,12 +134,15 @@ class slash
     
     @relative: (rel, to) ->
         
+        if empty to
+            error "slash.relative to nothing?", rel, to
+            return rel
+            
         rel = slash.resolve rel
         return rel if not slash.isAbsolute rel
         if slash.resolve(to) == rel
             return '.'
         slash.path path.relative slash.resolve(to), rel
-    
         
     @fileUrl: (p) -> "file://#{slash.encode slash.resolve p}"
 

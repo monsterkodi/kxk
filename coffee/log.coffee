@@ -4,7 +4,6 @@
 #000      000   000  000   000
 #0000000   0000000    0000000 
 
-slash   = require './slash'
 post    = require './ppost' 
 str     = require './str'
 os      = require 'os'
@@ -15,6 +14,7 @@ stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
 slog = (s) ->
     
+    slash = require './slash'
     try # fancy log with source-mapped files and line numbers
         f = stack.capture()[slog.depth]
         if magic = sorcery.loadSync(f.getFileName())

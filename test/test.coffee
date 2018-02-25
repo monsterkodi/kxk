@@ -64,7 +64,10 @@ describe 'slash', ->
     
         expect slash.relative 'C:\\some\\path', 'C:/some/path'
         .to.eql '.'
-    
+
+        expect slash.relative 'C:/Users/kodi/s/konrad/app/js/coffee.js', 'C:/Users/kodi/s/konrad'
+        .to.eql 'app/js/coffee.js'
+            
     it 'splitDrive', ->
         
         expect slash.splitDrive '/some/path'
