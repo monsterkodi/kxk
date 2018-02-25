@@ -21,24 +21,8 @@ splitFileLine = (p)       -> slash.splitFileLine p
 joinFilePos   = (f, p)    -> slash.joinFilePos f, p
 joinFileLine  = (f, l, c) -> slash.joinFilePos f, l, c
 
-fileExists = (p) ->
-    return false if not p?
-    file = slash.resolve p
-    try
-        if fs.statSync(p).isFile()
-            fs.accessSync p, fs.R_OK
-            return true
-    catch 
-        return false
-
-dirExists = (dir) ->
-    dir = slash.resolve dir
-    try
-        if fs.statSync(dir).isDirectory()
-            fs.accessSync dir, fs.R_OK
-            return true
-    catch
-        return false
+fileExists = (p) -> slash.fileExists p
+dirExists  = (p) -> slash.dirExists p
     
 module.exports = 
     

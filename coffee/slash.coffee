@@ -162,5 +162,28 @@ class slash
                 if fileExists slash.join p, 'package.json' then return slash.resolve p
                 p = slash.dirname p
         null
-    
+
+    @exists: (p) -> 
+        
+        return false if not p?
+        try
+            p = slash.resolve p
+            if stat = fs.statSync(p)
+                fs.accessSync p, fs.R_OK
+                return stat
+        catch 
+            return null
+        null     
+
+    @fileExists: (p) ->
+        
+        if stat = slash.exists p
+            return stat if stat.isFile()
+
+    @dirExists: (p) ->
+
+        if stat = slash.exists p
+            return stat if stat.isDirectory()
+
+
 module.exports = slash

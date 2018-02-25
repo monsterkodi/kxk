@@ -113,6 +113,33 @@ describe 'slash', ->
         expect slash.splitFilePos 'c:/some/path:123:15'
         .to.eql ['c:/some/path', [15, 122]]
         
+    it 'exists', ->
+
+        expect slash.exists __dirname
+        .to.exist
+
+        expect slash.exists __filename
+        .to.exist
+        
+        expect slash.exists __filename + 'foo'
+        .to.not.exist
+    
+    it 'fileExists', ->
+
+        expect slash.fileExists __filename
+        .to.exist
+
+        expect slash.fileExists __dirname
+        .to.not.exist
+        
+    it 'dirExists', ->
+        
+        expect slash.dirExists __dirname
+        .to.exist
+
+        expect slash.dirExists __filename
+        .to.not.exist
+        
 describe 'fileList', ->
 
     it "exists", -> _.isFunction fileList
