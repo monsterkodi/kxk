@@ -4,7 +4,7 @@
 # 000       000   000  000   000  000   000  000   000  
 # 00000000  000   000  000   000   0000000   000   000  
 
-{log, str, post} = require './kxk'
+{ log, str, post } = require './kxk'
 
 error = ->
     

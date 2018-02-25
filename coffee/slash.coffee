@@ -101,6 +101,7 @@ class slash
     @isAbsolute: (p) -> path.isAbsolute p
     @dirname:    (p) -> slash.path path.dirname p
     @normalize:  (p) -> slash.path path.normalize p
+    @parse:      (p) -> path.parse p
     
     @fileName  = (p) -> slash.basename p, slash.extname p
     @extName   = (p) -> slash.extname(p).slice 1
