@@ -15,6 +15,8 @@ describe 'slash', ->
     
     it 'path', ->
         
+        return if not slash.win()
+        
         expect slash.path "C:\\Back\\Slash\\Crap"
         .to.eql "C:/Back/Slash/Crap"
         
@@ -26,12 +28,18 @@ describe 'slash', ->
         expect slash.join 'a', 'b', 'c'
         .to.eql 'a/b/c'
         
+        return if not slash.win()
+        
         expect slash.join 'C:\\FOO', '.\\BAR', 'that\\sucks'
         .to.eql 'C:/FOO/BAR/that/sucks'
 
     it 'home', ->
         
-        home = "C:/Users/kodi"
+        if slash.win()
+            home = "C:/Users/kodi"
+        else
+            home = "/Users/kodi"
+            
         expect slash.home()
         .to.eql home
         
@@ -62,6 +70,8 @@ describe 'slash', ->
         expect slash.splitDrive '/some/path'
         .to.eql ['/some/path', '']
         
+        return if not slash.win()
+        
         expect slash.splitDrive 'c:/some/path'
         .to.eql ['/some/path', 'c:']
         
@@ -73,6 +83,8 @@ describe 'slash', ->
         expect slash.removeDrive '/some/path'
         .to.eql '/some/path'
 
+        return if not slash.win()
+        
         expect slash.removeDrive 'c:/some/path'
         .to.eql '/some/path'
 
@@ -90,6 +102,8 @@ describe 'slash', ->
         expect slash.splitFileLine '/some/path:123:15'
         .to.eql ['/some/path', 123, 15]
 
+        return if not slash.win()
+        
         expect slash.splitFileLine 'c:/some/path:123'
         .to.eql ['c:/some/path', 123, 0]
 
@@ -107,6 +121,8 @@ describe 'slash', ->
         expect slash.splitFilePos '/some/path:123:15'
         .to.eql ['/some/path', [15, 122]]
 
+        return if not slash.win()
+        
         expect slash.splitFilePos 'c:/some/path:123'
         .to.eql ['c:/some/path', [0, 122]]
 

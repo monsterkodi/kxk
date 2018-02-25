@@ -40,6 +40,7 @@ class slash
             root = path.parse(p).root
             if root.length
                 return [slash.path(p.slice(root.length-1)), p.slice(0, root.length-1)]
+                
         [slash.path(p), '']
         
     @removeDrive: (p) ->
