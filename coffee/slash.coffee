@@ -6,7 +6,7 @@
 0000000   0000000  000   000  0000000   000   000    
 ###
 
-{ dirExists, fileExists, fs, os, path, log, error, _ } = require './kxk'
+{ fs, os, path, log, error, _ } = require './kxk'
 
 class slash
 
@@ -158,9 +158,9 @@ class slash
             
             while p.length and p not in ['.', '/']
                 
-                if dirExists  slash.join p, '.git'         then return slash.resolve p
-                if fileExists slash.join p, 'package.noon' then return slash.resolve p
-                if fileExists slash.join p, 'package.json' then return slash.resolve p
+                if slash.dirExists  slash.join p, '.git'         then return slash.resolve p
+                if slash.fileExists slash.join p, 'package.noon' then return slash.resolve p
+                if slash.fileExists slash.join p, 'package.json' then return slash.resolve p
                 p = slash.dirname p
         null
 
@@ -185,6 +185,5 @@ class slash
 
         if stat = slash.exists p
             return stat if stat.isDirectory()
-
 
 module.exports = slash
