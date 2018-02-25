@@ -6,7 +6,7 @@
 0000000   0000000  000   000  0000000   000   000    
 ###
 
-{ fs, os, path, log, error, _ } = require './kxk'
+{ dirExists, fileExists, fs, os, path, log, error, _ } = require './kxk'
 
 class slash
 
@@ -62,6 +62,11 @@ class slash
         [f,l,c] = slash.splitFileLine p
         [f, [c, l-1]]
         
+    @ext:       (p) -> path.extname(p).slice 1
+    @splitExt:  (p) -> [@removeExt(p), slash.ext(p)]
+    @removeExt: (p) -> slash.join path.dirname(p), fileName p
+    @swapExt:   (p, ext) -> slash.removeExt(p) + (ext.startsWith('.') and ext or ".#{ext}")
+        
     #       000   0000000   000  000   000  
     #       000  000   000  000  0000  000  
     #       000  000   000  000  000 0 000  
@@ -89,6 +94,7 @@ class slash
     # 000  0000  000   000  000 0 000  000       
     # 000   000  000   000  000   000  00000000  
     
+    @fileName:   (p) -> path.basename p, path.extname p
     @extname:    (p) -> path.extname p
     @basename:   (p) -> path.extname p
     @isAbsolute: (p) -> path.isAbsolute p
@@ -132,4 +138,52 @@ class slash
             return '.'
         slash.path path.relative slash.resolve(to), rel
     
+        
+    @fileUrl: (p) -> "file://#{slash.encode slash.resolve p}"
+
+    @samePath: (a, b) -> slash.resolve(a) == slash.resolve(b)
+
+    @escape: (p) -> p.replace /([\`"])/g, '\\$1'
+
+    @encode: (p) ->
+        p = encodeURI p
+        p = p.replace /\#/g, "%23"
+        p = p.replace /\&/g, "%26"
+        p = p.replace /\'/g, "%27"
+
+    @pkg: (p) ->
+    
+        if p?.length?
+            
+            while p.length and p not in ['.', '/']
+                
+                if dirExists  slash.join p, '.git'         then return slash.resolve p
+                if fileExists slash.join p, 'package.noon' then return slash.resolve p
+                if fileExists slash.join p, 'package.json' then return slash.resolve p
+                p = slash.dirname p
+        null
+
+    @exists: (p) -> 
+        
+        return false if not p?
+        try
+            p = slash.resolve p
+            if stat = fs.statSync(p)
+                fs.accessSync p, fs.R_OK
+                return stat
+        catch 
+            return null
+        null     
+
+    @fileExists: (p) ->
+        
+        if stat = slash.exists p
+            return stat if stat.isFile()
+
+    @dirExists: (p) ->
+
+        if stat = slash.exists p
+            return stat if stat.isDirectory()
+
+
 module.exports = slash
