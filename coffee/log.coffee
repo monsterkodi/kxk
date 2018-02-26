@@ -7,6 +7,8 @@
 post    = require './ppost' 
 str     = require './str'
 os      = require 'os'
+fs      = require 'fs'
+_       = require 'lodash'
 sutil   = require 'stack-utils'
 sorcery = require 'sorcery'
 
@@ -17,16 +19,21 @@ slog = (s) ->
     slash = require './slash'
     try # fancy log with source-mapped files and line numbers
         f = stack.capture()[slog.depth]
-        if magic = sorcery.loadSync(f.getFileName())
-            info = magic.trace(f.getLineNumber(), f.getFunctionName())
+
+        if chain = sorcery.loadSync(f.getFileName())
+            info   = chain.trace(f.getLineNumber(), 0)
+            source = fs.readFileSync f.getFileName(), 'utf8'
+            match  = source.match /\/\/\# sourceURL=(.+)$/
+            info.source = slash.tilde match?[1] ? f.getFileName()
         else
-            info = source: f.getFileName(), line: f.getLineNumber()
-        p = slash.tilde info.source
-        m = f.getFunctionName()
-        s = "#{p}:#{info.line} ⦿ #{m} ▸ #{s}"
+            info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
+
+        file = _.padStart "#{info.source}:#{info.line}", slog.filepad
+        meth = _.padEnd f.getFunctionName(), slog.methpad
+        s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
         post.emit 'slog', s 
     catch err
-        post.emit 'slog', " ▸ #{s}"
+        post.emit 'slog', "!#{slog.methsep}#{s} #{err}"
 
 log = ->
     
@@ -37,6 +44,10 @@ log = ->
     slog s
 
 slog.depth = 2
+slog.filesep = ' > ' #' ⦿ '
+slog.methsep = ' >> ' #' ▸ '
+slog.filepad = 30
+slog.methpad = 15
 log.slog = slog
 
 module.exports = log
