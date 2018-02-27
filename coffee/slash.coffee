@@ -96,17 +96,14 @@ class slash
     # 000   000  000   000  000   000  00000000  
     
     @fileName:   (p)   -> path.basename p, path.extname p
+    @file:       (p)   -> path.basename p, path.extname p
     @extname:    (p)   -> path.extname p
     @basename:   (p,e) -> path.basename p,e
     @isAbsolute: (p)   -> path.isAbsolute p
     @dirname:    (p)   -> slash.path path.dirname p
+    @dir:        (p)   -> slash.path path.dirname p
     @normalize:  (p)   -> slash.path path.normalize p
     @parse:      (p)   -> path.parse p
-    
-    @fileName  = (p)   -> slash.basename p, slash.extname p
-    @extName   = (p)   -> slash.extname(p).slice 1
-    @splitExt  = (p)   -> slash.join slash.dirname(p), fileName p
-    @swapExt   = (p,e) -> splitExt(p) + (e.startsWith('.') and e or ".#{e}")
     
     # 00     00  000   0000000   0000000    
     # 000   000  000  000       000         
