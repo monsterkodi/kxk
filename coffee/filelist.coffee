@@ -4,7 +4,7 @@
 # 000       000  000      000       000      000       000     000     
 # 000       000  0000000  00000000  0000000  000  0000000      000     
 
-{ slash, path, fs, log, _ } = require './kxk'
+{ slash, fs, log, _ } = require './kxk'
 
 #   synchronous file list
 #
@@ -29,14 +29,14 @@ fileList = (paths, opt) ->
     
     filter = (p) ->
         
-        if slash.fileName(p).toLowerCase() == 'ntuser' then return true
+        if slash.base(p).toLowerCase() == 'ntuser' then return true
         
-        if opt.ignoreHidden and path.basename(p).startsWith '.'
+        if opt.ignoreHidden and slash.file(p).startsWith '.'
             return true
         else if opt.matchExt? 
-            if _.isString(opt.matchExt) and path.extname(p) != path.extname opt.matchExt
+            if _.isString(opt.matchExt) and slash.extname(p) != slash.extname opt.matchExt
                 return true
-            else if _.isArray(opt.matchExt) and path.extname(p) not in opt.matchExt
+            else if _.isArray(opt.matchExt) and slash.extname(p) not in opt.matchExt
                 return true
         false
     
@@ -55,7 +55,7 @@ fileList = (paths, opt) ->
                     if ps.isDirectory() then childdirs.push slash.normalize p
                     else if ps.isFile()
                         if not filter p
-                            if path.isAbsolute p
+                            if slash.isAbsolute p
                                 files.push slash.resolve p
                             else
                                 files.push slash.normalize p 

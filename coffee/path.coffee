@@ -6,7 +6,7 @@
 
 { slash, path, error, os, fs } = require './kxk'
 
-fileName   = (p)    -> slash.fileName p
+fileName   = (p)    -> slash.base p
 extName    = (p)    -> slash.ext p
 splitExt   = (p)    -> slash.removeExt p
 swapExt    = (p, e) -> slash.swapExt p, e

@@ -52,6 +52,8 @@ class slash
         
         return slash.splitDrive(p)[0]
   
+    @isRoot: (p) -> @removeDrive(p) == '/'
+        
     @splitFileLine: (p) ->  # file.txt:1:0 --> ['file.txt', 1, 0]
         
         [f,d] = slash.splitDrive p
@@ -71,7 +73,7 @@ class slash
         
     @ext:       (p) -> path.extname(p).slice 1
     @splitExt:  (p) -> [slash.removeExt(p), slash.ext(p)]
-    @removeExt: (p) -> slash.join path.dirname(p), fileName p
+    @removeExt: (p) -> slash.join slash.dir(p), slash.base p
     @swapExt:   (p, ext) -> slash.removeExt(p) + (ext.startsWith('.') and ext or ".#{ext}")
         
     #       000   0000000   000  000   000  
@@ -101,8 +103,8 @@ class slash
     # 000  0000  000   000  000 0 000  000       
     # 000   000  000   000  000   000  00000000  
     
-    @fileName:   (p)   -> path.basename p, path.extname p
-    @file:       (p)   -> path.basename p, path.extname p
+    @base:       (p)   -> path.basename p, path.extname p
+    @file:       (p)   -> path.basename p
     @extname:    (p)   -> path.extname p
     @basename:   (p,e) -> path.basename p, e
     @isAbsolute: (p)   -> path.isAbsolute p
@@ -202,5 +204,8 @@ class slash
 
         if stat = slash.exists p
             return stat if stat.isDirectory()
+            
+    @isDir: (p) -> @dirExists p
+    @isFile: (p) -> @fileExists p
 
 module.exports = slash

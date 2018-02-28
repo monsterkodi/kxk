@@ -13,6 +13,11 @@ chai.should()
 
 describe 'slash', ->
     
+    it 'base', -> 
+        
+        expect slash.base '/some/path.txt'
+        .to.eql 'path'
+            
     it 'path', ->
         
         return if not slash.win()
