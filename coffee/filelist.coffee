@@ -26,7 +26,11 @@ fileList = (paths, opt) ->
     opt.logError     ?= true
     files = []
     paths = [paths] if _.isString paths
+    
     filter = (p) ->
+        
+        if slash.fileName(p).toLowerCase() == 'ntuser' then return true
+        
         if opt.ignoreHidden and path.basename(p).startsWith '.'
             return true
         else if opt.matchExt? 

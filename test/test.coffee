@@ -52,6 +52,16 @@ describe 'slash', ->
         expect slash.untilde '~/sub'
         .to.eql home + '/sub'
 
+    it 'unenv', ->
+        
+        expect slash.unenv 'C:/$Recycle.bin'
+        .to.eql 'C:/$Recycle.bin'
+
+        return if not slash.win()
+
+        expect slash.unenv '$HOME/test'
+        .to.eql 'C:/Users/kodi/test'
+
     it 'resolve', ->
         
         expect slash.resolve '~'
@@ -68,6 +78,14 @@ describe 'slash', ->
         expect slash.relative 'C:/Users/kodi/s/konrad/app/js/coffee.js', 'C:/Users/kodi/s/konrad'
         .to.eql 'app/js/coffee.js'
             
+    it 'parse', ->
+        
+        expect slash.parse('c:').root
+        .to.eql 'c:/'
+
+        expect slash.parse('c:').dir
+        .to.eql 'c:/'
+            
     it 'splitDrive', ->
         
         expect slash.splitDrive '/some/path'
@@ -76,10 +94,16 @@ describe 'slash', ->
         return if not slash.win()
         
         expect slash.splitDrive 'c:/some/path'
-        .to.eql ['/some/path', 'c:']
+        .to.eql ['/some/path', 'c']
         
         expect slash.splitDrive 'c:\\some\\path'
-        .to.eql ['/some/path', 'c:']
+        .to.eql ['/some/path', 'c']
+
+        expect slash.splitDrive 'c:\\'
+        .to.eql ['/', 'c']
+        
+        expect slash.splitDrive 'c:'
+        .to.eql ['/', 'c']
         
     it 'removeDrive', ->
         
@@ -93,6 +117,15 @@ describe 'slash', ->
 
         expect slash.removeDrive 'c:\\some\\path'
         .to.eql '/some/path'
+
+        expect slash.removeDrive 'c:/'
+        .to.eql '/'
+
+        expect slash.removeDrive 'c:\\'
+        .to.eql '/'
+        
+        expect slash.removeDrive 'c:'
+        .to.eql '/'
 
     it 'splitFileLine', ->
 
@@ -157,6 +190,20 @@ describe 'slash', ->
         .to.exist
 
         expect slash.dirExists __filename
+        .to.not.exist
+
+    it 'pkg', ->
+        
+        expect slash.pkg __dirname
+        .to.exist
+
+        expect slash.pkg __filename
+        .to.exist
+
+        expect slash.pkg 'C:\\'
+        .to.not.exist
+        
+        expect slash.pkg 'C:'
         .to.not.exist
         
 describe 'fileList', ->

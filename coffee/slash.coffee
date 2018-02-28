@@ -37,15 +37,20 @@ class slash
     @splitDrive: (p) ->
         
         if slash.win()
-            root = path.parse(p).root
-            if root.length
-                return [slash.path(p.slice(root.length-1)), p.slice(0, root.length-1)]
+            root = slash.parse(p).root
+
+            if root.length > 1
+                if p.length > root.length
+                    filePath = slash.path p.slice(root.length-1)
+                else 
+                    filePath = '/'
+                return [filePath , root.slice 0, root.length-2]
                 
         [slash.path(p), '']
         
     @removeDrive: (p) ->
         
-        return @splitDrive(p)[0]
+        return slash.splitDrive(p)[0]
   
     @splitFileLine: (p) ->  # file.txt:1:0 --> ['file.txt', 1, 0]
         
@@ -56,6 +61,7 @@ class slash
         l = c = 0
         l = line if Number.isInteger line
         c = clmn if Number.isInteger clmn
+        d = d + ':' if d != ''
         [ d + split[0], Math.max(l,1),  Math.max(c,0) ]
         
     @splitFilePos: (p) -> # file.txt:1:3 --> ['file.txt', [3, 0]]
@@ -64,7 +70,7 @@ class slash
         [f, [c, l-1]]
         
     @ext:       (p) -> path.extname(p).slice 1
-    @splitExt:  (p) -> [@removeExt(p), slash.ext(p)]
+    @splitExt:  (p) -> [slash.removeExt(p), slash.ext(p)]
     @removeExt: (p) -> slash.join path.dirname(p), fileName p
     @swapExt:   (p, ext) -> slash.removeExt(p) + (ext.startsWith('.') and ext or ".#{ext}")
         
@@ -98,12 +104,22 @@ class slash
     @fileName:   (p)   -> path.basename p, path.extname p
     @file:       (p)   -> path.basename p, path.extname p
     @extname:    (p)   -> path.extname p
-    @basename:   (p,e) -> path.basename p,e
+    @basename:   (p,e) -> path.basename p, e
     @isAbsolute: (p)   -> path.isAbsolute p
     @dirname:    (p)   -> slash.path path.dirname p
     @dir:        (p)   -> slash.path path.dirname p
     @normalize:  (p)   -> slash.path path.normalize p
-    @parse:      (p)   -> path.parse p
+    
+    @parse:      (p)   -> 
+        
+        dict = path.parse p
+        
+        if dict.dir.length == 2 and dict.dir[1] == ':'
+            dict.dir += '/'
+        if dict.root.length == 2 and dict.root[1] == ':'
+            dict.root += '/'
+            
+        dict
     
     # 00     00  000   0000000   0000000    
     # 000   000  000  000       000         
@@ -116,14 +132,14 @@ class slash
     @untilde:   (p) -> slash.path(p).replace /^\~/, slash.home()
     @unenv:     (p) -> 
         
-        i = p.indexOf '$'
+        i = p.indexOf '$', 0
         while i >= 0
             for k,v of process.env
                 if k == p.slice i+1, i+1+k.length
                     p = p.slice(0, i) + v + p.slice(i+k.length+1)
-                    i = p.indexOf '$'
                     break
-        p
+            i = p.indexOf '$', i+1
+        slash.path p
     
     @resolve: (p) ->
         
@@ -157,7 +173,7 @@ class slash
     
         if p?.length?
             
-            while p.length and p not in ['.', '/']
+            while p.length and @removeDrive(p) not in ['.', '/', '']
                 
                 if slash.dirExists  slash.join p, '.git'         then return slash.resolve p
                 if slash.fileExists slash.join p, 'package.noon' then return slash.resolve p
