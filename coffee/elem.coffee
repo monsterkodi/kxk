@@ -44,4 +44,9 @@ elem = (typ, opt) ->
         e.setAttribute k, opt[k]
     e
 
+elem.containsPos = (div, pos) ->
+    
+    br = div.getBoundingClientRect()
+    br.left <= pos.x <= br.left+br.width and br.top <= pos.y <= br.top+br.height
+    
 module.exports = elem
