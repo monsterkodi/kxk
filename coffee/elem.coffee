@@ -50,3 +50,4 @@ elem.containsPos = (div, pos) ->
     br.left <= pos.x <= br.left+br.width and br.top <= pos.y <= br.top+br.height
     
 module.exports = elem
+
