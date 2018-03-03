@@ -65,8 +65,15 @@ describe 'slash', ->
         return if not slash.win()
 
         expect slash.unenv '$HOME/test'
-        .to.eql 'C:/Users/kodi/test'
+        .to.eql slash.path(process.env['HOME']) + '/test'
 
+    it 'unslash', ->
+        
+        return if not slash.win()
+
+        expect slash.unslash '/c/test'
+        .to.eql 'c:\\test'
+        
     it 'resolve', ->
         
         expect slash.resolve '~'

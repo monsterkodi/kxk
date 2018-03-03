@@ -26,6 +26,13 @@ class slash
         p = p.replace slash.reg, '/'
         p
 
+    @unslash: (p) ->
+        return error "no path? #{p}" if not p? or p.length == 0
+        if p.length >= 3 and p[0] == '/' == p[2] 
+            p = p[1] + ':' + p.slice 2
+            log p
+        p = path.normalize p
+        
     #  0000000  00000000   000      000  000000000  
     # 000       000   000  000      000     000     
     # 0000000   00000000   000      000     000     
