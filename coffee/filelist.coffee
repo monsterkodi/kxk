@@ -34,9 +34,9 @@ fileList = (paths, opt) ->
         if opt.ignoreHidden and slash.file(p).startsWith '.'
             return true
         else if opt.matchExt? 
-            if _.isString(opt.matchExt) and slash.extname(p) != slash.extname opt.matchExt
+            if _.isString(opt.matchExt) and slash.ext(p) != opt.matchExt
                 return true
-            else if _.isArray(opt.matchExt) and slash.extname(p) not in opt.matchExt
+            else if _.isArray(opt.matchExt) and slash.ext(p) not in opt.matchExt
                 return true
         false
     

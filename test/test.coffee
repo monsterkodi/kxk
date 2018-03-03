@@ -72,7 +72,7 @@ describe 'slash', ->
         return if not slash.win()
 
         expect slash.unslash '/c/test'
-        .to.eql 'c:\\test'
+        .to.eql 'C:\\test'
         
     it 'resolve', ->
         
@@ -272,7 +272,7 @@ describe 'fileList', ->
             slash.normalize('dir/level1b/level1b.coffee')]
             
     it "matches extension", ->
-        expect fileList 'dir', depth: 3, matchExt: __filename
+        expect fileList 'dir', depth: 3, matchExt: slash.ext __filename
         .to.eql [
             slash.normalize('dir/test.coffee'), 
             slash.normalize('dir/level1/test.coffee'), 

@@ -28,10 +28,14 @@ class slash
 
     @unslash: (p) ->
         return error "no path? #{p}" if not p? or p.length == 0
-        if p.length >= 3 and p[0] == '/' == p[2] 
-            p = p[1] + ':' + p.slice 2
-            log p
-        p = path.normalize p
+        p = slash.path p
+        if slash.win()
+            if p.length >= 3 and p[0] == '/' == p[2] 
+                p = p[1] + ':' + p.slice 2
+            p = path.normalize p
+            if p[1] == ':'
+                p = p.splice 0, 1, p[0].toUpperCase()
+        p
         
     #  0000000  00000000   000      000  000000000  
     # 000       000   000  000      000     000     
@@ -137,8 +141,8 @@ class slash
     # 000   000  000  0000000    0000000    
     
     @home:          -> slash.path os.homedir()
-    @tilde:     (p) -> slash.path(p).replace slash.home(), '~'
-    @untilde:   (p) -> slash.path(p).replace /^\~/, slash.home()
+    @tilde:     (p) -> slash.path(p)?.replace slash.home(), '~'
+    @untilde:   (p) -> slash.path(p)?.replace /^\~/, slash.home()
     @unenv:     (p) -> 
         
         i = p.indexOf '$', 0
@@ -151,7 +155,7 @@ class slash
         slash.path p
     
     @resolve: (p) ->
-        
+        return error "no path? #{p}" if empty p
         slash.path path.resolve slash.unenv slash.untilde p
     
     @relative: (rel, to) ->
