@@ -13,6 +13,7 @@ os      = require 'os'
 noon    = require 'noon'
 path    = require 'path'
 fs      = require 'fs-extra'
+walkdir = require 'walkdir'
 atomic  = require 'write-file-atomic'
 post    = require './ppost'
 
@@ -22,6 +23,7 @@ module.exports =
     os:os
     fs:fs
     atomic:atomic
+    walkdir:walkdir
     post:post
     path:path
     noon:noon
