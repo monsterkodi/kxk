@@ -16,16 +16,20 @@ fs      = require 'fs-extra'
 walkdir = require 'walkdir'
 atomic  = require 'write-file-atomic'
 post    = require './ppost'
+karg    = require 'karg'
+colors  = require 'colors'
 
 module.exports =
     
     _:_
     os:os
     fs:fs
+    karg:karg
+    colors:colors
     atomic:atomic
     walkdir:walkdir
     post:post
-    path:path
+    path:path # obsolete
     noon:noon
     childp:childp
     
