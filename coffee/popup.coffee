@@ -4,8 +4,7 @@
 # 000        000   000  000        000   000  000      
 # 000         0000000   000         0000000   000      
 
-{ stopEvent, keyinfo, elem 
-} = require './kxk'
+{ stopEvent, keyinfo, elem } = require './kxk'
 
 class Popup
     

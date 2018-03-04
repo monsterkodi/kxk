@@ -4,7 +4,7 @@
 # 000        000   000  000        000   000  000        000   000  000  000  0000  
 # 000         0000000   000         0000000   000        00     00  000  000   000  
 
-{ keyinfo, elem, _ } = require './kxk'
+{ keyinfo, slash, elem, _ } = require './kxk'
 
 class PopupWindow
     
@@ -54,12 +54,12 @@ class PopupWindow
                 webSecurity: false
             width:           240
             height:          popupOpt.items.length * 28
-
+            
         html = """
-            <link rel='stylesheet' href="file://#{opt.stylesheet}" type='text/css'>
+            <link rel='stylesheet' href="#{slash.fileUrl opt.stylesheet}" type='text/css'>
             <body>
             <script>
-                var PopupWindow = require("#{__dirname}/popupWindow");
+                var PopupWindow = require("#{slash.path __dirname}/popupWindow");
                 new PopupWindow(#{JSON.stringify popupOpt});
             </script>
             </body>
@@ -67,7 +67,9 @@ class PopupWindow
         win.loadURL "data:text/html;charset=utf-8," + encodeURI html
 
         win.on 'blur', PopupWindow.close
-        win.on 'ready-to-show', -> win.show()
+        win.on 'ready-to-show', -> 
+            win.show()
+            # win.webContents.openDevTools()
             
         PopupWindow.win = win
         win
@@ -81,6 +83,7 @@ class PopupWindow
                 break
         
     @close: -> 
+        
         electron = require 'electron'
         electron.ipcRenderer.removeListener 'popupItem',  PopupWindow.onPopupItem
         electron.ipcRenderer.removeListener 'popupClose', PopupWindow.close
@@ -95,6 +98,7 @@ class PopupWindow
     # 000         0000000   000         0000000   000        
     
     constructor: (opt) ->
+        
         @items = elem class: 'popupWindow', tabindex: 1
         @targetWinID = opt.winID
         for item in opt.items
@@ -116,10 +120,11 @@ class PopupWindow
         @items.addEventListener 'mouseover', @onHover
         @items.focus()
 
-        @getWin().setSize @items.getBoundingClientRect().width,
-                          @items.getBoundingClientRect().height
+        @getWin().setSize parseInt(@items.getBoundingClientRect().width),
+                          parseInt(@items.getBoundingClientRect().height)
         
     close: =>
+        
         electron = require 'electron'
         @items?.removeEventListener 'keydown',   @onKeyDown
         @items?.removeEventListener 'focusout',  @onFocusOut
@@ -144,9 +149,11 @@ class PopupWindow
         @close()
      
     onHover: (event) => @select event.target   
+    
     onKeyDown: (event) =>
+        
         electron = require 'electron'
-        {mod, key, combo} = keyinfo.forEvent event
+        { mod, key, combo } = keyinfo.forEvent event
         switch combo
             when 'end', 'page down' then return @select @items.lastChild
             when 'home', 'page up'  then return @select @items.firstChild

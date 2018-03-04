@@ -4,8 +4,7 @@
 # 000   000  000   000  000   000  000   000
 # 0000000    000   000  000   000   0000000 
 
-{ def, pos, stopEvent, error, log, $, _
-} = require './kxk'
+{ def, pos, stopEvent, error, log, $, _ } = require './kxk'
 
 class Drag
 
