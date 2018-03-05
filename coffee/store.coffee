@@ -6,9 +6,7 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ fileExists, setKeypath, getKeypath, noon, post, path, fs, log, error, _ } = require './kxk'
-
-atomic = require 'write-file-atomic'
+{ fileExists, setKeypath, getKeypath, noon, post, atomic, slash, fs, log, error, _ } = require './kxk'
 
 # simple key value store with delayed saving to userData folder
 # does sync changes between processes
@@ -38,7 +36,7 @@ class Store
             Store.addStore @
             
             @timer   = null
-            @file    = opt?.file ? (@app? and path.join(@app.getPath('userData'), "#{@name}.noon"))
+            @file    = opt?.file ? (@app? and slash.join(@app.getPath('userData'), "#{@name}.noon"))
             # log "store using file: #{@file}"
             @timeout = opt?.timeout ? 4000
                 
