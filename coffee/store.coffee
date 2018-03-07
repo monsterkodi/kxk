@@ -135,7 +135,7 @@ class Store
             @timer = null
             
             try
-                atomic.sync @file, noon.stringify @data, {indent: 2, maxalign: 8}
+                atomic.sync @file, noon.stringify(@data, {indent: 2, maxalign: 8})+'\n'
             catch err
                 error "can't save store to file '#{@file}:", err
         else 
