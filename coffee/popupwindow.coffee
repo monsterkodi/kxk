@@ -24,8 +24,10 @@ class PopupWindow
         
         electron = require 'electron'
         
-        PopupWindow.close()
+        # PopupWindow.close()
+        
         PopupWindow.opt = opt        
+        
         popupOpt = 
             winID: electron.remote.getCurrentWindow().id
             items:[]
@@ -41,21 +43,42 @@ class PopupWindow
         electron.ipcRenderer.on 'popupItem', PopupWindow.onPopupItem
         electron.ipcRenderer.on 'popupClose', PopupWindow.close
         
-        win = new Browser
-            x:               opt.x
-            y:               opt.y
-            backgroundColor: opt.background ? '#222'
-            hasShadow:       true
-            show:            false
-            frame:           false
-            resizable:       false
-            minimizable:     false
-            maximizable:     false
-            fullscreenable:  false
-            webPreferences:
-                webSecurity: false
-            width:           240
-            height:          popupOpt.items.length * 28
+        if PopupWindow.win?
+            PopupWindow.win.setPosition opt.x, opt.y
+        else
+            win = new Browser
+                x:               opt.x
+                y:               opt.y
+                backgroundColor: opt.background ? '#222'
+                hasShadow:       true
+                show:            false
+                frame:           false
+                resizable:       false
+                minimizable:     false
+                maximizable:     false
+                fullscreenable:  false
+                webPreferences:
+                    webSecurity: false
+                width:           240
+                height:          popupOpt.items.length * 28
+                
+            # html = """
+                # <link rel='stylesheet' href="#{slash.fileUrl opt.stylesheet}" type='text/css'>
+                # <body>
+                # <script>
+                    # var PopupWindow = require("#{slash.path __dirname}/popupWindow");
+                    # new PopupWindow(#{JSON.stringify popupOpt});
+                # </script>
+                # </body>
+            # """
+            # win.loadURL "data:text/html;charset=utf-8," + encodeURI html
+    
+            win.on 'blur', PopupWindow.close
+            # win.on 'ready-to-show', -> 
+                # win.show()
+                # win.webContents.openDevTools()
+                
+            PopupWindow.win = win
             
         html = """
             <link rel='stylesheet' href="#{slash.fileUrl opt.stylesheet}" type='text/css'>
@@ -66,15 +89,11 @@ class PopupWindow
             </script>
             </body>
         """
-        win.loadURL "data:text/html;charset=utf-8," + encodeURI html
-
-        win.on 'blur', PopupWindow.close
-        win.on 'ready-to-show', -> 
-            win.show()
-            # win.webContents.openDevTools()
+        PopupWindow.win.loadURL "data:text/html;charset=utf-8," + encodeURI html
+        PopupWindow.win.webContents.on 'did-finish-load', ->
+            PopupWindow.win.show()
             
-        PopupWindow.win = win
-        win
+        PopupWindow.win
 
     @onPopupItem: (e,text) -> 
         
@@ -90,8 +109,7 @@ class PopupWindow
         electron.ipcRenderer.removeListener 'popupItem',  PopupWindow.onPopupItem
         electron.ipcRenderer.removeListener 'popupClose', PopupWindow.close
         
-        PopupWindow.win?.close()
-        PopupWindow.win = null
+        PopupWindow.win?.hide()
 
     # 00000000    0000000   00000000   000   000  00000000   
     # 000   000  000   000  000   000  000   000  000   000  

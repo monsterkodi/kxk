@@ -23,7 +23,7 @@ class Popup
             div.item = item
             div.addEventListener 'click', @onClick
             if item.combo?
-                combo = elem 'span', class: 'popupCombo', text: item.combo
+                combo = elem 'span', class: 'popupCombo', text: keyinfo.short item.combo
                 div.appendChild combo
             @items.appendChild div
 
