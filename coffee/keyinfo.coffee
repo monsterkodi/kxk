@@ -19,8 +19,11 @@ class Keyinfo
         combo: combo
         short: @short combo
     
-    @modifierNames = ['shift', 'ctrl', 'alt', 'command']
-    @modifierChars = ['⇧', '^', '⌥', '⌘']
+    @modifierNames = ['shift', 'ctrl', 'alt', 'command'] 
+    @modifierChars = ['⇧', '⌃', '⌥', '⌘']
+    
+    @iconKeyNames  = ['shift', 'ctrl', 'alt', 'command', 'backspace', 'delete', 'home', 'end', 'page up', 'page down', 'return']
+    @iconKeyChars  = ['⇧', '⌃', '⌥', '⌘', '⌫', '⌦', '↖', '↘', '⇞', '⇟', '↩']
     
     @forCombo: (combo) ->
         mods = []
@@ -72,9 +75,8 @@ class Keyinfo
         ansi
         
     @short: (combo) ->
-        for i in [0...@modifierNames.length]
-            modifierName = @modifierNames[i]+'+'
-            combo = combo.replace modifierName, @modifierChars[i]
+        for i in [0...@iconKeyNames.length]
+            combo = combo.replace @iconKeyNames[i], @iconKeyChars[i]
         combo.toUpperCase()
 
 module.exports = Keyinfo
