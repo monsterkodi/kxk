@@ -40,7 +40,7 @@ elem = (typ, opt) ->
         if opt[event] and _.isFunction opt[event]
             e.addEventListener event, opt[event]
             delete opt[event]
-        
+            
     for k in Object.keys opt
         e.setAttribute k, opt[k]
     e
