@@ -63,6 +63,7 @@ class Pos
         newPos
 
     normal:         -> @copy().normalize()
+    neg:            -> @copy().negate()
     length:         -> return Math.sqrt @square()
     dot:        (o) -> @x*o.x + @y*o.y
     cross:      (o) -> @x*o.y - @y*o.x
@@ -118,6 +119,11 @@ class Pos
         @y *= other.y
         @
         
+    div: (other) ->
+        @x /= other.x
+        @y /= other.y
+        @
+        
     add: (other) ->
         @x += other.x
         @y += other.y
@@ -141,6 +147,11 @@ class Pos
             @x *= l
             @y *= l
         @    
+
+    negate: ->
+        @x *= -1
+        @y *= -1
+        @
         
     rotate: (angle) ->
         angle -= 360 while angle >  360 
