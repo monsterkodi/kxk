@@ -13,7 +13,7 @@ class Prefs
     @store = null
     
     @init: (defs={}) -> 
-        return error 'duplicate prefs init?' if @store?
+        return error 'prefs.init -- duplicate stores?' if @store?
         @store = new store 'prefs', defaults:defs
         
     @get:  (key, value) -> @store.get key, value

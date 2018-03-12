@@ -137,7 +137,7 @@ class Store
             try
                 atomic.sync @file, noon.stringify(@data, {indent: 2, maxalign: 8})+'\n'
             catch err
-                error "can't save store to file '#{@file}:", err
+                error "store.save -- can't save to '#{@file}:", err
         else 
             post.toMain 'store', @name, 'save' 
         

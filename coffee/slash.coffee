@@ -21,13 +21,13 @@ class slash
     # 000        000   000     000     000   000  
     
     @path: (p) ->
-        return error "no path? #{p}" if not p? or p.length == 0
+        return error "slash.path -- no path? #{p}" if not p? or p.length == 0
         p = path.normalize p
         p = p.replace slash.reg, '/'
         p
 
     @unslash: (p) ->
-        return error "no path? #{p}" if not p? or p.length == 0
+        return error "slash.unslash -- no path? #{p}" if not p? or p.length == 0
         p = slash.path p
         if slash.win()
             if p.length >= 3 and p[0] == '/' == p[2] 
@@ -155,13 +155,13 @@ class slash
         slash.path p
     
     @resolve: (p) ->
-        return error "no path? #{p}" if empty p
+        return error "slash.resolve -- no path? #{p}" if empty p
         slash.path path.resolve slash.unenv slash.untilde p
     
     @relative: (rel, to) ->
         
         if empty to
-            error "slash.relative to nothing?", rel, to
+            error "slash.relative -- to nothing?", rel, to
             return rel
             
         rel = slash.resolve rel

@@ -15,7 +15,7 @@ class Stash
     
     constructor: (@name, opt) ->
 
-        return error 'no name for stash?' if not @name
+        return error 'stash.constructor -- no name?' if not @name
         
         electron = require 'electron'
         app  = electron.app ? electron.remote.app
@@ -91,6 +91,6 @@ class Stash
         try
             atomic.sync @file, noon.stringify @data, {indent: 2, maxalign: 8}
         catch err
-            error "can't save stash to '#{@file}': #{err}"
+            error "stash.save -- can't save to '#{@file}': #{err}"
         
 module.exports = Stash
