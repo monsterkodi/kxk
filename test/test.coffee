@@ -97,6 +97,19 @@ describe 'slash', ->
 
         expect slash.parse('c:').dir
         .to.eql 'c:/'
+        
+    it 'split', ->
+        expect slash.split '/c/users/home/'
+        .to.eql ['c', 'users', 'home']
+        
+        expect slash.split 'd/users/home'
+        .to.eql ['d', 'users', 'home']
+        
+        expect slash.split 'c:/some/path'
+        .to.eql ['c:', 'some', 'path']
+        
+        expect slash.split 'd:\\some\\path\\'
+        .to.eql ['d:', 'some', 'path']
             
     it 'splitDrive', ->
         

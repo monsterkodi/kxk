@@ -43,7 +43,7 @@ class slash
     #      000  000        000      000     000     
     # 0000000   000        0000000  000     000     
     
-    @split: (p) -> slash.path(p).split '/'
+    @split: (p) -> slash.path(p).split('/').filter (e) -> e.length
     
     @splitDrive: (p) ->
         
