@@ -84,6 +84,7 @@ class Store
     set: (key, value) ->
         
         return if not key?.split?
+        return if @get(key) == value
         setKeypath @data, @keypath(key), value
         
         if @app

@@ -8,7 +8,7 @@
 
 { fs, os, path, empty, log, error, _ } = require './kxk'
 
-class slash
+class Slash
 
     @reg = new RegExp "\\\\", 'g'
 
@@ -219,4 +219,4 @@ class slash
     @isDir: (p) -> @dirExists p
     @isFile: (p) -> @fileExists p
 
-module.exports = slash
+module.exports = Slash
