@@ -6,13 +6,15 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ fileExists, setKeypath, getKeypath, noon, post, atomic, slash, fs, log, error, _ } = require './kxk'
+{ fileExists, setKeypath, getKeypath, noon, post, atomic, first, slash, fs, log, error, _ } = require './kxk'
+
+Emitter = require 'events'
 
 # simple key value store with delayed saving to userData folder
 # does sync changes between processes
 
-class Store
-    
+class Store extends Emitter
+
     @stores = {}
     @addStore: (store) ->
 
@@ -25,6 +27,8 @@ class Store
 
     constructor: (@name, opt) ->
 
+        super()
+        
         return error 'no name for store?' if not @name
 
         electron = require 'electron'
@@ -73,7 +77,7 @@ class Store
     get: (key, value) ->
         
         return value if not key?.split?
-        getKeypath @data, @keypath(key), value
+        _.clone getKeypath @data, @keypath(key), value
          
     #  0000000  00000000  000000000  
     # 000       000          000     
@@ -82,11 +86,10 @@ class Store
     # 0000000   00000000     000     
     
     set: (key, value) ->
-        
+
         return if not key?.split?
-        return if @get(key) == value
+        return if _.isEqual @get(key), value
         setKeypath @data, @keypath(key), value
-        
         if @app
             clearTimeout @timer
             @timer = setTimeout @save, @timeout
@@ -112,6 +115,11 @@ class Store
     # 000      000   000  000   000  000   000  
     # 0000000   0000000   000   000  0000000    
     
+    reload: ->
+        if @app
+            @data = @load()
+            post.toWins 'store', @name, 'data', @data
+    
     load: ->
         if @app
             try
@@ -132,6 +140,8 @@ class Store
             return if not @file
             return if _.isEmpty @data
             
+            @emit 'willSave'
+            
             clearTimeout @timer
             @timer = null
             
@@ -139,6 +149,8 @@ class Store
                 atomic.sync @file, noon.stringify(@data, {indent: 2, maxalign: 8})+'\n'
             catch err
                 error "store.save -- can't save to '#{@file}:", err
+                
+            @emit 'didSave'
         else 
             post.toMain 'store', @name, 'save' 
         

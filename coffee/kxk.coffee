@@ -15,6 +15,7 @@ path    = require 'path'
 fs      = require 'fs-extra'
 walkdir = require 'walkdir'
 atomic  = require 'write-file-atomic'
+watch   = require 'chokidar'
 post    = require './ppost'
 karg    = require 'karg'
 colors  = require 'colors'
@@ -28,6 +29,7 @@ module.exports =
     colors:colors
     atomic:atomic
     walkdir:walkdir
+    watch:watch
     post:post
     path:path # obsolete
     noon:noon

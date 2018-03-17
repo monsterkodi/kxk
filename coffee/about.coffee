@@ -1,31 +1,31 @@
 ###
- 0000000   0000000     0000000   000   000  000000000  
-000   000  000   000  000   000  000   000     000     
-000000000  0000000    000   000  000   000     000     
-000   000  000   000  000   000  000   000     000     
-000   000  0000000     0000000    0000000      000     
+ 0000000   0000000     0000000   000   000  000000000
+000   000  000   000  000   000  000   000     000
+000000000  0000000    000   000  000   000     000
+000   000  000   000  000   000  000   000     000
+000   000  0000000     0000000    0000000      000
 ###
 
 opener = require 'opener'
 
 class About
-    
+
     @win = null
     @url = null
-    
+
     @show: (opt) ->
 
         electron = require 'electron'
         Browser  = electron.BrowserWindow
         ipc      = electron.ipcMain
-                
+
         About.url = opt?.url
         if not About.url? and opt?.pkg?.repository?.url
             url = opt.pkg.repository.url
-            url = url.slice 4 if url.startsWith "git+" 
-            url = url.slice 0, url.length-4 if url.endsWith ".git" 
+            url = url.slice 4 if url.startsWith "git+"
+            url = url.slice 0, url.length-4 if url.endsWith ".git"
             About.url = url
-        
+
         win = new Browser
             backgroundColor: opt?.background ? '#222'
             preloadWindow:   true
@@ -55,14 +55,14 @@ class About
                     outline-width: 0;
                     overflow:      hidden;
                 }
-                                
+
                 #image {
-                    margin-top:     #{opt?.imageOffset ? '12%'}; 
-                    width:          #{opt?.imageWidth  ? '62%'}; 
-                    height:         #{opt?.imageHeight ? '62%'}; 
+                    margin-top:     #{opt?.imageOffset ? '12%'};
+                    width:          #{opt?.imageWidth  ? '62%'};
+                    height:         #{opt?.imageHeight ? '62%'};
                 }
-                
-                #version { 
+
+                #version {
                     position: absolute;
                     bottom:         #{opt?.versionOffset  ? '7%'};
                     left:           0;
@@ -72,11 +72,11 @@ class About
                     font-family:    Verdana, sans-serif;
                     text-decoration: none;
                 }
-                
-                #version:hover { 
-                    color:          #{opt?.highlight ? '#f80'}; 
+
+                #version:hover {
+                    color:          #{opt?.highlight ? '#f80'};
                 }
-                
+
             </style>
             <div id='about' tabindex=0>
                 <img id='image' src="file://#{opt.img}"/>
@@ -100,19 +100,19 @@ class About
         ipc.on 'openURL',    About.openURL
         ipc.on 'closeAbout', About.closeAbout
 
-        win.loadURL "data:text/html;charset=utf-8," + encodeURI(html) 
+        win.loadURL "data:text/html;charset=utf-8," + encodeURI(html)
         win.on 'ready-to-show', -> win.show()
         About.win = win
         win
 
-    @closeAbout: -> 
+    @closeAbout: ->
         electron = require 'electron'
         ipc      = electron.ipcMain
         ipc.removeAllListeners 'openURL'
         ipc.removeAllListeners 'closeAbout'
         About.win?.close()
         About.win = null
-        
-    @openURL: -> if About.url? then opener About.url 
+
+    @openURL: -> if About.url? then opener About.url
 
 module.exports = About.show
