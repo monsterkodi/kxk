@@ -84,6 +84,8 @@ class Slash
         [f,l,c] = Slash.splitFileLine p
         [f, [c, l-1]]
         
+    @removeLinePos: (p) -> Slash.splitFileLine(p)[0]
+        
     @ext:       (p) -> path.extname(p).slice 1
     @splitExt:  (p) -> [Slash.removeExt(p), Slash.ext(p)]
     @removeExt: (p) -> Slash.join Slash.dir(p), Slash.base p
