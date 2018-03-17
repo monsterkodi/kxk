@@ -11,7 +11,6 @@ crypto  = require 'crypto'
 _       = require 'lodash'
 os      = require 'os'
 noon    = require 'noon'
-path    = require 'path'
 fs      = require 'fs-extra'
 walkdir = require 'walkdir'
 atomic  = require 'write-file-atomic'
@@ -31,7 +30,6 @@ module.exports =
     walkdir:walkdir
     watch:watch
     post:post
-    path:path # obsolete
     noon:noon
     childp:childp
     
@@ -138,7 +136,6 @@ module.exports.error       = require './error'
 module.exports.pos         = require './pos'
 module.exports.slash       = require './slash'
 module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'
-module.exports[k]          = require('./path')[k] for k in Object.keys require './path' 
 module.exports.drag        = require './drag'
 module.exports.elem        = require './elem'
 module.exports.stash       = require './stash'
@@ -146,7 +143,6 @@ module.exports.store       = require './store'
 module.exports.state       = require './state'
 module.exports.prefs       = require './prefs'
 module.exports.fileList    = require './fileList'
-module.exports.packagePath = require('./slash').packagePath # deprecated
 module.exports.keyinfo     = require './keyinfo'
 module.exports.history     = require './history'
 module.exports.scheme      = require './scheme'

@@ -6,7 +6,9 @@
 0000000   0000000  000   000  0000000   000   000    
 ###
 
-{ fs, os, path, empty, log, error, _ } = require './kxk'
+{ fs, os, empty, log, error, _ } = require './kxk'
+
+path = require 'path'
 
 class Slash
 

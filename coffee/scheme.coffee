@@ -6,19 +6,19 @@
 0000000    0000000  000   000  00000000  000   000  00000000
 ###
 
-{ prefs, elem, post, path, $, _ } = require './kxk'
+{ prefs, elem, post, slash, $, _ } = require './kxk'
 
 class Scheme
 
     @toggle: (schemes = ['dark', 'bright']) ->
         link =$ 'style-link'
-        currentScheme = path.basename _.last(link.href.split('/')), '.css'
+        currentScheme = slash.basename _.last(link.href.split('/')), '.css'
         nextSchemeIndex = ( schemes.indexOf(currentScheme) + 1) % schemes.length
         nextScheme = schemes[nextSchemeIndex]
         Scheme.set nextScheme
 
     @set: (scheme) ->
-        scheme = path.basename scheme, '.css'
+        scheme = slash.basename scheme, '.css'
         prefs.set 'scheme', scheme
         link =$ 'style-link'
         newlink = elem 'link',
