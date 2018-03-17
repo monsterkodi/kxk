@@ -25,24 +25,26 @@ class Store extends Emitter
     
         @stores[store.name] = store
 
-    constructor: (@name, opt) ->
+    constructor: (@name, opt={}) ->
 
+        opt.separator ?= ':'
+        opt.timeout   ?= 4000
+        
         super()
         
         return error 'no name for store?' if not @name
 
         electron = require 'electron'
         @app = electron.app
-        @sep = opt?.separator ? ':'
+        @sep = opt.separator
         
         if @app
             
             Store.addStore @
             
             @timer   = null
-            @file    = opt?.file ? (@app? and slash.join(@app.getPath('userData'), "#{@name}.noon"))
-            # log "store using file: #{@file}"
-            @timeout = opt?.timeout ? 4000
+            @file    = opt.file ? (@app? and slash.join(@app.getPath('userData'), "#{@name}.noon"))
+            @timeout = opt.timeout
                 
             post.on 'store', (name, action, args...) =>
                 return if @name != name
@@ -64,7 +66,7 @@ class Store extends Emitter
                     when 'del'  then setKeypath @data, @keypath(args[0])
                 
         @data = @load()
-        @data = _.defaults @data, opt.defaults if opt?.defaults?
+        @data = _.defaults @data, opt.defaults if opt.defaults?
 
     keypath: (key) -> key.split @sep
     

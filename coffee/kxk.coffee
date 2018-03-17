@@ -143,6 +143,7 @@ module.exports.drag        = require './drag'
 module.exports.elem        = require './elem'
 module.exports.stash       = require './stash'
 module.exports.store       = require './store'
+module.exports.state       = require './state'
 module.exports.prefs       = require './prefs'
 module.exports.fileList    = require './fileList'
 module.exports.packagePath = require('./slash').packagePath # deprecated
