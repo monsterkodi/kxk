@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ fileList, splitFileLine, slash, pos, log, _ } = require '../coffee/kxk'
+{ fileList, splitFileLine, slash, pos, clamp, log, _ } = require '../coffee/kxk'
 
 assert = require 'assert'
 chai   = require 'chai'
@@ -327,4 +327,42 @@ describe 'pos', ->
         expect pos(1,0).rotate(45).rounded(0.001)
         .to.eql pos(1,1).normal().rounded(0.001)
 
+describe 'clamp', ->
+    
+    it 'clamps', ->
+        
+        expect clamp 0, 1, 1.1
+        .to.eql 1
 
+        expect clamp 1, 0, 1.1
+        .to.eql 1
+        
+        expect clamp 2.2, 3, 1.1
+        .to.eql 2.2
+
+        expect clamp 3, 2.2, 1.1
+        .to.eql 2.2
+        
+    it 'nulls', ->
+        
+        expect clamp 0, 1
+        .to.eql 0
+        
+        expect clamp 2, 3, undefined
+        .to.eql 2
+        
+        expect clamp 4, 5, null
+        .to.eql 4
+
+        expect clamp 6, 7, {}
+        .to.eql 6
+
+        expect clamp 8, 9, []
+        .to.eql 8
+
+        expect clamp 10, 11, clamp
+        .to.eql 10
+        
+        expect clamp -3, -2, 0
+        .to.eql -2
+        

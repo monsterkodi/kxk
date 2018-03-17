@@ -75,7 +75,14 @@ module.exports =
     #    000     000   000  000      000   000  000     
     #     0      000   000  0000000   0000000   00000000
 
-    clamp: (r1, r2, v) -> _.clamp v, r1, r2
+    clamp: (r1, r2, v) -> 
+        
+        v = r1 if not _.isFinite v
+        [s1, s2] = [Math.min(r1,r2), Math.max(r1,r2)]
+        v = s1 if v < s1
+        v = s2 if v > s2
+        v = r1 if not _.isFinite v
+        v
 
     fadeAngles: (a, b, f) ->
         
