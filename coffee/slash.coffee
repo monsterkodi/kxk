@@ -85,6 +85,10 @@ class Slash
         [f, [c, l-1]]
         
     @removeLinePos: (p) -> Slash.splitFileLine(p)[0]
+    @removeColumn:  (p) -> 
+        [f,l] = Slash.splitFileLine p
+        if l>1 then f + ':' + l
+        else f
         
     @ext:       (p) -> path.extname(p).slice 1
     @splitExt:  (p) -> [Slash.removeExt(p), Slash.ext(p)]
