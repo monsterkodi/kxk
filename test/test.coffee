@@ -231,6 +231,26 @@ describe 'slash', ->
         expect slash.pkg 'C:'
         .to.not.exist
         
+    it 'isRelative', ->
+        
+        expect slash.isRelative __dirname
+        .to.eql false
+        
+        expect slash.isRelative '.'
+        .to.eql true
+        
+        expect slash.isRelative '..'
+        .to.eql true
+        
+        expect slash.isRelative '.././bla../../fark'
+        .to.eql true
+
+        expect slash.isRelative 'C:\\blafark'
+        .to.eql false
+
+        expect slash.isRelative '..\\blafark'
+        .to.eql true
+        
 describe 'fileList', ->
 
     it "exists", -> _.isFunction fileList

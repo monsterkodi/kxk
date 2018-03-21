@@ -127,6 +127,7 @@ class Slash
     @extname:    (p)   -> path.extname p
     @basename:   (p,e) -> path.basename p, e
     @isAbsolute: (p)   -> path.isAbsolute p
+    @isRelative: (p)   -> not Slash.isAbsolute p
     @dirname:    (p)   -> Slash.path path.dirname p
     @dir:        (p)   -> Slash.path path.dirname p
     @normalize:  (p)   -> Slash.path path.normalize p
