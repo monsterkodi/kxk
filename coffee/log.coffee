@@ -19,15 +19,23 @@ stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 slog = (s) ->
     
     slash = require './slash'
+    
     try # fancy log with source-mapped files and line numbers
         f = stack.capture()[slog.depth]
-
         if chain = sorcery.loadSync(f.getFileName())
             info   = chain.trace(f.getLineNumber(), 0)
-            source = fs.readFileSync f.getFileName(), 'utf8'
-            match  = source.match /\/\/\# sourceURL=(.+)$/
-            info.source = slash.tilde match?[1] ? f.getFileName()
+            source = f.getFileName()
+            if not slash.samePath f.getScriptNameOrSourceURL(), f.getFileName()
+                source = slash.path f.getScriptNameOrSourceURL()
+            else
+                sourceText = fs.readFileSync f.getFileName(), 'utf8'
+                # balancer is broken. below is not a comment. should handle escaped hash signs. 
+                match  = sourceText.match /\/\/\# sourceURL=(.+)$/
+                if match?[1]?
+                    source = match?[1]
+            info.source = slash.tilde source
         else
+            console.log 'no chain'
             info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
 
         file = _.padStart "#{info.source}:#{info.line}", slog.filepad
