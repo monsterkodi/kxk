@@ -14,8 +14,6 @@ class Popup
         
         @focus = document.activeElement
         @items = elem class: 'popup', tabindex: 3
-        @items.style.left = "#{opt.x}px"
-        @items.style.top  = "#{opt.y}px"
         
         for item in opt.items
             continue if item.hide
@@ -35,6 +33,18 @@ class Popup
         @items.addEventListener 'focusout',  @onFocusOut
         @items.addEventListener 'mouseover', @onHover
         @items.focus()
+        
+        br = @items.getBoundingClientRect()
+        
+        if opt.x+br.width > document.body.clientWidth 
+            @items.style.left = "#{document.body.clientWidth - br.width}px"
+        else
+            @items.style.left = "#{opt.x}px" 
+           
+        if opt.y+br.height > document.body.clientHeight
+            @items.style.top = "#{document.body.clientHeight - br.height}px"
+        else
+            @items.style.top  = "#{opt.y}px"
         
     close: =>
         @items?.removeEventListener 'keydown',   @onKeyDown
