@@ -6,7 +6,9 @@
 0000000      000     000   000  0000000   000   000  
 ###
 
-{ sds, noon, atomic, slash, fs, log, error, _ } = require './kxk'
+{ noon, atomic, slash, fs, log, error, _ } = require './kxk'
+
+sds = require 'sds'
 
 # simple key value store with delayed saving to userData folder
 # does not sync between processes

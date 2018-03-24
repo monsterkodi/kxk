@@ -6,9 +6,10 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ fileExists, sds, noon, post, atomic, first, slash, fs, log, error, _ } = require './kxk'
+{ fileExists, noon, post, atomic, first, slash, fs, log, error, _ } = require './kxk'
 
 Emitter = require 'events'
+sds = require 'sds'
 
 # simple key value store with delayed saving to userData folder
 # does sync changes between processes
