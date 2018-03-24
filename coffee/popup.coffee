@@ -6,16 +6,15 @@
 000         0000000   000         0000000   000      
 ###
 
-{ empty, stopEvent, keyinfo, elem, log } = require './kxk'
+{ empty, stopEvent, keyinfo, post, elem, log } = require './kxk'
 
 class Popup
     
     constructor: (opt) ->
         
-        @focus = document.activeElement
-        @items = elem class: 'popup', tabindex: 3
-        
-        @menu  = opt.menu
+        @focusElem = document.activeElement
+        @items  = elem class: 'popup', tabindex: 3
+        @parent = opt.parent
         
         for item in opt.items
             continue if item.hide
@@ -31,14 +30,11 @@ class Popup
                     div.appendChild elem 'span', class:'popupCombo', text:'▶'
             @items.appendChild div
 
-        @select @items.firstChild
-            
         document.body.appendChild @items
-        
+                
         @items.addEventListener 'keydown',   @onKeyDown
         @items.addEventListener 'focusout',  @onFocusOut
         @items.addEventListener 'mouseover', @onHover
-        @items.focus()
         
         br = @items.getBoundingClientRect()
         
@@ -52,71 +48,143 @@ class Popup
         else
             @items.style.top  = "#{opt.y}px"
         
+        if opt.selectFirstItem != false
+            @select @items.firstChild, open:false
+        
+    #  0000000  000       0000000    0000000  00000000  
+    # 000       000      000   000  000       000       
+    # 000       000      000   000  0000000   0000000   
+    # 000       000      000   000       000  000       
+    #  0000000  0000000   0000000   0000000   00000000  
+    
     close: (opt={})=>
         
-        # log ''
+        log 'popup', @popup?, 'parent', @parent? 
+        @popup?.close focus:false
+        delete @popup
         
         @items?.removeEventListener 'keydown',   @onKeyDown
         @items?.removeEventListener 'focusout',  @onFocusOut
         @items?.removeEventListener 'mouseover', @onHover
         @items?.remove()
         delete @items
-        @focus.focus() if opt.focus != false
+        
+        if opt.all
+            if @parent?
+                log 'close all', @parent?
+                @parent.close opt
+        else
+            @focusElem.focus() if opt.focus != false
 
-    select: (item) ->
+    #  0000000  00000000  000      00000000   0000000  000000000  
+    # 000       000       000      000       000          000     
+    # 0000000   0000000   000      0000000   000          000     
+    #      000  000       000      000       000          000     
+    # 0000000   00000000  0000000  00000000   0000000     000     
+    
+    select: (item, opt={}) ->
         
         return if not item?
+        
+        if @popup?
+            @popup.close focus:false
+        
         @selected?.classList.remove 'selected'
         @selected = item
         @selected.classList.add 'selected'
-        @menu?.itemSelected? item.item, item
         
+        if item.item?.menu and opt.open != false
+            delete @popup
+            @popupChild item, opt
+            
+        @items.focus()
+
+    # 00000000    0000000   00000000   000   000  00000000    0000000  000   000  000  000      0000000    
+    # 000   000  000   000  000   000  000   000  000   000  000       000   000  000  000      000   000  
+    # 00000000   000   000  00000000   000   000  00000000   000       000000000  000  000      000   000  
+    # 000        000   000  000        000   000  000        000       000   000  000  000      000   000  
+    # 000         0000000   000         0000000   000         0000000  000   000  000  0000000  0000000    
+    
+    popupChild: (item, opt={}) -> 
+        
+        if items = item.item.menu
+            if @popup
+                @popup.close focus:false
+                delete @popup
+            else
+                br = item.getBoundingClientRect()
+                @popup = new Popup items:items, parent:@, x:br.left+br.width, y:br.top, selectFirstItem:opt?.selectFirstItem
+            
+    # 000   000  00000000  000   000  000000000        00000000   00000000   00000000  000   000  
+    # 0000  000  000        000 000      000           000   000  000   000  000       000   000  
+    # 000 0 000  0000000     00000       000           00000000   0000000    0000000    000 000   
+    # 000  0000  000        000 000      000           000        000   000  000          000     
+    # 000   000  00000000  000   000     000           000        000   000  00000000      0      
+    
     nextItem: ->
         if next = @selected
             while next = next.nextSibling
                 if not empty next.item?.text
                     return next
-
+    
     prevItem: ->
         if prev = @selected
             while prev = prev.previousSibling
                 if not empty prev.item?.text
                     return prev
                 
+    #  0000000    0000000  000000000  000  000   000   0000000   000000000  00000000  
+    # 000   000  000          000     000  000   000  000   000     000     000       
+    # 000000000  000          000     000   000 000   000000000     000     0000000   
+    # 000   000  000          000     000     000     000   000     000     000       
+    # 000   000   0000000     000     000      0      000   000     000     00000000  
+    
     activate: (item) ->
         
-        if not @menu?
-            
-            log 'no menu'
-            
-            @close()
-            item.item?.cb?(item.item.arg ? item.item.text)
-            
-        else if not @menu?.itemActivated? item.item, item
-            log 'menu returned false ... closing'
-            @close focus:false
-            # item.item?.cb?(item.item.arg ? item.item.text)
-     
-    onHover:    (event) => @select event.target   
-    onFocusOut: (event) => 
-        if @menu 
-            @menu.popupFocusOut @, event
-        else 
-            @close() 
+        log 'activate close all'
         
+        @close all:true
+        
+        if item.item?.cb?
+            log 'cb', item.item.arg ? item.item.text
+            item.item.cb item.item.arg ? item.item.text
+        else
+            log 'menuAction', item.item.action ? item.item.text
+            post.emit 'menuAction', item.item.action ? item.item.text
+     
+    onHover: (event) => 
+    
+        @select event.target, selectFirstItem:false   
+    
+    onFocusOut: (event) => 
+        
+        log 'related', event.relatedTarget?, 'class', event.relatedTarget.className, 'id', event.relatedTarget.id
+        
+        if not event.relatedTarget.classList.contains 'popup'
+            log 'onFocusOut close'
+            @close all:true
+        else 
+            log 'onFocusOut keep'
+    
+    # 000   000  00000000  000   000  
+    # 000  000   000        000 000   
+    # 0000000    0000000     00000    
+    # 000  000   000          000     
+    # 000   000  00000000     000     
+    
     onKeyDown: (event) =>
         
         { mod, key, combo } = keyinfo.forEvent event
         
         switch combo
-            when 'end', 'page down' then @select @items.lastChild
-            when 'home', 'page up'  then @select @items.firstChild
+            when 'end', 'page down' then @select @items.lastChild, selectFirstItem:false 
+            when 'home', 'page up'  then @select @items.firstChild, selectFirstItem:false 
             when 'enter'            then @activate @selected
             when 'esc', 'space'     then @close()
-            when 'down'             then @select @nextItem() ? @items.firstChild 
-            when 'up'               then @select @prevItem() ? @items.lastChild 
-            when 'right'            then @select @nextItem()
-            when 'left'             then @select @prevItem()
+            when 'down'             then @select @nextItem() ? @items.firstChild, selectFirstItem:false 
+            when 'up'               then @select @prevItem() ? @items.lastChild, selectFirstItem:false 
+            when 'right'            then @select @nextItem(), selectFirstItem:false 
+            when 'left'             then @select @prevItem(), selectFirstItem:false 
             
         stopEvent event
      

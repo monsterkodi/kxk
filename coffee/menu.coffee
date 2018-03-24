@@ -38,10 +38,10 @@ class Menu
     
     focus: => 
         
-        @focus = document.activeElement
+        @focusElem = document.activeElement
         @elem.focus()
         
-    blur: => @close(); @focus?.focus?()
+    blur: => @close(); @focusElem?.focus?()
     
     onHover: (event) => @select event.target
     
@@ -60,11 +60,17 @@ class Menu
             popup.close()
             @blur()
         
+    #  0000000  000       0000000    0000000  00000000  
+    # 000       000      000   000  000       000       
+    # 000       000      000   000  0000000   0000000   
+    # 000       000      000   000       000  000       
+    #  0000000  0000000   0000000   0000000   00000000  
+    
     close: => 
         log @popup?
         @popup?.close focus:false
         delete @popup
-        # @focus?.focus()
+        # @focusElem?.focus()
     
     #  0000000  00000000  000      00000000   0000000  000000000  
     # 000       000       000      000       000          000     
@@ -104,26 +110,12 @@ class Menu
             else
                 br = item.getBoundingClientRect()
                 pr = item.parentNode.getBoundingClientRect()
-                @popup = popup.menu items:items, parent:item, x:br.left, y:pr.top+pr.height, menu:@
+                @popup = popup.menu items:items, parent:@, x:br.left, y:pr.top+pr.height
         
-    itemActivated: (item, elem) ->
-        
-        if item?.menu
-            br = elem.getBoundingClientRect()
-            log 'activate', item.text, br.top
-            popup.menu items:item.menu, parent:elem, x:br.left+br.width, y:br.top, menu:@
-            true
-        else 
-            @popup?.close focus:false
-            post.emit 'menuAction', item.action ? item.text
-            false
-            
     itemSelected: (item, elem) ->
             
     deactivate: (item) -> log item.item
 
-        # item.item?.cb?(item.item.arg ? item.item.text)
-         
     # 000   000  00000000  000   000  
     # 000  000   000        000 000   
     # 0000000    0000000     00000    
