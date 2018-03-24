@@ -6,7 +6,7 @@
 000         0000000   000         0000000   000      
 ###
 
-{ stopEvent, keyinfo, elem } = require './kxk'
+{ empty, stopEvent, keyinfo, elem, log } = require './kxk'
 
 class Popup
     
@@ -15,19 +15,24 @@ class Popup
         @focus = document.activeElement
         @items = elem class: 'popup', tabindex: 3
         
+        @menu  = opt.menu
+        
         for item in opt.items
             continue if item.hide
-            div = elem class: 'popupItem', text: item.text
-            div.item = item
-            div.addEventListener 'click', @onClick
-            if item.combo?
-                combo = elem 'span', class: 'popupCombo', text: keyinfo.short item.combo
-                div.appendChild combo
+            if empty item.text
+                div = elem 'hr', class: 'popupItem separator'
+            else
+                div = elem class: 'popupItem', text: item.text
+                div.item = item
+                div.addEventListener 'click', @onClick
+                if item.combo ? item.accel
+                    combo = elem 'span', class: 'popupCombo', text: keyinfo.short item.combo ? item.accel
+                    div.appendChild combo
             @items.appendChild div
 
         @select @items.firstChild
             
-        (opt.parent ? document.body).appendChild @items
+        document.body.appendChild @items
         
         @items.addEventListener 'keydown',   @onKeyDown
         @items.addEventListener 'focusout',  @onFocusOut
@@ -47,6 +52,9 @@ class Popup
             @items.style.top  = "#{opt.y}px"
         
     close: =>
+        
+        # log ''
+        
         @items?.removeEventListener 'keydown',   @onKeyDown
         @items?.removeEventListener 'focusout',  @onFocusOut
         @items?.removeEventListener 'mouseover', @onHover
@@ -54,32 +62,51 @@ class Popup
         delete @items
         @focus.focus()
 
-    select: (item) -> 
+    select: (item) ->
+        
         return if not item?
         @selected?.classList.remove 'selected'
         @selected = item
         @selected.classList.add 'selected'
+        @menu?.itemSelected? item.item, item
         
+    nextItem: ->
+        if next = @selected
+            while next = next.nextSibling
+                if not empty next.item?.text
+                    return next
+
+    prevItem: ->
+        if prev = @selected
+            while prev = prev.previousSibling
+                if not empty prev.item?.text
+                    return prev
+                
     activate: (item) ->
-        @close()
-        item.item?.cb?(item.item.arg ? item.item.text)
+        if not @menu?.itemActivated? item.item, item
+            log 'no menu or false'
+            @close()
+            item.item?.cb?(item.item.arg ? item.item.text)
      
-    onHover: (event) => @select event.target   
-    onFocusOut: (event) => @close()
+    onHover:    (event) => @select event.target   
+    onFocusOut: (event) => @close() if not @menu?
+        
     onKeyDown: (event) =>
-        {mod, key, combo} = keyinfo.forEvent event
+        
+        { mod, key, combo } = keyinfo.forEvent event
+        
         switch combo
             when 'end', 'page down' then @select @items.lastChild
             when 'home', 'page up'  then @select @items.firstChild
             when 'enter'            then @activate @selected
             when 'esc', 'space'     then @close()
-            when 'down'             then @select @selected?.nextSibling ? @items.firstChild 
-            when 'up'               then @select @selected?.previousSibling ? @items.lastChild 
-            when 'right'            then @select @selected?.nextSibling
-            when 'left'             then @select @selected?.previousSibling
+            when 'down'             then @select @nextItem() ? @items.firstChild 
+            when 'up'               then @select @prevItem() ? @items.lastChild 
+            when 'right'            then @select @nextItem()
+            when 'left'             then @select @prevItem()
             
         stopEvent event
      
-    onClick: (e) => @activate e.target
+    onClick: (e) => stopEvent e, @activate e.target
         
 module.exports = menu: (opt) -> new Popup opt

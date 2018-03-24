@@ -75,6 +75,7 @@ class Keyinfo
         ansi
         
     @short: (combo) ->
+        combo = combo.toLowerCase()
         for i in [0...@iconKeyNames.length]
             combo = combo.replace @iconKeyNames[i], @iconKeyChars[i]
         combo = combo.replace /\+/g, ''
