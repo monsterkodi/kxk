@@ -24,7 +24,6 @@ module.exports =
     _:_
     os:os
     fs:fs
-    sds:sds
     karg:karg
     colors:colors
     atomic:atomic
