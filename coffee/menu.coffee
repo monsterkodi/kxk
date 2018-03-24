@@ -36,18 +36,35 @@ class Menu
     # 000       000   000  000       000   000       000  
     # 000        0000000    0000000   0000000   0000000   
     
-    focus: -> 
+    focus: => 
         
         @focus = document.activeElement
         @elem.focus()
         
-    blur: -> @focus.focus()
+    blur: => @close(); @focus?.focus?()
     
     onHover: (event) => @select event.target
     
-    onFocusOut: (event) => @close()
+    onFocusOut: (event) => 
+        log 'onFocusOut' #, document.activeElement.innerHTML
+        #@close()
     
-    close: -> #log '' # @selected?.item
+    popupFocusOut: (popup, event) ->
+        
+        log 'popupFocusOut', popup == @popup
+        if popup == @popup
+            log 'relatedTarget', event.relatedTarget.id, event.relatedTarget.className 
+            if not event.relatedTarget.classList.contains 'popup'
+                @close()
+        else
+            popup.close()
+            @blur()
+        
+    close: => 
+        log @popup?
+        @popup?.close focus:false
+        delete @popup
+        # @focus?.focus()
     
     #  0000000  00000000  000      00000000   0000000  000000000  
     # 000       000       000      000       000          000     
@@ -58,9 +75,17 @@ class Menu
     select: (item) -> 
         
         return if not item?
+        
+        if @popup?
+            @popup.close focus:false
+        
         @selected?.classList.remove 'selected'
         @selected = item
         @selected.classList.add 'selected'
+        
+        if @popup?
+            delete @popup
+            @activate item
         
     #  0000000    0000000  000000000  000  000   000   0000000   000000000  00000000  
     # 000   000  000          000     000  000   000  000   000     000     000       
@@ -71,11 +96,15 @@ class Menu
     activate: (item) -> 
         
         items = item.item.menu
-        # log 'activate', item.item.text
+        log 'activate', item.item.text
         if items
-            br = item.getBoundingClientRect()
-            pr = item.parentNode.getBoundingClientRect()
-            popup.menu items:items, parent:item, x:br.left, y:pr.top+pr.height, menu:@
+            if @popup
+                @popup.close focus:false
+                delete @popup
+            else
+                br = item.getBoundingClientRect()
+                pr = item.parentNode.getBoundingClientRect()
+                @popup = popup.menu items:items, parent:item, x:br.left, y:pr.top+pr.height, menu:@
         
     itemActivated: (item, elem) ->
         
@@ -85,6 +114,7 @@ class Menu
             popup.menu items:item.menu, parent:elem, x:br.left+br.width, y:br.top, menu:@
             true
         else 
+            @popup?.close focus:false
             post.emit 'menuAction', item.action ? item.text
             false
             

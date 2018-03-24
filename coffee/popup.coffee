@@ -26,8 +26,9 @@ class Popup
                 div.item = item
                 div.addEventListener 'click', @onClick
                 if item.combo ? item.accel
-                    combo = elem 'span', class: 'popupCombo', text: keyinfo.short item.combo ? item.accel
-                    div.appendChild combo
+                    div.appendChild elem 'span', class:'popupCombo', text:keyinfo.short item.combo ? item.accel
+                else if item.menu 
+                    div.appendChild elem 'span', class:'popupCombo', text:'▶'
             @items.appendChild div
 
         @select @items.firstChild
@@ -51,7 +52,7 @@ class Popup
         else
             @items.style.top  = "#{opt.y}px"
         
-    close: =>
+    close: (opt={})=>
         
         # log ''
         
@@ -60,7 +61,7 @@ class Popup
         @items?.removeEventListener 'mouseover', @onHover
         @items?.remove()
         delete @items
-        @focus.focus()
+        @focus.focus() if opt.focus != false
 
     select: (item) ->
         
@@ -83,13 +84,25 @@ class Popup
                     return prev
                 
     activate: (item) ->
-        if not @menu?.itemActivated? item.item, item
-            log 'no menu or false'
+        
+        if not @menu?
+            
+            log 'no menu'
+            
             @close()
             item.item?.cb?(item.item.arg ? item.item.text)
+            
+        else if not @menu?.itemActivated? item.item, item
+            log 'menu returned false ... closing'
+            @close focus:false
+            # item.item?.cb?(item.item.arg ? item.item.text)
      
     onHover:    (event) => @select event.target   
-    onFocusOut: (event) => @close() if not @menu?
+    onFocusOut: (event) => 
+        if @menu 
+            @menu.popupFocusOut @, event
+        else 
+            @close() 
         
     onKeyDown: (event) =>
         
