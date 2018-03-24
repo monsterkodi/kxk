@@ -12,6 +12,7 @@ _       = require 'lodash'
 os      = require 'os'
 noon    = require 'noon'
 fs      = require 'fs-extra'
+sds     = require 'sds'
 walkdir = require 'walkdir'
 atomic  = require 'write-file-atomic'
 watch   = require 'chokidar'
@@ -24,6 +25,7 @@ module.exports =
     _:_
     os:os
     fs:fs
+    sds:sds
     karg:karg
     colors:colors
     atomic:atomic
@@ -46,28 +48,6 @@ module.exports =
             _.clone d
         else
             {}
-
-    setKeypath: (object, keypath, value) ->
-        keypath = _.clone keypath
-        while keypath.length > 1
-            k = keypath.shift()
-            if not object[k]?
-                object = object[k] = {}
-            else
-                object = object[k]
-                
-        if (keypath.length == 1) and object?
-            if value?
-                object[keypath[0]] = value
-            else
-                delete object[keypath[0]]
-
-    getKeypath: (object, keypath, value) ->
-        while keypath.length
-            object = object[keypath.shift()]
-            if not object?
-                return value
-        object ? value
     
     # 000   000   0000000   000      000   000  00000000
     # 000   000  000   000  000      000   000  000     

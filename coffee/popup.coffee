@@ -150,7 +150,7 @@ class Popup
             item.item.cb item.item.arg ? item.item.text
         else
             log 'menuAction', item.item.action ? item.item.text
-            post.emit 'menuAction', item.item.action ? item.item.text
+            post.emit 'menuAction', item.item.action ? item.item.text, item.item.actarg
      
     onHover: (event) => 
     

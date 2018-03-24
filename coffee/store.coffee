@@ -6,7 +6,7 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ fileExists, setKeypath, getKeypath, noon, post, atomic, first, slash, fs, log, error, _ } = require './kxk'
+{ fileExists, sds, noon, post, atomic, first, slash, fs, log, error, _ } = require './kxk'
 
 Emitter = require 'events'
 
@@ -61,9 +61,9 @@ class Store extends Emitter
                 return if @name != name
                 switch action
                     when 'data' then @data = args[0]
-                    when 'set'  then setKeypath @data, @keypath(args[0]), args[1]
-                    when 'get'  then getKeypath @data, @keypath(args[0]), args[1]
-                    when 'del'  then setKeypath @data, @keypath(args[0])
+                    when 'set'  then sds.set @data, @keypath(args[0]), args[1]
+                    when 'get'  then sds.get @data, @keypath(args[0]), args[1]
+                    when 'del'  then sds.set @data, @keypath(args[0])
                 
         @data = @load()
         @data = _.defaults @data, opt.defaults if opt.defaults?
@@ -79,7 +79,7 @@ class Store extends Emitter
     get: (key, value) ->
         
         return value if not key?.split?
-        _.clone getKeypath @data, @keypath(key), value
+        _.clone sds.get @data, @keypath(key), value
          
     #  0000000  00000000  000000000  
     # 000       000          000     
@@ -91,7 +91,7 @@ class Store extends Emitter
 
         return if not key?.split?
         return if _.isEqual @get(key), value
-        setKeypath @data, @keypath(key), value
+        sds.set @data, @keypath(key), value
         if @app
             clearTimeout @timer
             @timer = setTimeout @save, @timeout

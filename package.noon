@@ -1,5 +1,5 @@
 name            kxk
-version         0.52.0
+version         0.53.0
 description     kodi's tool kit
 main            js/kxk.js
 repository
@@ -22,6 +22,7 @@ dependencies
                 mocha           ^5.0.4
                 noon            >=1.1.1
                 opener          ^1.4.3
+                sds             ^1.9.1
                 sorcery         ^0.10.0
                 stack-utils     ^1.0.1
                 walkdir         0.0.12

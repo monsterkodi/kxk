@@ -6,7 +6,7 @@
 0000000      000     000   000  0000000   000   000  
 ###
 
-{ setKeypath, getKeypath, noon, atomic, slash, fs, log, error, _ } = require './kxk'
+{ sds, noon, atomic, slash, fs, log, error, _ } = require './kxk'
 
 # simple key value store with delayed saving to userData folder
 # does not sync between processes
@@ -41,7 +41,7 @@ class Stash
     get: (key, value) ->
         error 'stash.get -- invalid key', key if not key?.split?
         return value if not key?.split?
-        getKeypath @data, @keypath(key), value
+        sds.get @data, @keypath(key), value
          
     #  0000000  00000000  000000000  
     # 000       000          000     
@@ -52,7 +52,7 @@ class Stash
     set: (key, value) ->
         
         return error 'stash.set -- invalid key', key if not key?.split?
-        setKeypath @data, @keypath(key), value
+        sds.set @data, @keypath(key), value
         
         clearTimeout @timer if @timer
         @timer = setTimeout @save, @timeout
