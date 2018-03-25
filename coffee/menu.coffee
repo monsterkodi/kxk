@@ -43,7 +43,7 @@ class Menu
         
     blur: => @close(); @focusElem?.focus?()
     
-    onHover: (event) => @select event.target
+    onHover: (event) => @select event.target, selectFirstItem:false
     
     onFocusOut: (event) => 
     
@@ -64,10 +64,22 @@ class Menu
     # 000       000      000   000       000  000       
     #  0000000  0000000   0000000   0000000   00000000  
     
-    close: => 
-        @popup?.close focus:false
+    close: (opt={}) =>
+        
+        if @popup?
+            # if @popup != opt.popup
+                # @popup.close focus:false
+            @popup.close focus:false
+            delete @popup
+            @elem.focus()
+        else
+            log @focusElem?.id, @focusElem?.className
+            @focusElem?.focus?()
+            
+    childClosed: ->
+        
         delete @popup
-        # @focusElem?.focus()
+        @elem.focus()
     
     #  0000000  00000000  000      00000000   0000000  000000000  
     # 000       000       000      000       000          000     
@@ -75,7 +87,7 @@ class Menu
     #      000  000       000      000       000          000     
     # 0000000   00000000  0000000  00000000   0000000     000     
     
-    select: (item) -> 
+    select: (item, opt={}) -> 
         
         return if not item?
         
@@ -86,9 +98,9 @@ class Menu
         @selected = item
         @selected.classList.add 'selected'
         
-        if @popup?
+        if @popup? or opt.activate
             delete @popup
-            @activate item
+            @activate item, opt
         
     #  0000000    0000000  000000000  000  000   000   0000000   000000000  00000000  
     # 000   000  000          000     000  000   000  000   000     000     000       
@@ -96,22 +108,41 @@ class Menu
     # 000   000  000          000     000     000     000   000     000     000       
     # 000   000   0000000     000     000      0      000   000     000     00000000  
     
-    activate: (item) -> 
+    activate: (item, opt={}) -> 
         
         items = item.item.menu
+        
         if items
+            
             if @popup
                 @popup.close focus:false
                 delete @popup
-            else
-                br = item.getBoundingClientRect()
-                pr = item.parentNode.getBoundingClientRect()
-                @popup = popup.menu items:items, parent:@, x:br.left, y:pr.top+pr.height
+
+            br = item.getBoundingClientRect()
+            pr = item.parentNode.getBoundingClientRect()
+            opt.items = items
+            opt.parent = @
+            opt.x = br.left
+            opt.y = pr.top+pr.height
+            @popup = popup.menu opt
+            if opt.selectFirstItem == false
+                @elem.focus()
+
+    toggle: (item) ->
         
+        if @popup
+            @popup.close focus:false
+            delete @popup
+        else
+            @activate item, selectFirstItem:false
+            
     itemSelected: (item, elem) ->
             
     deactivate: (item) -> log item.item
 
+    navigateLeft:  -> @select @selected?.previousSibling, activate:true, selectFirstItem:false
+    navigateRight: -> @select @selected?.nextSibling,     activate:true, selectFirstItem:false
+    
     # 000   000  00000000  000   000  
     # 000  000   000        000 000   
     # 0000000    0000000     00000    
@@ -123,18 +154,14 @@ class Menu
         { mod, key, combo } = keyinfo.forEvent event
         
         switch combo
-            when 'end', 'page down'   then @select @elem.lastChild
-            when 'home', 'page up'    then @select @elem.firstChild
-            when 'enter', 'down'      then @activate @selected
-            when 'up'                 then @deactivate @selected
-            when 'esc', 'space'       then @close()
-            # when 'down'             then @select @selected?.nextSibling ? @elem.firstChild 
-            # when 'up'               then @select @selected?.previousSibling ? @elem.lastChild 
-            when 'right'            then @select @selected?.nextSibling
-            when 'left'             then @select @selected?.previousSibling
             
-        stopEvent event
-     
-    onClick: (e) => @activate e.target
+            when 'end', 'page down'         then stopEvent event, @select @elem.lastChild, activate:true, selectFirstItem:false
+            when 'home', 'page up'          then stopEvent event, @select @elem.firstChild, activate:true, selectFirstItem:false
+            when 'enter', 'down', 'space'   then stopEvent event, @activate @selected
+            when 'esc'                      then stopEvent event, @close()
+            when 'right'                    then stopEvent event, @navigateRight()
+            when 'left'                     then stopEvent event, @navigateLeft()
+            
+    onClick: (e) => @toggle e.target
         
 module.exports = Menu

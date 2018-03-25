@@ -49,7 +49,8 @@ class Popup
             @items.style.top  = "#{opt.y}px"
         
         if opt.selectFirstItem != false
-            @select @items.firstChild, open:false
+            # @select @items.firstChild, open:false
+            @select @items.firstChild, selectFirstItem:false
         
     #  0000000  000       0000000    0000000  00000000  
     # 000       000      000   000  000       000       
@@ -68,12 +69,21 @@ class Popup
         @items?.remove()
         delete @items
         
+        @parent?.childClosed()
+        
         if opt.all
             if @parent?
                 @parent.close opt
-        else
-            @focusElem.focus() if opt.focus != false
+                                            
+        if opt.focus != false and not @parent
+            # log 'focus elem', @focusElem?.id, @focusElem?.className
+            @focusElem?.focus() 
 
+    childClosed: ->
+        
+        delete @popup
+        @focus()
+            
     #  0000000  00000000  000      00000000   0000000  000000000  
     # 000       000       000      000       000          000     
     # 0000000   0000000   000      0000000   000          000     
@@ -95,8 +105,10 @@ class Popup
             delete @popup
             @popupChild item, opt
             
-        @items.focus()
+        @focus()
 
+    focus: -> @items?.focus()
+        
     # 00000000    0000000   00000000   000   000  00000000    0000000  000   000  000  000      0000000    
     # 000   000  000   000  000   000  000   000  000   000  000       000   000  000  000      000   000  
     # 00000000   000   000  00000000   000   000  00000000   000       000000000  000  000      000   000  
@@ -107,11 +119,51 @@ class Popup
         
         if items = item.item.menu
             if @popup
-                @popup.close focus:false
-                delete @popup
+                @closePopup()
             else
                 br = item.getBoundingClientRect()
                 @popup = new Popup items:items, parent:@, x:br.left+br.width, y:br.top, selectFirstItem:opt?.selectFirstItem
+
+    closePopup: ->
+        
+        @popup?.close focus:false
+        delete @popup
+
+    # 000   000   0000000   000   000  000   0000000    0000000   000000000  00000000  
+    # 0000  000  000   000  000   000  000  000        000   000     000     000       
+    # 000 0 000  000000000   000 000   000  000  0000  000000000     000     0000000   
+    # 000  0000  000   000     000     000  000   000  000   000     000     000       
+    # 000   000  000   000      0      000   0000000   000   000     000     00000000  
+    
+    navigateLeft: ->
+        
+        if @popup 
+            @closePopup()
+        else if menu = @parentMenu()
+            menu.navigateLeft()
+        else if @parent
+            @close focus:false
+
+    activateOrNavigateRight: ->
+        
+        if @selected?
+            if not @selected.item.menu
+                @activate @selected
+            else
+                @navigateRight()
+            
+    navigateRight: ->
+        if @popup
+            @popup.select @popup.items.firstChild
+        else if @selected?.item.menu
+            # @activate @selected
+            @select @selected, selectFirstItem:true
+        else if menu = @parentMenu()
+            menu.navigateRight()
+            
+    parentMenu: -> 
+        if @parent? and not @parent.parent
+            @parent
             
     # 000   000  00000000  000   000  000000000        00000000   00000000   00000000  000   000  
     # 0000  000  000        000 000      000           000   000  000   000  000       000   000  
@@ -139,15 +191,21 @@ class Popup
     
     activate: (item) ->
         
-        @close all:true
-        
         if item.item?.cb?
-            # log 'cb', item.item.arg ? item.item.text
+            @close all:true
             item.item.cb item.item.arg ? item.item.text
-        else
-            # log 'menuAction', item.item.action ? item.item.text
+        else if not item.item.menu
+            @close all:true
             post.emit 'menuAction', item.item.action ? item.item.text, item.item.actarg
-     
+
+    toggle: (item) ->
+        
+        if @popup
+            @popup.close focus:false
+            delete @popup
+        else
+            @select item, selectFirstItem:false
+            
     onHover: (event) => 
     
         @select event.target, selectFirstItem:false   
@@ -170,15 +228,21 @@ class Popup
         switch combo
             when 'end', 'page down' then @select @items.lastChild, selectFirstItem:false 
             when 'home', 'page up'  then @select @items.firstChild, selectFirstItem:false 
-            when 'enter'            then @activate @selected
-            when 'esc', 'space'     then @close()
-            when 'down'             then @select @nextItem() ? @items.firstChild, selectFirstItem:false 
-            when 'up'               then @select @prevItem() ? @items.lastChild, selectFirstItem:false 
-            when 'right'            then @select @nextItem(), selectFirstItem:false 
-            when 'left'             then @select @prevItem(), selectFirstItem:false 
+            when 'esc'              then @close()
+            when 'down'             then @select @nextItem(), selectFirstItem:false 
+            when 'up'               then @select @prevItem(), selectFirstItem:false 
+            when 'enter', 'space'   then @activateOrNavigateRight()
+            when 'left'             then @navigateLeft()
+            when 'right'            then @navigateRight()
             
         stopEvent event
      
-    onClick: (e) => stopEvent e, @activate e.target
+    onClick: (e) => 
+        stopEvent e 
+        item = e.target
+        if item.item.menu
+            @toggle item
+        else
+            @activate item
         
 module.exports = menu: (opt) -> new Popup opt
