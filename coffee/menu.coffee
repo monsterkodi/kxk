@@ -68,10 +68,12 @@ class Menu
             if opt.focus != false
                 @focusElem?.focus?()
             
-    childClosed: (child) ->
+    childClosed: (child, opt) ->
         
         if child == @popup
             delete @popup
+            if opt.focus != false
+                @elem.focus()
     
     #  0000000  00000000  000      00000000   0000000  000000000  
     # 000       000       000      000       000          000     

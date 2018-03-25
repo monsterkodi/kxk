@@ -70,7 +70,7 @@ class Popup
         @items?.remove()
         delete @items
         
-        @parent?.childClosed @
+        @parent?.childClosed @, opt
         
         if opt.all
             if @parent?
@@ -79,11 +79,12 @@ class Popup
         if opt.focus != false and not @parent
             @focusElem?.focus() 
 
-    childClosed: (child) ->
+    childClosed: (child, opt) ->
         
         if child == @popup
             delete @popup
-            @focus()
+            if opt.focus != false
+                @focus()
             
     #  0000000  00000000  000      00000000   0000000  000000000  
     # 000       000       000      000       000          000     
