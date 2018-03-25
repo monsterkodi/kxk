@@ -11,6 +11,7 @@ crypto  = require 'crypto'
 _       = require 'lodash'
 os      = require 'os'
 noon    = require 'noon'
+sds     = require 'sds'
 fs      = require 'fs-extra'
 walkdir = require 'walkdir'
 atomic  = require 'write-file-atomic'
@@ -24,6 +25,7 @@ module.exports =
     _:_
     os:os
     fs:fs
+    sds:sds
     karg:karg
     colors:colors
     atomic:atomic
@@ -135,4 +137,3 @@ module.exports.about       = require './about'
 module.exports.popup       = require './popup'
 module.exports.menu        = require './menu'
 module.exports.popupWindow = require './popupWindow'
-module.exports.sds         = require 'sds'
