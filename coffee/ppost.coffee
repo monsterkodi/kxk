@@ -6,6 +6,7 @@
 000         0000000   0000000      000       
 ###
 
+_       = require 'lodash'
 Emitter = require 'events'
 POST    = '__POST__'
 
@@ -80,8 +81,15 @@ else
                         when 'toOthers'    then @sendToWins(type, argl, id).sendToMain(type, argl)
                         when 'toOtherWins' then @sendToWins type, argl, id
                         when 'toWins'      then @sendToWins type, argl
-                        when 'toWin'       then @toWin.apply @, [id, type].concat argl
-                        when 'get'         then event.returnValue = @getCallbacks[type]?.apply @getCallbacks[type], argl
+                        when 'toWin'       
+                            if @dbg then console.log 'to win', id, type, argl
+                            @toWin.apply @, [id, type].concat argl
+                        when 'get'
+                            if @dbg then console.log 'post get', type, argl, @getCallbacks[type]
+                            if _.isFunction @getCallbacks[type]
+                                retval = @getCallbacks[type].apply @getCallbacks[type], argl
+                                if @dbg then console.log 'post get retval', retval
+                                event.returnValue = retval
 
         toAll:  (    type, args...) -> @sendToWins(type, args).sendToMain(type, args)
         toMain: (    type, args...) -> @sendToMain type, args
@@ -93,14 +101,20 @@ else
             @
 
         sendToMain: (type, argl) ->
+            if @dbg then console.log "post to main", type, argl
             argl.unshift type
             @emit.apply @, argl
             @
 
         sendToWins: (type, argl, except) ->
             for win in require('electron').BrowserWindow.getAllWindows()
-                win.webContents.send(POST, type, argl) if win.id != except
+                if win.id != except
+                    if @dbg then console.log "post to #{win.id} #{type}" #, argl.map((a) -> new String(a)).join ' '
+                    win.webContents.send(POST, type, argl) 
             @
+            
+        debug: (@dbg=true) ->
+            console.log "post.debug", @dbg
 
     module.exports = new PostMain()
     

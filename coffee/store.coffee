@@ -6,7 +6,7 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ fileExists, noon, post, atomic, first, slash, fs, log, error, _ } = require './kxk'
+{ noon, post, atomic, first, slash, fs, log, error, _ } = require './kxk'
 
 Emitter = require 'events'
 sds = require 'sds'
@@ -20,9 +20,11 @@ class Store extends Emitter
     @addStore: (store) ->
 
         if _.isEmpty @stores
-            post.onGet 'store', (name, action, args...) =>
+            post.onGet 'store', (name, action) =>
                 switch action
-                    when 'data' then return @stores[name]?.data
+                    when 'data'
+                        console.log 'store.onGet', name, action, @stores[name]?, @stores[name]?.data
+                        return @stores[name]?.data
     
         @stores[store.name] = store
 
@@ -58,6 +60,7 @@ class Store extends Emitter
                 @
                 
         else
+            
             post.on 'store', (name, action, args...) =>
                 return if @name != name
                 switch action
