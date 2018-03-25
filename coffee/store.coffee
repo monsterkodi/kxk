@@ -59,6 +59,9 @@ class Store extends Emitter
                 
         else
             
+            app = electron.remote.app
+            @file = slash.join app.getPath('userData'), "#{@name}.noon"
+            
             post.on 'store', (name, action, args...) =>
                 return if @name != name
                 switch action
