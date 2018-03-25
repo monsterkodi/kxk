@@ -6,10 +6,9 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ noon, post, atomic, first, slash, fs, log, error, _ } = require './kxk'
+{ noon, post, atomic, first, sds, slash, fs, log, error, _ } = require './kxk'
 
 Emitter = require 'events'
-sds = require 'sds'
 
 # simple key value store with delayed saving to userData folder
 # does sync changes between processes
@@ -23,7 +22,6 @@ class Store extends Emitter
             post.onGet 'store', (name, action) =>
                 switch action
                     when 'data'
-                        console.log 'store.onGet', name, action, @stores[name]?, @stores[name]?.data
                         return @stores[name]?.data
     
         @stores[store.name] = store
