@@ -35,7 +35,6 @@ slog = (s) ->
                     source = match?[1]
             info.source = slash.tilde source
         else
-            console.log 'no chain'
             info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
 
         file = _.padStart "#{info.source}:#{info.line}", slog.filepad
