@@ -46,8 +46,6 @@ class Menu
     onHover: (event) => @select event.target
     
     onFocusOut: (event) => 
-        log 'onFocusOut' #, document.activeElement.innerHTML
-        #@close()
     
     popupFocusOut: (popup, event) ->
         
@@ -67,7 +65,6 @@ class Menu
     #  0000000  0000000   0000000   0000000   00000000  
     
     close: => 
-        log @popup?
         @popup?.close focus:false
         delete @popup
         # @focusElem?.focus()
@@ -102,7 +99,6 @@ class Menu
     activate: (item) -> 
         
         items = item.item.menu
-        log 'activate', item.item.text
         if items
             if @popup
                 @popup.close focus:false

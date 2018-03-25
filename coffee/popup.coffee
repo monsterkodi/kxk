@@ -59,7 +59,6 @@ class Popup
     
     close: (opt={})=>
         
-        log 'popup', @popup?, 'parent', @parent? 
         @popup?.close focus:false
         delete @popup
         
@@ -71,7 +70,6 @@ class Popup
         
         if opt.all
             if @parent?
-                log 'close all', @parent?
                 @parent.close opt
         else
             @focusElem.focus() if opt.focus != false
@@ -141,15 +139,13 @@ class Popup
     
     activate: (item) ->
         
-        log 'activate close all'
-        
         @close all:true
         
         if item.item?.cb?
-            log 'cb', item.item.arg ? item.item.text
+            # log 'cb', item.item.arg ? item.item.text
             item.item.cb item.item.arg ? item.item.text
         else
-            log 'menuAction', item.item.action ? item.item.text
+            # log 'menuAction', item.item.action ? item.item.text
             post.emit 'menuAction', item.item.action ? item.item.text, item.item.actarg
      
     onHover: (event) => 
@@ -158,13 +154,8 @@ class Popup
     
     onFocusOut: (event) => 
         
-        log 'related', event.relatedTarget?, 'class', event.relatedTarget.className, 'id', event.relatedTarget.id
-        
         if not event.relatedTarget.classList.contains 'popup'
-            log 'onFocusOut close'
             @close all:true
-        else 
-            log 'onFocusOut keep'
     
     # 000   000  00000000  000   000  
     # 000  000   000        000 000   
