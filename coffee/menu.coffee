@@ -46,18 +46,11 @@ class Menu
     onHover: (event) => @select event.target, selectFirstItem:false
     
     onFocusOut: (event) => 
+        
+        if @popup and not event.relatedTarget.classList.contains 'popup'
+            @popup.close focus:false
+            delete @popup
     
-    popupFocusOut: (popup, event) ->
-        
-        log 'popupFocusOut', popup == @popup
-        if popup == @popup
-            log 'relatedTarget', event.relatedTarget.id, event.relatedTarget.className 
-            if not event.relatedTarget.classList.contains 'popup'
-                @close()
-        else
-            popup.close()
-            @blur()
-        
     #  0000000  000       0000000    0000000  00000000  
     # 000       000      000   000  000       000       
     # 000       000      000   000  0000000   0000000   
@@ -67,19 +60,18 @@ class Menu
     close: (opt={}) =>
         
         if @popup?
-            # if @popup != opt.popup
-                # @popup.close focus:false
             @popup.close focus:false
             delete @popup
-            @elem.focus()
+            if opt.focus != false
+                @elem.focus()
         else
-            log @focusElem?.id, @focusElem?.className
-            @focusElem?.focus?()
+            if opt.focus != false
+                @focusElem?.focus?()
             
-    childClosed: ->
+    childClosed: (child) ->
         
-        delete @popup
-        @elem.focus()
+        if child == @popup
+            delete @popup
     
     #  0000000  00000000  000      00000000   0000000  000000000  
     # 000       000       000      000       000          000     
@@ -92,13 +84,14 @@ class Menu
         return if not item?
         
         if @popup?
+            hadPopup = true
             @popup.close focus:false
         
         @selected?.classList.remove 'selected'
         @selected = item
         @selected.classList.add 'selected'
         
-        if @popup? or opt.activate
+        if hadPopup or opt.activate
             delete @popup
             @activate item, opt
         

@@ -49,6 +49,41 @@ elem.containsPos = (div, pos) ->
     
     br = div.getBoundingClientRect()
     br.left <= pos.x <= br.left+br.width and br.top <= pos.y <= br.top+br.height
+
+elem.childIndex = (e) -> Array.prototype.indexOf.call e.parentNode.childNodes, e 
+
+elem.upAttr = (element, attr) ->
+    
+    return null if not element?
+    a = element.getAttribute? attr
+    return a if a != null and a != ''
+    elem.upAttr element.parentNode, attr
+
+elem.upProp = (element, prop) ->
+    
+    return null if not element?
+    return element[prop] if element[prop]?
+    elem.upProp element.parentNode, prop
+    
+elem.upElem = (element, opt) ->
+    
+    return null if not element?
+    return element if opt?.tag? and opt.tag == element.tagName
+    return element if opt?.prop? and element[opt.prop]?
+    return element if opt?.attr? and element.getAttribute?(opt.attr)?
+    elem.upElem element.parentNode, opt
+
+elem.downElem = (element, opt) ->
+    
+    return null if not element?
+    return element if opt?.tag? and opt.tag == element.tagName
+    if opt?.prop? and element[opt.prop]?
+        return element if not opt?.value? or element[opt.prop] == opt.value
+    if opt?.attr? and element.getAttribute?(opt.attr)?
+        return element if not opt?.value? or element.getAttribute(opt.attr) == opt.value
+    for child in element.children
+        if found = elem.downElem child, opt
+            return found
     
 module.exports = elem
 

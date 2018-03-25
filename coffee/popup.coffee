@@ -18,10 +18,12 @@ class Popup
         
         for item in opt.items
             continue if item.hide
-            if empty item.text
+            if empty(item.text) and empty(item.html)
                 div = elem 'hr', class: 'popupItem separator'
             else
                 div = elem class: 'popupItem', text: item.text
+                if not empty item.html
+                    div.innerHTML = item.html 
                 div.item = item
                 div.addEventListener 'click', @onClick
                 if item.combo ? item.accel
@@ -49,7 +51,6 @@ class Popup
             @items.style.top  = "#{opt.y}px"
         
         if opt.selectFirstItem != false
-            # @select @items.firstChild, open:false
             @select @items.firstChild, selectFirstItem:false
         
     #  0000000  000       0000000    0000000  00000000  
@@ -69,20 +70,20 @@ class Popup
         @items?.remove()
         delete @items
         
-        @parent?.childClosed()
+        @parent?.childClosed @
         
         if opt.all
             if @parent?
                 @parent.close opt
                                             
         if opt.focus != false and not @parent
-            # log 'focus elem', @focusElem?.id, @focusElem?.className
             @focusElem?.focus() 
 
-    childClosed: ->
+    childClosed: (child) ->
         
-        delete @popup
-        @focus()
+        if child == @popup
+            delete @popup
+            @focus()
             
     #  0000000  00000000  000      00000000   0000000  000000000  
     # 000       000       000      000       000          000     
@@ -106,8 +107,6 @@ class Popup
             @popupChild item, opt
             
         @focus()
-
-    focus: -> @items?.focus()
         
     # 00000000    0000000   00000000   000   000  00000000    0000000  000   000  000  000      0000000    
     # 000   000  000   000  000   000  000   000  000   000  000       000   000  000  000      000   000  
@@ -206,15 +205,40 @@ class Popup
         else
             @select item, selectFirstItem:false
             
+    # 00     00   0000000   000   000   0000000  00000000    
+    # 000   000  000   000  000   000  000       000         
+    # 000000000  000   000  000   000  0000000   0000000     
+    # 000 0 000  000   000  000   000       000  000         
+    # 000   000   0000000    0000000   0000000   00000000    
+            
     onHover: (event) => 
     
-        @select event.target, selectFirstItem:false   
+        if item = elem.upElem event.target, prop:'item'
+            @select item, selectFirstItem:false   
+
+    onClick: (event) => 
+        
+        stopEvent event 
+        
+        if item = elem.upElem event.target, prop:'item'
+            if item.item.menu
+                @toggle item
+            else
+                @activate item
+
+    # 00000000   0000000    0000000  000   000   0000000  
+    # 000       000   000  000       000   000  000       
+    # 000000    000   000  000       000   000  0000000   
+    # 000       000   000  000       000   000       000  
+    # 000        0000000    0000000   0000000   0000000   
+    
+    focus: -> @items?.focus()
     
     onFocusOut: (event) => 
         
         if not event.relatedTarget.classList.contains 'popup'
-            @close all:true
-    
+            @close all:true, focus:false
+                
     # 000   000  00000000  000   000  
     # 000  000   000        000 000   
     # 0000000    0000000     00000    
@@ -226,23 +250,13 @@ class Popup
         { mod, key, combo } = keyinfo.forEvent event
         
         switch combo
-            when 'end', 'page down' then @select @items.lastChild, selectFirstItem:false 
-            when 'home', 'page up'  then @select @items.firstChild, selectFirstItem:false 
-            when 'esc'              then @close()
-            when 'down'             then @select @nextItem(), selectFirstItem:false 
-            when 'up'               then @select @prevItem(), selectFirstItem:false 
-            when 'enter', 'space'   then @activateOrNavigateRight()
-            when 'left'             then @navigateLeft()
-            when 'right'            then @navigateRight()
+            when 'end', 'page down' then stopEvent event, @select @items.lastChild, selectFirstItem:false 
+            when 'home', 'page up'  then stopEvent event, @select @items.firstChild, selectFirstItem:false 
+            when 'esc'              then stopEvent event, @close()
+            when 'down'             then stopEvent event, @select @nextItem(), selectFirstItem:false 
+            when 'up'               then stopEvent event, @select @prevItem(), selectFirstItem:false 
+            when 'enter', 'space'   then stopEvent event, @activateOrNavigateRight()
+            when 'left'             then stopEvent event, @navigateLeft()
+            when 'right'            then stopEvent event, @navigateRight()
             
-        stopEvent event
-     
-    onClick: (e) => 
-        stopEvent e 
-        item = e.target
-        if item.item.menu
-            @toggle item
-        else
-            @activate item
-        
 module.exports = menu: (opt) -> new Popup opt
