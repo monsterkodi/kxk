@@ -88,7 +88,7 @@ else
                             if @dbg then console.log 'post get', type, argl, @getCallbacks[type]
                             if _.isFunction @getCallbacks[type]
                                 retval = @getCallbacks[type].apply @getCallbacks[type], argl
-                                event.returnValue = retval
+                                event.returnValue = retval ? []
 
         toAll:  (    type, args...) -> @sendToWins(type, args).sendToMain(type, args)
         toMain: (    type, args...) -> @sendToMain type, args
