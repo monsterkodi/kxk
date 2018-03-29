@@ -214,6 +214,14 @@ class Slash
         catch 
             return null
         null     
+        
+    @isWritable: (p) ->
+        
+        try
+            fs.accessSync Slash.resolve(p), fs.R_OK | fs.W_OK
+            return true
+        catch
+            return false
 
     @fileExists: (p) ->
         
