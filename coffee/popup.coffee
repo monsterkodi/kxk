@@ -237,7 +237,7 @@ class Popup
     
     onFocusOut: (event) => 
         
-        if not event.relatedTarget.classList.contains 'popup'
+        if not event.relatedTarget?.classList.contains 'popup'
             @close all:true, focus:false
                 
     # 000   000  00000000  000   000  

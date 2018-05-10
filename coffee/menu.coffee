@@ -47,7 +47,7 @@ class Menu
     
     onFocusOut: (event) => 
         
-        if @popup and not event.relatedTarget.classList.contains 'popup'
+        if @popup and not event.relatedTarget?.classList.contains 'popup'
             @popup.close focus:false
             delete @popup
     
