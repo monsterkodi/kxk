@@ -56,13 +56,17 @@ class Keyinfo
             args = args.filter (e) -> e?.length
             args.join '+'
     
-        key = keycode event
+        key = @keynameForEvent event
         if key not in @modifierNames
             return join @modifiersForEvent(event), key
         return ""
 
     @keynameForEvent: (event) -> 
         name = keycode event
+        if not name?
+            switch event.code
+                when 'NumpadEqual' then return 'numpad ='
+                when 'Numpad5'     then return 'numpad 5'
         return "" if name in ["left command", "right command", "ctrl", "alt", "shift"]
         name
 
