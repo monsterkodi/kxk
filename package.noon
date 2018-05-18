@@ -12,13 +12,13 @@ bugs
 homepage        https://github.com/monsterkodi/kxk#readme
 dependencies
                 ansi-keycode    0.0.0
-                chokidar        ^2.0.2
-                colors          ^1.2.0
-                fs-extra        ^5.0.0
+                chokidar        ^2.0.3
+                colors          ^1.2.5
+                fs-extra        ^6.0.1
                 html-entities   ^1.2.1
                 karg            >=1.1.2
-                keycode         ^2.1.9
-                lodash          ^4.17.5
+                keycode         ^2.2.0
+                lodash          ^4.17.10
                 mocha           ^5.0.4
                 noon            >=1.1.1
                 opener          ^1.4.3
