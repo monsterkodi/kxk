@@ -71,6 +71,7 @@ elem.upElem = (element, opt) ->
     return element if opt?.tag? and opt.tag == element.tagName
     return element if opt?.prop? and element[opt.prop]?
     return element if opt?.attr? and element.getAttribute?(opt.attr)?
+    return element if opt?.class? and element.classList?.contains opt.class
     elem.upElem element.parentNode, opt
 
 elem.downElem = (element, opt) ->
