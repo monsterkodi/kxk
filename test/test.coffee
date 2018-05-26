@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ fileList, splitFileLine, slash, pos, clamp, log, _ } = require '../coffee/kxk'
+{ fileList, splitFileLine, slash, pos, empty, clamp, log, _ } = require '../coffee/kxk'
 
 assert = require 'assert'
 chai   = require 'chai'
@@ -385,4 +385,44 @@ describe 'clamp', ->
         
         expect clamp -3, -2, 0
         .to.eql -2
+        
+describe 'empty', ->
+    
+    it 'true', ->
+        
+        expect empty ''    
+        .to.eql true
+        
+        expect empty []    
+        .to.eql true
+        
+        expect empty {}    
+        .to.eql true
+        
+        expect empty null
+        .to.eql true
+        
+        expect empty undefined
+        .to.eql true
+        
+    it 'false', ->
+        
+        expect empty 1
+        .to.eql false
+        
+        expect empty 0
+        .to.eql false
+        
+        expect empty [[]]
+        .to.eql false
+        
+        expect empty a:null
+        .to.eql false
+        
+        expect empty ' '
+        .to.eql false
+        
+        expect empty Infinity
+        .to.eql false
+        
         

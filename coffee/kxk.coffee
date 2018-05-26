@@ -73,7 +73,7 @@ module.exports =
     fade:  (s,e,v) -> s*(1-v)+e*(v)
     last:  (a) -> _.last a
     first: (a) -> _.first a
-    empty: (a) -> _.isEmpty(a) or a == ''
+    empty: (a) -> not _.isNumber(a) and _.isEmpty(a) or a == ''
     valid: (a) -> not module.exports.empty a
 
     absMax: (a,b) -> if Math.abs(a) >= Math.abs(b) then a else b
