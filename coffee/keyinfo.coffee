@@ -24,8 +24,9 @@ class Keyinfo
     
     @iconKeyNames  = ['shift', 'ctrl', 'alt', 'command', 'backspace', 'delete', 'home', 'end', 'page up', 'page down', 'return', 'enter', 'up', 'down', 'left', 'right']
     @iconKeyChars  = ['⌂', '⌃', '⌥', '⌘', '⌫', '⌦', '↖', '↘', '⇞', '⇟', '↩', '↩', '↑', '↓', '←', '→']
-    # ⇧
+
     @forCombo: (combo) ->
+        
         mods = []
         char = null
         for c in combo.split '+'
@@ -42,6 +43,7 @@ class Keyinfo
     @isModifier: (keyname) -> keyname in @modifierNames
 
     @modifiersForEvent: (event) -> 
+        
         mods = []
         mods.push 'command' if event.metaKey
         mods.push 'alt'     if event.altKey
@@ -61,7 +63,8 @@ class Keyinfo
             return join @modifiersForEvent(event), key
         return ""
 
-    @keynameForEvent: (event) -> 
+    @keynameForEvent: (event) ->
+        
         name = keycode event
         if not name?
             switch event.code
@@ -71,6 +74,7 @@ class Keyinfo
         name
 
     @characterForEvent: (event) ->
+        
         ansi = ansiKey event 
         return null if not ansi? 
         return null if ansi.length != 1 
@@ -79,9 +83,11 @@ class Keyinfo
         ansi
         
     @short: (combo) ->
+        
         combo = combo.toLowerCase()
         for i in [0...@iconKeyNames.length]
-            combo = combo.replace @iconKeyNames[i], @iconKeyChars[i]
+            # combo = combo.replace @iconKeyNames[i], @iconKeyChars[i]
+            combo = combo.replace new RegExp(@iconKeyNames[i], 'gi'), @iconKeyChars[i]
         combo = combo.replace /\+/g, ''
         combo.toUpperCase()
 
