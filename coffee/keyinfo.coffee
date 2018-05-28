@@ -20,10 +20,10 @@ class Keyinfo
         short: @short combo
     
     @modifierNames = ['shift', 'ctrl', 'alt', 'command'] 
-    @modifierChars = ['⇧', '⌃', '⌥', '⌘']
+    @modifierChars = ['⌂', '⌃', '⌥', '⌘']
     
     @iconKeyNames  = ['shift', 'ctrl', 'alt', 'command', 'backspace', 'delete', 'home', 'end', 'page up', 'page down', 'return', 'enter', 'up', 'down', 'left', 'right']
-    @iconKeyChars  = ['△', '⌃', '⌥', '⌘', '⌫', '⌦', '↖', '↘', '⇞', '⇟', '↩', '↩', '↑', '↓', '←', '→']
+    @iconKeyChars  = ['⌂', '⌃', '⌥', '⌘', '⌫', '⌦', '↖', '↘', '⇞', '⇟', '↩', '↩', '↑', '↓', '←', '→']
     # ⇧
     @forCombo: (combo) ->
         mods = []
