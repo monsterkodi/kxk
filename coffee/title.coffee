@@ -36,19 +36,17 @@ class Title
         @title.ondblclick = => post.toMain 'toggleMaximize'
         @elem.appendChild @title
                 
-        @minimize = elem class: 'winclose gray'
+        # ─ ◻ 🞩
+        @minimize = elem class: 'winclose gray', text:'─'
         @elem.appendChild @minimize
-        @minimize.appendChild elem 'img', src:slash.fileUrl __dirname + '/../img/minimize.png'
         @minimize.addEventListener 'click', -> post.emit 'menuAction', 'Minimize'
         
-        @maximize = elem class: 'winclose gray'
+        @maximize = elem class: 'winclose gray', text:'◻'
         @elem.appendChild @maximize
-        @maximize.appendChild elem 'img', src:slash.fileUrl __dirname + '/../img/maximize.png'
         @maximize.addEventListener 'click', -> post.emit 'menuAction', 'Maximize'
 
-        @close = elem class: 'winclose'
+        @close = elem class: 'winclose', text:'🞩'
         @elem.appendChild @close
-        @close.appendChild elem 'img', src:slash.fileUrl __dirname + '/../img/close.png'
         @close.addEventListener 'click', -> post.emit 'menuAction', 'Close Window'
         
         if @cfg.menu
