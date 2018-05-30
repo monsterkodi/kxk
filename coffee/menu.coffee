@@ -51,6 +51,14 @@ class Menu
             @popup.close focus:false
             delete @popup
     
+    #  0000000   00000000   00000000  000   000  
+    # 000   000  000   000  000       0000  000  
+    # 000   000  00000000   0000000   000 0 000  
+    # 000   000  000        000       000  0000  
+    #  0000000   000        00000000  000   000  
+    
+    open: -> @select @elem.firstChild, activate:true
+            
     #  0000000  000       0000000    0000000  00000000  
     # 000       000      000   000  000       000       
     # 000       000      000   000  0000000   0000000   
@@ -150,7 +158,7 @@ class Menu
         
         switch combo
             
-            when 'end', 'page down'         then stopEvent event, @select @elem.lastChild, activate:true, selectFirstItem:false
+            when 'end', 'page down'         then stopEvent event, @select @elem.lastChild,  activate:true, selectFirstItem:false
             when 'home', 'page up'          then stopEvent event, @select @elem.firstChild, activate:true, selectFirstItem:false
             when 'enter', 'down', 'space'   then stopEvent event, @activate @selected
             when 'esc'                      then stopEvent event, @close()
