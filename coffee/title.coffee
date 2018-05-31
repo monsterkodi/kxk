@@ -15,7 +15,7 @@ class Title
         post.on 'titlebar',   @onTitlebar
         post.on 'menuAction', @onMenuAction
         
-        @cfg = cfg 
+        @cfg = cfg
         @cfg ?= {}
         
         pkg = @cfg.pkg
@@ -36,16 +36,16 @@ class Title
         @title.ondblclick = => post.toMain 'toggleMaximize'
         @elem.appendChild @title
                 
-        # ─ ◻ 🞩
-        @minimize = elem class: 'winclose gray', text:'─'
+        # — ◻ 🞩
+        @minimize = elem class: 'winbutton minimize gray', text:'—'
         @elem.appendChild @minimize
         @minimize.addEventListener 'click', -> post.emit 'menuAction', 'Minimize'
         
-        @maximize = elem class: 'winclose gray', text:'◻'
+        @maximize = elem class: 'winbutton maximize gray', text:'◻'
         @elem.appendChild @maximize
         @maximize.addEventListener 'click', -> post.emit 'menuAction', 'Maximize'
 
-        @close = elem class: 'winclose', text:'🞩'
+        @close = elem class: 'winbutton close', text:'🞩'
         @elem.appendChild @close
         @close.addEventListener 'click', -> post.emit 'menuAction', 'Close Window'
         
