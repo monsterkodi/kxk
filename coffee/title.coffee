@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ elem, sds, prefs, slash, scheme, empty, post, keyinfo, menu, noon, log, $, _ } = require './kxk'
+{ elem, sds, prefs, slash, scheme, empty, post, keyinfo, menu, noon, str, log, $, _ } = require './kxk'
 
 class Title
     
