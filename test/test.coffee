@@ -41,9 +41,9 @@ describe 'slash', ->
     it 'home', ->
         
         if slash.win()
-            home = "C:/Users/kodi"
+            home = slash.path process.env['HOMEDRIVE'] + process.env['HOMEPATH']
         else
-            home = "/Users/kodi"
+            home = process.env['HOME']
             
         expect slash.home()
         .to.eql home
