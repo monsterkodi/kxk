@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ elem, sds, slash, empty, post, keyinfo, menu, noon, log, $, _ } = require './kxk'
+{ elem, sds, slash, empty, post, keyinfo, menu, noon, log, $, _ } = require 'kxk'
 
 class Title
     
@@ -37,15 +37,36 @@ class Title
         @elem.appendChild @title
                 
         # — ◻ 🞩
-        @minimize = elem class: 'winbutton minimize gray', text:'—'
+        @minimize = elem class: 'winbutton minimize gray'
+        
+        @minimize.innerHTML = """
+            <svg width="100%" height="100%" viewBox="-10 -8 30 30">
+                <line x1="-1" y1="5" x2="11" y2="5"></line>
+            </svg>
+        """
+        
         @elem.appendChild @minimize
         @minimize.addEventListener 'click', -> post.emit 'menuAction', 'Minimize'
         
-        @maximize = elem class: 'winbutton maximize gray', text:'◻'
+        @maximize = elem class: 'winbutton maximize gray'
+        
+        @maximize.innerHTML = """
+            <svg width="100%" height="100%" viewBox="-10 -9 30 30">
+              <rect width="11" height="11" style="fill-opacity: 0;"></rect>
+            </svg>
+        """
         @elem.appendChild @maximize
         @maximize.addEventListener 'click', -> post.emit 'menuAction', 'Maximize'
 
-        @close = elem class: 'winbutton close', text:'🞩'
+        @close = elem class: 'winbutton close'
+        
+        @close.innerHTML = """
+            <svg width="100%" height="100%" viewBox="-10 -9 30 30">
+                <line x1="0" y1="0" x2="10" y2="11"></line>
+                <line x1="10" y1="0" x2="0" y2="11"></line>
+            </svg>
+        """
+        
         @elem.appendChild @close
         @close.addEventListener 'click', -> post.emit 'menuAction', 'Close Window'
         
