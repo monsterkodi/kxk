@@ -69,6 +69,8 @@ class Title
         
         @elem.appendChild @close
         @close.addEventListener 'click', -> post.emit 'menuAction', 'Close Window'
+
+        @initStyle()
         
         if @cfg.menu
             
@@ -147,6 +149,25 @@ class Title
     toggleMenu:  => if @menuVisible() then @hideMenu() else @showMenu()
     openMenu:    => if @menuVisible() then @hideMenu() else @showMenu(); @menu.open()
 
+    initStyle: ->
+        
+        if link =$ "#style-link"
+            
+            href = __dirname + "/css/style.css"
+            titleStyle = elem 'link',
+                href: href
+                rel:  'stylesheet'
+                type: 'text/css'
+            link.parentNode.insertBefore titleStyle, link
+            
+            href = __dirname + "/css/dark.css"
+            titleStyle = elem 'link',
+                href: href
+                rel:  'stylesheet'
+                type: 'text/css'
+                id:   'style-title'
+            link.parentNode.insertBefore titleStyle, link
+    
     # 000   000  00000000  000   000
     # 000  000   000        000 000
     # 0000000    0000000     00000
