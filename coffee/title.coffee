@@ -68,7 +68,7 @@ class Title
         """
         
         @elem.appendChild @close
-        @close.addEventListener 'click', -> post.emit 'menuAction', 'Close Window'
+        @close.addEventListener 'click', -> post.emit 'menuAction', 'Close'
 
         @initStyle()
         
