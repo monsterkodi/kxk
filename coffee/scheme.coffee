@@ -12,11 +12,11 @@ class Scheme
 
     @toggle: (schemes = ['dark', 'bright']) ->
         
-        link =$ 'style-link'
-        currentScheme = slash.basename _.last(link.href.split('/')), '.css'
-        nextSchemeIndex = ( schemes.indexOf(currentScheme) + 1) % schemes.length
-        nextScheme = schemes[nextSchemeIndex]
-        Scheme.set nextScheme
+        if link =$ 'style-link'
+            currentScheme = slash.basename _.last(link.href.split('/')), '.css'
+            nextSchemeIndex = ( schemes.indexOf(currentScheme) + 1) % schemes.length
+            nextScheme = schemes[nextSchemeIndex]
+            Scheme.set nextScheme
 
     @set: (scheme) ->
         

@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ elem, sds, slash, empty, post, keyinfo, menu, noon, log, $, _ } = require './kxk'
+{ elem, sds, prefs, slash, scheme, empty, post, keyinfo, menu, noon, log, $, _ } = require './kxk'
 
 class Title
     
@@ -103,9 +103,10 @@ class Title
             when 'Open Menu'        then @openMenu()
             when 'Show Menu'        then @showMenu()
             when 'Hide Menu'        then @hideMenu()
+            when 'Toggle Scheme'    then scheme.toggle()
             when 'DevTools'         then win().webContents.toggleDevTools()
             when 'Reload'           then win().webContents.reloadIgnoringCache()
-            when 'Close Window'     then win().close()
+            when 'Close'            then win().close()
             when 'Minimize'         then win().minimize()
             when 'Maximize'         
                 if win().isMaximized() then win().unmaximize() else win().maximize()  
@@ -149,6 +150,12 @@ class Title
     toggleMenu:  => if @menuVisible() then @hideMenu() else @showMenu()
     openMenu:    => if @menuVisible() then @hideMenu() else @showMenu(); @menu.open()
 
+    #  0000000  000000000  000   000  000      00000000  
+    # 000          000      000 000   000      000       
+    # 0000000      000       00000    000      0000000   
+    #      000     000        000     000      000       
+    # 0000000      000        000     0000000  00000000  
+    
     initStyle: ->
         
         if link =$ "#style-link"
@@ -160,7 +167,7 @@ class Title
                 type: 'text/css'
             link.parentNode.insertBefore titleStyle, link
             
-            href = __dirname + "/css/dark.css"
+            href = __dirname + "/css/#{prefs.get 'scheme', 'dark'}.css"
             titleStyle = elem 'link',
                 href: href
                 rel:  'stylesheet'
