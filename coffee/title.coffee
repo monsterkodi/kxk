@@ -110,8 +110,10 @@ class Title
             when 'Close'            then win().close()
             when 'Minimize'         then win().minimize()
             when 'Maximize' 
-                log 'Maximize', win().isMaximized(), win().getBounds(), electron.screen.getPrimaryDisplay().workAreaSize
-                if win().isMaximized() then win().unmaximize() else win().maximize()  
+                wa = electron.screen.getPrimaryDisplay().workAreaSize
+                maximized = win().isMaximized() or (win().getBounds().width == wa.width and win().getBounds().height = wa.height)
+                log 'Maximize', win().isMaximized(), maximized, win().getBounds(), wa
+                if maximized then win().unmaximize() else win().maximize()  
 
     menuTemplate: ->
         
