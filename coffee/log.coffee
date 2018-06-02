@@ -16,6 +16,14 @@ sorcery = require 'sorcery'
 
 stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
+oscClient = null
+oscLog = (info) ->
+    if not oscClient
+        { Client } = require './osc'
+        oscClient = new Client
+    info.id = slog.id
+    oscClient.send info
+
 slog = (s) ->
     
     slash = require './slash'
@@ -41,7 +49,10 @@ slog = (s) ->
         meth = _.padEnd f.getFunctionName(), slog.methpad
         info.str = s
         s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
-        post.emit 'slog', s, info 
+        post.emit 'slog', s, info
+        if slog.osc
+            oscLog info
+            
     catch err
         post.emit 'slog', "!#{slog.methsep}#{s} #{err}"
 
@@ -53,6 +64,8 @@ log = ->
     console.log s
     slog s
 
+slog.osc   = false
+slog.id    = 'kxk'
 slog.depth = 2
 slog.filesep = ' > ' #' ⦿ '
 slog.methsep = ' >> ' #' ▸ '
