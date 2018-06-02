@@ -19,9 +19,11 @@ stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 oscClient = null
 oscLog = (info) ->
     if not oscClient
+        console.log 'osc client'
         { Client } = require './osc'
         oscClient = new Client
     info.id = slog.id
+    console.log 'osc send', info
     oscClient.send info
 
 slog = (s) ->
@@ -64,14 +66,14 @@ log = ->
     console.log s
     slog s
 
-slog.osc   = false
-slog.id    = 'kxk'
-slog.depth = 2
+slog.osc     = false
+slog.id      = 'kxk'
+slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '
 slog.methsep = ' >> ' #' ▸ '
 slog.filepad = 30
 slog.methpad = 15
-log.slog = slog
+log.slog     = slog
 
 module.exports = log
 

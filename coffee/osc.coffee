@@ -30,6 +30,7 @@ class Client
         @osc = new OSC plugin: new OSC.DatagramPlugin send: host:'localhost', port:port
         @osc.open()
         @osc.on 'open', => 
+            log 'oscClient'
             for msg in @msgs
                 @osc.send new OSC.Message @channel, msg
         
