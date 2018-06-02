@@ -19,10 +19,10 @@ class osc
         @opt.channel ?= '/log'
         
         @osc = new OSC plugin: new OSC.DatagramPlugin
-        @osc.open()
-        
         @osc.on 'open', @onOpen
         @osc.on @opt.channel, @onMsg if @opt.onMsg
+        log 'osc', opt
+        @osc.open()
         
     onOpen: =>
         log 'osc open', @opt.channel if @opt.debug
