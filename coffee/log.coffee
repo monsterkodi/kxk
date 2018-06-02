@@ -39,8 +39,9 @@ slog = (s) ->
 
         file = _.padStart "#{info.source}:#{info.line}", slog.filepad
         meth = _.padEnd f.getFunctionName(), slog.methpad
+        info.str = s
         s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
-        post.emit 'slog', s 
+        post.emit 'slog', s, info 
     catch err
         post.emit 'slog', "!#{slog.methsep}#{s} #{err}"
 
