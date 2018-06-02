@@ -21,7 +21,7 @@ oscLog = (info) ->
     if not oscClient
         console.log 'osc client'
         { Client } = require './osc'
-        oscClient = new Client
+        oscClient = new Client '/log', slog.port
     info.id = slog.id
     console.log 'osc send', info
     oscClient.send info
@@ -68,6 +68,7 @@ log = ->
 
 slog.osc     = false
 slog.id      = 'kxk'
+slog.port    = 41234
 slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '
 slog.methsep = ' >> ' #' ▸ '

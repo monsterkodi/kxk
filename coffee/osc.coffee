@@ -13,7 +13,7 @@ class Server
 
     constructor: (@cb, @channel='/log', port=41234) ->
         
-        @osc = new OSC plugin: new OSC.DatagramPlugin open: host:'localhost', port:port
+        @osc = new OSC plugin: new OSC.DatagramPlugin open: {host:'localhost', port:port}
         @osc.open()
         @osc.on @channel, @onMessage
         
@@ -27,7 +27,7 @@ class Client
         
         @msgs = []
         
-        @osc = new OSC plugin: new OSC.DatagramPlugin send: host:'localhost', port:port
+        @osc = new OSC plugin: new OSC.DatagramPlugin send: {host:'localhost', port:port}
         @osc.open()
         @osc.on 'open', => 
             log 'oscClient'
