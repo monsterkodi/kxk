@@ -21,7 +21,8 @@ class Title
         pkg = @cfg.pkg
         
         @elem =$ cfg.elem ? "#titlebar"
-        @elem.ondblclick = (event) -> post.toMain 'maximizeWindow', window.winID
+        # @elem.ondblclick = (event) -> post.toMain 'maximizeWindow', window.winID
+        @elem.ondblclick = (event) -> post.emit 'menuAction', 'Maximize'
                 
         @winicon = elem class: 'winicon'
         @winicon.appendChild elem 'img', src:slash.fileUrl @cfg.icon
@@ -33,10 +34,11 @@ class Title
         html += "<span class='titlebar-dot'> ● </span>"
         html += "<span class='titlebar-version'>#{pkg.version}</span>"
         @title.innerHTML = html
-        @title.ondblclick = => post.toMain 'toggleMaximize'
+        # @title.ondblclick = => post.toMain 'toggleMaximize'
         @elem.appendChild @title
                 
         # — ◻ 🞩
+        
         @minimize = elem class: 'winbutton minimize gray'
         
         @minimize.innerHTML = """
@@ -108,7 +110,8 @@ class Title
             when 'Reload'           then win().webContents.reloadIgnoringCache()
             when 'Close'            then win().close()
             when 'Minimize'         then win().minimize()
-            when 'Maximize'         
+            when 'Maximize' 
+                log 'Maximize', win().isMaximized()
                 if win().isMaximized() then win().unmaximize() else win().maximize()  
 
     menuTemplate: ->

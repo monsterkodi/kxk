@@ -16,7 +16,9 @@ else
         
     args = {} 
         
-    args.init = (cfg, pkg) ->
+    args.init = (cfg, kargOpt) ->
+        
+        pkg = kargOpt?.pkg
         
         if not pkg?
             pkgDir = slash.pkg __dirname
@@ -49,7 +51,7 @@ else
             
         delete args.init
         
-        for k,v of karg kargConfig
+        for k,v of karg kargConfig, kargOpt
             args[k] = v
             
         args
