@@ -26,12 +26,13 @@ class Store extends Emitter
     
         @stores[store.name] = store
 
-    constructor: (@name, opt={}) ->
+    constructor: (name, opt={}) ->
 
+        super()
+        
+        @name = name
         opt.separator ?= ':'
         opt.timeout   ?= 4000
-        
-        super()
         
         return error 'no name for store?' if not @name
 

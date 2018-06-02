@@ -10,21 +10,20 @@
 
 class Title
     
-    constructor: (cfg) ->
+    constructor: (@opt) ->
 
         post.on 'titlebar',   @onTitlebar
         post.on 'menuAction', @onMenuAction
         
-        @cfg = cfg
-        @cfg ?= {}
+        @opt ?= {}
         
-        pkg = @cfg.pkg
+        pkg = @opt.pkg
         
-        @elem =$ cfg.elem ? "#titlebar"
+        @elem =$ @opt.elem ? "#titlebar"
         @elem.addEventListener 'dblclick', (event) -> stopEvent event, post.emit 'menuAction', 'Maximize'
                 
         @winicon = elem class: 'winicon'
-        @winicon.appendChild elem 'img', src:slash.fileUrl @cfg.icon
+        @winicon.appendChild elem 'img', src:slash.fileUrl slash.join @opt.dir, @opt.icon
         @elem.appendChild @winicon
         @winicon.addEventListener 'click', -> post.emit 'menuAction', 'Open Menu'   
         
@@ -72,7 +71,7 @@ class Title
 
         @initStyle()
         
-        if @cfg.menu
+        if @opt.menu
             
             @initMenu @menuTemplate()
          
@@ -118,7 +117,8 @@ class Title
     menuTemplate: ->
         
         if empty @templateCache
-            @templateCache = @makeTemplate noon.load slash.resolve @cfg.menu
+            # log 'menuTemplate', slash.resolve slash.join @opt.dir, @opt.menu
+            @templateCache = @makeTemplate noon.load slash.resolve slash.join @opt.dir, @opt.menu
         @templateCache
         
     makeTemplate: (obj) ->
@@ -164,19 +164,23 @@ class Title
         
         if link =$ "#style-link"
             
-            href = __dirname + "/css/style.css"
+            href = slash.fileUrl slash.resolve slash.join __dirname, "css/style.css"
+            # href = slash.fileUrl slash.resolve "~/s/kxk/js/css/style.css"
             titleStyle = elem 'link',
                 href: href
                 rel:  'stylesheet'
                 type: 'text/css'
+                
             link.parentNode.insertBefore titleStyle, link
             
-            href = __dirname + "/css/#{prefs.get 'scheme', 'dark'}.css"
+            href = slash.fileUrl slash.resolve slash.join __dirname, "css/#{prefs.get 'scheme', 'dark'}.css"
+            # href = slash.fileUrl slash.resolve "~/s/kxk/js/css/#{prefs.get 'scheme', 'dark'}.css"
             titleStyle = elem 'link',
                 href: href
                 rel:  'stylesheet'
                 type: 'text/css'
                 id:   'style-title'
+                
             link.parentNode.insertBefore titleStyle, link
     
     # 000   000  00000000  000   000
