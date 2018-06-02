@@ -12,8 +12,6 @@ class App
     
     constructor: (@opt) ->
         
-        log 'App.constructor', @opt
-
         @watcher = null
             
         electron = require 'electron'
@@ -118,10 +116,10 @@ class App
     
         electron = require 'electron'
         @win = new electron.BrowserWindow
-            width:           474
-            height:          900
-            minWidth:        474
-            minHeight:       600
+            width:           @opt.width  ? 800
+            height:          @opt.height ? 800
+            minWidth:        @opt.minWidth ? 100
+            minHeight:       @opt.minHeight ? 100
             backgroundColor: '#181818'
             fullscreen:      false
             show:            false
@@ -138,9 +136,9 @@ class App
     
         @win.loadURL slash.fileUrl slash.join @opt.dir, @opt.index
         @win.webContents.openDevTools() if args.DevTools
-        @win.on 'closed', => @win = null
         @win.on 'resize', @saveBounds
         @win.on 'move',   @saveBounds
+        @win.on 'closed', => @win = null
         @win.on 'close',  => @app.dock?.hide()
         @win.on 'ready-to-show', => @win.show()
         @app.dock?.show()
