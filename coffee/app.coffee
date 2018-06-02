@@ -209,8 +209,8 @@ class App
     
     onSrcChange: (path) =>
     
-        log 'onSrcChange', path, __filename
-        if path == __filename
+        log 'onSrcChange', path, @opt.dir, path.startsWith @opt.dir
+        if slash.file(path) == 'main'
             @stopWatcher()
             @app.exit 0
             childp.execSync "#{@opt.dir}/../node_modules/.bin/electron . -w",
@@ -220,7 +220,7 @@ class App
                 shell:    true
             process.exit 0
         else
-            post.toWins 'reload'
+            post.toWins 'menuAction', 'Reload'
              
 module.exports = App
     
