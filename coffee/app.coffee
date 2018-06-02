@@ -22,15 +22,16 @@ class App
                 @app.quit()
                 return
     
-        args = """
+        argl = """
             noprefs     don't load preferences      false
             DevTools    open developer tools        false
             watch       watch sources for changes   false
             verbose     |                           false
             debug       |                           false
             """
-        args = @opt.args + args if @opt.args
-        args = args.init args
+            
+        argl = @opt.args + argl if @opt.args
+        args = args.init argl
             
         post.on 'showAbout', @showAbout
         post.on 'quitApp',   @quitApp
