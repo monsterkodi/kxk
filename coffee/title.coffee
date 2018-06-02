@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ elem, sds, prefs, slash, scheme, empty, post, keyinfo, menu, noon, str, log, $, _ } = require './kxk'
+{ elem, sds, prefs, slash, scheme, empty, post, stopEvent, keyinfo, menu, noon, str, log, $, _ } = require './kxk'
 
 class Title
     
@@ -21,8 +21,7 @@ class Title
         pkg = @cfg.pkg
         
         @elem =$ cfg.elem ? "#titlebar"
-        # @elem.ondblclick = (event) -> post.toMain 'maximizeWindow', window.winID
-        @elem.ondblclick = (event) -> post.emit 'menuAction', 'Maximize'
+        @elem.ondblclick = (event) -> stopEvent event, post.emit 'menuAction', 'Maximize'
                 
         @winicon = elem class: 'winicon'
         @winicon.appendChild elem 'img', src:slash.fileUrl @cfg.icon
@@ -34,7 +33,6 @@ class Title
         html += "<span class='titlebar-dot'> ● </span>"
         html += "<span class='titlebar-version'>#{pkg.version}</span>"
         @title.innerHTML = html
-        # @title.ondblclick = => post.toMain 'toggleMaximize'
         @elem.appendChild @title
                 
         # — ◻ 🞩
@@ -98,7 +96,8 @@ class Title
 
     onMenuAction: (action, args) =>
         
-        win = -> require('electron').remote.getCurrentWindow()
+        electron = require 'electron'  
+        win = -> electron.remote.getCurrentWindow()
         
         switch action
             when 'Toggle Menu'      then @toggleMenu()
@@ -111,7 +110,7 @@ class Title
             when 'Close'            then win().close()
             when 'Minimize'         then win().minimize()
             when 'Maximize' 
-                log 'Maximize', win().isMaximized()
+                log 'Maximize', win().isMaximized(), win().getBounds(), electron.screen.getPrimaryDisplay().workAreaSize
                 if win().isMaximized() then win().unmaximize() else win().maximize()  
 
     menuTemplate: ->
