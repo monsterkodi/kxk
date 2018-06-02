@@ -22,7 +22,6 @@ class Win
         
         window.titlebar = new title @opt
         
-        # $("#main").addEventListener 'contextmenu', @onContextMenu
         document.body.addEventListener 'contextmenu', @onContextMenu
         
         document.addEventListener 'keydown', @onKeyDown

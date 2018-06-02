@@ -21,9 +21,16 @@ class App
             if @app.makeSingleInstance @showWindow
                 @app.quit()
                 return
-        
-        if @opt.args
-            args = args.init @opt.args
+    
+        args = """
+            noprefs     don't load preferences      false
+            DevTools    open developer tools        false
+            watch       watch sources for changes   false
+            verbose     |                           false
+            debug       |                           false
+            """
+        args = @opt.args + args if @opt.args
+        args = args.init argCfg
             
         post.on 'showAbout', @showAbout
         post.on 'quitApp',   @quitApp
@@ -201,7 +208,7 @@ class App
     
     onSrcChange: (path) =>
     
-        log 'onSrcChange', path
+        log 'onSrcChange', path, __filename
         if path == __filename
             @stopWatcher()
             @app.exit 0
