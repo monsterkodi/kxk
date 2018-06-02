@@ -30,7 +30,7 @@ class App
             debug       |                           false
             """
         args = @opt.args + args if @opt.args
-        args = args.init argCfg
+        args = args.init args
             
         post.on 'showAbout', @showAbout
         post.on 'quitApp',   @quitApp
