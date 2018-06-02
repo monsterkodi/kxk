@@ -19,11 +19,9 @@ stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 oscClient = null
 oscLog = (info) ->
     if not oscClient
-        console.log 'osc client'
-        { Client } = require './osc'
-        oscClient = new Client '/log', slog.port
+        osc = require './osc'
+        oscClient = new osc
     info.id = slog.id
-    console.log 'osc send', info
     oscClient.send info
 
 slog = (s) ->
@@ -68,7 +66,6 @@ log = ->
 
 slog.osc     = false
 slog.id      = 'kxk'
-slog.port    = 41234
 slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '
 slog.methsep = ' >> ' #' ▸ '
