@@ -19,7 +19,10 @@ else
     args.init = (cfg, pkg) ->
         
         if not pkg?
-            pkgJson = slash.join slash.pkg(__dirname), 'package.json'
+            pkgDir = slash.pkg __dirname
+            while slash.file(slash.dir pkgDir) == 'node_modules'
+                pkgDir = slash.pkg slash.dir pkgDir
+            pkgJson = slash.join pkgDir, 'package.json'
             log 'pkgJson', pkgJson
             pkg = require pkgJson
             
