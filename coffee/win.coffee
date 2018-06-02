@@ -15,13 +15,15 @@ class Win
         prefs.init()
         
         electron = require 'electron'
-        @win = window.win = electron.remote.getCurrentWindow()
+        @win   = window.win = electron.remote.getCurrentWindow()
+        @winID = window.winID = @win.id
 
         post.on 'menuAction', @onMenuAction
         
         window.titlebar = new title @opt
         
-        $("#main").addEventListener 'contextmenu', @onContextMenu
+        # $("#main").addEventListener 'contextmenu', @onContextMenu
+        document.body.addEventListener 'contextmenu', @onContextMenu
         
         document.addEventListener 'keydown', @onKeyDown
         
@@ -70,10 +72,10 @@ class Win
     
         return stopEvent(event) if 'unhandled' != window.titlebar.handleKey event, true
         
-        { mod, key, combo, char } = keyinfo.forEvent event
+        info = keyinfo.forEvent event
     
-        return if not combo
-        
-        log 'win.onKeyDown', mod, key, combo
+        if info.combo
+            info.event = event
+            post.emit 'combo', info.combo, info
     
 module.exports = Win

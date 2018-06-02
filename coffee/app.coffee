@@ -17,9 +17,10 @@ class App
         electron = require 'electron'
         @app = electron.app
         
-        if @app.makeSingleInstance @showWindow
-            @app.quit()
-            return
+        if @opt.single != false
+            if @app.makeSingleInstance @showWindow
+                @app.quit()
+                return
         
         if @opt.args
             args = args.init @opt.args
