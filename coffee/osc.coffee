@@ -21,7 +21,7 @@ class osc
         @osc = new OSC plugin: new OSC.DatagramPlugin
         @osc.on 'open', @onOpen
         @osc.on @opt.channel, @onMsg if @opt.onMsg
-        log 'osc', opt
+        log 'osc', @opt
         @osc.open()
         
     onOpen: =>
