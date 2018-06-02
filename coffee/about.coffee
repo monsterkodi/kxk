@@ -50,6 +50,7 @@ class About
             <style type="text/css">
                 body {
                     overflow:      hidden;
+                    -webkit-user-select: none;
                 }
                 #about {
                     text-align:    center;
@@ -76,6 +77,7 @@ class About
                     color:          #{About.opt?.color ? '#333'};
                     font-family:    Verdana, sans-serif;
                     text-decoration: none;
+                    -webkit-user-select: text;
                 }
 
                 #version:hover {

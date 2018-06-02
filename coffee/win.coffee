@@ -15,8 +15,8 @@ class Win
         prefs.init()
         
         electron = require 'electron'
-        @win   = window.win = electron.remote.getCurrentWindow()
-        @winID = window.winID = @win.id
+        @win = window.win = electron.remote.getCurrentWindow()
+        @id  = window.winID = @win.id
 
         post.on 'menuAction', @onMenuAction
         
