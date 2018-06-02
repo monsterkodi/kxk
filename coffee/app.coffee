@@ -6,8 +6,7 @@
 000   000  000        000        
 ###
 
-{ args, prefs, empty, slash, about, karg, post, watch, childp, fs, log, error, _ } = require './kxk'
-
+{ args, prefs, empty, slash, about, post, watch, childp, fs, log, error, _ } = require './kxk'
 
 class App
     
@@ -19,12 +18,12 @@ class App
             
         electron = require 'electron'
         @app = electron.app
-        if app.makeSingleInstance @showWindow
-            app.quit()
+        
+        if @app.makeSingleInstance @showWindow
+            @app.quit()
             return
         
         if @opt.args
-            
             args = args.init @opt.args
             
         post.on 'showAbout', @showAbout
@@ -58,7 +57,7 @@ class App
         @showWindow()
          
         if args.watch
-            @startWatcher()        
+            @startWatcher()
 
     initTray: =>
         
@@ -88,7 +87,6 @@ class App
     
     quitApp: =>
         
-        log 'quitApp'
         @stopWatcher()
         @saveBounds()
         @app.exit 0

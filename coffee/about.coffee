@@ -57,9 +57,11 @@ class About
                 }
 
                 #image {
-                    margin-top:     #{opt?.imageOffset ? '12%'};
-                    width:          #{opt?.imageWidth  ? '62%'};
-                    height:         #{opt?.imageHeight ? '62%'};
+                    position                    absolute
+                    height                      70%
+                    left                        50%
+                    top                         50%
+                    transform                   translate(-50%, -50%)
                 }
 
                 #version {
