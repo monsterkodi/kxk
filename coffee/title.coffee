@@ -21,7 +21,7 @@ class Title
         pkg = @cfg.pkg
         
         @elem =$ cfg.elem ? "#titlebar"
-        @elem.ondblclick = (event) -> stopEvent event, post.emit 'menuAction', 'Maximize'
+        @elem.addEventListener 'dblclick', (event) -> stopEvent event, post.emit 'menuAction', 'Maximize'
                 
         @winicon = elem class: 'winicon'
         @winicon.appendChild elem 'img', src:slash.fileUrl @cfg.icon
@@ -97,7 +97,7 @@ class Title
     onMenuAction: (action, args) =>
         
         electron = require 'electron'  
-        win = -> electron.remote.getCurrentWindow()
+        win = electron.remote.getCurrentWindow()
         
         switch action
             when 'Toggle Menu'      then @toggleMenu()
@@ -105,15 +105,15 @@ class Title
             when 'Show Menu'        then @showMenu()
             when 'Hide Menu'        then @hideMenu()
             when 'Toggle Scheme'    then scheme.toggle()
-            when 'DevTools'         then win().webContents.toggleDevTools()
-            when 'Reload'           then win().webContents.reloadIgnoringCache()
-            when 'Close'            then win().close()
-            when 'Minimize'         then win().minimize()
+            when 'DevTools'         then win.webContents.toggleDevTools()
+            when 'Reload'           then win.webContents.reloadIgnoringCache()
+            when 'Close'            then win.close()
+            when 'Minimize'         then win.minimize()
             when 'Maximize' 
                 wa = electron.screen.getPrimaryDisplay().workAreaSize
-                maximized = win().isMaximized() or (win().getBounds().width == wa.width and win().getBounds().height = wa.height)
-                log 'Maximize', win().isMaximized(), maximized, win().getBounds(), wa
-                if maximized then win().unmaximize() else win().maximize()  
+                wb = win.getBounds()
+                maximized = win.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
+                if maximized then win.unmaximize() else win.maximize()  
 
     menuTemplate: ->
         
