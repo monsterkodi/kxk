@@ -1,5 +1,5 @@
 name            kxk
-version         0.95.0
+version         0.96.0
 description     kodi's tool kit
 main            js/kxk.js
 repository
@@ -16,7 +16,7 @@ dependencies
                 colors          ^1.3.0
                 fs-extra        ^6.0.1
                 html-entities   ^1.2.1
-                karg            >=1.4.0
+                karg            >=1.5.0
                 keycode         ^2.2.0
                 lodash          ^4.17.10
                 noon            >=1.4.0
