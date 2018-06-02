@@ -9,39 +9,39 @@
 log = console.log
 OSC = require 'osc-js' 
 
-class Server
+class osc
 
-    constructor: (@cb, @channel='/log', port=41234) ->
-        
-        @osc = new OSC plugin: new OSC.DatagramPlugin open: {host:'localhost', port:port}
-        @osc.open()
-        @osc.on @channel, @onMessage
-        
-    onMessage: (msg) => 
-        
-        @cb @channel, JSON.parse msg.args[0]
-        
-class Client
-    
-    constructor: (@channel='/log', port=41235) ->
+    constructor: (@opt) ->
         
         @msgs = []
         
-        @osc = new OSC plugin: new OSC.DatagramPlugin send: {host:'localhost', port:port}
+        @opt ?= {}
+        @opt.channel ?= '/log'
+        
+        @osc = new OSC plugin: new OSC.DatagramPlugin
         @osc.open()
-        @osc.on 'open', => 
-            log 'oscClient'
-            for msg in @msgs
-                @osc.send new OSC.Message @channel, msg
+        
+        @osc.on 'open', @onOpen
+        @osc.on opt.channel, @onMsg if @opt.onMsg
+        
+    onOpen: =>
+        log 'osc open', @opt.channel if @opt.debug
+        while msg = @msgs.shift()
+            log 'uncache', msg if @opt.debug
+            @osc.send new OSC.Message @opt.channel, msg
+        
+    onMsg: (msg) => 
+        log 'onMsg', JSON.parse(msg.args[0]) if @opt.debug
+        @opt.onMsg JSON.parse msg.args[0]
         
     send: (args...) ->
         
         if @osc.status()
-            @osc.send new OSC.Message @channel, JSON.stringify args
+            log 'send', JSON.stringify(args) if @opt.debug
+            @osc.send new OSC.Message @opt.channel, JSON.stringify args
         else
+            log 'cache', JSON.stringify(args) if @opt.debug
             @msgs.push JSON.stringify args
 
-module.exports = 
+module.exports = osc
     
-    Server:Server
-    Client:Client
