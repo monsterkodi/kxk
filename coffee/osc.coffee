@@ -11,7 +11,7 @@ OSC = require 'osc-js'
 
 class Server
 
-    constructor: (@cb, @channel='/log', port=9669) ->
+    constructor: (@cb, @channel='/log', port=41234) ->
         
         @osc = new OSC plugin: new OSC.DatagramPlugin open: host:'localhost', port:port
         @osc.open()
@@ -23,7 +23,7 @@ class Server
         
 class Client
     
-    constructor: (@channel='/log', port=9669) ->
+    constructor: (@channel='/log', port=41235) ->
         
         @msgs = []
         
