@@ -59,12 +59,12 @@ class About
                 }
 
                 #image {
-                    position                    absolute
-                    height                      70%
-                    max-height                  70%
-                    left                        50%
-                    top                         50%
-                    transform                   translate(-50%, -50%)
+                    position:      absolute;
+                    height:        70%;
+                    max-height:    70%;
+                    left:          50%;
+                    top:           50%;
+                    transform:     translate(-50%, -50%);
                 }
 
                 #version {
