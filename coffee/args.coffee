@@ -6,7 +6,7 @@
 000   000  000   000   0000000   0000000 
 ###
 
-{ karg, post, slash, noon, empty, fs, log, _ } = require './kxk'
+{ karg, post, slash, noon, empty, valid, fs, error, log, _ } = require './kxk'
 
 if process.type == 'renderer'
     
@@ -20,11 +20,14 @@ else
         
         if not pkg?
             pkgDir = slash.pkg __dirname
-            while slash.file(slash.dir pkgDir) == 'node_modules'
+            while valid(pkgDir) and slash.file(slash.dir pkgDir) == 'node_modules'
                 pkgDir = slash.pkg slash.dir pkgDir
-            pkgJson = slash.join pkgDir, 'package.json'
-            log 'pkgJson', pkgJson
-            pkg = require pkgJson
+            if valid pkgDir
+                pkgJson = slash.join pkgDir, 'package.json'
+                pkg = require pkgJson
+                return error "args -- no pkg in '#{pkgJson}'!" if empty pkg
+            else
+                return error 'args -- no pkg dir!'
             
         kargConfig = {}
         kargConfig[pkg.name] = {}
@@ -44,14 +47,11 @@ else
             
             kargConfig[pkg.name][kk] = o
             
-        # log 'cfg;', kargConfig
-            
         delete args.init
         
         for k,v of karg kargConfig
             args[k] = v
             
-        # log 'args:', args
         args
     
     post.onGet 'args', => args
