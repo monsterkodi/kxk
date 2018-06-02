@@ -8,7 +8,6 @@
 
 { args, prefs, empty, slash, about, karg, post, watch, childp, fs, log, error, _ } = require './kxk'
 
-electron = require 'electron'
 
 class App
     
@@ -18,7 +17,8 @@ class App
 
         @watcher = null
             
-        app = electron.app
+        electron = require 'electron'
+        @app = electron.app
         if app.makeSingleInstance @showWindow
             app.quit()
             return
@@ -44,14 +44,15 @@ class App
     
         if @opt.tray then @initTray()
          
-        electron.app.dock?.hide()
+        @app.dock?.hide()
          
-        electron.app.setName @opt.pkg.name
+        @app.setName @opt.pkg.name
     
         if not args.noprefs
             prefs.init
                 shortcut: @opt.shortcut
     
+        electron = require 'electron'
         electron.globalShortcut.register prefs.get('shortcut'), @showWindow
     
         @showWindow()
@@ -63,6 +64,7 @@ class App
         
         log 'initTray', slash.resolve slash.join @opt.dir, @opt.tray
         
+        electron = require 'electron'
         @tray = new electron.Tray slash.resolve slash.join @opt.dir, @opt.tray
         @tray.on 'click', @toggleWindow
              
@@ -89,7 +91,7 @@ class App
         log 'quitApp'
         @stopWatcher()
         @saveBounds()
-        electron.app.exit 0
+        @app.exit 0
         process.exit 0
         
     #000   000  000  000   000  0000000     0000000   000   000
@@ -102,7 +104,7 @@ class App
          
         if @win?.isVisible()
             @win.hide()
-            electron.app.dock?.hide()
+            @app.dock?.hide()
         else
             @showWindow()
     
@@ -112,10 +114,11 @@ class App
             @win.show()
         else
             @createWindow()
-        electron.app.dock?.show()
+        @app.dock?.show()
 
     createWindow: =>
     
+        electron = require 'electron'
         @win = new electron.BrowserWindow
             width:           474
             height:          900
@@ -140,9 +143,9 @@ class App
         @win.on 'closed', => @win = null
         @win.on 'resize', @saveBounds
         @win.on 'move',   @saveBounds
-        @win.on 'close',  -> electron.app.dock?.hide()
+        @win.on 'close',  => @app.dock?.hide()
         @win.on 'ready-to-show', => @win.show()
-        electron.app.dock?.show()
+        @app.dock?.show()
         @win
 
     saveBounds: => if @win? then prefs.set 'bounds', @win.getBounds()
@@ -170,7 +173,7 @@ class App
         log 'onSrcChange', path
         if path == __filename
             @stopWatcher()
-            electron.app.exit 0
+            @app.exit 0
             childp.execSync "#{@opt.dir}/../node_modules/.bin/electron . -w",
                 cwd:      "#{@opt.dir}/.."
                 encoding: 'utf8'

@@ -8,16 +8,13 @@
 
 { keyinfo, title, scheme, stopEvent, prefs, slash, post, elem, popup, pos, str, log, $, _ } = require './kxk'
 
-electron = require 'electron'
-
 class Win
     
     constructor: (@opt) ->
         
-        # log 'Win.constructor', @opt
-        
         prefs.init()
         
+        electron = require 'electron'
         @win = window.win = electron.remote.getCurrentWindow()
 
         post.on 'menuAction', @onMenuAction
