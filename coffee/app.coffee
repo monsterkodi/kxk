@@ -29,9 +29,9 @@ class App
         post.on 'showAbout', @showAbout
         post.on 'quitApp',   @quitApp
 
-        app.setName @opt.pkg.name
-        app.on 'ready', @onReady
-        app.on 'window-all-closed', (event) -> event.preventDefault()
+        @app.setName @opt.pkg.name
+        @app.on 'ready', @onReady
+        @app.on 'window-all-closed', (event) -> event.preventDefault()
 
     #00000000   00000000   0000000   0000000    000   000
     #000   000  000       000   000  000   000   000 000
