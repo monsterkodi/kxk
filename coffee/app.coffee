@@ -94,6 +94,7 @@ class App
             background: dark and '#282828' or '#fff'
             highlight:  dark and '#fff'    or '#000'
             pkg:        @opt.pkg
+            debug:      @opt.aboutDebug
     
     #  0000000   000   000  000  000000000  
     # 000   000  000   000  000     000     
