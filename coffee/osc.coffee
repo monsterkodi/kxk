@@ -22,7 +22,7 @@ class osc
         @osc.open()
         
         @osc.on 'open', @onOpen
-        @osc.on opt.channel, @onMsg if @opt.onMsg
+        @osc.on @opt.channel, @onMsg if @opt.onMsg
         
     onOpen: =>
         log 'osc open', @opt.channel if @opt.debug
