@@ -67,7 +67,7 @@ log = ->
 
 slog.udp     = true
 slog.id      = 'kxk'
-slog.icon    = '⛾'
+slog.icon    = if process.type == 'renderer' then '🞇' else '⬢'
 slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '
 slog.methsep = ' >> ' #' ▸ '
