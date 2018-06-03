@@ -16,13 +16,13 @@ sorcery = require 'sorcery'
 
 stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
-oscClient = null
-oscLog = (info) ->
-    if not oscClient
-        osc = require './osc'
-        oscClient = new osc
+udpSend = null
+udpLog = (info) ->
+    if not udpSend
+        udp = require './udp'
+        udpSend = new udp debug:slog.udpDebug
     info.id = slog.id
-    oscClient.send info
+    udpSend.send info
 
 slog = (s) ->
     
@@ -50,8 +50,8 @@ slog = (s) ->
         info.str = s
         s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
         post.emit 'slog', s, info
-        if slog.osc
-            oscLog info
+        if slog.udp
+            udpLog info
             
     catch err
         post.emit 'slog', "!#{slog.methsep}#{s} #{err}"
@@ -64,7 +64,7 @@ log = ->
     console.log s
     slog s
 
-slog.osc     = false
+slog.udp     = true
 slog.id      = 'kxk'
 slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '
