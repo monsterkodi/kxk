@@ -35,7 +35,10 @@ class udp
                 
     send: (args...) ->
         
-        msg = JSON.stringify args 
+        if args.length > 1
+            msg = JSON.stringify args
+        else
+            msg = JSON.stringify args[0]
         # log 'send', msg if @opt.debug
         buf = new Buffer msg
         @port.send buf, 0, buf.length, 9669, '255.255.255.255', =>
