@@ -37,6 +37,8 @@ class udp
                 
     send: (args...) ->
         
+        return if not @port
+        
         log = if @opt.debug then console.log else ->
             
         if args.length > 1
@@ -47,6 +49,11 @@ class udp
         buf = new Buffer msg
         @port.send buf, 0, buf.length, @opt.port, '255.255.255.255', ->
             log 'sent', msg
+            
+    close: ->
+        
+        @port.close()
+        @port = null
 
 module.exports = udp
     
