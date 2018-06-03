@@ -24,10 +24,8 @@ class App
     
         argl = """
             noprefs     don't load preferences      false
-            DevTools    open developer tools        false
+            Devtools    open developer tools        false
             watch       watch sources for changes   false
-            verbose     |                           false
-            debug       |                           false
             """
             
         argl = @opt.args + '\n' + argl if @opt.args
