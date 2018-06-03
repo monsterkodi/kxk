@@ -90,13 +90,15 @@ try
         app = electron.app
     slog.id = app.getName()
 catch err
-    slash = require './slash'
-    if slash.file process.argv[0] == 'node'
-        slog.id = slash.file process.argv[1]
-        console.log 'node script', slog.id
-    else
-        console.log 'process.argv', process.argv.join ' '
-    null
+    try
+        slash = require './slash'
+        if process.argv[0].length and slash.base(process.argv[0]) in ['node', 'coffee']
+            if process.argv[1]?.length
+                slog.id = slash.base process.argv[1]
+        else
+            console.log "can't figure out slog.id -- process.argv:", process.argv.join ' '
+    catch err
+        null
 
 module.exports = log
 

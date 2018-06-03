@@ -214,14 +214,16 @@ class Popup
             
     onHover: (event) => 
     
-        if item = elem.upElem event.target, prop:'item'
+        item = elem.upElem event.target, prop:'item'
+        if item
             @select item, selectFirstItem:false   
 
     onClick: (event) => 
         
         stopEvent event 
         
-        if item = elem.upElem event.target, prop:'item'
+        item = elem.upElem event.target, prop:'item'
+        if item
             if item.item.menu
                 @toggle item
             else
