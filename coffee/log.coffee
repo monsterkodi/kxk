@@ -24,6 +24,11 @@ udpLog = (info) ->
     info.id   = slog.id
     info.icon = slog.icon
     udpSend.send info
+    
+udpStop = ->
+    if udpSend
+        udpSend.close()
+        udpSend = null
 
 slog = (s) ->
     
@@ -74,9 +79,8 @@ slog.methsep = ' >> ' #' ▸ '
 slog.filepad = 30
 slog.methpad = 15
 log.slog     = slog
+log.stop     = udpStop
 
-console.log 'process.argv[0]', process.argv[0]
-console.log 'slog.id', slog.id
 try
     electron = require 'electron'
     if process.type == 'renderer'
@@ -84,8 +88,8 @@ try
     else
         app = electron.app
     slog.id = app.getName()
-    console.log 'appName', slog.id
 catch err
+    console.log 'process.argv', process.argv.join ' '
     null
 
 module.exports = log

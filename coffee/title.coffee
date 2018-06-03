@@ -117,10 +117,7 @@ class Title
     menuTemplate: ->
         
         if empty @templateCache
-            log 'menuTemplate dir ', @opt.dir
-            log 'menuTemplate menu', @opt.menu
-            log 'menuTemplate join', slash.join @opt.dir, @opt.menu
-            log 'menuTemplate rslv', slash.resolve slash.join @opt.dir, @opt.menu
+            log 'menuTemplate', slash.resolve slash.join @opt.dir, @opt.menu
             @templateCache = @makeTemplate noon.load slash.resolve slash.join @opt.dir, @opt.menu
         @templateCache
         

@@ -51,6 +51,8 @@ else
             
         delete args.init
         
+        log 'karg', kargConfig, kargOpt
+        
         for k,v of karg kargConfig, kargOpt
             args[k] = v
             
