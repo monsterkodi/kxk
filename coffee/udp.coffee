@@ -32,8 +32,8 @@ class udp
         else
             log 'sender', @opt
             @port.bind => 
-                log 'sender bind', @port.address().port
-                @port.setBroadcast true
+                log 'sender bind', @port?.address().port
+                @port?.setBroadcast true
                 
     send: (args...) ->
         
