@@ -184,7 +184,7 @@ class App
         @win.setPosition bounds.x, bounds.y if bounds?
     
         @win.loadURL slash.fileUrl @resolve @opt.index
-        @win.webContents.openDevTools() if args.DevTools
+        @win.webContents.openDevTools() if args.devtools
         @win.on 'resize', @saveBounds
         @win.on 'move',   @saveBounds
         @win.on 'closed', => @win = null
