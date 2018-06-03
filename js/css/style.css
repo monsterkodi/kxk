@@ -1,0 +1,146 @@
+/*
+ 0000000  000000000  000   000  000    
+000          000      000 000   000    
+0000000      000       00000    000    
+     000     000        000     000    
+0000000      000        000     0000000
+*/
+* {
+  outline-width: 0;
+}
+body {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 0;
+  margin: 0;
+  overflow: hidden;
+  -webkit-app-region: no-drag;
+  -webkit-user-select: none;
+}
+#main {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 30px;
+  scroll: none;
+  overflow: hidden;
+  pointer-events: auto;
+}
+#titlebar {
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-family: Bahnschrift Light, Ebrima, Varela Round, Arial Rounded MT Bold, Helvetica, Arial;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-app-region: drag;
+}
+.titlebar-title {
+  flex: 1 1 0;
+  display: inline-block;
+  flex-direction: row;
+  padding-top: 7px;
+  padding-left: 10px;
+  -webkit-app-region: drag;
+  font-weight: bold;
+  font: Bahnschrift Light, Ebrima, Varela Round, Arial Rounded MT Bold, Helvetica, Arial;
+}
+.titlebar-dot {
+  display: inline-block;
+  vertical-align: top;
+  padding-left: 9px;
+  padding-right: 9px;
+  margin-top: -1px;
+}
+#titlebar .winicon img {
+  -webkit-app-region: no-drag;
+  padding-left: 6px;
+  padding-top: 3px;
+  width: 22px;
+  height: 22px;
+}
+#titlebar .winbutton {
+  -webkit-app-region: no-drag;
+  flex: 0 0 45px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: bottom;
+  font-size: 18px;
+  padding-top: 2px;
+}
+#titlebar .winbutton.minimize {
+  padding-top: 5px;
+}
+.menuItem {
+  -webkit-app-region: no-drag;
+}
+.menu {
+  height: 30px;
+  pointer-events: auto;
+  -webkit-app-region: drag;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+}
+.menuItem {
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 7px;
+  display: inline-block;
+  height: 30px;
+  overflow: visible;
+}
+.popup {
+  z-index: 9999;
+  position: absolute;
+  border-radius: 3px;
+  font-size: 15px;
+  font-family: Bahnschrift Light, Ebrima, Varela Round, Arial Rounded MT Bold, Helvetica, Arial;
+}
+.popupItem {
+  padding: 2px;
+  padding-left: 12px;
+  padding-right: 82px;
+  cursor: pointer;
+}
+.popupItem.separator {
+  padding: 0;
+  cursor: default;
+  border: 0;
+  height: 0;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.popupItem:last-child {
+  padding-bottom: 6px;
+}
+.popupItem:first-child {
+  padding-top: 6px;
+}
+.popupCombo {
+  position: absolute;
+  right: 12px;
+}
+.popupCombo {
+  pointer-events: none;
+  position: absolute;
+  right: 12px;
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar {
+  height: 6px;
+  background-color: transparent;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}

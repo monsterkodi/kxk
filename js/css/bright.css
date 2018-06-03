@@ -1,0 +1,88 @@
+/*
+0000000    00000000   000   0000000   000   000  000000000  
+000   000  000   000  000  000        000   000     000     
+0000000    0000000    000  000  0000  000000000     000     
+000   000  000   000  000  000   000  000   000     000     
+0000000    000   000  000   0000000   000   000     000     
+*/
+body {
+  background: #eee;
+  color: #000;
+}
+#main {
+  border-left: 6px solid #fff;
+  border-right: 6px solid #fff;
+  border-bottom: 6px solid #fff;
+  background: #eee;
+}
+#titlebar {
+  background: #fff;
+}
+.titlebar-version {
+  color: #ddd;
+}
+.titlebar-dot {
+  color: #eee;
+}
+#titlebar .winbutton:active {
+  background-color: #f00;
+}
+#titlebar .winbutton:active.gray {
+  background-color: #eee;
+}
+#titlebar .winbutton svg {
+  stroke-width: 1px;
+  stroke: #ddd;
+}
+#titlebar .winbutton:active svg {
+  stroke: #000;
+}
+#titlebar .winbutton:hover svg {
+  stroke: #000;
+}
+.menuItem {
+  color: #888;
+  background-color: #fff;
+}
+.menuItem.selected {
+  color: #000;
+}
+.menu:focus .menuItem.selected {
+  color: #000;
+}
+.popup {
+  background-color: #fff;
+}
+.popupWindow {
+  background-color: #fff;
+}
+.popupItem {
+  color: #888;
+}
+.popupItem:not(:last-child) {
+  border-bottom: 1px solid #fff;
+}
+.popupItem.separator {
+  border-top: 1px solid #ddd;
+}
+.popupItem.selected {
+  color: #000;
+}
+.popupItem.selected .popupCombo {
+  color: #888;
+}
+.popupItem:active {
+  color: #000;
+}
+.popupCombo {
+  color: #eee;
+}
+::-webkit-scrollbar-corner {
+  background-color: #eee;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #000;
+}
