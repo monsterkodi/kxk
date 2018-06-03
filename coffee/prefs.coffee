@@ -46,9 +46,9 @@ class Prefs
     @onFileChange: => @store.reload()
     @onFileUnlink: => @unwatch(); @store.clear()
             
-    @get:  (key, value) -> @store.get key, value
+    @get:  (key, value) -> if @store then @store.get key, value else value
     @set:  (key, value) -> @unwatch(); @store.set(key, value); @watch()
     @del:  (key, value) -> @unwatch(); @store.del(key); @watch()
-    @save:              -> @store.save()
+    @save:              -> @store?.save()
         
 module.exports = Prefs

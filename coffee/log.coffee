@@ -20,8 +20,9 @@ udpSend = null
 udpLog = (info) ->
     if not udpSend
         udp = require './udp'
-        udpSend = new udp debug:slog.udpDebug
-    info.id = slog.id
+        udpSend = new udp debug:slog.debug
+    info.id   = slog.id
+    info.icon = slog.icon
     udpSend.send info
 
 slog = (s) ->
@@ -66,6 +67,7 @@ log = ->
 
 slog.udp     = true
 slog.id      = 'kxk'
+slog.icon    = '⛾'
 slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '
 slog.methsep = ' >> ' #' ▸ '
