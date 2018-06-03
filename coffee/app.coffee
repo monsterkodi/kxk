@@ -30,7 +30,7 @@ class App
             debug       |                           false
             """
             
-        argl = @opt.args + argl if @opt.args
+        argl = @opt.args + '\n' + argl if @opt.args
         args = args.init argl
             
         post.on 'showAbout', @showAbout
