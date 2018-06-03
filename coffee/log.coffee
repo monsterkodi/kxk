@@ -6,7 +6,7 @@
 000000   0000000    0000000 
 ###
 
-post    = require './ppost' 
+post    = require './ppost'
 str     = require './str'
 os      = require 'os'
 fs      = require 'fs'
@@ -28,7 +28,8 @@ udpLog = (info) ->
 udpStop = ->
     if udpSend
         udpSend.close()
-        udpSend = null
+        udpSend  = null
+        slog.udp = false
 
 slog = (s) ->
     
@@ -89,7 +90,12 @@ try
         app = electron.app
     slog.id = app.getName()
 catch err
-    console.log 'process.argv', process.argv.join ' '
+    slash = require './slash'
+    if slash.file process.argv[0] == 'node'
+        slog.id = slash.file process.argv[1]
+        console.log 'node script', slog.id
+    else
+        console.log 'process.argv', process.argv.join ' '
     null
 
 module.exports = log
