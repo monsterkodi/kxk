@@ -66,7 +66,7 @@ log = ->
     slog s
 
 slog.udp     = true
-slog.id      = 'kxk'
+slog.id      = '???'
 slog.icon    = if process.type == 'renderer' then '🞇' else '⬢'
 slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '
@@ -74,6 +74,19 @@ slog.methsep = ' >> ' #' ▸ '
 slog.filepad = 30
 slog.methpad = 15
 log.slog     = slog
+
+console.log 'process.argv[0]', process.argv[0]
+console.log 'slog.id', slog.id
+try
+    electron = require 'electron'
+    if process.type == 'renderer'
+        app = electron.remote.app
+    else
+        app = electron.app
+    slog.id = app.getName()
+    console.log 'appName', slog.id
+catch err
+    null
 
 module.exports = log
 
