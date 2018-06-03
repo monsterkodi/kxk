@@ -23,7 +23,9 @@ class udp
                 log 'listening', @port.address().address, @port.address().port
                 @port.setBroadcast true
             @port.on 'message', (message, rinfo) =>
-                log 'message', rinfo.address, rinfo.port, message
+                msg = JSON.parse message.toString()
+                log 'message', rinfo.address, rinfo.port, msg
+                @opt.onMsg msg
             @port.bind 9669
         else
             log 'sender', @opt
