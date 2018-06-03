@@ -60,8 +60,9 @@ class App
             prefs.init
                 shortcut: @opt.shortcut
     
-        electron = require 'electron'
-        electron.globalShortcut.register prefs.get('shortcut'), @showWindow
+        if not empty prefs.get 'shortcut' 
+            electron = require 'electron'
+            electron.globalShortcut.register prefs.get('shortcut'), @showWindow
     
         @showWindow()
          
@@ -158,9 +159,15 @@ class App
     createWindow: =>
     
         electron = require 'electron'
+        
+        bounds = prefs.get 'bounds'
+        width  = bounds?.width  ? @opt.width  ? 500
+        height = bounds?.height ? @opt.height ? 500
+        log 'createWindow', width, height
+        
         @win = new electron.BrowserWindow
-            width:           @opt.width     ? 500
-            height:          @opt.height    ? 500
+            width:           width
+            height:          height
             minWidth:        @opt.minWidth  ? 250
             minHeight:       @opt.minHeight ? 250
             backgroundColor: '#181818'
@@ -174,7 +181,6 @@ class App
             autoHideMenuBar: true
             icon:            @resolve @opt.icon 
     
-        bounds = prefs.get 'bounds'
         @win.setPosition bounds.x, bounds.y if bounds?
     
         @win.loadURL slash.fileUrl @resolve @opt.index
