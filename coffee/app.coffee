@@ -24,7 +24,7 @@ class App
     
         argl = """
             noprefs     don't load preferences      false
-            Devtools    open developer tools        false
+            devtools    open developer tools        false  -D
             watch       watch sources for changes   false
             """
             
