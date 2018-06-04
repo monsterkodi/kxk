@@ -28,10 +28,6 @@ class Title
         @winicon.addEventListener 'click', -> post.emit 'menuAction', 'Open Menu'   
         
         @title = elem class: 'titlebar-title'
-        # html  = "<span class='titlebar-name'>#{pkg.name}</span>"
-        # html += "<span class='titlebar-dot'> ● </span>"
-        # html += "<span class='titlebar-version'>#{pkg.version}</span>"
-        # @title.innerHTML = html
         @elem.appendChild @title
         @setTitle pkg
                 
@@ -114,7 +110,8 @@ class Title
             when 'Open Menu'        then @openMenu()
             when 'Show Menu'        then @showMenu()
             when 'Hide Menu'        then @hideMenu()
-            when 'Toggle Scheme'    then scheme.toggle()
+            when 'Toggle Scheme'    
+                if @opt.scheme != false then scheme.toggle()
             when 'DevTools'         then win.webContents.toggleDevTools()
             when 'Reload'           then win.webContents.reloadIgnoringCache()
             when 'Close'            then win.close()
