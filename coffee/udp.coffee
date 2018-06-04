@@ -21,20 +21,30 @@ class udp
             @port = dgram.createSocket 'udp4'
             
             if @opt.onMsg
+                
                 log 'receiver', @opt
+                
                 @port.on 'listening', => 
                     try
                         log 'listening', @port.address().address, @port.address().port
                         @port.setBroadcast true
                     catch err
                         log "[ERROR] can't listen:", err
+                        
                 @port.on 'message', (message, rinfo) =>
                     msg = JSON.parse message.toString()
                     log 'message', rinfo.address, rinfo.port, msg
                     @opt.onMsg msg
+                    
+                @port.on 'error', (err) =>
+                    log '[ERROR] port error', err
+                    
                 @port.bind @opt.port
+                
             else
+                
                 log 'sender', @opt
+                
                 @port.bind => 
                     log 'sender bind', @port?.address().port
                     @port?.setBroadcast true
