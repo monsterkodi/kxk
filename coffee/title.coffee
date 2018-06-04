@@ -28,11 +28,12 @@ class Title
         @winicon.addEventListener 'click', -> post.emit 'menuAction', 'Open Menu'   
         
         @title = elem class: 'titlebar-title'
-        html  = "<span class='titlebar-name'>#{pkg.name}</span>"
-        html += "<span class='titlebar-dot'> ● </span>"
-        html += "<span class='titlebar-version'>#{pkg.version}</span>"
-        @title.innerHTML = html
+        # html  = "<span class='titlebar-name'>#{pkg.name}</span>"
+        # html += "<span class='titlebar-dot'> ● </span>"
+        # html += "<span class='titlebar-version'>#{pkg.version}</span>"
+        # @title.innerHTML = html
         @elem.appendChild @title
+        @setTitle pkg
                 
         # — ◻ 🞩
         
@@ -77,7 +78,17 @@ class Title
          
     showTitle: -> @title.style.display = 'initial'
     hideTitle: -> @title.style.display = 'none'
-            
+
+    setTitle: (info) ->
+        html  = "<span class='titlebar-name'>#{info.name}</span>"
+        if info.version
+            html += "<span class='titlebar-dot'> ● </span>"
+            html += "<span class='titlebar-version'>#{info.version}</span>"
+        if info.path
+            html += "<span class='titlebar-dot'> ► </span>"
+            html += "<span class='titlebar-version'>#{info.path}</span>"
+        @title.innerHTML = html
+    
     onTitlebar: (action) =>
         
         switch action
@@ -165,7 +176,6 @@ class Title
         if link =$ "#style-link"
             
             href = slash.fileUrl slash.resolve slash.join __dirname, "css/style.css"
-            # href = slash.fileUrl slash.resolve "~/s/kxk/js/css/style.css"
             titleStyle = elem 'link',
                 href: href
                 rel:  'stylesheet'
@@ -174,7 +184,6 @@ class Title
             link.parentNode.insertBefore titleStyle, link
             
             href = slash.fileUrl slash.resolve slash.join __dirname, "css/#{prefs.get 'scheme', 'dark'}.css"
-            # href = slash.fileUrl slash.resolve "~/s/kxk/js/css/#{prefs.get 'scheme', 'dark'}.css"
             titleStyle = elem 'link',
                 href: href
                 rel:  'stylesheet'
