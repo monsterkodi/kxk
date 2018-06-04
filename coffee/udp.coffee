@@ -23,8 +23,11 @@ class udp
             if @opt.onMsg
                 log 'receiver', @opt
                 @port.on 'listening', => 
-                    log 'listening', @port.address().address, @port.address().port
-                    @port.setBroadcast true
+                    try
+                        log 'listening', @port.address().address, @port.address().port
+                        @port.setBroadcast true
+                    catch err
+                        log "[ERROR] can't listen:", err
                 @port.on 'message', (message, rinfo) =>
                     msg = JSON.parse message.toString()
                     log 'message', rinfo.address, rinfo.port, msg
@@ -56,7 +59,7 @@ class udp
             
     close: ->
         
-        @port.close()
+        @port?.close()
         @port = null
 
 module.exports = udp
