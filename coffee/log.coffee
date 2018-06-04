@@ -73,6 +73,7 @@ log = ->
 
 slog.udp     = true
 slog.id      = '???'
+slog.type    = if process.type == 'renderer' then 'win' else 'main'
 slog.icon    = if process.type == 'renderer' then '●' else '◆'
 slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '

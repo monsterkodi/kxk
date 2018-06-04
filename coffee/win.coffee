@@ -14,6 +14,8 @@ class Win
         
         prefs.init()
         
+        log.slog.icon = @opt.icon if @opt.icon
+        
         electron = require 'electron'
         @win = window.win = electron.remote.getCurrentWindow()
         @id  = window.winID = @win.id
