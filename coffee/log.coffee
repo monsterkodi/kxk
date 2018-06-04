@@ -23,6 +23,7 @@ udpLog = (info) ->
         udpSend = new udp debug:slog.debug
     info.id   = slog.id
     info.icon = slog.icon
+    info.type = slog.type
     udpSend.send info
     
 udpStop = ->
