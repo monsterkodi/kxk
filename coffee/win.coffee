@@ -14,7 +14,8 @@ class Win
         
         prefs.init()
         
-        log.slog.icon = @opt.icon if @opt.icon
+        if @opt.icon
+            log.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
         
         electron = require 'electron'
         @win = window.win = electron.remote.getCurrentWindow()

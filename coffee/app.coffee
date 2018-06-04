@@ -17,7 +17,8 @@ class App
         electron = require 'electron'
         @app = electron.app
         
-        log.slog.icon = @opt.tray if @opt.tray
+        if @opt.tray
+            log.slog.icon = slash.fileUrl @resolve @opt.tray  
         
         if @opt.single != false
             if @app.makeSingleInstance @showWindow
