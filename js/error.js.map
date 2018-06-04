@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "error.js",
+  "sourceRoot": "..\\..\\coffee\\error.cof",
+  "sources": [
+    ".\\..\\coffee\\error.coffee"
+  ],
+  "names": [],
+  "mappings": "AAMA;AAAA,MAAA;;EAAA,MAAmB,OAAA,CAAQ,OAAR,CAAnB,EAAC,aAAD,EAAM,aAAN,EAAW;;EAEX,KAAA,GAAQ,SAAA;AAEJ,QAAA;IAAA,CAAA,GAAI,UAAA,GAAa;;AAAC;AAAA;WAAA,sCAAA;;qBAAA,GAAA,CAAI,CAAJ;AAAA;;6BAAD,CAA4C,CAAC,IAA7C,CAAkD,GAAlD;IAEjB,IAAI,CAAC,IAAL,CAAU,OAAV,EAAmB,CAAnB;IACA,OAAO,CAAC,KAAR,CAAc,CAAd;WACA,GAAG,CAAC,IAAJ,CAAS,CAAT;EANI;;EAQR,MAAM,CAAC,OAAP,GAAiB;AAVjB"
+}

@@ -62,6 +62,8 @@ class App
             electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
     
+        post.emit 'appReady'
+            
         @showWindow()
          
         if args.watch
@@ -161,7 +163,7 @@ class App
         bounds = prefs.get 'bounds'
         width  = bounds?.width  ? @opt.width  ? 500
         height = bounds?.height ? @opt.height ? 500
-        log 'createWindow', width, height
+        # log 'createWindow', width, height
         
         @win = new electron.BrowserWindow
             width:           width
@@ -187,7 +189,7 @@ class App
         @win.on 'move',   @saveBounds
         @win.on 'closed', => @win = null
         @win.on 'close',  => @hideDock()
-        @win.on 'ready-to-show', => @win.show()
+        @win.on 'ready-to-show', => @win.show(); post.emit 'winReady', @win.id
         @showDock()
         @win
 

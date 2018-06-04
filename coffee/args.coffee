@@ -46,6 +46,9 @@ else
                     o[s[1]] = null
                 else
                     o['='] = noon.parse(s[1])[0] 
+            if s.length > 2
+                if s[2].startsWith '-'
+                    o['-'] = s[2].substr 1
             
             kargConfig[pkg.name][kk] = o
             
