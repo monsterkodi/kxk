@@ -15,25 +15,29 @@ class udp
         @opt ?= {}
         @opt.port ?= 9669
         
-        @port = dgram.createSocket 'udp4'
-        
         log = if @opt.debug then console.log else ->
-        
-        if @opt.onMsg
-            log 'receiver', @opt
-            @port.on 'listening', => 
-                log 'listening', @port.address().address, @port.address().port
-                @port.setBroadcast true
-            @port.on 'message', (message, rinfo) =>
-                msg = JSON.parse message.toString()
-                log 'message', rinfo.address, rinfo.port, msg
-                @opt.onMsg msg
-            @port.bind @opt.port
-        else
-            log 'sender', @opt
-            @port.bind => 
-                log 'sender bind', @port?.address().port
-                @port?.setBroadcast true
+            
+        try
+            @port = dgram.createSocket 'udp4'
+            
+            if @opt.onMsg
+                log 'receiver', @opt
+                @port.on 'listening', => 
+                    log 'listening', @port.address().address, @port.address().port
+                    @port.setBroadcast true
+                @port.on 'message', (message, rinfo) =>
+                    msg = JSON.parse message.toString()
+                    log 'message', rinfo.address, rinfo.port, msg
+                    @opt.onMsg msg
+                @port.bind @opt.port
+            else
+                log 'sender', @opt
+                @port.bind => 
+                    log 'sender bind', @port?.address().port
+                    @port?.setBroadcast true
+        catch err
+            @port = null
+            log "[ERROR] can't create udp port:", err
                 
     send: (args...) ->
         
