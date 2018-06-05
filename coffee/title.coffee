@@ -127,7 +127,11 @@ class Title
         if empty @templateCache
             # log 'menuTemplate', slash.resolve slash.join @opt.dir, @opt.menu
             @templateCache = @makeTemplate noon.load slash.resolve slash.join @opt.dir, @opt.menu
-        @templateCache
+            
+        if @opt.menuTemplate?
+            @opt.menuTemplate @templateCache
+        else
+            @templateCache
         
     makeTemplate: (obj) ->
         
