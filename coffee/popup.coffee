@@ -190,12 +190,13 @@ class Popup
     # 000   000   0000000     000     000      0      000   000     000     00000000  
     
     activate: (item) ->
-        
+
         if item.item?.cb?
             @close all:true
             item.item.cb item.item.arg ? item.item.text
         else if not item.item.menu
             @close all:true
+            log 'popup.activate', item.item
             post.emit 'menuAction', item.item.action ? item.item.text, item.item.actarg
 
     toggle: (item) ->
