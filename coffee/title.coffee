@@ -142,12 +142,17 @@ class Title
                 when _.isString menuOrAccel
                     text:text
                     accel:menuOrAccel
-                when empty(menuOrAccel)
+                when empty menuOrAccel
                     text:text
                     accel: ''
                 else
-                    text:text
-                    menu:@makeTemplate menuOrAccel
+                    if menuOrAccel.accel? or menuOrAccel.command? # needs better test!
+                        item = _.clone menuOrAccel
+                        item.text = text
+                        item
+                    else
+                        text:text
+                        menu:@makeTemplate menuOrAccel
         tmpl
 
     initMenu: (items) ->
