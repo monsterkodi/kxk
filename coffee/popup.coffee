@@ -197,7 +197,6 @@ class Popup
         else if not item.item.menu
             @close all:true
             log 'popup.activate', item.item
-            # post.emit 'menuAction', item.item.action ? item.item.text, item.item.actarg
             post.emit 'menuAction', item.item.action ? item.item.text, item.item
 
     toggle: (item) ->

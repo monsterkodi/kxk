@@ -215,7 +215,6 @@ class Title
             if combo in combos
                 keypath.pop()
                 item = sds.get mainMenu, keypath
-                # post.emit 'menuAction', item.action ? item.text, item.actarg
                 post.emit 'menuAction', item.action ? item.text, item
                 return item
 
