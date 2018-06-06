@@ -156,7 +156,6 @@ class Popup
         if @popup
             @popup.select @popup.items.firstChild
         else if @selected?.item.menu
-            # @activate @selected
             @select @selected, selectFirstItem:true
         else if menu = @parentMenu()
             menu.navigateRight()
@@ -196,7 +195,7 @@ class Popup
             item.item.cb item.item.arg ? item.item.text
         else if not item.item.menu
             @close all:true
-            log 'popup.activate', item.item
+            # log 'popup.activate', item.item
             post.emit 'menuAction', item.item.action ? item.item.text, item.item
 
     toggle: (item) ->
