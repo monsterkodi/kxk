@@ -32,7 +32,13 @@ class udp
                         log "[ERROR] can't listen:", err
                         
                 @port.on 'message', (message, rinfo) =>
-                    msg = JSON.parse message.toString()
+                    messageString = message.toString()
+                    log 'messageString', messageString
+                    try
+                        msg = JSON.parse messageString
+                    catch err
+                        log 'conversion error', err
+                        return
                     log 'message', rinfo.address, rinfo.port, msg
                     @opt.onMsg msg
                     
