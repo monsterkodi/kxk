@@ -68,10 +68,7 @@ class udp
             msg = JSON.stringify args
         else
             msg = JSON.stringify args[0]
-        # log 'send', msg if @opt.debug
         buf = new Buffer msg
-        # @port.send buf, 0, buf.length, @opt.port, '255.255.255.255', ->
-            # log 'sent', msg
         @port.send buf, 0, buf.length, @opt.port, '127.0.0.1', ->
             log 'sent', msg
             
