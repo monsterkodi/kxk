@@ -16,6 +16,7 @@ class App
             
         electron = require 'electron'
         @app = electron.app
+        @userData = @app.getPath 'userData'
         
         if @opt.tray
             log.slog.icon = slash.fileUrl @resolve @opt.tray  
