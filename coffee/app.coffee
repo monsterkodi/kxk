@@ -6,11 +6,21 @@
 000   000  000        000        
 ###
 
-{ args, prefs, empty, slash, about, post, watch, childp, fs, log, error, _ } = require './kxk'
+{ args, prefs, empty, slash, about, post, watch, childp, fs, error, log, _ } = require './kxk'
 
 class App
     
     constructor: (@opt) ->
+        
+        process.on 'uncaughtException', (err) ->
+            error 'main.uncaughtException'
+            error err.message ? err
+            try
+                sutil = require 'stack-utils'
+                stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
+                log stack.captureString()
+            catch err
+                error err.message ? err
         
         @watcher = null
             
@@ -40,7 +50,7 @@ class App
 
         @app.setName @opt.pkg.name
         @app.on 'ready', @onReady
-        @app.on 'window-all-closed', (event) -> event.preventDefault()
+        @app.on 'window-all-closed', (event) -> event.preventDefault()        
 
     resolve: (file) => slash.resolve slash.join @opt.dir, file
     
