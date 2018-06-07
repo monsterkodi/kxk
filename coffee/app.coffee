@@ -118,6 +118,7 @@ class App
     
     quitApp: =>
         
+        @opt.onQuit?()
         @stopWatcher()
         @saveBounds()
         @app.exit 0
