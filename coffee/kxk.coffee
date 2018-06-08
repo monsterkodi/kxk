@@ -118,13 +118,15 @@ if not String.prototype.strip
     
 if not String.prototype.hash
     String.prototype.hash = -> crypto.createHash('md5').update(@.valueOf(), 'utf8').digest('hex')
-
+    
 module.exports.str         = require './str'
 module.exports.log         = require './log'
 module.exports.error       = require './error'
 module.exports.pos         = require './pos'
 module.exports.slash       = require './slash'
+
 module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'
+    
 module.exports.drag        = require './drag'
 module.exports.elem        = require './elem'
 module.exports.stash       = require './stash'
@@ -142,6 +144,10 @@ module.exports.title       = require './title'
 module.exports.matchr      = require './matchr'
 module.exports.popupWindow = require './popupWindow'
 module.exports.args        = require './args'
+
+if process.platform == 'win32' then module.exports.wxw = require 'wxw'
+
 module.exports.app         = require './app'
 module.exports.win         = require './win'
 module.exports.udp         = require './udp'
+
