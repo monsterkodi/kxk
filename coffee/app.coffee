@@ -130,10 +130,14 @@ class App
     
     quitApp: =>
         
-        return if 'delay' == @opt.onQuit?()
-        
         @stopWatcher()
         @saveBounds()
+        
+        if 'delay' != @opt.onQuit?()
+            @exitApp()
+            
+    exitApp: =>
+        
         @app.exit 0
         process.exit 0
         
