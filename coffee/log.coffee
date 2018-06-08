@@ -40,15 +40,19 @@ slog = (s) ->
         f = stack.capture()[slog.depth]
         if chain = sorcery.loadSync(f.getFileName())
             info   = chain.trace(f.getLineNumber(), 0)
-            source = f.getFileName()
             if not slash.samePath f.getScriptNameOrSourceURL(), f.getFileName()
-                source = slash.path f.getScriptNameOrSourceURL()
+                if slash.isAbsolute f.getScriptNameOrSourceURL()
+                    source = slash.path f.getScriptNameOrSourceURL()
+                else
+                    source = slash.resolve slash.join f.getFileName(), f.getScriptNameOrSourceURL()
             else
-                sourceText = fs.readFileSync f.getFileName(), 'utf8'
-                # balancer is broken. below is not a comment. should handle escaped hash signs. 
-                match  = sourceText.match /\/\/\# sourceURL=(.+)$/
-                if match?[1]?
-                    source = match?[1]
+                source = f.getFileName()
+            # else
+                # sourceText = fs.readFileSync f.getFileName(), 'utf8'
+                # # balancer is broken. below is not a comment. should handle escaped hash signs. 
+                # match  = sourceText.match /\/\/\# sourceURL=(.+)$/
+                # if match?[1]?
+                    # source = match?[1]
             info.source = slash.tilde source
         else
             info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
