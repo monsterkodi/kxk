@@ -13,6 +13,7 @@ os      = require 'os'
 noon    = require 'noon'
 sds     = require 'sds'
 fs      = require 'fs-extra'
+open    = require 'opener' 
 walkdir = require 'walkdir'
 atomic  = require 'write-file-atomic'
 watch   = require 'chokidar'
@@ -31,6 +32,7 @@ module.exports =
     atomic:atomic
     walkdir:walkdir
     watch:watch
+    open:open
     post:post
     noon:noon
     childp:childp
