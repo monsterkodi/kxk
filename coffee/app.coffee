@@ -169,9 +169,12 @@ class App
         foreground = true
         if @win and slash.win()
             wxw = require 'wxw'
-            wininfo = wxw.wininfo @win.hwnd
+            activeWin = wxw.active()
+            wininfo = wxw.wininfo activeWin
             log 'wininfo:', wininfo
-            foreground = wininfo.foreground
+            log @win.getNativeWindowHandle()
+            log wxw.wininfo @win.getNativeWindowHandle()
+            # foreground = wininfo.foreground
             
         if @win?.isVisible() and foreground
             @win.hide()
