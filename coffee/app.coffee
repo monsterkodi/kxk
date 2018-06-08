@@ -95,7 +95,7 @@ class App
         
         electron = require 'electron'
         @tray = new electron.Tray @resolve @opt.tray
-        @tray.on 'click', @toggleWindow
+        @tray.on 'click', @toggleWindowFromTray
              
         @tray.setContextMenu electron.Menu.buildFromTemplate [
             label: "Quit"
@@ -163,7 +163,15 @@ class App
             @hideDock()
         else
             @showWindow()
-    
+
+    toggleWindowFromTray: =>
+         
+        if @win?.isVisible() and @win?.isActive()
+            @win.hide()
+            @hideDock()
+        else
+            @showWindow()
+            
     showWindow: =>
          
         if @win?

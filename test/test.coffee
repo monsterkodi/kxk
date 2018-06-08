@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ fileList, splitFileLine, slash, pos, empty, clamp, log, _ } = require '../coffee/kxk'
+{ fileList, splitFileLine, slash, pos, empty, clamp, log, _ } = require '../' # '../coffee/kxk'
 
 assert = require 'assert'
 chai   = require 'chai'
@@ -264,6 +264,14 @@ describe 'slash', ->
 
         expect slash.isRelative '..\\blafark'
         .to.eql true
+        
+    it 'sanitize', ->
+        
+        expect slash.sanitize 'a.b\n'
+        .to.eql 'a.b'
+
+        expect slash.sanitize '\n\n c . d  \n\n\n'
+        .to.eql ' c . d  '
         
 describe 'fileList', ->
 

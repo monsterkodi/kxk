@@ -76,7 +76,7 @@ module.exports =
     last:  (a) -> _.last a
     first: (a) -> _.first a
     empty: (a) -> not _.isNumber(a) and _.isEmpty(a) or a == ''
-    valid: (a) -> not module.exports.empty a
+    valid: (a) -> _.isNumber(a) or (_.isString(a) and a != '') or not _.isEmpty(a)
 
     absMax: (a,b) -> if Math.abs(a) >= Math.abs(b) then a else b
     absMin: (a,b) -> if Math.abs(a)  < Math.abs(b) then a else b

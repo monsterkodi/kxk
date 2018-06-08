@@ -6,7 +6,7 @@
 0000000   0000000  000   000  0000000   000   000    
 ###
 
-{ fs, os, empty, valid, log, error, _ } = require './kxk'
+{ fs, os, empty, valid, _ } = require './kxk'
 
 path = require 'path'
 
@@ -16,6 +16,11 @@ class Slash
 
     @win: -> path.sep == '\\'
     
+    @error: (msg) ->
+        error = require './error'
+        error msg
+        ''
+    
     # 00000000    0000000   000000000  000   000  
     # 000   000  000   000     000     000   000  
     # 00000000   000000000     000     000000000  
@@ -23,13 +28,13 @@ class Slash
     # 000        000   000     000     000   000  
     
     @path: (p) ->
-        return error "Slash.path -- no path? #{p}" if not p? or p.length == 0
+        return Slash.error "Slash.path -- no path? #{p}" if not p? or p.length == 0
         p = path.normalize p
         p = p.replace Slash.reg, '/'
         p
 
     @unslash: (p) ->
-        return error "Slash.unslash -- no path? #{p}" if not p? or p.length == 0
+        return Slash.error "Slash.unslash -- no path? #{p}" if not p? or p.length == 0
         p = Slash.path p
         if Slash.win()
             if p.length >= 3 and p[0] == '/' == p[2] 
@@ -65,7 +70,7 @@ class Slash
         
         return Slash.splitDrive(p)[0]
   
-    @isRoot: (p) -> @removeDrive(p) == '/'
+    @isRoot: (p) -> Slash.removeDrive(p) == '/'
         
     @splitFileLine: (p) ->  # file.txt:1:0 --> ['file.txt', 1, 0]
         
@@ -122,15 +127,25 @@ class Slash
     # 000  0000  000   000  000 0 000  000       
     # 000   000  000   000  000   000  00000000  
     
-    @base:       (p)   -> path.basename p, path.extname p
-    @file:       (p)   -> path.basename p
-    @extname:    (p)   -> path.extname p
-    @basename:   (p,e) -> path.basename p, e
-    @isAbsolute: (p)   -> path.isAbsolute p
-    @isRelative: (p)   -> not Slash.isAbsolute p
-    @dirname:    (p)   -> Slash.path path.dirname p
-    @dir:        (p)   -> Slash.path path.dirname p
-    @normalize:  (p)   -> Slash.path path.normalize p
+    @base:       (p)   -> path.basename Slash.sanitize(p), path.extname Slash.sanitize(p)
+    @file:       (p)   -> path.basename Slash.sanitize(p)
+    @extname:    (p)   -> path.extname Slash.sanitize(p)
+    @basename:   (p,e) -> path.basename Slash.sanitize(p), e
+    @isAbsolute: (p)   -> path.isAbsolute Slash.sanitize(p)
+    @isRelative: (p)   -> not Slash.isAbsolute Slash.sanitize(p)
+    @dirname:    (p)   -> Slash.path path.dirname Slash.sanitize(p)
+    @dir:        (p)   -> Slash.path path.dirname Slash.sanitize(p)
+    @normalize:  (p)   -> Slash.path path.normalize Slash.sanitize(p)
+    @sanitize:   (p)   -> 
+        if empty p
+            return Slash.error 'empty path!'
+        if p[0] == '\n'
+            Slash.error "leading newline in path! '#{p}'"
+            return Slash.sanitize p.substr 1
+        if p.endsWith '\n'
+            Slash.error "trailing newline in path! '#{p}'"
+            return Slash.sanitize p.substr 0, p.length-1
+        p
     
     @parse:      (p)   -> 
         
@@ -164,13 +179,13 @@ class Slash
         Slash.path p
     
     @resolve: (p) ->
-        return error "Slash.resolve -- no path? #{p}" if empty p
+        return Slash.error "Slash.resolve -- no path? #{p}" if empty p
         Slash.path path.resolve Slash.unenv Slash.untilde p
     
     @relative: (rel, to) ->
         
         if empty to
-            error "Slash.relative -- to nothing?", rel, to
+            Slash.error "Slash.relative -- to nothing? rel:'#{rel}' to:'#{to}'"
             return rel
             
         rel = Slash.resolve rel
