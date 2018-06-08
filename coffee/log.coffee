@@ -44,7 +44,7 @@ slog = (s) ->
                 if slash.isAbsolute f.getScriptNameOrSourceURL()
                     source = slash.path f.getScriptNameOrSourceURL()
                 else
-                    source = slash.resolve slash.join f.getFileName(), f.getScriptNameOrSourceURL()
+                    source = slash.resolve slash.join slash.dir(f.getFileName()), f.getScriptNameOrSourceURL()
             else
                 source = f.getFileName()
             # else
