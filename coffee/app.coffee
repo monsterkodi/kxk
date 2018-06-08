@@ -166,7 +166,14 @@ class App
 
     toggleWindowFromTray: =>
          
-        if @win?.isVisible() and @win?.isFocused()
+        foreground = true
+        if @win and slash.win()
+            wxw = require 'wxw'
+            wininfo = wxw.wininfo @win.hwnd
+            log 'wininfo:', wininfo
+            foreground = wininfo.foreground
+            
+        if @win?.isVisible() and foreground
             @win.hide()
             @hideDock()
         else
