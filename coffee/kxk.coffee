@@ -144,9 +144,6 @@ module.exports.title       = require './title'
 module.exports.matchr      = require './matchr'
 module.exports.popupWindow = require './popupWindow'
 module.exports.args        = require './args'
-
-if process.platform == 'win32' then module.exports.wxw = require 'wxw'
-
 module.exports.app         = require './app'
 module.exports.win         = require './win'
 module.exports.udp         = require './udp'
