@@ -200,7 +200,21 @@ describe 'slash', ->
         
         expect slash.exists __filename + 'foo'
         .to.not.exist
-    
+        
+    it 'exists async', (done) ->
+        
+        slash.exists __filename, (f) ->
+            expect slash.samePath f, __filename
+            .to.eql true
+            done()
+
+    it 'exist async not', (done) ->
+        
+        slash.exists __filename + 'foo', (f) ->
+            expect f
+            .to.eql undefined
+            done()
+            
     it 'fileExists', ->
 
         expect slash.fileExists __filename

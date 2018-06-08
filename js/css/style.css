@@ -116,8 +116,8 @@ body {
   cursor: default;
   border: 0;
   height: 0;
-  margin-top: 4px;
-  margin-bottom: 4px;
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 .popupItem:last-child {
   padding-bottom: 6px;

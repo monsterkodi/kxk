@@ -6,7 +6,7 @@
 0000000   0000000  000   000  0000000   000   000    
 ###
 
-{ fs, os, empty, log, error, _ } = require './kxk'
+{ fs, os, empty, valid, log, error, _ } = require './kxk'
 
 path = require 'path'
 
@@ -203,7 +203,19 @@ class Slash
                 p = Slash.dirname p
         null
 
-    @exists: (p) -> 
+    @exists: (p, cb) ->
+        
+        if _.isFunction cb
+            if not p?
+                cb() 
+                return
+            p = Slash.resolve p
+            fs.access p, fs.R_OK | fs.F_OK, (err) ->
+                if valid err
+                    cb() 
+                else
+                    cb p
+            return
         
         return false if not p?
         try
