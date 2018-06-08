@@ -18,7 +18,9 @@ class App
             try
                 sutil = require 'stack-utils'
                 stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
-                log stack.captureString()
+                stackTrace = stack.captureString()
+                console.log 'stackTrace', stackTrace
+                log stackTrace 
             catch err
                 error err.message ? err
         
@@ -128,7 +130,8 @@ class App
     
     quitApp: =>
         
-        @opt.onQuit?()
+        return if 'delay' == @opt.onQuit?()
+        
         @stopWatcher()
         @saveBounds()
         @app.exit 0
