@@ -166,7 +166,7 @@ class App
 
     toggleWindowFromTray: =>
          
-        if @win?.isVisible() and @win?.isActive()
+        if @win?.isVisible() and @win?.isFocused()
             @win.hide()
             @hideDock()
         else
