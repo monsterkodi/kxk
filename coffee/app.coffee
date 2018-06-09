@@ -98,7 +98,6 @@ class App
         
         electron = require 'electron'
         trayImg = @resolve @opt.tray
-        log 'trayImg', trayImg
         @tray = new electron.Tray trayImg
         @tray.on 'click', @toggleWindowFromTray
              
