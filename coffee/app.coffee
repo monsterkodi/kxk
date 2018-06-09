@@ -217,7 +217,10 @@ class App
         @win.on 'move',   @saveBounds
         @win.on 'closed', => @win = null
         @win.on 'close',  => @hideDock()
-        @win.on 'ready-to-show', => @win.show(); post.emit 'winReady', @win.id
+        @win.on 'ready-to-show', (event) => 
+            log 'event.sender', event?.sender
+            log 'event.sender.id', event?.sender?.id
+            @win.show(); post.emit 'winReady', @win.id
         @showDock()
         @win
 
