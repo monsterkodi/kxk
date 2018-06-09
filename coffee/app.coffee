@@ -77,13 +77,16 @@ class App
         if not empty prefs.get 'shortcut' 
             electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
-    
-        post.emit 'appReady'
-            
-        @showWindow()
-         
+             
         if args.watch
             @startWatcher()
+        
+        if @opt.onReady
+            @opt.onReady()
+        else
+            @showWindow()
+
+        post.emit 'appReady'
 
     # 000000000  00000000    0000000   000   000  
     #    000     000   000  000   000   000 000   
