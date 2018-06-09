@@ -81,8 +81,8 @@ class App
         if args.watch
             @startWatcher()
         
-        if @opt.onReady
-            @opt.onReady()
+        if @opt.onShow
+            @opt.onShow()
         else
             @showWindow()
 
