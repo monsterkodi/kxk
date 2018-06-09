@@ -185,7 +185,7 @@ class App
     # 000       000   000  000       000   000     000     000       
     #  0000000  000   000  00000000  000   000     000     00000000  
     
-    createWindow: =>
+    createWindow: (onReadyToShow) =>
     
         electron = require 'electron'
         
@@ -217,7 +217,11 @@ class App
         @win.on 'move',   @saveBounds
         @win.on 'closed', => @win = null
         @win.on 'close',  => @hideDock()
-        @win.on 'ready-to-show', (event) => event.sender.show(); post.emit 'winReady', event.sender.id
+        @win.on 'ready-to-show', (event) => 
+            win = event.sender
+            onReadyToShow?(win); 
+            win.show(); 
+            post.emit 'winReady', win.id
         @showDock()
         @win
 
