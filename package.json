@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.169.0",
+  "version": "0.170.0",
   "description": "kodi's tool kit",
   "main": "js/kxk.js",
   "repository": {
@@ -22,9 +22,8 @@
     "karg": "^1.10.0",
     "keycode": "^2.2.0",
     "lodash": "^4.17.10",
-    "noon": ">=1.4.0",
+    "noon": ">=1.5.0",
     "opener": "^1.4.3",
-    "osc-js": "^1.2.2",
     "sds": "^1.14.1",
     "sorcery": "^0.10.0",
     "stack-utils": "^1.0.1",
