@@ -24,8 +24,6 @@ class PopupWindow
         
         electron = require 'electron'
         
-        # PopupWindow.close()
-        
         PopupWindow.opt = opt        
         
         popupOpt = 

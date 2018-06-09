@@ -13,13 +13,13 @@ class App
     constructor: (@opt) ->
         
         process.on 'uncaughtException', (err) ->
-            error 'main.uncaughtException'
+            # error 'main.uncaughtException'
             error err.message ? err
             try
                 sutil = require 'stack-utils'
                 stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
                 stackTrace = stack.captureString()
-                console.log 'stackTrace', stackTrace
+                console.log 'stackTrace', stackTrace.split('\n').length, stackTrace
                 log stackTrace 
             catch err
                 error err.message ? err
@@ -94,7 +94,9 @@ class App
     initTray: =>
         
         electron = require 'electron'
-        @tray = new electron.Tray @resolve @opt.tray
+        trayImg = @resolve @opt.tray
+        log 'trayImg', trayImg
+        @tray = new electron.Tray trayImg
         @tray.on 'click', @toggleWindowFromTray
              
         @tray.setContextMenu electron.Menu.buildFromTemplate [
@@ -164,13 +166,7 @@ class App
         else
             @showWindow()
 
-    toggleWindowFromTray: =>
-                     
-        # if @win?.isVisible() and foreground
-            # @win.hide()
-            # @hideDock()
-        # else
-        @showWindow()
+    toggleWindowFromTray: => @showWindow()
             
     showWindow: =>
          
@@ -193,7 +189,6 @@ class App
         bounds = prefs.get 'bounds'
         width  = bounds?.width  ? @opt.width  ? 500
         height = bounds?.height ? @opt.height ? 500
-        # log 'createWindow', width, height
         
         @win = new electron.BrowserWindow
             width:           width
