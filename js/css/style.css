@@ -47,6 +47,7 @@ body {
   flex-direction: row;
   padding-top: 7px;
   padding-left: 10px;
+  padding-right: 10px;
   -webkit-app-region: drag;
   font-weight: bold;
   font: Bahnschrift Light, Ebrima, Varela Round, Arial Rounded MT Bold, Helvetica, Arial;
