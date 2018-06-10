@@ -238,8 +238,8 @@ class Slash
             if stat = fs.statSync(p)
                 fs.accessSync p, fs.R_OK
                 return stat
-        catch 
-            return null
+        catch err
+            console.log err
         null     
         
     @isWritable: (p) ->
