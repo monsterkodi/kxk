@@ -33,7 +33,7 @@ class App
             log.slog.icon = slash.fileUrl @resolve @opt.tray  
         
         if @opt.single != false
-            if @app.makeSingleInstance @showWindow
+            if @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
                 @app.quit()
                 return
     
