@@ -31,12 +31,7 @@ class App
         
         if @opt.tray
             log.slog.icon = slash.fileUrl @resolve @opt.tray  
-        
-        if @opt.single != false
-            if @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
-                @app.quit()
-                return
-    
+            
         argl = """
             noprefs     don't load preferences      false
             devtools    open developer tools        false  -D
@@ -45,7 +40,15 @@ class App
             
         argl = @opt.args + '\n' + argl if @opt.args
         args = args.init argl
-            
+        
+        log 'app.args', args
+        
+        if @opt.single != false
+            if @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
+                log 'app.quit single'
+                @app.quit()
+                return
+        
         post.on 'showAbout', @showAbout
         post.on 'quitApp',   @quitApp
 
