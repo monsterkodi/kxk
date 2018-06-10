@@ -71,14 +71,18 @@ class App
          
         @app.setName @opt.pkg.name
     
-        log 'App.onReady init prefs'
+        log 'App.onReady init prefs', args
         
         if not args.noprefs
             if @opt.shortcut
+                log 'App.onReady shortcut', @opt.shortcut
                 prefs.init shortcut: @opt.shortcut
             else
+                log 'App.onReady no shortcut'
                 prefs.init()
     
+        log 'App.onReady setShortcut'
+                
         if not empty prefs.get 'shortcut' 
             electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
