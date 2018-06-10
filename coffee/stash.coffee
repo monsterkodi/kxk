@@ -91,7 +91,7 @@ class Stash
         clearTimeout @timer
         @timer = null
         try
-            log 'save stash', @file
+            # log 'save stash', @file
             atomic.sync @file, noon.stringify @data, { indent: 2, maxalign: 8 }
         catch err
             error "stash.save -- can't save to '#{@file}': #{err}"
