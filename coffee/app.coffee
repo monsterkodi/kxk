@@ -63,8 +63,6 @@ class App
     
     onReady: =>
     
-        log 'App.onReady'
-        
         if @opt.tray then @initTray()
          
         @hideDock()
@@ -77,10 +75,8 @@ class App
             else
                 prefs.init()
     
-        log 'App.onReady setShortcut', prefs.get('shortcut'), valid(prefs.get('shortcut')), valid(undefined)
-                
         if valid prefs.get 'shortcut'
-            log 'App.onReady apply shortcut'
+            log 'App.onReady apply shortcut', prefs.get('shortcut')
             electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
              
@@ -88,8 +84,6 @@ class App
         
         if args.watch
             @startWatcher()
-        
-        log 'App.onReady init onShow'
         
         if @opt.onShow
             @opt.onShow()

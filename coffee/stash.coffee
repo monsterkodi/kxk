@@ -22,7 +22,7 @@ class Stash
 
         @sep = opt?.separator ? ':'
         @timer   = null
-        @file    = opt?.file ? "#{app.getPath('userData')}/#{@name}.noon"
+        @file    = slash.path opt?.file ? "#{app.getPath('userData')}/#{@name}.noon"
         @timeout = opt?.timeout ? 4000
         @changes = []
         
@@ -85,11 +85,14 @@ class Stash
     # 0000000   000   000      0      00000000
 
     save: =>
+        
         return if not @file
+        
         clearTimeout @timer
         @timer = null
         try
-            atomic.sync @file, noon.stringify @data, {indent: 2, maxalign: 8}
+            log 'save stash', @file
+            atomic.sync @file, noon.stringify @data, { indent: 2, maxalign: 8 }
         catch err
             error "stash.save -- can't save to '#{@file}': #{err}"
         

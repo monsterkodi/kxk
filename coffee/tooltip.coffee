@@ -50,7 +50,10 @@ class Tooltip
         return if not @elem?
         return if @div?
         @div = elem id:'tooltip', class:'tooltip', html: @opt.html
-        document.body.appendChild @div
+        if @opt.parent
+            @opt.parent.appendChild @div
+        else
+            document.body.appendChild @div
         br = @elem.getBoundingClientRect()
         @div.style.transform = "scaleY(1)"
         @div.style.opacity = '1'
