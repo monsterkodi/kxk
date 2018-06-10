@@ -12,17 +12,17 @@ class App
     
     constructor: (@opt) ->
         
+        log 'App.constructor'
         process.on 'uncaughtException', (err) ->
-            # error 'main.uncaughtException'
             error err.message ? err
-            try
-                sutil = require 'stack-utils'
-                stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
-                stackTrace = stack.captureString()
-                console.log 'stackTrace', stackTrace.split('\n').length, stackTrace
-                log stackTrace 
-            catch err
-                error err.message ? err
+            # try
+            sutil = require 'stack-utils'
+            stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
+            stackTrace = stack.captureString()
+            # console.log 'stackTrace', stackTrace.split('\n').length, stackTrace
+            log stackTrace 
+            # catch err
+                # error err.message ? err
         
         @watcher = null
             
@@ -53,6 +53,8 @@ class App
         @app.setName @opt.pkg.name
         @app.on 'ready', @onReady
         @app.on 'window-all-closed', (event) -> event.preventDefault()        
+        
+        log 'App.constructor done'
 
     resolve: (file) => slash.resolve slash.join @opt.dir, file
     
@@ -64,6 +66,8 @@ class App
     
     onReady: =>
     
+        log 'App.onReady'
+        
         if @opt.tray then @initTray()
          
         @hideDock()
@@ -71,8 +75,10 @@ class App
         @app.setName @opt.pkg.name
     
         if not args.noprefs
-            prefs.init
-                shortcut: @opt.shortcut
+            if @opt.shortcut
+                prefs.init shortcut: @opt.shortcut
+            else
+                prefs.init()
     
         if not empty prefs.get 'shortcut' 
             electron = require 'electron'
@@ -87,6 +93,8 @@ class App
             @showWindow()
 
         post.emit 'appReady'
+        
+        log 'App.onReady done'
 
     # 000000000  00000000    0000000   000   000  
     #    000     000   000  000   000   000 000   
@@ -176,6 +184,7 @@ class App
             @win.show()
         else
             @createWindow()
+            
         @showDock()
         
     #  0000000  00000000   00000000   0000000   000000000  00000000  
@@ -186,6 +195,8 @@ class App
     
     createWindow: (onReadyToShow) =>
     
+        log 'App.createWindow'
+        
         electron = require 'electron'
         
         bounds = prefs.get 'bounds'
@@ -222,6 +233,9 @@ class App
             win.show(); 
             post.emit 'winReady', win.id
         @showDock()
+        
+        log 'App.createWindow done'
+                
         @win
 
     saveBounds: => if @win? then prefs.set 'bounds', @win.getBounds()
