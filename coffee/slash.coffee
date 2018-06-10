@@ -235,6 +235,7 @@ class Slash
         return false if not p?
         try
             p = Slash.resolve p
+            console.log 'exists?', p
             if stat = fs.statSync(p)
                 fs.accessSync p, fs.R_OK
                 return stat
