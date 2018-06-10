@@ -77,7 +77,7 @@ class App
             else
                 prefs.init()
     
-        log 'App.onReady setShortcut', prefs.get('shortcut'), valid prefs.get 'shortcut'
+        log 'App.onReady setShortcut', prefs.get('shortcut'), valid prefs.get('shortcut'), valid(undefined)
                 
         if valid prefs.get 'shortcut'
             log 'App.onReady apply shortcut'
