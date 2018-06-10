@@ -6,7 +6,7 @@
    000      0000000    0000000   0000000     000     000  000      
 ###
 
-{ elem, pos, error, log, $, _ } = require './kxk'
+{ elem, pos, empty, error, log, $, _ } = require './kxk'
 
 class Tooltip
     
@@ -25,9 +25,11 @@ class Tooltip
         @elem.addEventListener 'DOMNodeRemoved', @del
 
     del: (event) => 
+        
         return if @opt.keep
         return if not @elem?
-        if event.target == @elem
+        
+        if empty(event) or event?.target == @elem
             log 'tooltip.del'
             delete @elem.tooltip
             @onLeave()
