@@ -71,6 +71,8 @@ class App
          
         @app.setName @opt.pkg.name
     
+        log 'App.onReady init prefs'
+        
         if not args.noprefs
             if @opt.shortcut
                 prefs.init shortcut: @opt.shortcut
@@ -81,8 +83,12 @@ class App
             electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
              
+        log 'App.onReady init watch'
+        
         if args.watch
             @startWatcher()
+        
+        log 'App.onReady init onShow'
         
         if @opt.onShow
             @opt.onShow()
