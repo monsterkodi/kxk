@@ -224,7 +224,7 @@ class Slash
             if not p?
                 cb() 
                 return
-            p = Slash.resolve p
+            p = Slash.resolve Slash.removeLinePos p
             fs.access p, fs.R_OK | fs.F_OK, (err) ->
                 if valid err
                     cb() 
@@ -234,8 +234,7 @@ class Slash
         
         return false if not p?
         try
-            p = Slash.resolve p
-            console.log 'exists?', p
+            p = Slash.resolve Slash.removeLinePos p
             if stat = fs.statSync(p)
                 fs.accessSync p, fs.R_OK
                 return stat
