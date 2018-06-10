@@ -22,21 +22,18 @@ class Tooltip
         @elem.tooltip = @      
 
         @elem.addEventListener 'mouseenter', @onHover
-        @elem.addEventListener 'mouseleave', @onLeave
-        @elem.addEventListener 'mousedown',  @onLeave
-        @elem.addEventListener 'DOMNodeRemoved', @del
 
     del: => 
-        
+        log 'tooltip.del'
         return if @opt.keep
         return if not @elem?
         delete @elem.tooltip
-        @onLeave()
         @elem.removeEventListener  'mousemove',  @onHover
         @elem.removeEventListener  'mouseleave', @onLeave
         @elem.removeEventListener  'mousedown',  @onLeave
         @elem.removeEventListener  'DOMNodeRemoved', @del
         @elem = null
+        @onLeave()
 
     onHover: (event) =>
 
@@ -44,6 +41,10 @@ class Tooltip
         return if @div?
         clearTimeout @timer
         @timer = setTimeout @popup, @opt.delay
+        
+        @elem.addEventListener 'mouseleave', @onLeave
+        @elem.addEventListener 'mousedown',  @onLeave
+        @elem.addEventListener 'DOMNodeRemoved', @del
 
     popup: (event) =>
         
@@ -63,7 +64,7 @@ class Tooltip
         
     onLeave: (event, e) =>
         
-        return if not @elem?
+        # return if not @elem?
         clearTimeout @timer
         @timer = null
         @div?.remove()
