@@ -12,7 +12,6 @@ class App
     
     constructor: (@opt) ->
         
-        log 'App.constructor'
         process.on 'uncaughtException', (err) ->
             error err.message ? err
             # try
@@ -54,8 +53,6 @@ class App
         @app.on 'ready', @onReady
         @app.on 'window-all-closed', (event) -> event.preventDefault()        
         
-        log 'App.constructor done'
-
     resolve: (file) => slash.resolve slash.join @opt.dir, file
     
     #00000000   00000000   0000000   0000000    000   000
@@ -229,8 +226,8 @@ class App
         @win.on 'close',  => @hideDock()
         @win.on 'ready-to-show', (event) => 
             win = event.sender
-            onReadyToShow?(win); 
-            win.show(); 
+            onReadyToShow? win 
+            win.show() 
             post.emit 'winReady', win.id
         @showDock()
         
