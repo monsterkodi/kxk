@@ -41,7 +41,7 @@ class App
         argl = @opt.args + '\n' + argl if @opt.args
         args = args.init argl
         
-        log 'app.args', args
+        # log 'app.args', args
         
         if @opt.single != false
             if @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
@@ -79,13 +79,12 @@ class App
                 prefs.init()
     
         if valid prefs.get 'shortcut'
-            log 'App.onReady apply shortcut', prefs.get('shortcut')
             electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
              
-        log 'App.onReady init watch'
         
         if args.watch
+            log 'App.onReady startWatcher'
             @startWatcher()
         
         if @opt.onShow
@@ -95,8 +94,6 @@ class App
 
         post.emit 'appReady'
         
-        log 'App.onReady done'
-
     # 000000000  00000000    0000000   000   000  
     #    000     000   000  000   000   000 000   
     #    000     0000000    000000000    00000    
@@ -196,8 +193,6 @@ class App
     
     createWindow: (onReadyToShow) =>
     
-        log 'App.createWindow'
-        
         electron = require 'electron'
         
         bounds = prefs.get 'bounds'
@@ -235,8 +230,6 @@ class App
             post.emit 'winReady', win.id
         @showDock()
         
-        log 'App.createWindow done'
-                
         @win
 
     saveBounds: => if @win? then prefs.set 'bounds', @win.getBounds()
