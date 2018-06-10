@@ -6,7 +6,7 @@
 000   000  000        000        
 ###
 
-{ args, prefs, empty, slash, about, post, watch, childp, fs, error, log, _ } = require './kxk'
+{ args, prefs, empty, valid, slash, about, post, watch, childp, fs, error, log, _ } = require './kxk'
 
 class App
     
@@ -81,9 +81,9 @@ class App
                 log 'App.onReady no shortcut'
                 prefs.init()
     
-        log 'App.onReady setShortcut'
+        log 'App.onReady setShortcut', prefs.get 'shortcut' 
                 
-        if not empty prefs.get 'shortcut' 
+        if valid prefs.get 'shortcut' 
             electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
              
