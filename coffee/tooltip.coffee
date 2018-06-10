@@ -30,7 +30,6 @@ class Tooltip
         return if not @elem?
         
         if empty(event) or event?.target == @elem
-            log 'tooltip.del'
             delete @elem.tooltip
             @onLeave()
             @elem.removeEventListener 'DOMNodeRemoved', @del
