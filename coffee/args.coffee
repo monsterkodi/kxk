@@ -18,7 +18,8 @@ else
         
     args.init = (cfg, kargOpt) ->
         
-        pkg = kargOpt?.pkg
+        kargOpt ?= {}
+        pkg = kargOpt.pkg
         
         if not pkg?
             pkgDir = slash.pkg __dirname
@@ -53,7 +54,13 @@ else
             kargConfig[pkg.name][kk] = o
             
         delete args.init
-                
+        
+        if empty kargOpt.ignoreArgs
+            if slash.win() and slash.file(process.argv[0]) == "#{pkg.name}.exe"
+                kargOpt.ignoreArgs=1
+            else
+                kargOpt.ignoreArgs=2
+        
         for k,v of karg kargConfig, kargOpt
             args[k] = v
             
