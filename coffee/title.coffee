@@ -66,6 +66,9 @@ class Title
         @elem.appendChild @close
         @close.addEventListener 'click', -> post.emit 'menuAction', 'Close'
 
+        @topframe = elem class: 'topframe'
+        @elem.appendChild @topframe
+        
         @initStyle()
         
         if @opt.menu
