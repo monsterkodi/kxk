@@ -8,15 +8,14 @@
 
 { args, prefs, empty, valid, slash, about, post, watch, childp, fs, error, log, _ } = require './kxk'
 
-# require('source-map-support').install() # hookRequire: true, environment: 'node', handleUncaughtExceptions: true
 require('source-map-support').install hookRequire: true, environment: 'node', handleUncaughtExceptions: true
 
 class App
     
     constructor: (@opt) ->
         
-        # process.on 'uncaughtException', (err) ->
-            # error err.message ? err
+        process.on 'uncaughtException', (err) ->
+            error err.message ? err
             # sutil = require 'stack-utils'
             # stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
             # stackTrace = stack.captureString()
