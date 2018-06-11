@@ -16,15 +16,62 @@ describe 'kxk', ->
     after -> log.stop()
     
     describe 'slash', ->
-        
+
+        it 'dir', ->
+            
+            expect slash.dir '/some/path/file.txt'
+            .to.eql '/some/path'
+            
+            expect slash.dir '/some/dir/'
+            .to.eql '/some'
+            
+            expect slash.dir 'C:\\Back\\'
+            .to.eql 'C:/'
+            
+            expect slash.dir '../..'
+            .to.eql '..'
+
+            expect slash.dir '/'
+            .to.eql ''
+
+            expect slash.dir '.'
+            .to.eql ''
+            
+            expect slash.dir '..'
+            .to.eql ''
+            
+            expect slash.dir '~'
+            .to.eql ''
+
+            expect slash.dir './'
+            .to.eql ''
+            
+            expect slash.dir '../'
+            .to.eql ''
+            
+            expect slash.dir '~/'
+            .to.eql ''
+            
+            expect slash.dir 'C:/'
+            .to.eql ''
+            
         it 'pathlist', ->
             
             expect slash.pathlist '/some/path.txt'
             .to.eql ['/', '/some', '/some/path.txt']
-    
+
+            expect slash.pathlist '/'
+            .to.eql ['/']
+            
             expect slash.pathlist ''
             .to.eql []
             
+            expect slash.pathlist 'C:\\Back\\Slash\\'
+            .to.eql ['C:/', 'C:/Back', 'C:/Back/Slash/']
+
+            expect slash.pathlist '~'
+            .to.eql ['~']
+                        
         it 'base', -> 
             
             expect slash.base '/some/path.txt'

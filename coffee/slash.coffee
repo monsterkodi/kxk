@@ -109,6 +109,7 @@ class Slash
     @join: -> [].map.call(arguments, Slash.path).join '/'
     
     @joinFilePos: (file, pos) -> # ['file.txt', [3, 0]] --> file.txt:1:3
+        
         if not pos? or not pos[0] and not pos[1]
             file
         else if pos[0]
@@ -117,6 +118,7 @@ class Slash
             file + ":#{pos[1]+1}"
                 
     @joinFileLine: (file, line, col) -> # 'file.txt', 1, 2 --> file.txt:1:2
+        
         return file if not line?
         return "#{file}:#{line}" if not col?
         "#{file}:#{line}:#{col}"
@@ -127,13 +129,14 @@ class Slash
     # 000        000   000     000     000   000  000      000       000     000     
     # 000        000   000     000     000   000  0000000  000  0000000      000     
     
-    @pathlist: (path) -> # /root/dir/file.txt --> [/, /root, /root/dir, /root/dir/file.txt]
+    @pathlist: (p) -> # '/root/dir/file.txt' --> ['/', '/root', '/root/dir', '/root/dir/file.txt']
     
-        return [] if empty path
-        list = [path]
-        while Slash.dir(path) != path
-            list.unshift Slash.dir(path)
-            path = Slash.dir path
+        return [] if empty p
+        p = Slash.path Slash.sanitize p
+        list = [p]
+        while Slash.dir(p) != ''
+            list.unshift Slash.dir(p)
+            p = Slash.dir p
         list
         
     # 000   000   0000000   00     00  00000000  
@@ -149,16 +152,21 @@ class Slash
     @isAbsolute: (p)   -> path.isAbsolute Slash.sanitize(p)
     @isRelative: (p)   -> not Slash.isAbsolute Slash.sanitize(p)
     @dirname:    (p)   -> Slash.path path.dirname Slash.sanitize(p)
-    @dir:        (p)   -> Slash.path path.dirname Slash.sanitize(p)
     @normalize:  (p)   -> Slash.path path.normalize Slash.sanitize(p)
+    @dir:        (p)   -> 
+        p = Slash.sanitize p
+        if Slash.isRoot p then return ''
+        p = path.dirname p
+        if p == '.' then return ''
+        Slash.path p
     @sanitize:   (p)   -> 
         if empty p
             return Slash.error 'empty path!'
         if p[0] == '\n'
-            Slash.error "leading newline in path! '#{p}'"
+            # Slash.error "leading newline in path! '#{p}'"
             return Slash.sanitize p.substr 1
         if p.endsWith '\n'
-            Slash.error "trailing newline in path! '#{p}'"
+            # Slash.error "trailing newline in path! '#{p}'"
             return Slash.sanitize p.substr 0, p.length-1
         p
     
