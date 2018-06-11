@@ -14,16 +14,12 @@ class App
     
     constructor: (@opt) ->
         
-        process.on 'uncaughtException', (err) ->
-            error err.message ? err
-            # try
-            sutil = require 'stack-utils'
-            stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
-            stackTrace = stack.captureString()
-            # console.log 'stackTrace', stackTrace.split('\n').length, stackTrace
-            log stackTrace 
-            # catch err
-                # error err.message ? err
+        # process.on 'uncaughtException', (err) ->
+            # error err.message ? err
+            # sutil = require 'stack-utils'
+            # stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
+            # stackTrace = stack.captureString()
+            # log stackTrace 
         
         @watcher = null
             
