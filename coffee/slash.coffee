@@ -121,6 +121,21 @@ class Slash
         return "#{file}:#{line}" if not col?
         "#{file}:#{line}:#{col}"
     
+    # 00000000    0000000   000000000  000   000  000      000   0000000  000000000  
+    # 000   000  000   000     000     000   000  000      000  000          000     
+    # 00000000   000000000     000     000000000  000      000  0000000      000     
+    # 000        000   000     000     000   000  000      000       000     000     
+    # 000        000   000     000     000   000  0000000  000  0000000      000     
+    
+    @pathlist: (path) -> # /root/dir/file.txt --> [/, /root, /root/dir, /root/dir/file.txt]
+    
+        return [] if empty path
+        list = [path]
+        while Slash.dir(path) != path
+            list.unshift Slash.dir(path)
+            path = Slash.dir path
+        list
+        
     # 000   000   0000000   00     00  00000000  
     # 0000  000  000   000  000   000  000       
     # 000 0 000  000000000  000000000  0000000   
