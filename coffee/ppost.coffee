@@ -89,6 +89,8 @@ else
                             if _.isFunction @getCallbacks[type]
                                 retval = @getCallbacks[type].apply @getCallbacks[type], argl
                                 event.returnValue = retval ? []
+            catch err
+                console.log err.message ? err
 
         toAll:  (    type, args...) -> @sendToWins(type, args).sendToMain(type, args)
         toMain: (    type, args...) -> @sendToMain type, args
