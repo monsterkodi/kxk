@@ -8,7 +8,8 @@
 
 { args, prefs, empty, valid, slash, about, post, watch, childp, fs, error, log, _ } = require './kxk'
 
-require('source-map-support').install() # hookRequire: true, environment: 'node', handleUncaughtExceptions: true
+# require('source-map-support').install() # hookRequire: true, environment: 'node', handleUncaughtExceptions: true
+require('source-map-support').install hookRequire: true, environment: 'node', handleUncaughtExceptions: true
 
 class App
     
