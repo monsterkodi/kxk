@@ -76,7 +76,7 @@ log = ->
     console.log s
     slog s
 
-slog.udp     = true
+slog.udp     = false
 slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'
 slog.icon    = if process.type == 'renderer' then '●' else '◆'
