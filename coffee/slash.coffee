@@ -17,8 +17,8 @@ class Slash
     @win: -> path.sep == '\\'
     
     @error: (msg) ->
-        error = require './error'
-        error msg
+        # error = require './error'
+        # error msg
         ''
     
     # 00000000    0000000   000000000  000   000  
@@ -163,10 +163,10 @@ class Slash
         if empty p
             return Slash.error 'empty path!'
         if p[0] == '\n'
-            # Slash.error "leading newline in path! '#{p}'"
+            Slash.error "leading newline in path! '#{p}'"
             return Slash.sanitize p.substr 1
         if p.endsWith '\n'
-            # Slash.error "trailing newline in path! '#{p}'"
+            Slash.error "trailing newline in path! '#{p}'"
             return Slash.sanitize p.substr 0, p.length-1
         p
     
