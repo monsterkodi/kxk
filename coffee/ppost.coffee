@@ -73,7 +73,7 @@ else
             @getCallbacks = {}
             try
                 ipc = require('electron').ipcMain
-                ipc.on POST, (event, kind, type, argl, id) =>
+                ipc?.on POST, (event, kind, type, argl, id) =>
                     id = id or event.sender.id
                     switch kind
                         when 'toMain'      then @sendToMain type, argl
