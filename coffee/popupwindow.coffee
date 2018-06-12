@@ -59,22 +59,8 @@ class PopupWindow
                     webSecurity: false
                 width:           240
                 height:          popupOpt.items.length * 28
-                
-            # html = """
-                # <link rel='stylesheet' href="#{slash.fileUrl opt.stylesheet}" type='text/css'>
-                # <body>
-                # <script>
-                    # var PopupWindow = require("#{slash.path __dirname}/popupWindow");
-                    # new PopupWindow(#{JSON.stringify popupOpt});
-                # </script>
-                # </body>
-            # """
-            # win.loadURL "data:text/html;charset=utf-8," + encodeURI html
-    
+                    
             win.on 'blur', PopupWindow.close
-            # win.on 'ready-to-show', -> 
-                # win.show()
-                # win.webContents.openDevTools()
                 
             PopupWindow.win = win
             
