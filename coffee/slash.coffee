@@ -229,6 +229,12 @@ class Slash
         p = p.replace /\&/g, "%26"
         p = p.replace /\'/g, "%27"
 
+    # 00000000   000   000   0000000       000   0000000   000  000000000  
+    # 000   000  000  000   000           000   000        000     000     
+    # 00000000   0000000    000  0000    000    000  0000  000     000     
+    # 000        000  000   000   000   000     000   000  000     000     
+    # 000        000   000   0000000   000       0000000   000     000     
+    
     @pkg: (p) ->
     
         if p?.length?
@@ -238,9 +244,19 @@ class Slash
                 if Slash.dirExists  Slash.join p, '.git'         then return Slash.resolve p
                 if Slash.fileExists Slash.join p, 'package.noon' then return Slash.resolve p
                 if Slash.fileExists Slash.join p, 'package.json' then return Slash.resolve p
-                p = Slash.dirname p
+                p = Slash.dir p
         null
 
+    @git: (p) ->
+
+        if p?.length?
+            
+            while p.length and @removeDrive(p) not in ['.', '/', '']
+                
+                if Slash.dirExists Slash.join p, '.git' then return Slash.resolve p
+                p = Slash.dir p
+        null
+        
     # 00000000  000   000  000   0000000  000000000   0000000  
     # 000        000 000   000  000          000     000       
     # 0000000     00000    000  0000000      000     0000000   
