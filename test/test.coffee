@@ -262,16 +262,16 @@ describe 'kxk', ->
             
         it 'exists async', (done) ->
             
-            slash.exists __filename, (f) ->
-                expect slash.samePath f, __filename
-                .to.eql true
+            slash.exists __filename, (stat) ->
+                expect stat
+                .to.exist
                 done()
     
         it 'exist async not', (done) ->
             
-            slash.exists __filename + 'foo', (f) ->
-                expect f
-                .to.eql undefined
+            slash.exists __filename + 'foo', (stat) ->
+                expect stat
+                .to.not.exist
                 done()
                 
         it 'fileExists', ->

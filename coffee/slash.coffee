@@ -241,6 +241,12 @@ class Slash
                 p = Slash.dirname p
         null
 
+    # 00000000  000   000  000   0000000  000000000   0000000  
+    # 000        000 000   000  000          000     000       
+    # 0000000     00000    000  0000000      000     0000000   
+    # 000        000 000   000       000     000          000  
+    # 00000000  000   000  000  0000000      000     0000000   
+    
     @exists: (p, cb) ->
         
         if _.isFunction cb
@@ -252,10 +258,15 @@ class Slash
                 if valid err
                     cb() 
                 else
-                    cb p
+                    fs.stat p, (err, stat) ->
+                        if valid err
+                            cb()
+                        else
+                            cb stat
             return
         
         return false if not p?
+        
         try
             p = Slash.resolve Slash.removeLinePos p
             if stat = fs.statSync(p)
@@ -267,25 +278,40 @@ class Slash
             console.log err
         null     
         
-    @isWritable: (p) ->
+    @fileExists: (p, cb) ->
         
-        try
-            fs.accessSync Slash.resolve(p), fs.R_OK | fs.W_OK
-            return true
-        catch
-            return false
+        if _.isFunction cb
+            Slash.exists p, (stat) ->
+                if stat?.isFile() then cb stat
+                else cb()
+        else
+            if stat = Slash.exists p
+                return stat if stat.isFile()
 
-    @fileExists: (p) ->
-        
-        if stat = Slash.exists p
-            return stat if stat.isFile()
+    @dirExists: (p, cb) ->
 
-    @dirExists: (p) ->
-
-        if stat = Slash.exists p
-            return stat if stat.isDirectory()
+        if _.isFunction cb
+            Slash.exists p, (stat) ->
+                if stat?.isDirectory() then cb stat
+                else cb()
+        else
+            if stat = Slash.exists p
+                return stat if stat.isDirectory()
             
-    @isDir: (p) -> @dirExists p
-    @isFile: (p) -> @fileExists p
+    @isDir:  (p, cb) -> @dirExists p, cb
+    @isFile: (p, cb) -> @fileExists p, cb
+    
+    @isWritable: (p, cb) ->
+        
+        if _.isFunction cb
+            fs.access Slash.resolve(p), fs.R_OK | fs.W_OK, (err) ->
+                if valid err then cb false
+                else cb true
+        else
+            try
+                fs.accessSync Slash.resolve(p), fs.R_OK | fs.W_OK
+                return true
+            catch
+                return false
 
 module.exports = Slash
