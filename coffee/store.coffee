@@ -96,8 +96,8 @@ class Store extends Emitter
     set: (key, value) ->
 
         return if not key?.split?
-        # return if _.isEqual @get(key), value
-        return if @get(key) == value
+        return if _.isEqual @get(key), value
+        # return if @get(key) == value
         sds.set @data, @keypath(key), value
         if @app
             clearTimeout @timer
