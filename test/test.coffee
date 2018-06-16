@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ fileList, splitFileLine, slash, pos, empty, valid, clamp, log, _ } = require '../' # '../coffee/kxk'
+{ fileList, splitFileLine, slash, pos, empty, valid, clamp, filter, log, _ } = require '../' # '../coffee/kxk'
 
 assert = require 'assert'
 chai   = require 'chai'
@@ -545,3 +545,30 @@ describe 'kxk', ->
             expect valid Infinity
             .to.eql true
         
+    describe 'filter', ->
+        
+        it 'array', ->
+            
+            expect filter [1,2,3,4], (v,i) -> i % 2
+            .to.eql [2,4]
+
+            expect filter [1,2,3,4], (v,i) -> v % 2
+            .to.eql [1,3]
+            
+        it 'object', ->
+            
+            expect filter {a:1,b:2,c:3,d:4}, (v,k) -> v % 2
+            .to.eql {a:1,c:3}
+
+            expect filter {a:1,b:2,c:3,d:4}, (v,k) -> k in ['b', 'c']
+            .to.eql {b:2,c:3}
+            
+        it 'value', ->            
+            
+            expect filter 1, -> 
+            .to.eql 1
+            
+            expect filter "hello", -> 
+            .to.eql "hello"
+                
+                

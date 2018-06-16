@@ -71,7 +71,6 @@ class App
             electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
              
-        
         if args.watch
             log 'App.onReady startWatcher'
             @startWatcher()
