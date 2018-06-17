@@ -39,7 +39,7 @@ slog = (s) ->
     try # fancy log with source-mapped files and line numbers
         f = stack.capture()[slog.depth]
         if chain = sorcery.loadSync(f.getFileName())
-            info   = chain.trace(f.getLineNumber(), 0)
+            info = chain.trace(f.getLineNumber(), 0)
             if not slash.samePath f.getScriptNameOrSourceURL(), f.getFileName()
                 if slash.isAbsolute f.getScriptNameOrSourceURL()
                     source = slash.path f.getScriptNameOrSourceURL()
@@ -47,12 +47,6 @@ slog = (s) ->
                     source = slash.resolve slash.join slash.dir(f.getFileName()), f.getScriptNameOrSourceURL()
             else
                 source = f.getFileName()
-            # else
-                # sourceText = fs.readFileSync f.getFileName(), 'utf8'
-                # # balancer is broken. below is not a comment. should handle escaped hash signs. 
-                # match  = sourceText.match /\/\/\# sourceURL=(.+)$/
-                # if match?[1]?
-                    # source = match?[1]
             info.source = slash.tilde source
         else
             info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
@@ -79,13 +73,14 @@ log = ->
 slog.udp     = true
 slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'
-slog.icon    = if process.type == 'renderer' then '●' else '◆'
+slog.icon    = if process.type == 'renderer' then '●' else '◼'
 slog.depth   = 2
 slog.filesep = ' > ' #' ⦿ '
 slog.methsep = ' >> ' #' ▸ '
 slog.filepad = 30
 slog.methpad = 15
 log.slog     = slog
+log.ulog     = udpLog
 log.stop     = udpStop
 
 try
