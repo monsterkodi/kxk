@@ -171,7 +171,7 @@ class App
             
     showWindow: =>
         
-        opt.onWillShowWin?()
+        @opt.onWillShowWin?()
         
         if @win?
             @win.show()
