@@ -170,7 +170,9 @@ class App
     toggleWindowFromTray: => @showWindow()
             
     showWindow: =>
-         
+        
+        opt.onWillShowWin?()
+        
         if @win?
             @win.show()
         else
