@@ -20,11 +20,11 @@ regex2     = /^\s+at\s+(.*):(\d+):(\d+)/
 # 000      000   000  000   000  000       000   000  000   000  
 # 0000000   0000000    0000000   00000000  000   000  000   000  
 
-logErr = (err) ->
+logErr = (err, sep='💥') ->
     
     console.log errorStack err
     trace = errorTrace err
-    log.ulog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:'💥'
+    log.ulog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
     for line in trace.lines
         sep = if slash.isAbsolute line.file then '🐞' else '🔼'
         if sep == '🐞'
