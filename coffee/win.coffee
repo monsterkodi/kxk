@@ -12,6 +12,17 @@ class Win
     
     constructor: (@opt) ->
         
+        window.onerror = (msg, source, line, col, err) ->
+            
+            srcmap = require './srcmap'
+            console.log srcmap.errorStack err
+            trace = srcmap.errorTrace err
+            log.ulog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:'💥'
+            for line in trace.lines
+                sep = if slash.isAbsolute line.file then '🐞' else '🔼'
+                log.ulog str:'       '+line.func, source:line.file, line:line.line, sep:sep
+            true
+        
         prefs.init()
         
         if @opt.icon

@@ -11,6 +11,17 @@
 class App
     
     constructor: (@opt) ->
+
+        process.on 'uncaughtException', (err) ->
+            srcmap = require './srcmap'    
+            console.log srcmap.errorStack err
+            trace = srcmap.errorTrace err
+            log.ulog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:'🔻'
+            for line in trace.lines
+                if slash.isAbsolute line.file
+                    log.ulog str:'       '+line.func, source:line.file, line:line.line, sep:'🐞'
+                else
+                    log.ulog str:'       '+line.func, source:line.file, line:line.line, sep:'🔼'
         
         @watcher = null
             
