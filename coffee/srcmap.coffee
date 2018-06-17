@@ -145,10 +145,10 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
                     log 'no pos.line', pos
             else
                 log 'no consumer originalPositionFor'
-        else
-            log 'no mapData', jsFile
-    else
-        log 'no jsFile', jsFile 
+        # else
+            # log 'no mapData', jsFile
+    # else
+        # log 'no jsFile', jsFile 
         
     [coffeeFile, coffeeLine, coffeeCol]
 
@@ -180,8 +180,8 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
                 log 'empty poss'
         else
             log 'no allGeneratedPositionsFor in', consumer
-    else
-        log 'no mapData'
+    # else
+        # log 'no mapData'
         
     [jsFile, null, null]
         
