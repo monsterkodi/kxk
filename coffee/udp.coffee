@@ -20,6 +20,9 @@ class udp
         try
             @port = dgram.createSocket 'udp4', recvBufferSize:2000000, sendBufferSize:2000000
             
+            log @port.getSendBufferSize()
+            log @port.getRecvBufferSize()
+            
             if @opt.onMsg
                 
                 log 'receiver', @opt
@@ -72,6 +75,9 @@ class udp
         buf = new Buffer msg
         
         log "sending #{buf.length} bytes"
+        
+        if buf.length > @port.getSendBufferSize()
+            log "msg too large! #{buf.length} #{@port.getSendBufferSize()}"
         
         @port.send buf, 0, buf.length, @opt.port, '127.0.0.1', ->
             log 'sent', msg
