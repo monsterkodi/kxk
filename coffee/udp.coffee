@@ -18,7 +18,7 @@ class udp
         log = if @opt.debug then console.log else ->
             
         try
-            @port = dgram.createSocket 'udp4'
+            @port = dgram.createSocket 'udp4', recvBufferSize:2000000, sendBufferSize:2000000
             
             if @opt.onMsg
                 
@@ -68,7 +68,11 @@ class udp
             msg = JSON.stringify args
         else
             msg = JSON.stringify args[0]
+            
         buf = new Buffer msg
+        
+        log "sending #{buf.length} bytes"
+        
         @port.send buf, 0, buf.length, @opt.port, '127.0.0.1', ->
             log 'sent', msg
             
