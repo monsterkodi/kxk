@@ -18,11 +18,8 @@ class udp
         log = if @opt.debug then console.log else ->
             
         try
-            @port = dgram.createSocket 'udp4', recvBufferSize:2000000, sendBufferSize:2000000
-            
-            log @port.getSendBufferSize()
-            log @port.getRecvBufferSize()
-            
+            @port = dgram.createSocket 'udp4'
+                        
             if @opt.onMsg
                 
                 log 'receiver', @opt
@@ -31,10 +28,15 @@ class udp
                     try
                         log 'listening', @port.address().address, @port.address().port
                         @port.setBroadcast true
+                        @port.setRecvBufferSize 2000000
+                        log 'req size',  @port.getRecvBufferSize()
+                        
                     catch err
                         log "[ERROR] can't listen:", err
                         
                 @port.on 'message', (message, rinfo) =>
+                    @port.setSendBufferSize 2000000
+                    log 'send size', @port.getSendBufferSize()
                     messageString = message.toString()
                     log 'messageString', messageString
                     try
