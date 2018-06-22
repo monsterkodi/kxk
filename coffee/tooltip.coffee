@@ -39,6 +39,7 @@ class Tooltip
 
         return if not @elem?
         return if @div?
+        
         clearTimeout @timer
         @timer = setTimeout @popup, @opt.delay
         

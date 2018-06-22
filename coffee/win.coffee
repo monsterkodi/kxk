@@ -62,9 +62,12 @@ class Win
         absPos = pos event
         if not absPos?
             absPos = pos $("#main").getBoundingClientRect().left, $("#main").getBoundingClientRect().top
-           
+        
         items = _.clone window.titlebar.menuTemplate()
-        items.unshift text:'Clear', accel:'ctrl+k'
+        if _.isFunction @opt.context
+            items = @opt.context items
+        else
+            items.unshift text:'Clear', accel:'ctrl+k'
             
         popup.menu
             items:  items
