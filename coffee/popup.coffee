@@ -64,7 +64,7 @@ class Popup
     
     close: (opt={})=>
         
-        if empty @parent
+        if empty(@parent) or @parentMenu()?.elem?.classList.contains 'menu'
             post.emit 'popup', 'closed'
             @onClose?()
         
