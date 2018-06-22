@@ -53,6 +53,8 @@ class Popup
         
         if opt.selectFirstItem != false
             @select @items.firstChild, selectFirstItem:false
+            
+        post.emit 'popup', 'opened'
         
     #  0000000  000       0000000    0000000  00000000  
     # 000       000      000   000  000       000       
@@ -63,6 +65,7 @@ class Popup
     close: (opt={})=>
         
         if empty @parent
+            post.emit 'popup', 'closed'
             @onClose?()
         
         @popup?.close focus:false
@@ -199,7 +202,6 @@ class Popup
             item.item.cb item.item.arg ? item.item.text
         else if not item.item.menu
             @close all:true
-            # log 'popup.activate', item.item
             post.emit 'menuAction', item.item.action ? item.item.text, item.item
 
     toggle: (item) ->
