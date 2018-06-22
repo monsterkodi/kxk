@@ -6,15 +6,16 @@
 000         0000000   000         0000000   000      
 ###
 
-{ empty, stopEvent, keyinfo, post, elem, log } = require './kxk'
+{ post, empty, stopEvent, keyinfo, elem, log } = require './kxk'
 
 class Popup
     
     constructor: (opt) ->
         
         @focusElem = document.activeElement
-        @items  = elem class: 'popup', tabindex: 3
-        @parent = opt.parent
+        @items   = elem class: 'popup', tabindex: 3
+        @parent  = opt.parent
+        @onClose = opt.onClose
         
         for item in opt.items
             continue if item.hide
@@ -60,6 +61,9 @@ class Popup
     #  0000000  0000000   0000000   0000000   00000000  
     
     close: (opt={})=>
+        
+        if empty @parent
+            @onClose?()
         
         @popup?.close focus:false
         delete @popup

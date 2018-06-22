@@ -70,9 +70,10 @@ class Win
             items.unshift text:'Clear', accel:'ctrl+k'
             
         popup.menu
-            items:  items
-            x:      absPos.x
-            y:      absPos.y
+            items:   items
+            x:       absPos.x
+            y:       absPos.y
+            onClose: -> post.emit 'contextClosed'
     
     # 000   000  00000000  000   000
     # 000  000   000        000 000
