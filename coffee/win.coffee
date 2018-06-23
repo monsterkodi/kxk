@@ -24,10 +24,12 @@ class Win
             log.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
         
         electron = require 'electron'
+        
         @win = window.win = electron.remote.getCurrentWindow()
         @id  = window.winID = @win.id
 
         @userData = electron.remote.app.getPath 'userData'
+        log '@userData', @userData
         
         post.on 'menuAction', @onMenuAction
         
