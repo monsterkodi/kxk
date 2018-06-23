@@ -19,7 +19,8 @@ stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 fileLog = (info) ->
     
     try
-        stream = fs.createWriteStream slog.logFile, flags:'a'
+        slash = require './slash'
+        stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a'
         stream.write JSON.stringify info
         stream.end()
     catch err
