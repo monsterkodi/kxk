@@ -27,6 +27,8 @@ class Win
         @win = window.win = electron.remote.getCurrentWindow()
         @id  = window.winID = @win.id
 
+        @userData = electron.remote.app.getPath 'userData'
+        
         post.on 'menuAction', @onMenuAction
         
         window.titlebar = new title @opt
