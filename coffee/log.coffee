@@ -27,6 +27,9 @@ fileLog = (info) ->
     try
         slash = require './slash'
         stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
+        info.id   = slog.id
+        info.icon = slog.icon
+        info.type = slog.type
         stream.write JSON.stringify info
         stream.write '\n'
         stream.end()
