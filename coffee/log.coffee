@@ -26,7 +26,6 @@ fileLog = (info) ->
     
     try
         slash = require './slash'
-        console.log "fileLog -- ", slash.resolve(slog.logFile)
         stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
         stream.write JSON.stringify info
         stream.write '\n'
@@ -140,7 +139,7 @@ try
         app = electron.app
     slog.id = app.getName()
     slash = require './slash'
-    slog.logFile = slash.join app.getPath('appData'), 'log.txt'
+    slog.logFile = slash.join app.getPath('appData'), 'klog', 'log.txt'
 catch err
     try
         slash = require './slash'
