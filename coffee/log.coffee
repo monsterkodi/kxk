@@ -16,11 +16,17 @@ sorcery = require 'sorcery'
 
 stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
+# 00000000  000  000      00000000  
+# 000       000  000      000       
+# 000000    000  000      0000000   
+# 000       000  000      000       
+# 000       000  0000000  00000000  
+
 fileLog = (info) ->
     
     try
         slash = require './slash'
-        stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a'
+        stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
         stream.write JSON.stringify info
         stream.end()
     catch err
