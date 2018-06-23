@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.214.0",
+  "version": "0.215.0",
   "description": "kodi's tool kit",
   "main": "js/kxk.js",
   "repository": {

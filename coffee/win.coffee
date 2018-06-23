@@ -29,7 +29,6 @@ class Win
         @id  = window.winID = @win.id
 
         @userData = electron.remote.app.getPath 'userData'
-        log '@userData', @userData
         
         post.on 'menuAction', @onMenuAction
         

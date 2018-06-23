@@ -16,6 +16,21 @@ sorcery = require 'sorcery'
 
 stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
+fileLog = (info) ->
+    
+    try
+        stream = fs.createWriteStream slog.logFile, flags:'a'
+        stream.write JSON.stringify info
+        stream.end()
+    catch err
+        console.log "fileLog error -- ", err.stack
+
+# 000   000  0000000    00000000   
+# 000   000  000   000  000   000  
+# 000   000  000   000  00000000   
+# 000   000  000   000  000        
+#  0000000   0000000    000        
+
 udpSend = null
 udpLog = (info) ->
     if not udpSend
@@ -31,6 +46,12 @@ udpStop = ->
         udpSend.close()
         udpSend  = null
         slog.udp = false
+
+#  0000000  000       0000000    0000000   
+# 000       000      000   000  000        
+# 0000000   000      000   000  000  0000  
+#      000  000      000   000  000   000  
+# 0000000   0000000   0000000    0000000   
 
 slog = (s) ->
     
@@ -58,9 +79,17 @@ slog = (s) ->
         post.emit 'slog', s, info
         if slog.udp
             udpLog info
+        if slog.file
+            fileLog info            
             
     catch err
         post.emit 'slog', "!#{slog.methsep}#{s} #{err}"
+
+# 000       0000000    0000000   
+# 000      000   000  000        
+# 000      000   000  000  0000  
+# 000      000   000  000   000  
+# 0000000   0000000    0000000   
 
 log = ->
     
@@ -70,7 +99,16 @@ log = ->
     console.log s
     slog s
 
-slog.udp     = true
+#  0000000   0000000   000   000  00000000  000   0000000     
+# 000       000   000  0000  000  000       000  000          
+# 000       000   000  000 0 000  000000    000  000  0000    
+# 000       000   000  000  0000  000       000  000   000    
+#  0000000   0000000   000   000  000       000   0000000     
+    
+slog.file    = true
+slog.logFile = '~/AppData/Roaming/klog/log.txt'
+slog.udp     = false
+
 slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'
 slog.icon    = if process.type == 'renderer' then '●' else '◼'
@@ -79,9 +117,11 @@ slog.filesep = ' > ' #' ⦿ '
 slog.methsep = ' >> ' #' ▸ '
 slog.filepad = 30
 slog.methpad = 15
+
 log.slog     = slog
 log.ulog     = udpLog
 log.stop     = udpStop
+log.flog     = fileLog
 
 try
     electron = require 'electron'
@@ -90,6 +130,7 @@ try
     else
         app = electron.app
     slog.id = app.getName()
+    slog.logFile = slash.join app.getPath('userData'), 'klog', 'log.txt'
 catch err
     try
         slash = require './slash'
