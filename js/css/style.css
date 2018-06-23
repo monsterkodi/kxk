@@ -114,6 +114,10 @@ body {
   font-size: 15px;
   font-family: Bahnschrift Light, Ebrima, Varela Round, Arial Rounded MT Bold, Helvetica, Arial;
 }
+.popup.titlemenu {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
 .popupItem {
   padding: 2px;
   padding-left: 12px;

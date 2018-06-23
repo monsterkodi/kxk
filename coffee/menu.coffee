@@ -6,7 +6,7 @@
 000   000  00000000  000   000   0000000   
 ###
 
-{ stopEvent, keyinfo, popup, post, elem, log } = require './kxk'
+{ post, stopEvent, keyinfo, popup, elem, log } = require './kxk'
 
 class Menu
     
@@ -127,6 +127,7 @@ class Menu
             opt.parent = @
             opt.x = br.left
             opt.y = pr.top+pr.height
+            opt.class = 'titlemenu'
             @popup = popup.menu opt
             if opt.selectFirstItem == false
                 @elem.focus()

@@ -6,7 +6,7 @@
 00     00  000  000   000  
 ###
 
-{ keyinfo, title, scheme, stopEvent, prefs, slash, post, elem, popup, pos, str, log, $, _ } = require './kxk'
+{ post, keyinfo, title, scheme, stopEvent, prefs, slash, elem, popup, pos, str, log, $, _ } = require './kxk'
 
 class Win
     
@@ -38,6 +38,22 @@ class Win
         if @opt.scheme != false
             scheme.set prefs.get 'scheme', 'dark'
 
+    # 0000000   0000000  00000000   00000000  00000000  000   000   0000000  000   000   0000000   000000000
+    #000       000       000   000  000       000       0000  000  000       000   000  000   000     000
+    #0000000   000       0000000    0000000   0000000   000 0 000  0000000   000000000  000   000     000
+    #     000  000       000   000  000       000       000  0000       000  000   000  000   000     000
+    #0000000    0000000  000   000  00000000  00000000  000   000  0000000   000   000   0000000      000
+    
+    screenshot: ->
+    
+        @win.capturePage (img) =>
+            file = slash.resolve "~/Desktop/#{@opt.pkg.name}-screenshot.png"
+            fs.writeFile file, img.toPNG(), (err) ->
+                if valid err
+                    log 'saving screenshot failed', err
+                else
+                    log "screenshot saved to #{file}"
+            
     # 00     00  00000000  000   000  000   000   0000000    0000000  000000000  000   0000000   000   000  
     # 000   000  000       0000  000  000   000  000   000  000          000     000  000   000  0000  000  
     # 000000000  0000000   000 0 000  000   000  000000000  000          000     000  000   000  000 0 000  
@@ -47,9 +63,10 @@ class Win
     onMenuAction: (action, args) =>
         
         switch action
-            when 'About' then post.toMain 'showAbout'
-            when 'Save'  then post.toMain 'saveBuffer'
-            when 'Quit'  then post.toMain 'quitApp'
+            when 'Screenshot' then @screenshot()
+            when 'About'      then post.toMain 'showAbout'
+            when 'Save'       then post.toMain 'saveBuffer'
+            when 'Quit'       then post.toMain 'quitApp'
 
     #  0000000   0000000   000   000  000000000  00000000  000   000  000000000  
     # 000       000   000  0000  000     000     000        000 000      000     

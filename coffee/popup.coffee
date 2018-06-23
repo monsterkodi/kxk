@@ -17,6 +17,8 @@ class Popup
         @parent  = opt.parent
         @onClose = opt.onClose
         
+        @items.classList.add opt.class if opt.class
+        
         for item in opt.items
             continue if item.hide
             if empty(item.text) and empty(item.html)
