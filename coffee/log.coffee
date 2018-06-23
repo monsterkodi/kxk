@@ -137,6 +137,7 @@ try
     else
         app = electron.app
     slog.id = app.getName()
+    slash = require './slash'
     slog.logFile = slash.join app.getPath('userData'), 'klog', 'log.txt'
 catch err
     try
