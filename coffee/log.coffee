@@ -36,28 +36,6 @@ fileLog = (info) ->
     catch err
         console.log "fileLog error -- ", err.stack
 
-# 000   000  0000000    00000000   
-# 000   000  000   000  000   000  
-# 000   000  000   000  00000000   
-# 000   000  000   000  000        
-#  0000000   0000000    000        
-
-udpSend = null
-udpLog = (info) ->
-    if not udpSend
-        udp = require './udp'
-        udpSend = new udp debug:slog.debug
-    info.id   = slog.id
-    info.icon = slog.icon
-    info.type = slog.type
-    udpSend.send info
-    
-udpStop = ->
-    if udpSend
-        udpSend.close()
-        udpSend  = null
-        slog.udp = false
-
 #  0000000  000       0000000    0000000   
 # 000       000      000   000  000        
 # 0000000   000      000   000  000  0000  
@@ -88,8 +66,6 @@ slog = (s) ->
         info.str = s
         s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
         post.emit 'slog', s, info
-        if slog.udp
-            udpLog info
         if slog.file
             fileLog info            
             
@@ -118,7 +94,6 @@ log = ->
     
 slog.file    = true
 slog.logFile = '~/AppData/Roaming/klog/log.txt'
-slog.udp     = false
 
 slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'
@@ -130,8 +105,6 @@ slog.filepad = 30
 slog.methpad = 15
 
 log.slog     = slog
-log.ulog     = udpLog
-log.stop     = udpStop
 log.flog     = fileLog
 
 try

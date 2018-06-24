@@ -13,8 +13,6 @@ chai.should()
 
 describe 'kxk', ->
     
-    after -> log.stop()
-    
     describe 'slash', ->
 
         it 'dir', ->
