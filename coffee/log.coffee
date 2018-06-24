@@ -92,7 +92,10 @@ log = ->
 #  0000000   0000000   000   000  000       000   0000000     
     
 slog.file    = true
-slog.logFile = '~/AppData/Roaming/klog/log.txt'
+if process.platform == 'win32'
+    slog.logFile = '~/AppData/Roaming/klog/log.txt'
+else
+    slog.logFile = '~/Library/Application Support/klog/log.txt'
 
 slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'
