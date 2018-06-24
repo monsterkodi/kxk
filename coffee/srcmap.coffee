@@ -26,7 +26,7 @@ logErr = (err, sep='💥') ->
     trace = errorTrace err
     log.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
     for line in trace.lines
-        sep = if slash.isAbsolute line.file then '🐞' else '🔼'
+        sep = if slash.isAbsolute(line.file) or line.file[0]=='~' then '🐞' else '🔼'
         if sep == '🐞' or line.file[0] == '.'
             log.flog str:'       '+line.func, source:line.file, line:line.line, sep:sep
 
@@ -126,7 +126,7 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
     jsLine = parseInt jsLine
     jsCol  = parseInt jsCol
     
-    coffeeFile = slash.path jsFile
+    coffeeFile = slash.tilde jsFile
     coffeeLine = jsLine
     coffeeCol  = jsCol
         
