@@ -138,8 +138,8 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
             if consumer.originalPositionFor
                 pos = consumer.originalPositionFor line:jsLine, column:jsCol, bias:sourceMap.SourceMapConsumer.LEAST_UPPER_BOUND
                 if valid(pos.line) and valid(pos.column)
-                    coffeeFile = mapData.sources[0]
-                    coffeeLine = slash.tilde pos.line 
+                    coffeeFile = slash.tilde mapData.sources[0]
+                    coffeeLine = pos.line 
                     coffeeCol  = pos.column
                 else
                     log 'no pos.line', pos
