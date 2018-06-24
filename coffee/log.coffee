@@ -30,8 +30,7 @@ fileLog = (info) ->
         info.id   = slog.id
         info.icon = slog.icon
         info.type = slog.type
-        stream.write JSON.stringify info
-        stream.write '\n'
+        stream.write JSON.stringify(info)+'\n'
         stream.end()
     catch err
         console.log "fileLog error -- ", err.stack
