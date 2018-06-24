@@ -139,16 +139,12 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
                 pos = consumer.originalPositionFor line:jsLine, column:jsCol, bias:sourceMap.SourceMapConsumer.LEAST_UPPER_BOUND
                 if valid(pos.line) and valid(pos.column)
                     coffeeFile = mapData.sources[0]
-                    coffeeLine = pos.line 
+                    coffeeLine = slash.tilde pos.line 
                     coffeeCol  = pos.column
                 else
                     log 'no pos.line', pos
             else
                 log 'no consumer originalPositionFor'
-        # else
-            # log 'no mapData', jsFile
-    # else
-        # log 'no jsFile', jsFile 
         
     [coffeeFile, coffeeLine, coffeeCol]
 
@@ -180,8 +176,6 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
                 log 'empty poss'
         else
             log 'no allGeneratedPositionsFor in', consumer
-    # else
-        # log 'no mapData'
         
     [jsFile, null, null]
         

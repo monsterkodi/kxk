@@ -28,15 +28,12 @@ class udp
                     try
                         log 'listening', @port.address().address, @port.address().port
                         @port.setBroadcast true
-                        # @port.setRecvBufferSize 1000000
-                        # log 'req size', @port.getRecvBufferSize()
                         
                     catch err
                         log "[ERROR] can't listen:", err
                         
                 @port.on 'message', (message, rinfo) =>
-                    # @port.setSendBufferSize 1000000
-                    # log 'send size', @port.getSendBufferSize()
+
                     messageString = message.toString()
                     log 'messageString', messageString
                     try
@@ -78,8 +75,8 @@ class udp
         
         log "sending #{buf.length} bytes"
         
-        if buf.length > @port.getSendBufferSize()
-            log "msg too large! #{buf.length} #{@port.getSendBufferSize()}"
+        # if buf.length > @port.getSendBufferSize()
+            # log "msg too large! #{buf.length} #{@port.getSendBufferSize()}"
         
         @port.send buf, 0, buf.length, @opt.port, '127.0.0.1', ->
             log 'sent', msg
