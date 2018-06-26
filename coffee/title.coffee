@@ -74,7 +74,17 @@ class Title
         if @opt.menu
             
             @initMenu @menuTemplate()
-         
+       
+    # 00000000   000   000   0000000  000   000  00000000  000      00000000  00     00  
+    # 000   000  000   000  000       000   000  000       000      000       000   000  
+    # 00000000   000   000  0000000   000000000  0000000   000      0000000   000000000  
+    # 000        000   000       000  000   000  000       000      000       000 0 000  
+    # 000         0000000   0000000   000   000  00000000  0000000  00000000  000   000  
+    
+    pushElem: (elem) ->
+        
+        @elem.insertBefore elem, @minimize
+            
     showTitle: -> @title.style.display = 'initial'
     hideTitle: -> @title.style.display = 'none'
 
