@@ -33,13 +33,16 @@ body {
 #titlebar .winbutton:active.gray {
   background-color: #333;
 }
+#titlebar .winbutton.gray,
 #titlebar .winbutton svg {
   stroke-width: 1px;
   stroke: #666;
 }
+#titlebar .winbutton.gray:active,
 #titlebar .winbutton:active svg {
   stroke: #fff;
 }
+#titlebar .winbutton.gray:hover,
 #titlebar .winbutton:hover svg {
   stroke: #fff;
 }
