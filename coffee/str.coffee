@@ -9,6 +9,8 @@
 noon   = require 'noon'
 entity = require 'html-entities'
 
+xmlEntities = new entity.XmlEntities()
+
 str = (o) ->
     return 'null' if not o?
     if typeof(o) == 'object'
@@ -29,7 +31,7 @@ str = (o) ->
 
 str.encode = (s) ->
     if s
-        r = entity.XmlEntities.encode s
+        r = xmlEntities.encode s
         r = r.replace /\s/g, '&nbsp;'
     else
         ''
