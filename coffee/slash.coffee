@@ -217,7 +217,7 @@ class Slash
             return '.'
         Slash.path path.relative Slash.resolve(to), rel
         
-    @fileUrl: (p) -> "file://#{Slash.encode p}"
+    @fileUrl: (p) -> "file:///#{Slash.encode p}"
 
     @samePath: (a, b) -> Slash.resolve(a) == Slash.resolve(b)
 
