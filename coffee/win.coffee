@@ -28,7 +28,7 @@ class Win
         @win = window.win = electron.remote.getCurrentWindow()
         @id  = window.winID = @win.id
         
-        @modifiers = []
+        @modifiers = ''
 
         @userData = electron.remote.app.getPath 'userData'
         
@@ -110,19 +110,15 @@ class Win
         
         info = keyinfo.forEvent event
     
+        @modifiers = info.mod
+        
         if info.combo
             info.event = event
-            if info.combo in ['ctrl', 'alt', 'meta']
-                _.pull @modifiers, info.combo
-                @modifiers.push info.combo
             post.emit 'combo', info.combo, info
     
     onKeyUp: (event) =>
         
         info = keyinfo.forEvent event
-        console.log 'up', info.combo
-        
-        if info.combo in ['ctrl', 'alt', 'meta']   
-            _.pull @modifiers, info.combo
+        @modifiers = info.mod 
         
 module.exports = Win
