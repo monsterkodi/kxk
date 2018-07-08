@@ -113,14 +113,16 @@ class Win
         if info.combo
             info.event = event
             if info.combo in ['ctrl', 'alt', 'meta']
-                _.pullAll @modifiers, [info.combo]
+                _.pull @modifiers, info.combo
                 @modifiers.push info.combo
             post.emit 'combo', info.combo, info
     
     onKeyUp: (event) =>
         
         info = keyinfo.forEvent event
+        console.log 'up', info.combo
+        
         if info.combo in ['ctrl', 'alt', 'meta']   
-            _.pullAll @modifiers, [info.combo]
+            _.pull @modifiers, info.combo
         
 module.exports = Win
