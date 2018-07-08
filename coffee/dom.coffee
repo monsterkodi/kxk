@@ -21,6 +21,8 @@ module.exports =
         else
             idOrQueryOrElement
 
+    # for elem in document.querySelectorAll '.class'
+            
     childIndex: (e) -> Array.prototype.indexOf.call e.parentNode.childNodes, e 
 
     sw: () -> document.body.clientWidth

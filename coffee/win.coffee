@@ -27,6 +27,8 @@ class Win
         
         @win = window.win = electron.remote.getCurrentWindow()
         @id  = window.winID = @win.id
+        
+        @modifiers = []
 
         @userData = electron.remote.app.getPath 'userData'
         
@@ -37,6 +39,7 @@ class Win
         document.body.addEventListener 'contextmenu', @onContextMenu
         
         document.addEventListener 'keydown', @onKeyDown
+        document.addEventListener 'keyup',   @onKeyUp
         
         if @opt.scheme != false
             scheme.set prefs.get 'scheme', 'dark'
@@ -109,6 +112,15 @@ class Win
     
         if info.combo
             info.event = event
+            if info.combo in ['ctrl', 'alt', 'meta']
+                _.pullAll @modifiers, [info.combo]
+                @modifiers.push info.combo
             post.emit 'combo', info.combo, info
     
+    onKeyUp: (event) =>
+        
+        info = keyinfo.forEvent event
+        if info.combo in ['ctrl', 'alt', 'meta']   
+            _.pullAll @modifiers, [info.combo]
+        
 module.exports = Win
