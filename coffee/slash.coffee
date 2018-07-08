@@ -330,4 +330,25 @@ class Slash
             catch
                 return false
 
+    @userData: ->
+       
+        try
+            electron = require 'electron'
+            if process.type == 'renderer'
+                return electron.remote.app.getPath 'userData'
+            else
+                return electron.app.getPath 'userData'
+        catch err
+            
+            try
+                if pkgDir = Slash.pkg __dirname
+                    pkg = require slash.join pkgDir, 'package.json'
+                    { sds } = require './kxk'
+                    name = sds.find.value pkg, 'name'
+                    return @Slash.resolve "~/AppData/Roaming/#{name}"
+            catch err
+                error err
+                
+        return @Slash.resolve "~/AppData/Roaming/"
+                
 module.exports = Slash
