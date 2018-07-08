@@ -45,7 +45,7 @@ class Store extends Emitter
             Store.addStore @
             
             @timer   = null
-            @file    = opt.file ? (@app? and slash.join(@app.getPath('userData'), "#{@name}.noon"))
+            @file    = opt.file ? slash.join slash.userData(), "#{@name}.noon"
             @timeout = opt.timeout
                 
             post.on 'store', (name, action, args...) =>
@@ -60,8 +60,7 @@ class Store extends Emitter
                 
         else
             
-            app = electron.remote.app
-            @file = slash.join app.getPath('userData'), "#{@name}.noon"
+            @file = slash.join slash.userData(), "#{@name}.noon"
             
             post.on 'store', (name, action, args...) =>
                 return if @name != name
@@ -97,7 +96,7 @@ class Store extends Emitter
 
         return if not key?.split?
         return if _.isEqual @get(key), value
-        # return if @get(key) == value
+
         sds.set @data, @keypath(key), value
         if @app
             clearTimeout @timer

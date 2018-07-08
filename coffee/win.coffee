@@ -30,7 +30,7 @@ class Win
         
         @modifiers = ''
 
-        @userData = electron.remote.app.getPath 'userData'
+        @userData = slash.userData()
         
         post.on 'menuAction', @onMenuAction
         

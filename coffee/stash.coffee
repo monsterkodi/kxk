@@ -22,7 +22,7 @@ class Stash
 
         @sep = opt?.separator ? ':'
         @timer   = null
-        @file    = slash.path opt?.file ? "#{app.getPath('userData')}/#{@name}.noon"
+        @file    = slash.path opt?.file ? "#{slash.userData()}/#{@name}.noon"
         @timeout = opt?.timeout ? 4000
         @changes = []
         
