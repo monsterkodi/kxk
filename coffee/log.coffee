@@ -25,8 +25,8 @@ stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 fileLog = (info) ->
     
     try
-        slash = require './slash'
-        stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
+        slash     = require './slash'
+        stream    = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
         info.id   = slog.id
         info.icon = slog.icon
         info.type = slog.type
@@ -34,6 +34,7 @@ fileLog = (info) ->
         stream.end()
     catch err
         console.log "fileLog error -- ", err.stack
+        slog.file = false
 
 #  0000000  000       0000000    0000000   
 # 000       000      000   000  000        
