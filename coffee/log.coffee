@@ -91,7 +91,7 @@ log = ->
 # 000       000   000  000  0000  000       000  000   000    
 #  0000000   0000000   000   000  000       000   0000000     
     
-slog.file    = true
+slog.file = true
 if process.platform == 'win32'
     slog.logFile = '~/AppData/Roaming/klog/log.txt'
 else

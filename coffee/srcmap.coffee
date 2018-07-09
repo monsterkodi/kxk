@@ -24,11 +24,14 @@ logErr = (err, sep='💥') ->
     
     console.log errorStack err
     trace = errorTrace err
-    log.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
-    for line in trace.lines
-        sep = if slash.isAbsolute(line.file) or line.file[0]=='~' then '🐞' else '🔼'
-        if sep == '🐞' or line.file[0] == '.'
-            log.flog str:'       '+line.func, source:line.file, line:line.line, sep:sep
+    if valid trace.lines
+        log.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
+        for line in trace.lines
+            sep = if slash.isAbsolute(line.file) or line.file[0]=='~' then '🐞' else '🔼'
+            if sep == '🐞' or line.file[0] == '.'
+                log.flog str:'       '+line.func, source:line.file, line:line.line, sep:sep
+    else
+        log.flog str:trace.text, source:'', line:0, sep:sep
 
 # 00000000  000  000      00000000  00000000    0000000    0000000  
 # 000       000  000      000       000   000  000   000  000       
