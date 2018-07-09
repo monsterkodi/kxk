@@ -93,9 +93,9 @@ log = ->
     
 slog.file = true
 if process.platform == 'win32'
-    slog.logFile = '~/AppData/Roaming/klog/log.txt'
+    slog.logFile = '~/AppData/Roaming/klog.txt'
 else
-    slog.logFile = '~/Library/Application Support/klog/log.txt'
+    slog.logFile = '~/Library/Application Support/klog.txt'
 
 slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'
@@ -117,7 +117,7 @@ try
         app = electron.app
     slog.id = app.getName()
     slash = require './slash'
-    slog.logFile = slash.join app.getPath('appData'), 'klog', 'log.txt'
+    slog.logFile = slash.join app.getPath('appData'), 'klog.txt'
 catch err
     try
         slash = require './slash'
