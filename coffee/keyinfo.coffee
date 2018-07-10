@@ -61,7 +61,7 @@ class Keyinfo
         key = @keynameForEvent event
         if key not in @modifierNames
             return join @modifiersForEvent(event), key
-        return ""
+        return ''
 
     @keynameForEvent: (event) ->
         
@@ -70,7 +70,7 @@ class Keyinfo
             switch event.code
                 when 'NumpadEqual' then return 'numpad ='
                 when 'Numpad5'     then return 'numpad 5'
-        return "" if name in ["left command", "right command", "ctrl", "alt", "shift"]
+        return '' if name in ['left command', 'right command', 'ctrl', 'alt', 'shift']
         name
 
     @characterForEvent: (event) ->
@@ -78,7 +78,7 @@ class Keyinfo
         ansi = ansiKey event 
         return null if not ansi? 
         return null if ansi.length != 1 
-        return null if @modifiersForEvent(event) not in ["", "shift"]
+        return null if @modifiersForEvent(event) not in ['', 'shift']
         return null if /f\d{1,2}/.test @keynameForEvent event
         ansi
         
@@ -86,7 +86,6 @@ class Keyinfo
         
         combo = combo.toLowerCase()
         for i in [0...@iconKeyNames.length]
-            # combo = combo.replace @iconKeyNames[i], @iconKeyChars[i]
             combo = combo.replace new RegExp(@iconKeyNames[i], 'gi'), @iconKeyChars[i]
         combo = combo.replace /\+/g, ''
         combo.toUpperCase()
