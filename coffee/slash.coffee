@@ -8,7 +8,24 @@
 
 { fs, os, empty, valid, _ } = require './kxk'
 
-path = require 'path'
+path     = require 'path'
+isBinary = require 'isbinaryfile'
+
+textext = _.reduce require('textextensions'), (map, ext) ->
+    map[".#{ext}"] = true
+    map
+, {}
+
+textext['.crypt']  = true
+textext['.bashrc'] = true
+textext['.svg']    = true
+textext['.csv']    = true
+
+textbase = 
+    profile:1
+    license:1
+    '.gitignore':1
+    '.npmignore':1
 
 class Slash
 
@@ -345,10 +362,25 @@ class Slash
                     pkg = require slash.join pkgDir, 'package.json'
                     { sds } = require './kxk'
                     name = sds.find.value pkg, 'name'
-                    return @Slash.resolve "~/AppData/Roaming/#{name}"
+                    return Slash.resolve "~/AppData/Roaming/#{name}"
             catch err
                 error err
                 
-        return @Slash.resolve "~/AppData/Roaming/"
-                
+        return Slash.resolve "~/AppData/Roaming/"
+
+    ###
+    000   0000000  000000000  00000000  000   000  000000000
+    000  000          000     000        000 000      000   
+    000  0000000      000     0000000     00000       000   
+    000       000     000     000        000 000      000   
+    000  0000000      000     00000000  000   000     000   
+    ###
+    
+    @isText: (f) ->
+    
+        return true if Slash.extname(f) and textext[Slash.extname f]? 
+        return true if textbase[Slash.basename(f).toLowerCase()]
+        return false if not Slash.isFile f
+        return not isBinary.sync f
+    
 module.exports = Slash

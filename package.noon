@@ -1,5 +1,5 @@
 name            kxk
-version         0.240.0
+version         0.241.0
 description     kodi's tool kit
 main            js/kxk.js
 repository
@@ -27,6 +27,8 @@ dependencies
                 source-map      =0.7.3
                 stack-utils     ^1.0.1
                 walkdir         0.0.12
+                textextensions  ^2.2.0
+                isbinaryfile    ^3.0.2
                 write-file-atomic  ^2.3.0
 devDependencies
                 assert  ^1.4.1
