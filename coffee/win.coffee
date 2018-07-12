@@ -43,6 +43,9 @@ class Win
         
         if @opt.scheme != false
             scheme.set prefs.get 'scheme', 'dark'
+            
+        if _.isFunction @opt.onShow
+            @win.on 'ready-to-show', @opt.onShow
 
     # 0000000   0000000  00000000   00000000  00000000  000   000   0000000  000   000   0000000   000000000
     #000       000       000   000  000       000       0000  000  000       000   000  000   000     000
