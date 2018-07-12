@@ -47,6 +47,9 @@ class Win
         if _.isFunction @opt.onShow
             @win.on 'ready-to-show', @opt.onShow
 
+        if _.isFunction @opt.onLoad
+            @win.webContents.on 'did-finish-load', @opt.onLoad
+            
     # 0000000   0000000  00000000   00000000  00000000  000   000   0000000  000   000   0000000   000000000
     #000       000       000   000  000       000       0000  000  000       000   000  000   000     000
     #0000000   000       0000000    0000000   0000000   000 0 000  0000000   000000000  000   000     000
