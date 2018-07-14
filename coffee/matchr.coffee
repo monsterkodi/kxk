@@ -6,7 +6,7 @@
 000   000  000   000     000      0000000  000   000  000   000
 ###
 
-{ empty, last, str, _ } = require './kxk'
+{ empty, valid, last, str, _ } = require './kxk'
 
 #  0000000   0000000   000   000  00000000  000   0000000 
 # 000       000   000  0000  000  000       000  000      
@@ -57,7 +57,7 @@ ranges = (regexes, text, flags) ->
                 regexes = [[new RegExp(regexes, flags), 'found']]
         else
             regexes = [[regexes, 'found']]
-    else if not empty(regexes) and _.isArray regexes[0]
+    else if valid(regexes) and not _.isArray regexes[0]
         regexes = [regexes]
 
     rgs = []
