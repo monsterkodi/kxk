@@ -57,7 +57,7 @@ ranges = (regexes, text, flags) ->
                 regexes = [[new RegExp(regexes, flags), 'found']]
         else
             regexes = [[regexes, 'found']]
-    else if not _.isArray regexes[0]
+    else if not empty(regexes) and _.isArray regexes[0]
         regexes = [regexes]
 
     rgs = []
