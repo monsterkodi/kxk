@@ -246,6 +246,23 @@ describe 'kxk', ->
     
             expect slash.splitFilePos 'c:/some/path:123:15'
             .to.eql ['c:/some/path', [15, 122]]
+
+        it 'joinFilePos', ->
+    
+            expect slash.joinFilePos '/some/path', [0,0]
+            .to.eql '/some/path:1'
+
+            expect slash.joinFilePos '/some/path', [0,4]
+            .to.eql '/some/path:5'
+            
+            expect slash.joinFilePos '/some/path', [1,5]
+            .to.eql '/some/path:6:1'
+            
+            expect slash.joinFilePos '/some/path'
+            .to.eql '/some/path'
+
+            expect slash.joinFilePos '/some/path', []
+            .to.eql '/some/path'
             
         it 'exists', ->
     

@@ -127,7 +127,7 @@ class Slash
     
     @joinFilePos: (file, pos) -> # ['file.txt', [3, 0]] --> file.txt:1:3
         
-        if not pos? or not pos[0] and not pos[1]
+        if not pos? or not pos[0]?
             file
         else if pos[0]
             file + ":#{pos[1]+1}:#{pos[0]}"
