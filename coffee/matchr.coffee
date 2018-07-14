@@ -61,7 +61,7 @@ ranges = (regexes, text, flags) ->
         regexes = [regexes]
 
     rgs = []
-    return rgs if not text?
+    return rgs if not text? or empty regexes
     
     for r in [0...regexes.length]
         
