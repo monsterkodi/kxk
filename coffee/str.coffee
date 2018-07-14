@@ -29,10 +29,12 @@ str = (o) ->
 00000000  000   000   0000000   0000000   0000000    00000000
 ###
 
-str.encode = (s) ->
+str.encode = (s, spaces=true) ->
     if s
         r = xmlEntities.encode s
-        r = r.replace /\s/g, '&nbsp;'
+        if spaces
+            r = r.replace /\s/g, '&nbsp;'
+        r
     else
         ''
         
