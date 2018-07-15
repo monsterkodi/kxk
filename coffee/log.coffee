@@ -32,10 +32,12 @@ fileLog = (info) ->
         info.icon = slog.icon
         info.type = slog.type
         lines = info.str.split '\n'
-        if valid lines
+        if lines.length
             for line in lines
                 info.str = line
                 stream.write JSON.stringify(info)+'\n'
+        else
+            stream.write JSON.stringify(info)+'\n'
         stream.end()
     catch err
         console.log "fileLog error -- ", err.stack
