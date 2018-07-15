@@ -148,6 +148,7 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
                     log 'no pos.line', pos
             else
                 log 'no consumer originalPositionFor', mapData
+                log 'no consumer originalPositionFor', consumer
         
     [coffeeFile, coffeeLine, coffeeCol]
 

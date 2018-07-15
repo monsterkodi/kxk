@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.250.0",
+  "version": "0.251.0",
   "description": "kodi's tool kit",
   "main": "js/kxk.js",
   "repository": {
@@ -27,7 +27,7 @@
     "opener": "^1.4.3",
     "sds": "^1.14.1",
     "sorcery": "^0.10.0",
-    "source-map": "=0.7.3",
+    "source-map": "=0.6.1",
     "stack-utils": "^1.0.1",
     "walkdir": "0.0.12",
     "textextensions": "^2.2.0",
