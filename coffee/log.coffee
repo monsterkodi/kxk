@@ -36,6 +36,9 @@ fileLog = (info) ->
             for line in lines
                 info.str = line
                 stream.write JSON.stringify(info)+'\n'
+                info.id   = ''
+                info.file = ''
+                info.sep  = ''
         else
             stream.write JSON.stringify(info)+'\n'
         stream.end()
