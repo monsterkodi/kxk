@@ -11,6 +11,7 @@ str     = require './str'
 os      = require 'os'
 fs      = require 'fs'
 _       = require 'lodash'
+noon    = require 'noon'
 sutil   = require 'stack-utils'
 sorcery = require 'sorcery'
 
@@ -30,7 +31,7 @@ fileLog = (info) ->
         info.id   = slog.id
         info.icon = slog.icon
         info.type = slog.type
-        stream.write JSON.stringify(info)+'\n'
+        stream.write noon.stringify(info)+'\n'
         stream.end()
     catch err
         console.log "fileLog error -- ", err.stack
