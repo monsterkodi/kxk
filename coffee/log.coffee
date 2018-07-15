@@ -39,6 +39,7 @@ fileLog = (info) ->
                 info.id   = ''
                 info.file = ''
                 info.sep  = ''
+                info.icon = ''
         else
             stream.write JSON.stringify(info)+'\n'
         stream.end()
