@@ -74,7 +74,7 @@ filePos = (line) ->
             console.log 'absFile', absFile
             if slash.fileExists absFile
                 console.log 'gotcha1!', absFile
-                [jsFile,a,b] = toJs absFile, 0, 0
+                [jsFile,a,b] = toJs absFile, 1, 0
                 console.log 'gotcha2!', jsFile
                 if slash.fileExists jsFile
                     console.log 'gotcha3!', jsFile
