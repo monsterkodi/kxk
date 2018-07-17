@@ -62,28 +62,24 @@ filePos = (line) ->
         else if slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file
             
             # seems like chrome is resolving to relative paths already without mapping the lines numbers correctly :(
-            # lets see what we got ...
-            console.log 'filePos1', line, str result
-            console.log 'process.cwd', process.cwd()
-            try
-                console.log 'app.getPath("exe")', require('electron').remote.app.getPath 'exe'
-            catch err
-                console.log err.stack
+            
+            # console.log "filePos1 line:'#{line}' result:", str result
+            # console.log 'process.cwd', process.cwd()
+            # try
+                # console.log 'app.getPath("exe")', require('electron').remote.app.getPath 'exe'
+            # catch err
+                # console.log err.stack
                 
             absFile = slash.resolve slash.join process.cwd(), 'coffee', result.file
-            console.log 'absFile', absFile
             if slash.fileExists absFile
-                console.log 'gotcha1!', absFile
                 [jsFile,a,b] = toJs absFile, 1, 0
-                console.log 'gotcha2!', jsFile
                 if slash.fileExists jsFile
-                    console.log 'gotcha3!', jsFile
                     [coffeeFile, coffeeLine, coffeeCol] = toCoffee jsFile, result.line, result.col
                     if slash.fileExists coffeeFile
-                        console.log 'yay!!', coffeeFile
-                        result.file = coffeeFile
-                        result.line = coffeeLine
-                        result.col  = coffeeCol
+                        result.file = coffeeFile # this 'fix' relies on process.cwd to be unchanged
+                        result.line = coffeeLine # and only works for app started from source
+                        result.col  = coffeeCol  # via node_modules/electron... :(
+                        # using app.getPath("exe") and filter out node_modules would probably be better
                         
     else if match = regex2.exec line
         
@@ -104,7 +100,7 @@ filePos = (line) ->
                 
         else if slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file                
             
-            console.log 'filePos2', line, result
+            console.log "filePos2 FIXME!", line, result
             
     result
 
