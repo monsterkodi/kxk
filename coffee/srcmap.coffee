@@ -24,7 +24,7 @@ logErr = (err, sep='💥') ->
     
     console.log errorStack err
     trace = errorTrace err
-    console.log 'trace:', str trace
+    console.log 'trace:', str(trace)
     if valid trace.lines
         log.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
         for line in trace.lines
@@ -50,6 +50,8 @@ filePos = (line) ->
             line: match[3]
             col:  match[4]
         
+        console.log 'filePos1', line, result
+        
         if slash.ext(result.file) == 'js'
             
             mappedLine = toCoffee result.file, result.line, result.col
@@ -67,6 +69,8 @@ filePos = (line) ->
             line: match[2]
             col:  match[3]
         
+        console.log 'filePos2', line, result
+            
         if slash.ext(result.file) == 'js'
             
             mappedLine = toCoffee result.file, result.line, result.col
@@ -107,8 +111,6 @@ errorTrace = (err) ->
     lines = []
     text  = []
 
-    # console.log err.stack
-    
     for stackLine in err.stack.split '\n' 
         
         if fp = filePos stackLine
