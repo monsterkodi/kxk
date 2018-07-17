@@ -6,7 +6,7 @@
 0000000   000   000   0000000  000   000  000   000  000        
 ###
 
-{ fs, valid, empty, slash, log, _ } = require './kxk'
+{ fs, valid, empty, slash, str, log, _ } = require './kxk'
 
 sourceMap  = require 'source-map'
 mapConvert = require 'convert-source-map'
@@ -24,6 +24,7 @@ logErr = (err, sep='💥') ->
     
     console.log errorStack err
     trace = errorTrace err
+    console.log 'trace:', str trace
     if valid trace.lines
         log.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
         for line in trace.lines
@@ -106,7 +107,7 @@ errorTrace = (err) ->
     lines = []
     text  = []
 
-    console.log err.stack
+    # console.log err.stack
     
     for stackLine in err.stack.split '\n' 
         
