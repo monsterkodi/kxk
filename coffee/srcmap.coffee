@@ -70,12 +70,14 @@ filePos = (line) ->
             catch err
                 console.log err.stack
                 
-            absFile = slash.fileExists slash.join process.cwd(), 'coffee', result.file
-            if absFile
-                console.log 'gotcha!', absFile
-                [jsFile] = toJs absFile, 0, 0
+            absFile = slash.join process.cwd(), 'coffee', result.file
+            console.log 'absFile', absFile
+            if slash.fileExists absFile
+                console.log 'gotcha1!', absFile
+                [jsFile,a,b] = toJs absFile, 0, 0
+                console.log 'gotcha2!', jsFile
                 if slash.fileExists jsFile
-                    console.log 'gotcha2!', jsFile
+                    console.log 'gotcha3!', jsFile
                     [coffeeFile, coffeeLine, coffeeCol] = toCoffee jsFile, result.line, result.col
                     if slash.fileExists coffeeFile
                         console.log 'yay!!', coffeeFile
