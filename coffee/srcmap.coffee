@@ -66,10 +66,23 @@ filePos = (line) ->
             console.log 'filePos1', line, str result
             console.log 'process.cwd', process.cwd()
             try
-                console.log 'app.getPath 'exe'', require('electron').remote.app.getPath 'exe'
+                console.log 'app.getPath("exe")', require('electron').remote.app.getPath 'exe'
             catch err
                 console.log err.stack
-
+                
+            absFile = slash.fileExists slash.join process.cwd(), 'coffee', result.file
+            if absFile
+                console.log 'gotcha!', absFile
+                [jsFile] = toJs absFile, 0, 0
+                if slash.fileExists jsFile
+                    console.log 'gotcha2!', jsFile
+                    [coffeeFile, coffeeLine, coffeeCol] = toCoffee jsFile, result.line, result.col
+                    if slash.fileExists coffeeFile
+                        console.log 'yay!!', coffeeFile
+                        result.file = coffeeFile
+                        result.line = coffeeLine
+                        result.col  = coffeeCol
+                        
     else if match = regex2.exec line
         
         result =
