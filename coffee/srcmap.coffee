@@ -50,8 +50,6 @@ filePos = (line) ->
             line: match[3]
             col:  match[4]
         
-        console.log 'filePos1', line, result
-        
         if slash.ext(result.file) == 'js'
             
             mappedLine = toCoffee result.file, result.line, result.col
@@ -60,6 +58,17 @@ filePos = (line) ->
                 result.file = mappedLine[0]
                 result.line = mappedLine[1]
                 result.col  = mappedLine[2]
+                
+        else if slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file
+            
+            # seems like chrome is resolving to relative paths already without mapping the lines numbers correctly :(
+            # lets see what we got ...
+            console.log 'filePos1', line, str result
+            console.log 'process.cwd', process.cwd()
+            try
+                console.log 'app.getPath 'exe'', require('electron').remote.app.getPath 'exe'
+            catch err
+                console.log err.stack
 
     else if match = regex2.exec line
         
@@ -69,8 +78,6 @@ filePos = (line) ->
             line: match[2]
             col:  match[3]
         
-        console.log 'filePos2', line, result
-            
         if slash.ext(result.file) == 'js'
             
             mappedLine = toCoffee result.file, result.line, result.col
@@ -79,6 +86,11 @@ filePos = (line) ->
                 result.file = mappedLine[0]
                 result.line = mappedLine[1]
                 result.col  = mappedLine[2]
+                
+        else if slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file                
+            
+            console.log 'filePos2', line, result
+            
     result
 
 #  0000000  000000000   0000000    0000000  000   000  
