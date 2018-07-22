@@ -238,7 +238,7 @@ class Slash
 
     @samePath: (a, b) -> Slash.resolve(a) == Slash.resolve(b)
 
-    @escape: (p) -> p.replace /([\`"])/g, '\\$1'
+    @escape: (p) -> p.replace /([\`\"])/g, '\\$1'
 
     @encode: (p) ->
         p = encodeURI p

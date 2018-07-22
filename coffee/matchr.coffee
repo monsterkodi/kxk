@@ -170,7 +170,7 @@ dissect = (ranges, opt = join:false) ->
             if rg.value?
                 if not rg.value.split?
                     for r in rg.value
-                        continue if not r.split?
+                        continue if not r?.split?
                         for c in r.split '.' 
                             d[pn].cls.push c if d[pn].cls.indexOf(c) < 0
                 else 
