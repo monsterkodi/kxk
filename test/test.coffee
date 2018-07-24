@@ -146,7 +146,13 @@ describe 'kxk', ->
     
             expect slash.relative 'C:/Users/kodi/s/konrad/app/js/coffee.js', 'C:/Users/kodi/s/konrad'
             .to.eql 'app/js/coffee.js'
-                
+
+            expect slash.relative 'C:/some/path/on.c', 'D:/path/on.d'
+            .to.eql 'C:/some/path/on.c'
+            
+            expect slash.relative 'C:\\some\\path\\on.c', 'D:\\path\\on.d'
+            .to.eql 'C:/some/path/on.c'
+            
         it 'parse', ->
             
             expect slash.parse('c:').root

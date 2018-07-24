@@ -8,6 +8,7 @@
 
 { fs, os, empty, valid, _ } = require './kxk'
 
+log      = console.log
 path     = require 'path'
 isBinary = require 'isbinaryfile'
 
@@ -232,6 +233,7 @@ class Slash
         return rel if not Slash.isAbsolute rel
         if Slash.resolve(to) == rel
             return '.'
+            
         Slash.path path.relative Slash.resolve(to), rel
         
     @fileUrl: (p) -> "file:///#{Slash.encode p}"

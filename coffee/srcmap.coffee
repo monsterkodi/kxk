@@ -61,7 +61,7 @@ filePos = (line) ->
                 
         else if slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file
             
-            # seems like chrome is resolving to relative paths already without mapping the lines numbers correctly :(
+            # seems like chrome is resolving to relative paths already without mapping the line numbers correctly :(
             
             # console.log "filePos1 line:'#{line}' result:", str result
             # console.log 'process.cwd', process.cwd()
