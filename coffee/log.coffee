@@ -138,6 +138,6 @@ catch err
             console.log "can't figure out slog.id -- process.argv:", process.argv.join ' '
     catch err
         null
-
+    
 module.exports = log
 

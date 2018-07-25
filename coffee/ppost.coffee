@@ -90,7 +90,7 @@ else
                                 retval = @getCallbacks[type].apply @getCallbacks[type], argl
                                 event.returnValue = retval ? []
             catch err
-                console.log err.message ? err
+                null # don't log error here (this gets called for non-electron scripts as well)
 
         toAll:  (    type, args...) -> @sendToWins(type, args).sendToMain(type, args)
         toMain: (    type, args...) -> @sendToMain type, args

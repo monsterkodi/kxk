@@ -358,7 +358,6 @@ class Slash
             else
                 return electron.app.getPath 'userData'
         catch err
-            
             try
                 if pkgDir = Slash.pkg __dirname
                     pkg = require slash.join pkgDir, 'package.json'
