@@ -13,9 +13,9 @@ class Popup
     constructor: (opt) ->
         
         @focusElem = document.activeElement
-        @items   = elem class: 'popup', tabindex: 3
-        @parent  = opt.parent
-        @onClose = opt.onClose
+        @items     = elem class: 'popup', tabindex: 3
+        @parent    = opt.parent
+        @onClose   = opt.onClose
         
         @items.classList.add opt.class if opt.class
         
@@ -36,10 +36,10 @@ class Popup
             @items.appendChild div
 
         document.body.appendChild @items
-                
-        @items.addEventListener 'keydown',   @onKeyDown
-        @items.addEventListener 'focusout',  @onFocusOut
-        @items.addEventListener 'mouseover', @onHover
+        @items.addEventListener 'contextmenu', @onContextMenu
+        @items.addEventListener 'keydown',     @onKeyDown
+        @items.addEventListener 'focusout',    @onFocusOut
+        @items.addEventListener 'mouseover',   @onHover
         
         br = @items.getBoundingClientRect()
         
@@ -51,7 +51,7 @@ class Popup
         if opt.y+br.height > document.body.clientHeight
             @items.style.top = "#{document.body.clientHeight - br.height}px"
         else
-            @items.style.top  = "#{opt.y}px"
+            @items.style.top = "#{opt.y}px"
         
         if opt.selectFirstItem != false
             @select @items.firstChild, selectFirstItem:false
@@ -227,7 +227,7 @@ class Popup
             @select item, selectFirstItem:false   
 
     onClick: (event) => 
-        
+        log 'popup.onClick'
         stopEvent event 
         
         item = elem.upElem event.target, prop:'item'
@@ -236,6 +236,8 @@ class Popup
                 @toggle item
             else
                 @activate item
+                
+    onContextMenu: (event) => stopEvent event # prevents multiple popups
 
     # 00000000   0000000    0000000  000   000   0000000  
     # 000       000   000  000       000   000  000       

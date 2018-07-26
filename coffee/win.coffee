@@ -87,7 +87,7 @@ class Win
     #  0000000   0000000   000   000     000     00000000  000   000     000     
     
     onContextMenu: (event) =>
-        
+        log 'win.onContextMenu'
         absPos = pos event
         if not absPos?
             absPos = pos $("#main").getBoundingClientRect().left, $("#main").getBoundingClientRect().top
