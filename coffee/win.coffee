@@ -45,10 +45,12 @@ class Win
             scheme.set prefs.get 'scheme', 'dark'
             
         if _.isFunction @opt.onShow
-            @win.on 'ready-to-show', @opt.onShow
+            onShow = => @opt.onShow(); @win.removeListener 'ready-to-show', onShow
+            @win.on 'ready-to-show', onShow
 
         if _.isFunction @opt.onLoad
-            @win.webContents.on 'did-finish-load', @opt.onLoad
+            onLoad = => @opt.onLoad(); @win.webContents.removeListener 'did-finish-load', onLoad
+            @win.webContents.on 'did-finish-load', onLoad
             
     # 0000000   0000000  00000000   00000000  00000000  000   000   0000000  000   000   0000000   000000000
     #000       000       000   000  000       000       0000  000  000       000   000  000   000     000
@@ -87,7 +89,7 @@ class Win
     #  0000000   0000000   000   000     000     00000000  000   000     000     
     
     onContextMenu: (event) =>
-        log 'win.onContextMenu'
+
         absPos = pos event
         if not absPos?
             absPos = pos $("#main").getBoundingClientRect().left, $("#main").getBoundingClientRect().top
