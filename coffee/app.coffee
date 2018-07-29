@@ -252,6 +252,7 @@ class App
     
     onSrcChange: (path) =>
     
+        path = slash.path path
         log 'onSrcChange', path, @opt.dir, path.startsWith @opt.dir
         if slash.file(path) == 'main'
             @stopWatcher()

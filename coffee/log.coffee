@@ -23,11 +23,22 @@ stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 # 000       000  000      000       
 # 000       000  0000000  00000000  
 
+infos = []
+
+dumpInfos = ->
+    
+    slash  = require './slash'
+    stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
+    while infos.length
+        info = infos.shift()
+        stream.write JSON.stringify(info)+'\n'
+    stream.end()
+
+dumpTimer = null
+    
 fileLog = (info) ->
     
     try
-        slash     = require './slash'
-        stream    = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
         info.id   = slog.id
         info.icon = slog.icon
         info.type = slog.type
@@ -35,12 +46,13 @@ fileLog = (info) ->
         if lines.length
             for line in lines
                 info.str = line
-                stream.write JSON.stringify(info)+'\n'
+                infos.push _.clone info
                 info.sep  = ''
                 info.icon = ''
         else
-            stream.write JSON.stringify(info)+'\n'
-        stream.end()
+            infos.push info
+        clearImmediate dumpTimer
+        dumpTimer = setImmediate dumpInfos
     catch err
         console.log "fileLog error -- ", err.stack
         slog.file = false

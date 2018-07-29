@@ -227,7 +227,7 @@ class Popup
             @select item, selectFirstItem:false   
 
     onClick: (event) => 
-        log 'popup.onClick'
+
         stopEvent event 
         
         item = elem.upElem event.target, prop:'item'
