@@ -158,7 +158,7 @@ class Title
                     accel:str menuOrAccel
                 when _.isString menuOrAccel
                     text:text
-                    accel:menuOrAccel
+                    accel:keyinfo.convertCmdCtrl menuOrAccel
                 when empty menuOrAccel
                     text:text
                     accel: ''
@@ -225,6 +225,7 @@ class Title
             
         for keypath in sds.find.key mainMenu, 'accel'
             combos = sds.get(mainMenu, keypath).split ' '
+            combos = combos.map (combo) -> keyinfo.convertCmdCtrl combo
             if combo in combos
                 keypath.pop()
                 item = sds.get mainMenu, keypath

@@ -8,6 +8,7 @@
 
 keycode = require 'keycode'
 ansiKey = require 'ansi-keycode'
+os      = require 'os'
 
 class Keyinfo
     
@@ -63,6 +64,17 @@ class Keyinfo
             return join @modifiersForEvent(event), key
         return ''
 
+    @convertCmdCtrl: (combo) ->
+        
+        index = combo.indexOf 'cmdctrl'
+        if index >= 0
+            if os.platform() == 'darwin'
+                combo.replace 'cmdctrl', 'cmd'
+            else
+                combo.replace 'cmdctrl', 'ctrl'
+        else
+            combo
+                
     @keynameForEvent: (event) ->
         
         name = keycode event
