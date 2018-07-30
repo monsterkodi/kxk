@@ -35,7 +35,7 @@ body {
   height: 30px;
   box-sizing: border-box;
   font-size: 15px;
-  font-family: Bahnschrift Light, Ebrima, Varela Round, Arial Rounded MT Bold, Helvetica, Arial;
+  font-family: Bahnschrift Light, Helvetica Neue, Ebrima, Varela Round, Helvetica, Arial;
   white-space: nowrap;
   pointer-events: auto;
   cursor: pointer;
@@ -50,7 +50,7 @@ body {
   padding-right: 10px;
   -webkit-app-region: drag;
   font-weight: bold;
-  font: Bahnschrift Light, Ebrima, Varela Round, Arial Rounded MT Bold, Helvetica, Arial;
+  font: Bahnschrift Light, Helvetica Neue, Ebrima, Varela Round, Helvetica, Arial;
 }
 .titlebar-dot {
   display: inline-block;
@@ -112,7 +112,7 @@ body {
   position: absolute;
   border-radius: 3px;
   font-size: 15px;
-  font-family: Bahnschrift Light, Ebrima, Varela Round, Arial Rounded MT Bold, Helvetica, Arial;
+  font-family: Bahnschrift Light, Helvetica Neue, Ebrima, Varela Round, Helvetica, Arial;
 }
 .popup.titlemenu {
   border-top-left-radius: 0;

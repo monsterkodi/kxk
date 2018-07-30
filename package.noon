@@ -17,18 +17,19 @@ dependencies
                 convert-source-map  ^1.5.1
                 fs-extra        ^6.0.1
                 html-entities   ^1.2.1
+                isbinaryfile    ^3.0.2
                 karg            ^1.10.0
                 keycode         ^2.2.0
                 lodash          ^4.17.10
                 noon            >=1.5.0
+                npm             ^6.2.0
                 opener          ^1.4.3
                 sds             ^1.14.1
                 sorcery         ^0.10.0
                 source-map      https://github.com/monsterkodi/source-map.git
                 stack-utils     ^1.0.1
-                walkdir         0.0.12
                 textextensions  ^2.2.0
-                isbinaryfile    ^3.0.2
+                walkdir         0.0.12
                 write-file-atomic  ^2.3.0
 devDependencies
                 assert  ^1.4.1
