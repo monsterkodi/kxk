@@ -6,7 +6,7 @@
 000        000   000  00000000  000       0000000 
 ###
 
-{ store, watch, error, log } = require './kxk'
+{ store, slash, error, fs, log } = require './kxk'
 
 class Prefs
     
@@ -32,15 +32,13 @@ class Prefs
         
         return if not @store.app?
         
+        slash.touch @store.file
+        
         @unwatch()
-        @watcher = watch.watch @store.file,
-            ignoreInitial:  true
-            usePolling:     false
-            useFsEvents:    true
-
+        @watcher = fs.watch @store.file
         @watcher
             .on 'change', @onFileChange
-            .on 'unlink', @onFileUnlink
+            .on 'rename', @onFileUnlink
             .on 'error' , (err) -> log 'Prefs watch error', err
         
     @onFileChange: => @store.reload()

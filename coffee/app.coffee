@@ -6,7 +6,7 @@
 000   000  000        000        
 ###
 
-{ args, prefs, empty, valid, slash, about, post, watch, childp, fs, error, log, _ } = require './kxk'
+{ args, prefs, empty, valid, slash, about, post, childp, fs, error, log, _ } = require './kxk'
 
 class App
     
@@ -239,8 +239,7 @@ class App
     # 00     00  000   000     000      0000000  000   000  00000000  000   000    
         
     startWatcher: =>
-         
-        @watcher = watch.watch @opt.dir
+        @watcher = fs.watch @opt.dir
         @watcher.on 'change', @onSrcChange
         @watcher.on 'error', (err) -> error err
     
@@ -250,8 +249,9 @@ class App
             @watcher.close()
             @watcher = null
     
-    onSrcChange: (path) =>
+    onSrcChange: (eventType, path) =>
     
+        return if eventType != 'change'
         path = slash.path path
         log 'onSrcChange', path, @opt.dir, path.startsWith @opt.dir
         if slash.file(path) == 'main'

@@ -38,8 +38,9 @@ class Win
         
         document.body.addEventListener 'contextmenu', @onContextMenu
         
-        document.addEventListener 'keydown', @onKeyDown
-        document.addEventListener 'keyup',   @onKeyUp
+        if not @opt.nokeys
+            document.addEventListener 'keydown', @onKeyDown
+            document.addEventListener 'keyup',   @onKeyUp
         
         if @opt.scheme != false
             scheme.set prefs.get 'scheme', 'dark'
@@ -120,9 +121,9 @@ class Win
     
         @modifiers = info.mod
         
-        if info.combo
-            info.event = event
-            post.emit 'combo', info.combo, info
+        # if info.combo
+        info.event = event
+        post.emit 'combo', info.combo, info
     
     onKeyUp: (event) =>
         

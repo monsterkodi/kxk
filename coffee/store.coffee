@@ -129,6 +129,7 @@ class Store extends Emitter
             post.toWins 'store', @name, 'data', @data
     
     load: ->
+        
         if @app
             try
                 noon.load @file
@@ -144,6 +145,7 @@ class Store extends Emitter
     # 0000000   000   000      0      00000000
 
     save: =>
+        
         if @app
             return if not @file
             return if _.isEmpty @data

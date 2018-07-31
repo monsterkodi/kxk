@@ -313,6 +313,12 @@ class Slash
             console.log err
         null     
         
+    @touch: (p) ->
+        
+        fs.ensureDirSync Slash.dirname p
+        if not Slash.fileExists p
+            fs.writeFileSync p, ''
+        
     @fileExists: (p, cb) ->
         
         if _.isFunction cb
