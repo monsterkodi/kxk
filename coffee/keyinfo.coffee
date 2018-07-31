@@ -69,11 +69,11 @@ class Keyinfo
         index = combo.indexOf 'cmdctrl'
         if index >= 0
             if os.platform() == 'darwin'
-                combo.replace 'cmdctrl', 'cmd'
+                combo = combo.replace 'cmdctrl', 'command'
+                combo = combo.replace 'alt+command', 'command+alt'
             else
-                combo.replace 'cmdctrl', 'ctrl'
-        else
-            combo
+                combo = combo.replace 'cmdctrl', 'ctrl'            
+        combo
                 
     @keynameForEvent: (event) ->
         
