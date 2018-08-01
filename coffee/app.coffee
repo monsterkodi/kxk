@@ -265,20 +265,22 @@ class App
     
     onSrcChange: (info) =>
     
-        # log 'onSrcChange', info.change, info.path
+        log "onSrcChange '#{info.change}'", info.path
         return if info.change != 'change'
-        path = info.path
-        if slash.base(path) == 'main'
+        if slash.base(info.path) == 'main'
             @stopWatcher()
             @app.exit 0
-            childp.execSync "#{@opt.dir}/../node_modules/.bin/electron . -w",
-                cwd:      "#{@opt.dir}/.."
-                encoding: 'utf8'
-                stdio:    'inherit'
-                shell:    true
-            process.exit 0
-        else
-            post.toWins 'menuAction', 'Reload'
+            if pkg = slash.pkg @opt.dir
+                if slash.isDir slash.join pkg, 'node_modules'
+                    childp.execSync "#{pkg}/node_modules/.bin/electron . -w",
+                        cwd:      pkg
+                        encoding: 'utf8'
+                        stdio:    'inherit'
+                        shell:    true
+                    process.exit 0
+                    return
+
+        post.toWins 'menuAction', 'Reload'
              
 module.exports = App
     

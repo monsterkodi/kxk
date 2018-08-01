@@ -57,10 +57,8 @@ class Watch extends event
         path = slash.join @dir, path
         
         if @file and @file != path
-            log "ignore file:#{@file} path:#{path}"
             return
             
-        # log "onChange '#{change}' #{@dir} #{path}"
         @emit 'change', dir:@dir, path:path, change:change, watch:@
         
 module.exports = Watch
