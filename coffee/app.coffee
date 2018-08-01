@@ -6,7 +6,7 @@
 000   000  000        000        
 ###
 
-{ args, prefs, empty, valid, slash, about, post, childp, fs, error, log, _ } = require './kxk'
+{ args, prefs, watch, empty, valid, slash, about, post, childp, fs, error, log, _ } = require './kxk'
 
 class App
     
@@ -17,7 +17,7 @@ class App
             srcmap.logErr err, '🔻'
             true
         
-        @watcher = null
+        @watchers = []
             
         electron = require 'electron'
         @app = electron.app
@@ -239,22 +239,36 @@ class App
     # 00     00  000   000     000      0000000  000   000  00000000  000   000    
         
     startWatcher: =>
-        @watcher = fs.watch @opt.dir
-        @watcher.on 'change', @onSrcChange
-        @watcher.on 'error', (err) -> error err
+        
+        @opt.dir = slash.resolve @opt.dir
+        console.log 'startWatcher', @opt.dir
+        watcher = watch.dir @opt.dir
+        watcher.on 'change', @onSrcChange
+        watcher.on 'error', (err) -> error err
+        @watchers.push watcher
+        
+        return if empty @opt.dirs
+        
+        console.log 'startWatchers', @opt.dirs
+        for dir in @opt.dirs
+            watcher = watch.dir slash.resolve slash.join @opt.dir, dir
+            watcher.on 'change', @onSrcChange
+            watcher.on 'error', (err) -> error err
+            @watchers.push watcher 
     
     stopWatcher: =>
          
-        if @watcher?
-            @watcher.close()
-            @watcher = null
+        return if empty @watchers
+        for watcher in @watchers
+            watcher.close()
+        @watchers = []
     
-    onSrcChange: (eventType, path) =>
+    onSrcChange: (info) =>
     
-        return if eventType != 'change'
-        path = slash.path path
-        log 'onSrcChange', path, @opt.dir, path.startsWith @opt.dir
-        if slash.file(path) == 'main'
+        # log 'onSrcChange', info.change, info.path
+        return if info.change != 'change'
+        path = info.path
+        if slash.base(path) == 'main'
             @stopWatcher()
             @app.exit 0
             childp.execSync "#{@opt.dir}/../node_modules/.bin/electron . -w",
