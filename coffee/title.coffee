@@ -230,7 +230,6 @@ class Title
                 keypath.pop()
                 item = sds.get mainMenu, keypath
                 post.emit 'menuAction', item.action ? item.text, item
-                log 'handled'
                 return item
 
         'unhandled'
