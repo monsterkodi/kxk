@@ -266,7 +266,6 @@ class App
     onSrcChange: (info) =>
     
         log "onSrcChange '#{info.change}'", info.path
-        return if info.change != 'change'
         if slash.base(info.path) == 'main'
             @stopWatcher()
             @app.exit 0
@@ -279,7 +278,6 @@ class App
                         shell:    true
                     process.exit 0
                     return
-
         post.toWins 'menuAction', 'Reload'
              
 module.exports = App
