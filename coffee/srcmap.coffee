@@ -162,7 +162,8 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
     if slash.fileExists jsFile
         mapData = mapConvert.fromSource(fs.readFileSync jsFile, 'utf8')?.toObject()
         if valid mapData
-            mapData.sources[0] = slash.resolve slash.join slash.dir(jsFile), mapData?.sources[0] if mapData?.sources[0]
+            mapData.sources[0] = slash.unslash slash.resolve slash.join slash.dir(jsFile), mapData?.sources[0] if mapData?.sources[0]
+            mapData.sources[0] = '"' + mapData.sources[0] + '"'
             consumer = new sourceMap.SourceMapConsumer mapData
             if consumer.originalPositionFor
                 pos = consumer.originalPositionFor line:jsLine, column:jsCol, bias:sourceMap.SourceMapConsumer.LEAST_UPPER_BOUND
@@ -173,8 +174,7 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
                 else
                     log 'no pos.line', pos
             else
-                log 'no consumer originalPositionFor', mapData
-                log 'no consumer originalPositionFor', consumer
+                log 'no consumer originalPositionFor', mapData?, consumer?
         
     [coffeeFile, coffeeLine, coffeeCol]
 
