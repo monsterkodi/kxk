@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ fileList, splitFileLine, slash, pos, empty, valid, clamp, filter, log, _ } = require '../' # '../coffee/kxk'
+{ filelist, splitFileLine, slash, pos, empty, valid, clamp, filter, log, _ } = require '../' # '../coffee/kxk'
 
 assert = require 'assert'
 chai   = require 'chai'
@@ -23,8 +23,9 @@ describe 'kxk', ->
             expect slash.dir '/some/dir/'
             .to.eql '/some'
             
-            expect slash.dir 'C:\\Back\\'
-            .to.eql 'C:/'
+            if slash.win()
+                expect slash.dir 'C:\\Back\\'
+                .to.eql 'C:/'
             
             expect slash.dir '../..'
             .to.eql '..'
@@ -50,8 +51,9 @@ describe 'kxk', ->
             expect slash.dir '~/'
             .to.eql ''
             
-            expect slash.dir 'C:/'
-            .to.eql ''
+            if slash.win()
+                expect slash.dir 'C:/'
+                .to.eql ''
             
         it 'pathlist', ->
             
@@ -64,8 +66,9 @@ describe 'kxk', ->
             expect slash.pathlist ''
             .to.eql []
             
-            expect slash.pathlist 'C:\\Back\\Slash\\'
-            .to.eql ['C:/', 'C:/Back', 'C:/Back/Slash/']
+            if slash.win()
+                expect slash.pathlist 'C:\\Back\\Slash\\'
+                .to.eql ['C:/', 'C:/Back', 'C:/Back/Slash/']
 
             expect slash.pathlist '~'
             .to.eql ['~']
@@ -147,14 +150,17 @@ describe 'kxk', ->
             expect slash.relative 'C:/Users/kodi/s/konrad/app/js/coffee.js', 'C:/Users/kodi/s/konrad'
             .to.eql 'app/js/coffee.js'
 
-            expect slash.relative 'C:/some/path/on.c', 'D:/path/on.d'
-            .to.eql 'C:/some/path/on.c'
-            
-            expect slash.relative 'C:\\some\\path\\on.c', 'D:\\path\\on.d'
-            .to.eql 'C:/some/path/on.c'
+            if slash.win()
+                
+                expect slash.relative 'C:/some/path/on.c', 'D:/path/on.d'
+                .to.eql 'C:/some/path/on.c'
+                
+                expect slash.relative 'C:\\some\\path\\on.c', 'D:\\path\\on.d'
+                .to.eql 'C:/some/path/on.c'
             
         it 'parse', ->
             
+            return if not slash.win()
             expect slash.parse('c:').root
             .to.eql 'c:/'
     
@@ -162,6 +168,7 @@ describe 'kxk', ->
             .to.eql 'c:/'
             
         it 'split', ->
+            
             expect slash.split '/c/users/home/'
             .to.eql ['c', 'users', 'home']
             
@@ -339,6 +346,8 @@ describe 'kxk', ->
             expect slash.isRelative '.././bla../../fark'
             .to.eql true
     
+            return if not slash.win()
+            
             expect slash.isRelative 'C:\\blafark'
             .to.eql false
     
@@ -353,49 +362,49 @@ describe 'kxk', ->
             expect slash.sanitize '\n\n c . d  \n\n\n'
             .to.eql ' c . d  '
             
-    describe 'fileList', ->
+    describe 'filelist', ->
     
-        it "exists", -> _.isFunction fileList
+        it "exists", -> _.isFunction filelist
         
         it "chdir", ->
             process.chdir "#{__dirname}"
             expect process.cwd()
             .to.eql __dirname
             
-        it "returns an array", -> _.isArray fileList '.'
+        it "returns an array", -> _.isArray filelist '.'
         
-        it "returns empty array", -> _.isEmpty fileList 'foobar', logError: false
+        it "returns empty array", -> _.isEmpty filelist 'foobar', logError: false
         
         it "finds this file relative", ->
-            expect fileList '.'
+            expect filelist '.'
             .to.include 'test.coffee'
             
         it "finds this file absolute", ->
-            expect fileList __dirname
+            expect filelist __dirname
             .to.include slash.path __filename
             
         it "lists relative path with dot", ->
-            expect fileList('./dir').length
+            expect filelist('./dir').length
             .to.gt 0
             
         it "lists relative path without dot", ->
-            expect fileList('dir').length
+            expect filelist('dir').length
             .to.gt 0
             
         it "ignores hidden files by default", ->
-            expect fileList 'dir'
+            expect filelist 'dir'
             .to.not.include slash.normalize 'dir/.konrad.noon'
             
         it "includes hidden files", ->
-            expect fileList 'dir', 'ignoreHidden': false
+            expect filelist 'dir', 'ignoreHidden': false
             .to.include slash.normalize 'dir/.konrad.noon'
             
         it "doesn't recurse by default", ->
-            expect fileList 'dir'
+            expect filelist 'dir'
             .to.eql [slash.normalize('dir/test.coffee'), slash.normalize('dir/test.js'), slash.normalize('dir/test.txt')]
             
         it "recurses if depth set", ->
-            expect fileList 'dir', depth: 2
+            expect filelist 'dir', depth: 2
             .to.eql [
                 slash.normalize('dir/test.coffee'), 
                 slash.normalize('dir/test.js'), 
@@ -407,7 +416,7 @@ describe 'kxk', ->
                 slash.normalize('dir/level1b/level1b.coffee')]
                 
         it "matches extension", ->
-            expect fileList 'dir', depth: 3, matchExt: slash.ext __filename
+            expect filelist 'dir', depth: 3, matchExt: slash.ext __filename
             .to.eql [
                 slash.normalize('dir/test.coffee'), 
                 slash.normalize('dir/level1/test.coffee'), 

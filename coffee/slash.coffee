@@ -308,7 +308,7 @@ class Slash
                 fs.accessSync p, fs.R_OK
                 return stat
         catch err
-            if err.code == 'ENOENT'
+            if err.code in ['ENOENT', 'ENOTDIR']
                 return false
             console.log err
         null     
