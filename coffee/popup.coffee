@@ -6,7 +6,7 @@
 000         0000000   000         0000000   000      
 ###
 
-{ post, empty, stopEvent, keyinfo, elem, log } = require './kxk'
+{ post, stopEvent, keyinfo, empty, elem, menu, os } = require './kxk'
 
 class Popup
     
@@ -30,7 +30,11 @@ class Popup
                 div.item = item
                 div.addEventListener 'click', @onClick
                 if item.combo ? item.accel
-                    div.appendChild elem 'span', class:'popupCombo', text:keyinfo.short item.combo ? item.accel
+                    text = keyinfo.short if os.platform() == 'darwin'
+                        item.combo ? item.accel
+                    else
+                        item.accel ? item.combo
+                    div.appendChild elem 'span', class:'popupCombo', text:text
                 else if item.menu 
                     div.appendChild elem 'span', class:'popupCombo', text:'▶'
             @items.appendChild div
