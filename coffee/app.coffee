@@ -106,6 +106,9 @@ class App
         ,
             label: "About"
             click: @showAbout
+        ,
+            label: "Activate"
+            click: @toggleWindowFromTray
         ]
             
     #  0000000   0000000     0000000   000   000  000000000  
