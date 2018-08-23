@@ -99,8 +99,8 @@ class App
         trayImg = @resolve @opt.tray
         @tray = new electron.Tray trayImg
         @tray.on 'click', @toggleWindowFromTray
-             
-        @tray.setContextMenu electron.Menu.buildFromTemplate [
+        
+        template = [
             label: "Quit"
             click: @quitApp
         ,
@@ -110,6 +110,9 @@ class App
             label: "Activate"
             click: @toggleWindowFromTray
         ]
+             
+        @tray.setContextMenu electron.Menu.buildFromTemplate template
+
             
     #  0000000   0000000     0000000   000   000  000000000  
     # 000   000  000   000  000   000  000   000     000     
