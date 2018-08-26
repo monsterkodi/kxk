@@ -49,7 +49,6 @@ body {
   padding-left: 10px;
   padding-right: 10px;
   -webkit-app-region: drag;
-  font-weight: bold;
   font: Bahnschrift Light, Helvetica Neue, Ebrima, Varela Round, Helvetica, Arial;
 }
 .titlebar-dot {

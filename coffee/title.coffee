@@ -94,7 +94,7 @@ class Title
             html += "<span class='titlebar-dot'> ● </span>"
             html += "<span class='titlebar-version'>#{info.version}</span>"
         if info.path
-            html += "<span class='titlebar-dot'> ⯈ </span>"
+            html += "<span class='titlebar-dot'> ► </span>"
             html += "<span class='titlebar-version'>#{info.path}</span>"
         @title.innerHTML = html
     
