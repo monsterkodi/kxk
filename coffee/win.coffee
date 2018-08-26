@@ -91,6 +91,8 @@ class Win
     
     onContextMenu: (event) =>
 
+        @win.focus()
+        
         absPos = pos event
         if not absPos?
             absPos = pos $("#main").getBoundingClientRect().left, $("#main").getBoundingClientRect().top
@@ -99,7 +101,7 @@ class Win
         if _.isFunction @opt.context
             items = @opt.context items
         else
-            items.unshift text:'Clear', accel:'ctrl+k'
+            items.unshift text:'Clear', accel:'cmdctrl+k'
             
         popup.menu
             items:   items

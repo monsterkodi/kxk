@@ -96,7 +96,7 @@ class Keyinfo
         
     @short: (combo) ->
         
-        combo = combo.toLowerCase()
+        combo = @convertCmdCtrl combo.toLowerCase()
         for i in [0...@iconKeyNames.length]
             combo = combo.replace new RegExp(@iconKeyNames[i], 'gi'), @iconKeyChars[i]
         combo = combo.replace /\+/g, ''

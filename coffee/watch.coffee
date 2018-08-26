@@ -71,7 +71,7 @@ class Watch extends event
                 
             @walker.on 'directory', (path) =>
                 return if @ignore path
-                log "watch #{path}"
+                # log "watch #{path}"
                 watch = fs.watch path
                 @watchers.push watch
                 change = (dir) => (chg, pth) => @onChange chg, pth, dir
@@ -89,12 +89,12 @@ class Watch extends event
         
         return if @ignore path
         
-        log 'onChange', change, path, dir
+        # log 'onChange', change, path, dir
         if /\d\d\d\d\d\d\d\d?\d?$/.test slash.ext path
             return
 
         path = slash.join dir, path
-        log 'onChange---', path
+        # log 'onChange---', path
         if @file and @file != path
             return
             
