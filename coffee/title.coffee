@@ -223,7 +223,12 @@ class Title
         
         mainMenu = @menuTemplate()
             
-        for keypath in sds.find.key mainMenu, 'accel'
+        accels = sds.find.key mainMenu, 'accel'
+        combos = sds.find.key mainMenu, 'combo'
+        
+        kepaths = combos.concat accels # swap on win?
+        
+        for keypath in kepaths
             combos = sds.get(mainMenu, keypath).split ' '
             combos = combos.map (combo) -> keyinfo.convertCmdCtrl combo
             if combo in combos

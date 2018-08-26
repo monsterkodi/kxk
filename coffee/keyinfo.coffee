@@ -24,7 +24,7 @@ class Keyinfo
     @modifierChars = ['⌂', '⌃', '⌥', '⌘']
     
     @iconKeyNames  = ['shift', 'ctrl', 'alt', 'command', 'backspace', 'delete', 'home', 'end', 'page up', 'page down', 'return', 'enter', 'up', 'down', 'left', 'right', 'tab', 'click']
-    @iconKeyChars  = ['⌂', '⌃', '⌥', '⌘', '⌫', '⌦', '↖', '↘', '⇞', '⇟', '↩', '↩', '↑', '↓', '←', '→', '⭲', '🖯']
+    @iconKeyChars  = ['⌂', '⌃', '⌥', '⌘', '⌫', '⌦', '↖', '↘', '⇞', '⇟', '↩', '↩', '↑', '↓', '←', '→', '⤠', '⍝'] # '⭲', '🖯']
 
     @forCombo: (combo) ->
         
