@@ -8,7 +8,8 @@
 
 { slash, log, fs, _ } = require './kxk'
 
-event = require 'events'
+event   = require 'events'
+walkdir = require 'walkdir'
 
 class Watch extends event
 
@@ -43,22 +44,60 @@ class Watch extends event
         @watch.close()
         delete @watch
         
+        if @opt.recursive
+            for watch in @watchers 
+                watch.close()
+            delete @watchers
+        
     watchDir: ->
         
         @watch = fs.watch @dir
         @watch.on 'error', (err) -> log "fs.watch dir:'#{@dir}' error: #{err.stack}"
         @watch.on 'change', @onChange
         
-    onChange: (change, path) =>
+        if @opt.recursive
+            # log 'ignore', @opt.ignore
+            @watchers = []
+            @walker = walkdir @dir
+            onPath = (ignore) -> (path) -> 
+                for regex in ignore
+                    if new RegExp(regex).test path
+                        # log "ignore #{regex} #{path}"
+                        @ignore path
+                        return
+            
+            if @opt.ignore
+                @walker.on 'path', onPath @opt.ignore
+                
+            @walker.on 'directory', (path) =>
+                return if @ignore path
+                log "watch #{path}"
+                watch = fs.watch path
+                @watchers.push watch
+                change = (dir) => (chg, pth) => @onChange chg, pth, dir
+                watch.on 'change', change path
+
+    ignore: (path) ->
         
+        if @opt.ignore
+            for regex in @opt.ignore
+                if new RegExp(regex).test path
+                    # log "ignore! #{regex} #{path}"
+                    return true
+                
+    onChange: (change, path, dir=@dir) =>
+        
+        return if @ignore path
+        
+        log 'onChange', change, path, dir
         if /\d\d\d\d\d\d\d\d?\d?$/.test slash.ext path
             return
 
-        path = slash.join @dir, path
-        
+        path = slash.join dir, path
+        log 'onChange---', path
         if @file and @file != path
             return
             
-        @emit 'change', dir:@dir, path:path, change:change, watch:@
+        @emit 'change', dir:dir, path:path, change:change, watch:@
         
 module.exports = Watch
