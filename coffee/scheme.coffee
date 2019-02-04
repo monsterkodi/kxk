@@ -20,10 +20,13 @@ class Scheme
 
     @set: (scheme) ->
         
+        link =$ "#style-link"
+        
+        return if not link or not link.parentNode
+        
         scheme = slash.basename scheme, '.css'
         prefs.set 'scheme', scheme
         
-        link =$ "#style-link"
         newlink = elem 'link',
             href: "css/#{scheme}.css"
             rel:  'stylesheet'

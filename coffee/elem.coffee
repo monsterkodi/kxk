@@ -36,6 +36,10 @@ elem = (typ, opt) ->
             e.appendChild c if _.isElement c
         delete opt.children
         
+    if opt.parent? and _.isElement opt.parent
+        opt.parent.appendChild e
+        delete opt.parent
+        
     for event in ['mousedown', 'mousemove', 'mouseup', 'click', 'dblclick']
         if opt[event] and _.isFunction opt[event]
             e.addEventListener event, opt[event]

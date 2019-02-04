@@ -38,17 +38,27 @@ class App
         # log 'app.args', args
         
         if @opt.single != false
-            if @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
+            if @app.makeSingleInstance? and @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
                 log 'app.quit single'
                 @app.quit()
                 return
+            else if @app.requestSingleInstanceLock? 
+                if @app.requestSingleInstanceLock()
+                    @app.on 'second-instance', @opt.onOtherInstance ? @showWindow
+                else
+                    @app.quit()
+                    return
         
         post.on 'showAbout', @showAbout
         post.on 'quitApp',   @quitApp
 
         @app.setName @opt.pkg.name
         @app.on 'ready', @onReady
-        @app.on 'window-all-closed', (event) -> event.preventDefault()        
+        @app.on 'window-all-closed', (event) => 
+            if not @opt.singleWindow
+                event.preventDefault()        
+            else
+                @quitApp()
         
     resolve: (file) => slash.resolve slash.join @opt.dir, file
     
@@ -141,6 +151,7 @@ class App
         
         @stopWatcher()
         @saveBounds()
+        prefs.save()
         
         if 'delay' != @opt.onQuit?()
             @exitApp()
@@ -215,6 +226,8 @@ class App
             transparent:     true
             autoHideMenuBar: true
             icon:            @resolve @opt.icon 
+            webPreferences: 
+                nodeIntegration: true
     
         @win.setPosition bounds.x, bounds.y if bounds?
     

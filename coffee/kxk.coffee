@@ -85,6 +85,8 @@ module.exports =
         else if a-b < -180 then a += 360
         (1-f) * a + f * b
     
+    reduce: (v,d) -> if v>=0 then Math.max(0, v-d) else Math.min(0, v+d)
+        
     fade:  (s,e,v) -> s*(1-v)+e*(v)
     last:  (a) -> _.last a
     first: (a) -> _.first a
@@ -131,6 +133,20 @@ if not String.prototype.strip
     
 if not String.prototype.hash
     String.prototype.hash = -> crypto.createHash('md5').update(@.valueOf(), 'utf8').digest('hex')
+    
+#  0000000   00000000   00000000    0000000   000   000
+# 000   000  000   000  000   000  000   000   000 000 
+# 000000000  0000000    0000000    000000000    00000  
+# 000   000  000   000  000   000  000   000     000   
+# 000   000  000   000  000   000  000   000     000   
+
+if not Array.prototype.clone
+    Array.prototype.clone = ->
+        @.slice 0
+        
+if not Array.prototype.reversed
+    Array.prototype.reversed = ->
+        @.slice(0).reverse()
     
 module.exports.str         = require './str'
 module.exports.log         = require './log'

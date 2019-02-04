@@ -98,8 +98,11 @@ class Win
             absPos = pos $("#main").getBoundingClientRect().left, $("#main").getBoundingClientRect().top
         
         items = _.clone window.titlebar.menuTemplate()
+        
         if _.isFunction @opt.context
             items = @opt.context items
+            if empty items 
+                return
         else
             items.unshift text:'Clear', accel:'cmdctrl+k'
             

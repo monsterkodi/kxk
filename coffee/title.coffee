@@ -23,7 +23,8 @@ class Title
         @elem.addEventListener 'dblclick', (event) -> stopEvent event, post.emit 'menuAction', 'Maximize'
                 
         @winicon = elem class: 'winicon'
-        @winicon.appendChild elem 'img', src:slash.fileUrl slash.join @opt.dir, @opt.icon
+        if @opt.icon
+            @winicon.appendChild elem 'img', src:slash.fileUrl slash.join @opt.dir, @opt.icon
         @elem.appendChild @winicon
         @winicon.addEventListener 'click', -> post.emit 'menuAction', 'Open Menu'   
         

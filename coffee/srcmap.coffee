@@ -22,7 +22,8 @@ regex2     = /^\s+at\s+(.*):(\d+):(\d+)/
 
 logErr = (err, sep='💥') ->
     
-    console.log errorStack err
+    # console.log errorStack err
+    console.log err
     trace = errorTrace err
     #console.log 'trace:', str(trace)
     if valid trace.lines
@@ -98,9 +99,9 @@ filePos = (line) ->
                 result.line = mappedLine[1]
                 result.col  = mappedLine[2]
                 
-        else if slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file                
-            
-            console.log "filePos2 FIXME!", line, result
+        # else if slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file                
+#             
+            # console.log "filePos2 FIXME!", line, result
             
     result
 
