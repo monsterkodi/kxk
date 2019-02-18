@@ -6,7 +6,7 @@
 000   000  000        000        
 ###
 
-{ args, prefs, watch, empty, valid, slash, about, post, childp, fs, error, log, _ } = require './kxk'
+{ args, prefs, watch, empty, valid, slash, about, post, childp, os, fs, error, log, _ } = require './kxk'
 
 class App
     
@@ -110,19 +110,18 @@ class App
         @tray = new electron.Tray trayImg
         @tray.on 'click', @toggleWindowFromTray
         
-        template = [
-            label: "Quit"
-            click: @quitApp
-        ,
-            label: "About"
-            click: @showAbout
-        ,
-            label: "Activate"
-            click: @toggleWindowFromTray
-        ]
-             
-        @tray.setContextMenu electron.Menu.buildFromTemplate template
-
+        if os.platform() != 'darwin'
+            template = [
+                label: "Quit"
+                click: @quitApp
+            ,
+                label: "About"
+                click: @showAbout
+            ,
+                label: "Activate"
+                click: @toggleWindowFromTray
+            ]
+            @tray.setContextMenu electron.Menu.buildFromTemplate template
             
     #  0000000   0000000     0000000   000   000  000000000  
     # 000   000  000   000  000   000  000   000     000     

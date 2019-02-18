@@ -14,6 +14,7 @@ class Win
         
         window.onerror = (msg, source, line, col, err) ->
             
+            console.log 'window.onerror', msg, source, line, col
             srcmap = require './srcmap'
             srcmap.logErr err
             true

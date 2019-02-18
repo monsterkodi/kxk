@@ -25,7 +25,7 @@ logErr = (err, sep='💥') ->
     # console.log errorStack err
     console.log err
     trace = errorTrace err
-    #console.log 'trace:', str(trace)
+    # console.log 'trace:', str(trace)
     if valid trace.lines
         log.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
         for line in trace.lines
