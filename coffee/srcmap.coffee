@@ -203,9 +203,9 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
             if valid poss
                 return [jsFile, poss[0]?.line, poss[0]?.column]
             else
-                log 'empty poss'
+                console.log 'srcmap.toJs -- empty poss!'
         else
-            log 'no allGeneratedPositionsFor in', consumer
+            console.log 'srcmap.toJs -- no allGeneratedPositionsFor in', consumer
         
     [jsFile, null, null]
         
