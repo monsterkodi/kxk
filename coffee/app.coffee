@@ -216,6 +216,7 @@ class App
             minWidth:        @opt.minWidth  ? 250
             minHeight:       @opt.minHeight ? 250
             backgroundColor: '#181818'
+            fullscreenenable: true
             fullscreen:      false
             show:            false
             frame:           false
