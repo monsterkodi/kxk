@@ -20,7 +20,7 @@ class Watch extends event
         @dir = slash.resolve path
         @opt = opt ? {}
         
-        @watchDir()
+        slash.exists @dir, (stat) => if stat then @watchDir() 
        
     @watch: (path, opt) ->
     
@@ -41,7 +41,7 @@ class Watch extends event
 
     close: ->
         
-        @watch.close()
+        @watch?.close()
         delete @watch
         
         if @opt.recursive

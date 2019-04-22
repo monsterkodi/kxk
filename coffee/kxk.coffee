@@ -97,6 +97,7 @@ module.exports =
     absMin: (a,b) -> if Math.abs(a)  < Math.abs(b) then a else b
         
     randInt: (r) -> Math.floor Math.random() * r
+    randIntRange: (l,h) -> Math.floor l+Math.random()*(h-l)
     randRange: (l,h) -> l+Math.random()*(h-l)
         
     shortCount: (v) ->

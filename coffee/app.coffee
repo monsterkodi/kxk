@@ -37,14 +37,18 @@ class App
         
         # log 'app.args', args
         
-        if @opt.single != false
+        if @opt.single != false #and os.platform() != 'darwin'
             if @app.makeSingleInstance? and @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
                 log 'app.quit single'
                 @app.quit()
                 return
             else if @app.requestSingleInstanceLock? 
                 if @app.requestSingleInstanceLock()
-                    @app.on 'second-instance', @opt.onOtherInstance ? @showWindow
+                    if @opt.onOtherInstance
+                        cb = (event, args, dir) => @opt.onOtherInstance args, dir 
+                    else
+                        cb = @showWindow
+                    @app.on 'second-instance', cb                        
                 else
                     @app.quit()
                     return
@@ -62,11 +66,11 @@ class App
         
     resolve: (file) => slash.resolve slash.join @opt.dir, file
     
-    #00000000   00000000   0000000   0000000    000   000
-    #000   000  000       000   000  000   000   000 000
-    #0000000    0000000   000000000  000   000    00000
-    #000   000  000       000   000  000   000     000
-    #000   000  00000000  000   000  0000000       000
+    # 00000000   00000000   0000000   0000000    000   000
+    # 000   000  000       000   000  000   000   000 000
+    # 0000000    0000000   000000000  000   000    00000
+    # 000   000  000       000   000  000   000     000
+    # 000   000  00000000  000   000  0000000       000
     
     onReady: =>
     
