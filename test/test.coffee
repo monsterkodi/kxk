@@ -401,11 +401,12 @@ describe 'kxk', ->
             
         it "doesn't recurse by default", ->
             expect filelist 'dir'
-            .to.eql [slash.normalize('dir/test.coffee'), slash.normalize('dir/test.js'), slash.normalize('dir/test.txt')]
+            .to.eql [slash.normalize('dir/noext'), slash.normalize('dir/test.coffee'), slash.normalize('dir/test.js'), slash.normalize('dir/test.txt')]
             
         it "recurses if depth set", ->
             expect filelist 'dir', depth: 2
             .to.eql [
+                slash.normalize('dir/noext'), 
                 slash.normalize('dir/test.coffee'), 
                 slash.normalize('dir/test.js'), 
                 slash.normalize('dir/test.txt'), 
@@ -601,4 +602,10 @@ describe 'kxk', ->
             expect filter("hello", ->)
             .to.eql "hello"
                 
-                
+    describe 'isText', ->
+        
+        it 'non binary', ->
+            
+            expect slash.isText __dirname + '/dir/noext'
+            .to.eql true
+            

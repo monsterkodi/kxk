@@ -388,6 +388,6 @@ class Slash
         return true if Slash.extname(f) and textext[Slash.extname f]? 
         return true if textbase[Slash.basename(f).toLowerCase()]
         return false if not Slash.isFile f
-        return not isBinary.sync f
+        return not isBinary.isBinaryFileSync f
     
 module.exports = Slash
