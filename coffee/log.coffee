@@ -143,7 +143,7 @@ try
 catch err
     try
         slash = require './slash'
-        if process.argv[0].length and slash.base(process.argv[0]) in ['node', 'coffee', 'electron']
+        if process.argv[0].length and slash.base(process.argv[0]) in ['node', 'coffee', 'koffee', 'electron']
             if process.argv[1]?.length
                 slog.id = slash.base process.argv[1]
         else
