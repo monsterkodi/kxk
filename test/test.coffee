@@ -595,10 +595,10 @@ describe 'kxk', ->
             
         it 'value', ->            
             
-            expect filter 1, -> 
+            expect filter(1, ->)
             .to.eql 1
             
-            expect filter "hello", -> 
+            expect filter("hello", ->)
             .to.eql "hello"
                 
                 

@@ -1,7 +1,12 @@
 name            kxk
-version         0.276.0
+version         0.277.0
 description     kodi's tool kit
+keywords
+                coffeescript
+                toolkit
 main            js/kxk.js
+scripts
+                test  ./node_modules/.bin/mocha -c --require coffeescript/register test/test.coffee
 repository
                 type  git
                 url   git+https://github.com/monsterkodi/kxk.git
@@ -21,7 +26,6 @@ dependencies
                 keycode         ^2.2.0
                 lodash          ^4.17.10
                 noon            >=1.5.0
-                npm             ^6.2.0
                 opener          ^1.4.3
                 sds             ^1.14.1
                 sorcery         ^0.10.0
@@ -31,17 +35,7 @@ dependencies
                 walkdir         0.0.12
                 write-file-atomic  ^2.3.0
 devDependencies
-                assert  ^1.4.1
-                chai    ^4.1.2
-coffeelintConfig
-                no_trailing_whitespace
-                  level           ignore
-                  allowed_in_comments  true
-                  allowed_in_empty_lines  true
-                max_line_length
-                  value           150
-                  level           warn
-                  limitComments   false
-                indentation
-                  value   4
-                  level   warn
+                coffeescript  ^1.12.7
+                mocha         ^6.1.4
+                assert        ^1.4.1
+                chai          ^4.1.2

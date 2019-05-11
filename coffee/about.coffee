@@ -98,7 +98,8 @@ class About
                 var a = document.getElementById('about');
                 a.onclick   = function () { ipc.send('closeAbout'); }
                 a.onkeydown = function () { ipc.send('closeAbout'); }
-                a.onblur    = function () { ipc.send('blurAbout'); }
+                a.onblur    = function () { ipc.send('blurAbout');  }
+                a.onkeydown = function () { ipc.send('closeAbout'); }
                 a.focus()
             </script>
         """
