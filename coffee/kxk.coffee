@@ -19,6 +19,7 @@ atomic  = require 'write-file-atomic'
 post    = require './ppost'
 karg    = require 'karg'
 colors  = require 'colors'
+pretty  = require 'pretty-time'
 
 module.exports =
     
@@ -34,6 +35,7 @@ module.exports =
     post:post
     noon:noon
     childp:childp
+    'pretty-time':pretty
     
     # 0000000    000   0000000  000000000
     # 000   000  000  000          000   

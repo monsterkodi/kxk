@@ -388,5 +388,16 @@ class Slash
         return true if textbase[Slash.basename(f).toLowerCase()]
         return false if not Slash.isFile f
         return not isBinary.isBinaryFileSync f
+        
+    @readText: (f, cb) ->
+        
+        if _.isFunction cb
+            fs.readFile f, 'utf8', (err, text) -> 
+                cb empty(err) and text or ''
+        else
+            try
+                fs.readFileSync f, 'utf8'
+            catch err
+                ''
     
 module.exports = Slash

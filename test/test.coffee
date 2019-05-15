@@ -13,6 +13,12 @@ chai.should()
 
 describe 'kxk', ->
     
+    #  0000000  000       0000000    0000000  000   000  
+    # 000       000      000   000  000       000   000  
+    # 0000000   000      000000000  0000000   000000000  
+    #      000  000      000   000       000  000   000  
+    # 0000000   0000000  000   000  0000000   000   000  
+    
     describe 'slash', ->
 
         it 'dir', ->
@@ -362,6 +368,12 @@ describe 'kxk', ->
             expect slash.sanitize '\n\n c . d  \n\n\n'
             .to.eql ' c . d  '
             
+    # 00000000  000  000      00000000  000      000   0000000  000000000  
+    # 000       000  000      000       000      000  000          000     
+    # 000000    000  000      0000000   000      000  0000000      000     
+    # 000       000  000      000       000      000       000     000     
+    # 000       000  0000000  00000000  0000000  000  0000000      000     
+    
     describe 'filelist', ->
     
         it "exists", -> _.isFunction filelist
@@ -425,7 +437,13 @@ describe 'kxk', ->
                 slash.normalize('dir/level1/level2/level3/level3.coffee'), 
                 slash.normalize('dir/level1b/level1b.coffee')]
     
-    describe 'pos', ->
+    # 000   000  00000000    0000000    0000000  
+    # 000  000   000   000  000   000  000       
+    # 0000000    00000000   000   000  0000000   
+    # 000  000   000        000   000       000  
+    # 000   000  000         0000000   0000000   
+    
+    describe 'kpos', ->
     
         it "angle", ->
             expect kpos(1,0).angle(kpos 0,1)
@@ -458,6 +476,12 @@ describe 'kxk', ->
             .to.eql kpos(0,-1)
             expect kpos(1,0).rotate(45).rounded(0.001)
             .to.eql kpos(1,1).normal().rounded(0.001)
+    
+    #  0000000  000       0000000   00     00  00000000   
+    # 000       000      000   000  000   000  000   000  
+    # 000       000      000000000  000000000  00000000   
+    # 000       000      000   000  000 0 000  000        
+    #  0000000  0000000  000   000  000   000  000        
     
     describe 'clamp', ->
         
@@ -498,6 +522,12 @@ describe 'kxk', ->
             expect clamp -3, -2, 0
             .to.eql -2
             
+    # 00000000  00     00  00000000   000000000  000   000  
+    # 000       000   000  000   000     000      000 000   
+    # 0000000   000000000  00000000      000       00000    
+    # 000       000 0 000  000           000        000     
+    # 00000000  000   000  000           000        000     
+    
     describe 'empty', ->
         
         it 'true', ->
@@ -537,6 +567,12 @@ describe 'kxk', ->
             expect empty Infinity
             .to.eql false
             
+    # 000   000   0000000   000      000  0000000    
+    # 000   000  000   000  000      000  000   000  
+    #  000 000   000000000  000      000  000   000  
+    #    000     000   000  000      000  000   000  
+    #     0      000   000  0000000  000  0000000    
+    
     describe 'valid', ->
         
         it 'false', ->
@@ -576,6 +612,12 @@ describe 'kxk', ->
             expect valid Infinity
             .to.eql true
         
+    # 00000000  000  000      000000000  00000000  00000000   
+    # 000       000  000         000     000       000   000  
+    # 000000    000  000         000     0000000   0000000    
+    # 000       000  000         000     000       000   000  
+    # 000       000  0000000     000     00000000  000   000  
+    
     describe 'filter', ->
         
         it 'array', ->
@@ -602,10 +644,54 @@ describe 'kxk', ->
             expect filter("hello", ->)
             .to.eql "hello"
                 
+    # 000   0000000  000000000  00000000  000   000  000000000  
+    # 000  000          000     000        000 000      000     
+    # 000  0000000      000     0000000     00000       000     
+    # 000       000     000     000        000 000      000     
+    # 000  0000000      000     00000000  000   000     000     
+    
     describe 'isText', ->
         
         it 'non binary', ->
             
             expect slash.isText __dirname + '/dir/noext'
             .to.eql true
+
+        it 'binary', ->
+            
+            expect slash.isText __dirname + '../img/kxk.png'
+            .to.eql false
+            
+    # 00000000   00000000   0000000   0000000    000000000  00000000  000   000  000000000  
+    # 000   000  000       000   000  000   000     000     000        000 000      000     
+    # 0000000    0000000   000000000  000   000     000     0000000     00000       000     
+    # 000   000  000       000   000  000   000     000     000        000 000      000     
+    # 000   000  00000000  000   000  0000000       000     00000000  000   000     000     
+    
+    describe 'readText', ->
+        
+        it 'reads text', ->
+            
+            expect slash.readText __dirname + '/dir/noext'
+            .to.eql 'hello\n'
+
+        it 'returns empty text if file doesnt exist', ->
+            
+            expect slash.readText __dirname + '/dir/filedoesntexist'
+            .to.eql ''
+
+        it 'reads text sync', (done) ->
+            
+            slash.readText __dirname + '/dir/noext', (text) ->
+                expect text
+                .to.eql 'hello\n'
+                done()
+
+        it 'returns empty text if file doesnt exist sync', (done) ->
+            
+            slash.readText __dirname + '/dir/filedoesntexist', (text) ->
+                expect text
+                .to.eql ''
+                done()
+        
             
