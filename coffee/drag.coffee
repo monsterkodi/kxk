@@ -65,7 +65,7 @@ class Drag
             document.addEventListener 'mouseup',   @dragUp
         @
     
-    dragStart: (event) => @start pos(event), event
+    dragStart: (event) => @start kpos(event), event
         
     # 00     00   0000000   000   000  00000000  
     # 000   000  000   000  000   000  000       
