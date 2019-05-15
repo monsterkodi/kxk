@@ -6,7 +6,7 @@
 000   000  000        000        
 ###
 
-{ args, prefs, watch, empty, valid, slash, about, post, childp, os, fs, error, log, _ } = require './kxk'
+{ args, prefs, watch, empty, valid, slash, about, post, childp, os, fs, kerror, klog, _ } = require './kxk'
 
 class App
     
@@ -24,7 +24,7 @@ class App
         @userData = slash.userData() #@app.getPath 'userData'
         
         if @opt.tray
-            log.slog.icon = slash.fileUrl @resolve @opt.tray  
+            klog.slog.icon = slash.fileUrl @resolve @opt.tray  
             
         argl = """
             noprefs     don't load preferences      false
@@ -35,11 +35,11 @@ class App
         argl = @opt.args + '\n' + argl if @opt.args
         args = args.init argl
         
-        # log 'app.args', args
+        # klog 'app.args', args
         
         if @opt.single != false #and os.platform() != 'darwin'
             if @app.makeSingleInstance? and @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
-                log 'app.quit single'
+                klog 'app.quit single'
                 @app.quit()
                 return
             else if @app.requestSingleInstanceLock? 
@@ -264,7 +264,7 @@ class App
     startWatcher: =>
         
         @opt.dir = slash.resolve @opt.dir
-        console.log 'startWatcher', @opt.dir
+        log 'startWatcher', @opt.dir
         watcher = watch.dir @opt.dir
         watcher.on 'change', @onSrcChange
         watcher.on 'error', (err) -> error err
@@ -272,7 +272,7 @@ class App
         
         return if empty @opt.dirs
         
-        console.log 'startWatchers', @opt.dirs
+        log 'startWatchers', @opt.dirs
         for dir in @opt.dirs
             watcher = watch.dir slash.resolve slash.join @opt.dir, dir
             watcher.on 'change', @onSrcChange

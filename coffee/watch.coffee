@@ -6,7 +6,7 @@
 00     00  000   000     000      0000000  000   000
 ###
 
-{ slash, log, fs, _ } = require './kxk'
+{ slash, fs, _ } = require './kxk'
 
 event   = require 'events'
 walkdir = require 'walkdir'
@@ -52,7 +52,7 @@ class Watch extends event
     watchDir: ->
         
         @watch = fs.watch @dir
-        @watch.on 'error', (err) -> log "fs.watch dir:'#{@dir}' error: #{err.stack}"
+        @watch.on 'error', (err) -> error "fs.watch dir:'#{@dir}' error: #{err.stack}"
         @watch.on 'change', @onChange
         
         if @opt.recursive

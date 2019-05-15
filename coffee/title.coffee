@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ elem, sds, prefs, slash, scheme, empty, post, stopEvent, keyinfo, menu, noon, str, log, $, _ } = require './kxk'
+{ elem, sds, prefs, slash, scheme, empty, post, stopEvent, keyinfo, menu, noon, str, $, _ } = require './kxk'
 
 class Title
     
@@ -139,7 +139,6 @@ class Title
     menuTemplate: ->
         
         if empty @templateCache
-            # log 'menuTemplate', slash.resolve slash.join @opt.dir, @opt.menu
             @templateCache = @makeTemplate noon.load slash.resolve slash.join @opt.dir, @opt.menu
             
         if @opt.menuTemplate?

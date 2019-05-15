@@ -54,7 +54,7 @@ fileLog = (info) ->
         clearImmediate dumpTimer
         dumpTimer = setImmediate dumpInfos
     catch err
-        console.log "fileLog error -- ", err.stack
+        error "fileLog error -- ", err.stack
         slog.file = false
 
 #  0000000  000       0000000    0000000   
@@ -104,7 +104,7 @@ log = ->
     s = (str(s) for s in [].slice.call arguments, 0).join " " 
     
     post.emit 'log', s
-    console.log s
+    log s
     slog s
 
 #  0000000   0000000   000   000  00000000  000   0000000     
@@ -123,8 +123,8 @@ slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'
 slog.icon    = if process.type == 'renderer' then '●' else '◼'
 slog.depth   = 2
-slog.filesep = ' > ' #' ⦿ '
-slog.methsep = ' >> ' #' ▸ '
+slog.filesep = ' > '
+slog.methsep = ' >> '
 slog.filepad = 30
 slog.methpad = 15
 
@@ -146,8 +146,10 @@ catch err
         if process.argv[0].length and slash.base(process.argv[0]) in ['node', 'coffee', 'koffee', 'electron']
             if process.argv[1]?.length
                 slog.id = slash.base process.argv[1]
+        else if slash.ext(process.argv[-1]) in ['js']
+            slog.id = slash.base process.argv[-1]
         else
-            console.log "can't figure out slog.id -- process.argv:", process.argv.join ' '
+            log "can't figure out slog.id -- process.argv:", process.argv.join ' '
     catch err
         null
     

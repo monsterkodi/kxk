@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ filelist, splitFileLine, slash, pos, empty, valid, clamp, filter, log, _ } = require '../' # '../coffee/kxk'
+{ filelist, splitFileLine, slash, pos, empty, valid, clamp, filter, _ } = require '../' # '../coffee/kxk'
 
 assert = require 'assert'
 chai   = require 'chai'

@@ -6,7 +6,7 @@
 00     00  000  000   000  
 ###
 
-{ post, keyinfo, title, scheme, stopEvent, prefs, slash, elem, empty, valid, popup, pos, str, fs, log, $, _ } = require './kxk'
+{ post, keyinfo, title, scheme, stopEvent, prefs, slash, elem, empty, valid, popup, pos, str, fs, klog, $, _ } = require './kxk'
 
 class Win
     
@@ -14,7 +14,7 @@ class Win
         
         window.onerror = (msg, source, line, col, err) ->
             
-            console.log 'window.onerror', msg, source, line, col
+            error 'window.onerror', msg, source, line, col
             srcmap = require './srcmap'
             srcmap.logErr err
             true
@@ -22,7 +22,7 @@ class Win
         prefs.init()
         
         if @opt.icon
-            log.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
+            klog.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
         
         electron = require 'electron'
         
@@ -66,9 +66,9 @@ class Win
             file = slash.resolve "~/Desktop/#{@opt.pkg.name}-screenshot.png"
             fs.writeFile file, img.toPNG(), (err) ->
                 if valid err
-                    log 'saving screenshot failed', err
+                    klog 'saving screenshot failed', err
                 else
-                    log "screenshot saved to #{file}"
+                    klog "screenshot saved to #{file}"
             
     # 00     00  00000000  000   000  000   000   0000000    0000000  000000000  000   0000000   000   000  
     # 000   000  000       0000  000  000   000  000   000  000          000     000  000   000  0000  000  

@@ -6,7 +6,7 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ noon, post, atomic, first, sds, slash, fs, log, error, _ } = require './kxk'
+{ noon, post, atomic, first, sds, slash, fs, kerror, _ } = require './kxk'
 
 Emitter = require 'events'
 
@@ -34,7 +34,7 @@ class Store extends Emitter
         opt.separator ?= ':'
         opt.timeout   ?= 4000
         
-        return error 'no name for store?' if not @name
+        return kerror 'no name for store?' if not @name
 
         electron = require 'electron'
         @app = electron.app
@@ -158,7 +158,7 @@ class Store extends Emitter
             try
                 atomic.sync @file, noon.stringify(@data, {indent: 2, maxalign: 8})+'\n'
             catch err
-                error "store.save -- can't save to '#{@file}:", err
+                kerror "store.save -- can't save to '#{@file}:", err
                 
             @emit 'didSave'
         else 

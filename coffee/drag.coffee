@@ -6,7 +6,7 @@
 0000000    000   000  000   000   0000000 
 ###
 
-{ def, pos, stopEvent, error, log, $, _ } = require './kxk'
+{ def, pos, stopEvent, kerror, $, _ } = require './kxk'
 
 class Drag
 
@@ -23,15 +23,15 @@ class Drag
         if _.isString @target
             t =$ @target
             if not t?
-                return error "Drag -- can't find drag target with id", @target
+                return kerror "Drag -- can't find drag target with id", @target
             @target = t
             
         if not @target?
-            return error "Drag -- can't find drag target"
+            return kerror "Drag -- can't find drag target"
         
-        error "Drag -- onStart not a function?" if @onStart? and not _.isFunction @onStart
-        error "Drag -- onMove not a function?" if @onMove? and not _.isFunction @onMove
-        error "Drag -- onEnd not a function?" if @onEnd? and not _.isFunction @onEnd
+        kerror "Drag -- onStart not a function?" if @onStart? and not _.isFunction @onStart
+        kerror "Drag -- onMove not a function?" if @onMove? and not _.isFunction @onMove
+        kerror "Drag -- onEnd not a function?" if @onEnd? and not _.isFunction @onEnd
                 
         @dragging  = false
         @listening = false

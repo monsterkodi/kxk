@@ -6,7 +6,7 @@
 0000000   000   000   0000000  000   000  000   000  000        
 ###
 
-{ fs, valid, empty, slash, str, log, _ } = require './kxk'
+{ fs, valid, empty, slash, str, klog, _ } = require './kxk'
 
 sourceMap  = require 'source-map'
 mapConvert = require 'convert-source-map'
@@ -22,18 +22,18 @@ regex2     = /^\s+at\s+(.*):(\d+):(\d+)/
 
 logErr = (err, sep='💥') ->
     
-    # console.log errorStack err
-    console.log err
+    # log errorStack err
+    log err
     trace = errorTrace err
     # console.log 'trace:', str(trace)
     if valid trace.lines
-        log.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
+        klog.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
         for line in trace.lines
             sep = if slash.isAbsolute(line.file) or line.file[0]=='~' then '🐞' else '🔼'
             if sep == '🐞' or line.file[0] == '.'
-                log.flog str:'       '+line.func, source:line.file, line:line.line, sep:sep
+                klog.flog str:'       '+line.func, source:line.file, line:line.line, sep:sep
     else
-        log.flog str:trace.text, source:'', line:0, sep:sep
+        klog.flog str:trace.text, source:'', line:0, sep:sep
 
 # 00000000  000  000      00000000  00000000    0000000    0000000  
 # 000       000  000      000       000   000  000   000  000       
@@ -121,7 +121,8 @@ errorStack = (err) ->
             lines.push "       #{_.padEnd fp.func, 30} #{fp.file}:#{fp.line}" 
         else
             lines.push stackLine 
-  
+
+  
     lines.join '\n'
 
 # 000000000  00000000    0000000    0000000  00000000  
@@ -141,7 +142,8 @@ errorTrace = (err) ->
             lines.push fp
         else
             text.push stackLine 
-  
+
+  
     lines:  lines
     text:   text.join '\n'
     
@@ -172,9 +174,9 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
                     coffeeLine = pos.line 
                     coffeeCol  = pos.column
                 else
-                    log 'no pos.line', pos
+                    klog 'no pos.line', pos
             else
-                log 'no consumer originalPositionFor', mapData?, consumer?
+                klog 'no consumer originalPositionFor', mapData?, consumer?
         
     [coffeeFile, coffeeLine, coffeeCol]
 
@@ -203,9 +205,9 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
             if valid poss
                 return [jsFile, poss[0]?.line, poss[0]?.column]
             else
-                console.log 'srcmap.toJs -- empty poss!'
+                log 'srcmap.toJs -- empty poss!'
         else
-            console.log 'srcmap.toJs -- no allGeneratedPositionsFor in', consumer
+            log 'srcmap.toJs -- no allGeneratedPositionsFor in', consumer
         
     [jsFile, null, null]
         

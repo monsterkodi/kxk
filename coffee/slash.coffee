@@ -8,7 +8,6 @@
 
 { fs, os, empty, valid, _ } = require './kxk'
 
-log      = console.log
 path     = require 'path'
 isBinary = require 'isbinaryfile'
 
@@ -310,7 +309,7 @@ class Slash
         catch err
             if err.code in ['ENOENT', 'ENOTDIR']
                 return false
-            console.log err
+            error err
         null     
         
     @touch: (p) ->

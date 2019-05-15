@@ -6,7 +6,7 @@
 000       000  0000000  00000000  0000000  000  0000000      000     
 ###
 
-{ slash, fs, log, _ } = require './kxk'
+{ slash, fs, _ } = require './kxk'
 
 #   synchronous file list
 #
@@ -77,9 +77,9 @@ fileList = (paths, opt) ->
                 
         catch err
             if opt.logError
-                log "[ERROR] kxk.fileList: #{err}"
-                log "paths:", paths
-                log "opt:", opt
+                error "[ERROR] kxk.fileList: #{err}"
+                error "paths:", paths
+                error "opt:", opt
 
     files
 

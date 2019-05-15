@@ -6,13 +6,13 @@
    000      0000000    0000000   0000000     000     000  000      
 ###
 
-{ elem, pos, empty, error, log, $, _ } = require './kxk'
+{ elem, pos, empty, kerror, $, _ } = require './kxk'
 
 class Tooltip
     
     constructor: (@opt) ->
         
-        return error "no elem for tooltip?" if not @opt?.elem
+        return kerror "no elem for tooltip?" if not @opt?.elem
         
         @opt.delay ?= 700
         @opt.html  ?= @opt.text

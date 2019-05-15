@@ -8,11 +8,11 @@
 
 error = ->
 
-    { log, str } = require './kxk'
+    { klog, str } = require './kxk'
     
     s = '[ERROR] ' + (str(s) for s in [].slice.call arguments, 0).join " "
         
-    console.error s
-    log.slog s
+    error s
+    klog.slog s
 
 module.exports = error

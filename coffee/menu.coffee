@@ -6,7 +6,7 @@
 000   000  00000000  000   000   0000000   
 ###
 
-{ post, stopEvent, keyinfo, popup, elem, log } = require './kxk'
+{ post, stopEvent, keyinfo, popup, elem } = require './kxk'
 
 class Menu
     
@@ -142,7 +142,7 @@ class Menu
             
     itemSelected: (item, elem) ->
             
-    deactivate: (item) -> log item.item
+    deactivate: (item) -> 
 
     navigateLeft:  -> @select @selected?.previousSibling, activate:true, selectFirstItem:false
     navigateRight: -> @select @selected?.nextSibling,     activate:true, selectFirstItem:false

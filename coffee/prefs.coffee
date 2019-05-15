@@ -6,7 +6,7 @@
 000        000   000  00000000  000       0000000 
 ###
 
-{ store, slash, error, fs, log } = require './kxk'
+{ store, slash, fs } = require './kxk'
 
 class Prefs
     
@@ -39,7 +39,7 @@ class Prefs
         @watcher
             .on 'change', @onFileChange
             .on 'rename', @onFileUnlink
-            .on 'error' , (err) -> log 'Prefs watch error', err
+            .on 'error' , (err) -> error 'Prefs watch error', err
         
     @onFileChange: => @store.reload()
     @onFileUnlink: => @unwatch(); @store.clear()

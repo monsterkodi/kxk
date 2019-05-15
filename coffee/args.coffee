@@ -6,7 +6,7 @@
 000   000  000   000   0000000   0000000 
 ###
 
-{ karg, post, slash, noon, empty, valid, fs, error, log, _ } = require './kxk'
+{ karg, post, slash, noon, empty, valid, fs, kerror, _ } = require './kxk'
 
 if process.type == 'renderer'
     
@@ -28,9 +28,9 @@ else
             if valid pkgDir
                 pkgJson = slash.join pkgDir, 'package.json'
                 pkg = require pkgJson
-                return error "args -- no pkg in '#{pkgJson}'!" if empty pkg
+                return kerror "args -- no pkg in '#{pkgJson}'!" if empty pkg
             else
-                return error 'args -- no pkg dir!'
+                return kerror 'args -- no pkg dir!'
             
         kargConfig = {}
         kargConfig[pkg.name] = {}
