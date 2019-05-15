@@ -8,9 +8,9 @@
 
 error = ->
 
-    { klog, str } = require './kxk'
+    { klog, kstr } = require './kxk'
     
-    s = '[ERROR] ' + (str(s) for s in [].slice.call arguments, 0).join " "
+    s = '[ERROR] ' + (kstr(s) for s in [].slice.call arguments, 0).join " "
         
     error s
     klog.slog s

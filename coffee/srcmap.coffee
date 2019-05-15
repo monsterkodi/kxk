@@ -6,7 +6,7 @@
 0000000   000   000   0000000  000   000  000   000  000        
 ###
 
-{ fs, valid, empty, slash, str, klog, _ } = require './kxk'
+{ fs, valid, empty, slash, klog, _ } = require './kxk'
 
 sourceMap  = require 'source-map'
 mapConvert = require 'convert-source-map'

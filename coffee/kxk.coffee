@@ -150,10 +150,10 @@ if not Array.prototype.reversed
     Array.prototype.reversed = ->
         @.slice(0).reverse()
     
-module.exports.str         = require './str'
+module.exports.kstr        = require './str'
 module.exports.klog        = require './log'
 module.exports.kerror      = require './error'
-module.exports.pos         = require './pos'
+module.exports.kpos        = require './pos'
 module.exports.slash       = require './slash'
 
 module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'

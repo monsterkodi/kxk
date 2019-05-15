@@ -7,7 +7,7 @@
 ###
 
 post    = require './ppost'
-str     = require './str'
+kstr    = require './str'
 os      = require 'os'
 fs      = require 'fs'
 _       = require 'lodash'
@@ -101,7 +101,7 @@ slog = (s) ->
 
 log = ->
     
-    s = (str(s) for s in [].slice.call arguments, 0).join " " 
+    s = (kstr(s) for s in [].slice.call arguments, 0).join " " 
     
     post.emit 'log', s
     log s

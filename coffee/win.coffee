@@ -6,7 +6,7 @@
 00     00  000  000   000  
 ###
 
-{ post, keyinfo, title, scheme, stopEvent, prefs, slash, elem, empty, valid, popup, pos, str, fs, klog, $, _ } = require './kxk'
+{ post, keyinfo, title, scheme, stopEvent, prefs, slash, elem, empty, valid, popup, fs, klog, $, _ } = require './kxk'
 
 class Win
     

@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ filelist, splitFileLine, slash, pos, empty, valid, clamp, filter, _ } = require '../' # '../coffee/kxk'
+{ filelist, splitFileLine, slash, kpos, empty, valid, clamp, filter, _ } = require '../'
 
 assert = require 'assert'
 chai   = require 'chai'
@@ -428,36 +428,36 @@ describe 'kxk', ->
     describe 'pos', ->
     
         it "angle", ->
-            expect pos(1,0).angle(pos 0,1)
+            expect kpos(1,0).angle(kpos 0,1)
             .to.eql 90
-            expect pos(1,0).angle(pos 0,-1)
+            expect kpos(1,0).angle(kpos 0,-1)
             .to.eql 90
-            expect pos(0,10).angle(pos 1,0)
+            expect kpos(0,10).angle(kpos 1,0)
             .to.eql 90
-            expect pos(0,-10).angle(pos 1,0)
+            expect kpos(0,-10).angle(kpos 1,0)
             .to.eql 90
     
         it "rotation", ->
-            expect Math.round pos(0,1).rotation(pos 1,0)
+            expect Math.round kpos(0,1).rotation(kpos 1,0)
             .to.eql 90
-            expect Math.round pos(0,-1).rotation(pos 1,0)
+            expect Math.round kpos(0,-1).rotation(kpos 1,0)
             .to.eql -90
-            expect Math.round pos(1,1).rotation(pos 1,0)
+            expect Math.round kpos(1,1).rotation(kpos 1,0)
             .to.eql 45
-            expect Math.round pos(1,-1).rotation(pos 1,0)
+            expect Math.round kpos(1,-1).rotation(kpos 1,0)
             .to.eql -45
-            expect Math.round pos(1,0).rotation(pos 0,1)
+            expect Math.round kpos(1,0).rotation(kpos 0,1)
             .to.eql -90
-            expect Math.round pos(1,0).rotation(pos 0,-1)
+            expect Math.round kpos(1,0).rotation(kpos 0,-1)
             .to.eql 90
     
         it "rotate", ->
-            expect pos(1,0).rotate(90).rounded()
-            .to.eql pos(0,1)
-            expect pos(1,0).rotate(-90).rounded()
-            .to.eql pos(0,-1)
-            expect pos(1,0).rotate(45).rounded(0.001)
-            .to.eql pos(1,1).normal().rounded(0.001)
+            expect kpos(1,0).rotate(90).rounded()
+            .to.eql kpos(0,1)
+            expect kpos(1,0).rotate(-90).rounded()
+            .to.eql kpos(0,-1)
+            expect kpos(1,0).rotate(45).rounded(0.001)
+            .to.eql kpos(1,1).normal().rounded(0.001)
     
     describe 'clamp', ->
         

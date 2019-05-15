@@ -6,7 +6,7 @@
 0000000    000   000  000   000   0000000 
 ###
 
-{ def, pos, stopEvent, kerror, $, _ } = require './kxk'
+{ def, kpos, stopEvent, kerror, $, _ } = require './kxk'
 
 class Drag
 
@@ -76,12 +76,12 @@ class Drag
     dragMove: (event) =>
 
         if @dragging
-            @pos      = pos event
+            @pos      = kpos event
             @delta    = @lastPos.to @pos
             @deltaSum = @startPos.to @pos
             
             if @constrainKey? and event[@constrainKey]
-                @constrain ?= if Math.abs(@delta.x) >= Math.abs(@delta.y) then pos 1,0 else pos 0,1
+                @constrain ?= if Math.abs(@delta.x) >= Math.abs(@delta.y) then kpos 1,0 else kpos 0,1
                 @delta.x *= @constrain.x
                 @delta.y *= @constrain.y
             else

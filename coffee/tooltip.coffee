@@ -6,7 +6,7 @@
    000      0000000    0000000   0000000     000     000  000      
 ###
 
-{ elem, pos, empty, kerror, $, _ } = require './kxk'
+{ elem, empty, kerror, $, _ } = require './kxk'
 
 class Tooltip
     

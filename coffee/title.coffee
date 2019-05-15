@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ elem, sds, prefs, slash, scheme, empty, post, stopEvent, keyinfo, menu, noon, str, $, _ } = require './kxk'
+{ elem, sds, prefs, slash, scheme, empty, post, stopEvent, keyinfo, menu, noon, kstr, $, _ } = require './kxk'
 
 class Title
     
@@ -155,7 +155,7 @@ class Title
                     text: ''
                 when _.isNumber menuOrAccel
                     text:text
-                    accel:str menuOrAccel
+                    accel:kstr menuOrAccel
                 when _.isString menuOrAccel
                     text:text
                     accel:keyinfo.convertCmdCtrl menuOrAccel
