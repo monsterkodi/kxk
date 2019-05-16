@@ -6,7 +6,7 @@
 00     00  000  000   000  
 ###
 
-{ post, keyinfo, title, scheme, stopEvent, prefs, slash, elem, empty, valid, popup, fs, klog, $, _ } = require './kxk'
+{ post, keyinfo, title, scheme, stopEvent, prefs, slash, elem, empty, valid, popup, fs, kpos, klog, $, _ } = require './kxk'
 
 class Win
     
@@ -94,9 +94,9 @@ class Win
 
         @win.focus()
         
-        absPos = pos event
+        absPos = kpos event
         if not absPos?
-            absPos = pos $("#main").getBoundingClientRect().left, $("#main").getBoundingClientRect().top
+            absPos = kpos $("#main").getBoundingClientRect().left, $("#main").getBoundingClientRect().top
         
         items = _.clone window.titlebar.menuTemplate()
         
