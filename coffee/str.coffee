@@ -8,6 +8,7 @@
 
 noon   = require 'noon'
 entity = require 'html-entities'
+time   = require 'pretty-time'
 
 xmlEntities = new entity.XmlEntities()
 
@@ -37,5 +38,7 @@ str.encode = (s, spaces=true) ->
         r
     else
         ''
+       
+str.time = time
         
 module.exports = str
