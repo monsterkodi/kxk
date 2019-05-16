@@ -6,19 +6,30 @@
 000   000  000   000  000   000  
 ###
 
-childp  = require 'child_process'
-crypto  = require 'crypto'
-_       = require 'lodash'
-os      = require 'os'
-noon    = require 'noon'
-sds     = require 'sds'
-fs      = require 'fs-extra'
-open    = require 'opener' 
-walkdir = require 'walkdir'
-atomic  = require 'write-file-atomic'
-post    = require './ppost'
-karg    = require 'karg'
-colors  = require 'colors'
+childp    = require 'child_process'
+crypto    = require 'crypto'
+_         = require 'lodash'
+os        = require 'os'
+noon      = require 'noon'
+sds       = require 'sds'
+fs        = require 'fs-extra'
+open      = require 'opener' 
+walkdir   = require 'walkdir'
+atomic    = require 'write-file-atomic'
+post      = require './ppost'
+karg      = require 'karg'
+colors    = require 'colors'
+colorette = require 'colorette'
+
+chai = require 'chai'
+chai.should()
+chai.util.getMessage = (obj, args) -> 
+    msg = chai.util.flag(obj, 'negate') and args[2] or args[1]
+    if typeof msg == "function" then msg = msg()
+    msg ?= ''
+    msg .replace /#\{this\}/g, -> yellowBright '\n'+noon.stringify(chai.util.flag obj, 'object')+'\n\n'
+        .replace /#\{act\}/g,  -> magenta      '\n'+noon.stringify(chai.util.getActual obj, args)+'\n'
+        .replace /#\{exp\}/g,  -> green        '\n'+noon.stringify(args[3])+'\n'
 
 module.exports =
     
@@ -27,7 +38,9 @@ module.exports =
     fs:fs
     sds:sds
     karg:karg
+    chai:karg
     colors:colors
+    colorette:colorette
     atomic:atomic
     walkdir:walkdir
     open:open
