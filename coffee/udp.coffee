@@ -16,7 +16,9 @@ class udp
         @opt.port ?= 9669
         
         try
-            @port = dgram.createSocket 'udp4'
+            @port = dgram.createSocket 'udp6'
+            # @port.setSendBufferSize 0
+            # @port.setRecvBufferSize 0
                         
             if @opt.onMsg
                 
@@ -59,7 +61,7 @@ class udp
         else
             msg = JSON.stringify args[0]
             
-        buf = new Buffer msg
+        buf = Buffer.from msg
         
         @port.send buf, 0, buf.length, @opt.port, '127.0.0.1', ->
             

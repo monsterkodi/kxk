@@ -39,6 +39,9 @@ str.encode = (s, spaces=true) ->
     else
         ''
        
+str.stripansi = (s) ->
+    s.replace /\x1B[[(?);]{0,2}(;?\d)*./g, ''
+        
 str.time = time
         
 module.exports = str
