@@ -91,7 +91,7 @@ class App
             electron.globalShortcut.register prefs.get('shortcut'), @showWindow
              
         if args.watch
-            log 'App.onReady startWatcher'
+            klog 'App.onReady startWatcher'
             @startWatcher()
         
         if @opt.onShow
@@ -264,7 +264,7 @@ class App
     startWatcher: =>
         
         @opt.dir = slash.resolve @opt.dir
-        log 'startWatcher', @opt.dir
+        klog 'startWatcher', @opt.dir
         watcher = watch.dir @opt.dir
         watcher.on 'change', @onSrcChange
         watcher.on 'error', (err) -> error err
@@ -272,7 +272,7 @@ class App
         
         return if empty @opt.dirs
         
-        log 'startWatchers', @opt.dirs
+        klog 'startWatchers', @opt.dirs
         for dir in @opt.dirs
             watcher = watch.dir slash.resolve slash.join @opt.dir, dir
             watcher.on 'change', @onSrcChange
@@ -288,7 +288,7 @@ class App
     
     onSrcChange: (info) =>
     
-        log "onSrcChange '#{info.change}'", info.path
+        klog "onSrcChange '#{info.change}'", info.path
         if slash.base(info.path) == 'main'
             @stopWatcher()
             @app.exit 0

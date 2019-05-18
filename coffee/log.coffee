@@ -1,9 +1,9 @@
 ###
-000       0000000    0000000     
-000      000   000  000          
-000      000   000  000  0000    
-000      000   000  000   000    
-0000000   0000000    0000000     
+000   000  000       0000000    0000000     
+000  000   000      000   000  000          
+0000000    000      000   000  000  0000    
+000  000   000      000   000  000   000    
+000   000  0000000   0000000    0000000     
 ###
 
 post    = require './ppost'
@@ -99,12 +99,12 @@ slog = (s) ->
 # 000      000   000  000   000  
 # 0000000   0000000    0000000   
 
-log = ->
+klog = ->
     
     s = (kstr(s) for s in [].slice.call arguments, 0).join " " 
     
     post.emit 'log', s
-    log s
+    console.log s
     slog s
 
 #  0000000   0000000   000   000  00000000  000   0000000     
@@ -128,8 +128,8 @@ slog.methsep = ' >> '
 slog.filepad = 30
 slog.methpad = 15
 
-log.slog     = slog
-log.flog     = fileLog
+klog.slog    = slog
+klog.flog    = fileLog
 
 try
     electron = require 'electron'
@@ -149,9 +149,9 @@ catch err
         else if slash.ext(process.argv[-1]) in ['js']
             slog.id = slash.base process.argv[-1]
         else
-            log "can't figure out slog.id -- process.argv:", process.argv.join ' '
+            warn "can't figure out slog.id -- process.argv:", process.argv.join ' '
     catch err
         null
     
-module.exports = log
+module.exports = klog
 
