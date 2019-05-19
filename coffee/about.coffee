@@ -42,66 +42,70 @@ class About
             maximizable:     false
             webPreferences:
                 webSecurity: false
+                nodeIntegration: true
             width:           About.opt?.size ? 300
             height:          About.opt?.size ? 300
 
         version = About.opt?.version ? About.opt?.pkg?.version
         html = """
-            <style type="text/css">
-                body {
-                    overflow:      hidden;
-                    -webkit-user-select: none;
-                }
-                #about {
-                    text-align:    center;
-                    cursor:        pointer;
-                    outline-width: 0;
-                    overflow:      hidden;
-                }
-
-                #image {
-                    position:      absolute;
-                    height:        70%;
-                    max-height:    70%;
-                    left:          50%;
-                    top:           50%;
-                    transform:     translate(-50%, -50%);
-                }
-
-                #version {
-                    position: absolute;
-                    bottom:         #{About.opt?.versionOffset  ? '7%'};
-                    left:           0;
-                    right:          0;
-                    text-align:     center;
-                    color:          #{About.opt?.color ? '#333'};
-                    font-family:    Verdana, sans-serif;
-                    text-decoration: none;
-                }
-
-                #version:hover {
-                    color:          #{About.opt?.highlight ? '#f80'};
-                }
-
-            </style>
-            <div id='about' tabindex=0>
-                <img id='image' src="file://#{About.opt.img}"/>
-                <div id='version'>
-                    #{version}
+        <!DOCTYPE html>
+        <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <style type="text/css">
+                    body {
+                        overflow:      hidden;
+                        -webkit-user-select: none;
+                    }
+                    .about {
+                        text-align:    center;
+                        cursor:        pointer;
+                        outline-width: 0;
+                        overflow:      hidden;
+                    }
+                    .image {
+                        position:      absolute;
+                        height:        70%;
+                        max-height:    70%;
+                        left:          50%;
+                        top:           50%;
+                        transform:     translate(-50%, -50%);
+                    }
+                    .version {
+                        position:       absolute;
+                        bottom:         #{About.opt?.versionOffset ? '7%'};
+                        left:           0;
+                        right:          0;
+                        text-align:     center;
+                        font-family:    Verdana, sans-serif;
+                        text-decoration: none;
+                        color:          rgb(50, 50, 50);
+                    }
+                    .version:hover {
+                        color:          rgb(205, 205, 205);
+                    }
+                </style>
+            </head>
+            <body>
+                <div class='about' id='about' tabindex=0>
+                    <img class='image' src="file://#{About.opt.img}"/>
+                    <div id='version' class='version'>
+                        #{version}
+                    </div>
                 </div>
-            </div>
-            <script>
-                var electron = require('electron');
-                var ipc = electron.ipcRenderer;
-                var l = document.getElementById('version');
-                l.onclick   = function () { ipc.send('openURL'); }
-                var a = document.getElementById('about');
-                a.onclick   = function () { ipc.send('closeAbout'); }
-                a.onkeydown = function () { ipc.send('closeAbout'); }
-                a.onblur    = function () { ipc.send('blurAbout');  }
-                a.onkeydown = function () { ipc.send('closeAbout'); }
-                a.focus()
-            </script>
+                <script>
+                    var electron = require('electron');
+                    var ipc = electron.ipcRenderer;
+                    var l = document.getElementById('version');
+                    l.onclick   = function () { ipc.send('openURL'); }
+                    var a = document.getElementById('about');
+                    a.onclick   = function () { ipc.send('closeAbout'); }
+                    a.onblur    = function () { ipc.send('blurAbout');  }
+                    a.onkeydown = function () { console.log('close'); ipc.send('closeAbout'); }
+                    a.focus()
+                </script>
+            </body>
+        </html>
         """
 
         ipc.on 'openURL',    About.openURL
