@@ -21,16 +21,6 @@ karg      = require 'karg'
 colors    = require 'colors'
 colorette = require 'colorette'
 
-chai = require 'chai'
-chai.should()
-chai.util.getMessage = (obj, args) ->
-    msg = chai.util.flag(obj, 'negate') and args[2] or args[1]
-    if typeof msg == "function" then msg = msg()
-    msg ?= ''
-    msg .replace /#\{this\}/g, -> yellowBright '\n'+noon.stringify(chai.util.flag obj, 'object')+'\n\n'
-        .replace /#\{act\}/g,  -> magenta      '\n'+noon.stringify(chai.util.getActual obj, args)+'\n'
-        .replace /#\{exp\}/g,  -> green        '\n'+noon.stringify(args[3])+'\n'
-
 module.exports =
 
     _:_
@@ -38,7 +28,6 @@ module.exports =
     fs:fs
     sds:sds
     karg:karg
-    chai:chai
     colors:colors
     colorette:colorette
     atomic:atomic
@@ -124,6 +113,18 @@ module.exports =
     deg2rad: (d) -> Math.PI * d / 180
 
     reversed: (a) -> _.clone(a).reverse()
+
+    chai: ->
+        chai = require 'chai'
+        chai.should()
+        chai.util.getMessage = (obj, args) ->
+            msg = chai.util.flag(obj, 'negate') and args[2] or args[1]
+            if typeof msg == "function" then msg = msg()
+            msg ?= ''
+            msg .replace /#\{this\}/g, -> yellowBright '\n'+noon.stringify(chai.util.flag obj, 'object')+'\n\n'
+                .replace /#\{act\}/g,  -> magenta      '\n'+noon.stringify(chai.util.getActual obj, args)+'\n'
+                .replace /#\{exp\}/g,  -> green        '\n'+noon.stringify(args[3])+'\n'
+        chai
 
     #  0000000   0000000  00000000   000  00000000   000000000
     # 000       000       000   000  000  000   000     000
