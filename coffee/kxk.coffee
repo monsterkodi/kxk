@@ -1,9 +1,9 @@
 ###
-000   000  000   000  000   000  
-000  000    000 000   000  000   
-0000000      00000    0000000    
-000  000    000 000   000  000   
-000   000  000   000  000   000  
+000   000  000   000  000   000
+000  000    000 000   000  000
+0000000      00000    0000000
+000  000    000 000   000  000
+000   000  000   000  000   000
 ###
 
 childp    = require 'child_process'
@@ -13,7 +13,7 @@ os        = require 'os'
 noon      = require 'noon'
 sds       = require 'sds'
 fs        = require 'fs-extra'
-open      = require 'opener' 
+open      = require 'opener'
 walkdir   = require 'walkdir'
 atomic    = require 'write-file-atomic'
 post      = require './ppost'
@@ -23,7 +23,7 @@ colorette = require 'colorette'
 
 chai = require 'chai'
 chai.should()
-chai.util.getMessage = (obj, args) -> 
+chai.util.getMessage = (obj, args) ->
     msg = chai.util.flag(obj, 'negate') and args[2] or args[1]
     if typeof msg == "function" then msg = msg()
     msg ?= ''
@@ -32,13 +32,13 @@ chai.util.getMessage = (obj, args) ->
         .replace /#\{exp\}/g,  -> green        '\n'+noon.stringify(args[3])+'\n'
 
 module.exports =
-    
+
     _:_
     os:os
     fs:fs
     sds:sds
     karg:karg
-    chai:karg
+    chai:chai
     colors:colors
     colorette:colorette
     atomic:atomic
@@ -47,12 +47,12 @@ module.exports =
     post:post
     noon:noon
     childp:childp
-    
+
     # 0000000    000   0000000  000000000
-    # 000   000  000  000          000   
-    # 000   000  000  000          000   
-    # 000   000  000  000          000   
-    # 0000000    000   0000000     000   
+    # 000   000  000  000          000
+    # 000   000  000  000          000
+    # 000   000  000  000          000
+    # 0000000    000   0000000     000
 
     def: (c,d) ->
         if c?
@@ -61,30 +61,30 @@ module.exports =
             _.clone d
         else
             {}
-    
-    # 00000000  000  000      000000000  00000000  00000000   
-    # 000       000  000         000     000       000   000  
-    # 000000    000  000         000     0000000   0000000    
-    # 000       000  000         000     000       000   000  
-    # 000       000  0000000     000     00000000  000   000  
-    
+
+    # 00000000  000  000      000000000  00000000  00000000
+    # 000       000  000         000     000       000   000
+    # 000000    000  000         000     0000000   0000000
+    # 000       000  000         000     000       000   000
+    # 000       000  0000000     000     00000000  000   000
+
     filter: (o, f) ->
-        
+
         if _.isArray o
             _.filter o, f
         else if _.isObject o
             _.pickBy o, f
         else
             o
-            
+
     # 000   000   0000000   000      000   000  00000000
-    # 000   000  000   000  000      000   000  000     
-    #  000 000   000000000  000      000   000  0000000 
-    #    000     000   000  000      000   000  000     
+    # 000   000  000   000  000      000   000  000
+    #  000 000   000000000  000      000   000  0000000
+    #    000     000   000  000      000   000  000
     #     0      000   000  0000000   0000000   00000000
 
-    clamp: (r1, r2, v) -> 
-        
+    clamp: (r1, r2, v) ->
+
         v = r1 if not _.isFinite v
         [s1, s2] = [Math.min(r1,r2), Math.max(r1,r2)]
         v = s1 if v < s1
@@ -93,13 +93,13 @@ module.exports =
         v
 
     fadeAngles: (a, b, f) ->
-        
+
         if      a-b >  180 then a -= 360
         else if a-b < -180 then a += 360
         (1-f) * a + f * b
-    
+
     reduce: (v,d) -> if v>=0 then Math.max(0, v-d) else Math.min(0, v+d)
-        
+
     fade:  (s,e,v) -> s*(1-v)+e*(v)
     last:  (a) -> _.last a
     first: (a) -> _.first a
@@ -108,61 +108,61 @@ module.exports =
 
     absMax: (a,b) -> if Math.abs(a) >= Math.abs(b) then a else b
     absMin: (a,b) -> if Math.abs(a)  < Math.abs(b) then a else b
-        
+
     randInt: (r) -> Math.floor Math.random() * r
     randIntRange: (l,h) -> Math.floor l+Math.random()*(h-l)
     randRange: (l,h) -> l+Math.random()*(h-l)
-        
+
     shortCount: (v) ->
         v = parseInt v
         switch
             when v > 999999 then "#{Math.floor v/1000000}M"
             when v > 999    then "#{Math.floor v/1000}k"
             else                 "#{v}"
-       
+
     rad2deg: (r) -> 180 * r / Math.PI
     deg2rad: (d) -> Math.PI * d / 180
 
     reversed: (a) -> _.clone(a).reverse()
-                                    
-    #  0000000   0000000  00000000   000  00000000   000000000  
-    # 000       000       000   000  000  000   000     000     
-    # 0000000   000       0000000    000  00000000      000     
-    #      000  000       000   000  000  000           000     
-    # 0000000    0000000  000   000  000  000           000     
-    
+
+    #  0000000   0000000  00000000   000  00000000   000000000
+    # 000       000       000   000  000  000   000     000
+    # 0000000   000       0000000    000  00000000      000
+    #      000  000       000   000  000  000           000
+    # 0000000    0000000  000   000  000  000           000
+
     osascript: (script) -> ( "-e \"#{l.replace(/\"/g, "\\\"")}\"" for l in script.split("\n") ).join(" ")
 
-#  0000000  000000000  00000000   000  000   000   0000000 
-# 000          000     000   000  000  0000  000  000      
+#  0000000  000000000  00000000   000  000   000   0000000
+# 000          000     000   000  000  0000  000  000
 # 0000000      000     0000000    000  000 0 000  000  0000
 #      000     000     000   000  000  000  0000  000   000
-# 0000000      000     000   000  000  000   000   0000000 
-    
+# 0000000      000     000   000  000  000   000   0000000
+
 if not String.prototype.splice
     String.prototype.splice = (start, delCount, newSubStr='') ->
         @slice(0, start) + newSubStr + @slice(start + Math.abs(delCount))
-        
+
 if not String.prototype.strip
     String.prototype.strip = String.prototype.trim
-    
+
 if not String.prototype.hash
     String.prototype.hash = -> crypto.createHash('md5').update(@.valueOf(), 'utf8').digest('hex')
-    
+
 #  0000000   00000000   00000000    0000000   000   000
-# 000   000  000   000  000   000  000   000   000 000 
-# 000000000  0000000    0000000    000000000    00000  
-# 000   000  000   000  000   000  000   000     000   
-# 000   000  000   000  000   000  000   000     000   
+# 000   000  000   000  000   000  000   000   000 000
+# 000000000  0000000    0000000    000000000    00000
+# 000   000  000   000  000   000  000   000     000
+# 000   000  000   000  000   000  000   000     000
 
 if not Array.prototype.clone
     Array.prototype.clone = ->
         @.slice 0
-        
+
 if not Array.prototype.reversed
     Array.prototype.reversed = ->
         @.slice(0).reverse()
-    
+
 module.exports.kstr        = require './str'
 module.exports.klog        = require './log'
 module.exports.kerror      = require './error'
@@ -170,7 +170,7 @@ module.exports.kpos        = require './pos'
 module.exports.slash       = require './slash'
 
 module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'
-    
+
 module.exports.drag        = require './drag'
 module.exports.elem        = require './elem'
 module.exports.stash       = require './stash'
@@ -192,4 +192,3 @@ module.exports.watch       = require './watch'
 module.exports.app         = require './app'
 module.exports.win         = require './win'
 module.exports.udp         = require './udp'
-

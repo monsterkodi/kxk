@@ -30,7 +30,7 @@ class Title
         
         @title = elem class: 'titlebar-title'
         @elem.appendChild @title
-        @setTitle pkg
+        @setTitle @opt
                 
         # — ◻ 🞩
         
@@ -76,12 +76,6 @@ class Title
             
             @initMenu @menuTemplate()
        
-    # 00000000   000   000   0000000  000   000  00000000  000      00000000  00     00  
-    # 000   000  000   000  000       000   000  000       000      000       000   000  
-    # 00000000   000   000  0000000   000000000  0000000   000      0000000   000000000  
-    # 000        000   000       000  000   000  000       000      000       000 0 000  
-    # 000         0000000   0000000   000   000  00000000  0000000  00000000  000   000  
-    
     pushElem: (elem) ->
         
         @elem.insertBefore elem, @minimize
@@ -89,14 +83,32 @@ class Title
     showTitle: -> @title.style.display = 'initial'
     hideTitle: -> @title.style.display = 'none'
 
-    setTitle: (info) ->
-        html  = "<span class='titlebar-name'>#{info.name}</span>"
-        if info.version
+    #  0000000  00000000  000000000  000000000  000  000000000  000      00000000  
+    # 000       000          000        000     000     000     000      000       
+    # 0000000   0000000      000        000     000     000     000      0000000   
+    #      000  000          000        000     000     000     000      000       
+    # 0000000   00000000     000        000     000     000     0000000  00000000  
+    
+    setTitle: (opt) ->
+        
+        html = ""
+        
+        parts = opt.title ? []
+        
+        if opt.pkg.name and 'name' in parts
+            html += "<span class='titlebar-name'>#{opt.pkg.name}</span>"
+        
+        if opt.pkg.version and 'version' in parts
             html += "<span class='titlebar-dot'> ● </span>"
-            html += "<span class='titlebar-version'>#{info.version}</span>"
-        if info.path
+            html += "<span class='titlebar-version'>#{opt.pkg.version}</span>"
+            
+        if opt.pkg.path and 'path' in parts
             html += "<span class='titlebar-dot'> ► </span>"
-            html += "<span class='titlebar-version'>#{info.path}</span>"
+            html += "<span class='titlebar-version'>#{opt.pkg.path}</span>"
+            
+        if html == ""
+            @title.style.display = 'none'
+            
         @title.innerHTML = html
     
     onTitlebar: (action) =>
