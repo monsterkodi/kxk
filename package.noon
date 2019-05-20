@@ -27,7 +27,7 @@ dependencies
                 karg            ^1.11.0
                 keycode         ^2.2.0
                 lodash          ^4.17.11
-                noon            >=2.0.2
+                noon            >=2.3.0
                 opener          ^1.5.1
                 pretty-time     ^1.1.0
                 sds             ^2.0.1
@@ -39,5 +39,5 @@ dependencies
                 write-file-atomic  ^2.4.2
 devDependencies
                 assert  ^2.0.0
-                koffee  ^0.42.0
+                koffee  ^0.43.0
                 mocha   ^6.1.4
