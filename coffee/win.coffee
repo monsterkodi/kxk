@@ -35,6 +35,8 @@ class Win
         
         post.on 'menuAction', @onMenuAction
         
+        @opt.title ?= process.argv[0].endsWith('Electron Helper') and ['version'] or []
+        
         window.titlebar = new title @opt
         
         document.body.addEventListener 'contextmenu', @onContextMenu
