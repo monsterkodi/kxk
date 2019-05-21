@@ -6,6 +6,7 @@
 0000000      000     000   000
 ###
 
+_      = require 'lodash'
 noon   = require 'noon'
 entity = require 'html-entities'
 time   = require 'pretty-time'
@@ -42,6 +43,14 @@ str.encode = (s, spaces=true) ->
 str.stripansi = (s) ->
     s.replace /\x1B[[(?);]{0,2}(;?\d)*./g, ''
         
+str.replaceTabs = (s) ->
+    i = 0
+    while i < s.length
+        if s[i] == '\t'
+            s = s.splice i, 1, _.padStart "", 4-(i%4)
+        i += 1
+    s
+    
 str.time = time
         
 module.exports = str

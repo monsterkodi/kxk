@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ filelist, splitFileLine, slash, kpos, empty, valid, clamp, filter, _ } = require '../'
+{ filelist, splitFileLine, slash, kpos, kstr, empty, valid, clamp, filter, _ } = require '../'
 
 assert = require 'assert'
 chai   = require 'chai'
@@ -12,6 +12,12 @@ expect = chai.expect
 chai.should()
 
 describe 'kxk', ->
+    
+    describe 'kstr', ->
+        
+        it 'replaceTabs', ->
+            kstr.replaceTabs('\t\t').should.eql '        '
+            kstr.replaceTabs('aa\tbb').should.eql 'aa  bb'
     
     #  0000000  000       0000000    0000000  000   000  
     # 000       000      000   000  000       000   000  
