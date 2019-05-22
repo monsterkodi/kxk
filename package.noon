@@ -30,7 +30,7 @@ dependencies
                 noon            >=2.3.0
                 opener          ^1.5.1
                 pretty-time     ^1.1.0
-                sds             ^2.0.1
+                sds             ^2.1.0
                 sorcery         ^0.10.0
                 source-map      https://github.com/monsterkodi/source-map.git
                 stack-utils     ^1.0.2
@@ -39,5 +39,5 @@ dependencies
                 write-file-atomic  ^2.4.2
 devDependencies
                 assert  ^2.0.0
-                koffee  ^0.43.0
+                koffee  ^0.45.0
                 mocha   ^6.1.4
