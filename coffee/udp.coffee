@@ -16,16 +16,13 @@ class udp
         @opt.port ?= 9669
         
         try
-            @port = dgram.createSocket 'udp6'
-            # @port.setSendBufferSize 0
-            # @port.setRecvBufferSize 0
+            @port = dgram.createSocket 'udp4'
                         
             if @opt.onMsg
                 
                 @port.on 'listening', => 
                     try
                         @port.setBroadcast true
-                        
                     catch err
                         error "[ERROR] can't listen:", err
                         
@@ -45,9 +42,8 @@ class udp
                 @port.bind @opt.port
                 
             else
+                @port.bind => @port?.setBroadcast true
                 
-                @port.bind => 
-                    @port?.setBroadcast true
         catch err
             @port = null
             error "[ERROR] can't create udp port:", err
@@ -61,8 +57,7 @@ class udp
         else
             msg = JSON.stringify args[0]
             
-        buf = Buffer.from msg
-        
+        buf = Buffer.from msg, 'utf8'
         @port.send buf, 0, buf.length, @opt.port, '127.0.0.1', ->
             
     close: ->
