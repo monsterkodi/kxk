@@ -39,9 +39,15 @@ str.encode = (s, spaces=true) ->
         r
     else
         ''
-       
+  
+# ESCAPEREGEXP = /[\\^$*+?.()|[\]{}]/g
+ESCAPEREGEXP = /[-\\^$*+?.()|[\]{}\/]/g
+str.escapeRegexp = (s) ->
+    s.replace ESCAPEREGEXP, '\\$&'
+        
+STRIPANSI = /\x1B[[(?);]{0,2}(;?\d)*./g
 str.stripansi = (s) ->
-    s.replace /\x1B[[(?);]{0,2}(;?\d)*./g, ''
+    s.replace STRIPANSI, ''
         
 str.replaceTabs = (s) ->
     i = 0

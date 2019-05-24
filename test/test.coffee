@@ -18,6 +18,9 @@ describe 'kxk', ->
         it 'replaceTabs', ->
             kstr.replaceTabs('\t\t').should.eql '        '
             kstr.replaceTabs('aa\tbb').should.eql 'aa  bb'
+            
+        it 'escapeRegexp', ->
+            kstr.escapeRegexp('a/b.txt').should.eql 'a\\/b\\.txt'
     
     #  0000000  000       0000000    0000000  000   000  
     # 000       000      000   000  000       000   000  

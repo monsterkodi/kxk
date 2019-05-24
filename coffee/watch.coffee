@@ -43,7 +43,7 @@ class Watch extends event
         
         @watch?.close()
         delete @watch
-        
+        delete @dir
         if @opt.recursive
             for watch in @watchers 
                 watch.close()
@@ -51,18 +51,18 @@ class Watch extends event
         
     watchDir: ->
         
+        return if not @dir
+        
         @watch = fs.watch @dir
         @watch.on 'error', (err) -> error "fs.watch dir:'#{@dir}' error: #{err.stack}"
         @watch.on 'change', @onChange
         
         if @opt.recursive
-            # log 'ignore', @opt.ignore
             @watchers = []
             @walker = walkdir @dir
             onPath = (ignore) -> (path) -> 
                 for regex in ignore
                     if new RegExp(regex).test path
-                        # log "ignore #{regex} #{path}"
                         @ignore path
                         return
             
@@ -71,7 +71,6 @@ class Watch extends event
                 
             @walker.on 'directory', (path) =>
                 return if @ignore path
-                # log "watch #{path}"
                 watch = fs.watch path
                 @watchers.push watch
                 change = (dir) => (chg, pth) => @onChange chg, pth, dir
@@ -82,19 +81,16 @@ class Watch extends event
         if @opt.ignore
             for regex in @opt.ignore
                 if new RegExp(regex).test path
-                    # log "ignore! #{regex} #{path}"
                     return true
                 
     onChange: (change, path, dir=@dir) =>
         
         return if @ignore path
         
-        # log 'onChange', change, path, dir
         if /\d\d\d\d\d\d\d\d?\d?$/.test slash.ext path
             return
 
         path = slash.join dir, path
-        # log 'onChange---', path
         if @file and @file != path
             return
             
