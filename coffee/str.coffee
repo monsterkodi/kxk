@@ -57,6 +57,14 @@ str.replaceTabs = (s) ->
         i += 1
     s
     
-str.time = time
+str.time = (t) ->
+    if typeof(t) == 'bigint'
+        f = 1000n 
+        for u in ['ns''μs''ms''s'] 
+            if u == 's' or t < f 
+                return '' + (1000n * t / f) + u 
+            f *= 1000n    
+    else
+        time t
         
 module.exports = str
