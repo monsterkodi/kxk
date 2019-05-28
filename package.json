@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/monsterkodi/kxk.git"
+    "url": "https://github.com/monsterkodi/kxk.git"
   },
   "author": "monsterkodi",
   "license": "Unlicense",
@@ -41,11 +41,11 @@
     "stack-utils": "^1.0.2",
     "textextensions": "^2.4.0",
     "walkdir": "0.4.0",
-    "write-file-atomic": "^2.4.2"
+    "write-file-atomic": "^3.0.0"
   },
   "devDependencies": {
     "assert": "^2.0.0",
-    "koffee": "^0.45.0",
+    "koffee": "^0.50.0",
     "mocha": "^6.1.4"
   }
 }
