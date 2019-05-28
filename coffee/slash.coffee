@@ -257,7 +257,7 @@ class Slash
     
         if p?.length?
             
-            while p.length and @removeDrive(p) not in ['.', '/', '']
+            while p.length and Slash.removeDrive(p) not in ['.', '/', '']
                 
                 if Slash.dirExists  Slash.join p, '.git'         then return Slash.resolve p
                 if Slash.fileExists Slash.join p, 'package.noon' then return Slash.resolve p
@@ -269,7 +269,7 @@ class Slash
 
         if p?.length?
             
-            while p.length and @removeDrive(p) not in ['.', '/', '']
+            while p.length and Slash.removeDrive(p) not in ['.', '/', '']
                 
                 if Slash.dirExists Slash.join p, '.git' then return Slash.resolve p
                 p = Slash.dir p
@@ -338,8 +338,8 @@ class Slash
             if stat = Slash.exists p
                 return stat if stat.isDirectory()
             
-    @isDir:  (p, cb) -> @dirExists p, cb
-    @isFile: (p, cb) -> @fileExists p, cb
+    @isDir:  (p, cb) -> Slash.dirExists p, cb
+    @isFile: (p, cb) -> Slash.fileExists p, cb
     
     @isWritable: (p, cb) ->
         
