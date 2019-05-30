@@ -43,6 +43,7 @@ describe 'kxk', ->
                 <span style="color:#ff0000;">red</span>
                 <span style="color:#00ff00;">green</span>
                 """
+            a2h "#{r5('red')}#{g5('green')}", '<span style="color:#ff0000;">red</span><span style="color:#00ff00;">green</span>'
             
         it 'stripAnsi' ->
             

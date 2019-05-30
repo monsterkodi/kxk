@@ -12,12 +12,12 @@
 
 STYLES =
     f0:  'color:#000' # normal intensity
-    f1:  'color:#E00'
-    f2:  'color:#0A0'
-    f3:  'color:#A50'
-    f4:  'color:#00E'
-    f5:  'color:#A0A'
-    f6:  'color:#0AA'
+    f1:  'color:#F00'
+    f2:  'color:#0D0'
+    f3:  'color:#DD0'
+    f4:  'color:#00F'
+    f5:  'color:#D0D'
+    f6:  'color:#0DD'
     f7:  'color:#AAA'
     f8:  'color:#555' # high intensity
     f9:  'color:#F55'
@@ -74,18 +74,25 @@ toHexString = (num) ->
 
 class AnsiDiss
     
-    constructor: () ->
-
     @ansi2html: (s) -> 
     
-        diss = new AnsiDiss()
+        andi = new AnsiDiss()
         lines = []
-        for l in s.split('\n') ? []
-            spans = diss.dissect(l)[1].map (d) -> d.styl and "<span style=\"#{d.styl}\">#{d.match}</span>" or d.match
-            lines.push spans.join ' '
+        for l in s?.split('\n') ? []
+            diss = andi.dissect(l)[1]
+            htmlLine = ''
+            for i in [0...diss.length]
+                d = diss[i]
+                span = d.styl and "<span style=\"#{d.styl}\">#{d.match}</span>" or d.match
+                if parseInt i
+                    if diss[i-1].start + diss[i-1].match.length < d.start
+                        htmlLine += ' '
+                htmlLine += span
+            lines.push htmlLine
         lines.join '\n'
         
     dissect: (@input) ->
+        
         @diss  = []
         @text  = ""
         @tokenize()
