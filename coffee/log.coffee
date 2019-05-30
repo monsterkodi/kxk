@@ -6,15 +6,7 @@
 000   000  0000000   0000000    0000000     
 ###
 
-post    = require './ppost'
-kstr    = require './str'
-os      = require 'os'
-fs      = require 'fs'
-_       = require 'lodash'
-noon    = require 'noon'
 sutil   = require 'stack-utils'
-sorcery = require 'sorcery'
-
 stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
 # 00000000  000  000      00000000  
@@ -27,6 +19,7 @@ infos = []
 
 dumpInfos = ->
     
+    fs     = require 'fs'
     slash  = require './slash'
     stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
     while infos.length
@@ -34,6 +27,16 @@ dumpInfos = ->
         stream.write JSON.stringify(info)+'\n'
     stream.end()
 
+dumpImmediately = ->
+    
+    fs     = require 'fs'
+    slash  = require './slash'
+    data = ''
+    while infos.length
+        info = infos.shift()
+        data += JSON.stringify(info)+'\n'
+    fs.appendFileSync slash.resolve(slog.logFile), data, 'utf8'
+    
 dumpTimer = null
     
 fileLog = (info) ->
@@ -46,13 +49,17 @@ fileLog = (info) ->
         if lines.length
             for line in lines
                 info.str = line
-                infos.push _.clone info
+                infos.push Object.assign {}, info
                 info.sep  = ''
                 info.icon = ''
         else
             infos.push info
-        clearImmediate dumpTimer
-        dumpTimer = setImmediate dumpInfos
+            
+        # clearImmediate dumpTimer
+        # dumpTimer = setImmediate dumpInfos
+        
+        dumpImmediately() # shell scripts need immediate dump
+        
     catch err
         error "fileLog error -- ", err.stack
         slog.file = false
@@ -66,24 +73,32 @@ fileLog = (info) ->
 slog = (s) ->
     
     slash = require './slash'
+    post  = require './ppost'
+    kstr  = require './str'
     
     try # fancy log with source-mapped files and line numbers
         f = stack.capture()[slog.depth]
-        if chain = sorcery.loadSync(f.getFileName())
-            info = chain.trace(f.getLineNumber(), 0)
-            if not slash.samePath f.getScriptNameOrSourceURL(), f.getFileName()
-                if slash.isAbsolute f.getScriptNameOrSourceURL()
-                    source = slash.path f.getScriptNameOrSourceURL()
+        sorcery = require 'sorcery'
+        
+        info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
+        try
+            if chain = sorcery.loadSync(f.getFileName())
+                sorceryInfo = chain.trace(f.getLineNumber(), 0)
+                if not slash.samePath f.getScriptNameOrSourceURL(), f.getFileName()
+                    if slash.isAbsolute f.getScriptNameOrSourceURL()
+                        source = slash.path f.getScriptNameOrSourceURL()
+                    else
+                        source = slash.resolve slash.join slash.dir(f.getFileName()), f.getScriptNameOrSourceURL()
                 else
-                    source = slash.resolve slash.join slash.dir(f.getFileName()), f.getScriptNameOrSourceURL()
+                    source = f.getFileName()
+                sorceryInfo.source = slash.tilde source
+                info = sorceryInfo
             else
-                source = f.getFileName()
-            info.source = slash.tilde source
-        else
-            info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
+        catch err
+            true
 
-        file = _.padStart "#{info.source}:#{info.line}", slog.filepad
-        meth = _.padEnd f.getFunctionName(), slog.methpad
+        file = kstr.lpad "#{info.source}:#{info.line}", slog.filepad
+        meth = kstr.rpad f.getFunctionName(), slog.methpad
         info.str = s
         s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
         post.emit 'slog', s, info
@@ -91,6 +106,7 @@ slog = (s) ->
             fileLog info            
             
     catch err
+        error err
         post.emit 'slog', "!#{slog.methsep}#{s} #{err}"
 
 # 000       0000000    0000000   
@@ -101,8 +117,10 @@ slog = (s) ->
 
 klog = ->
     
+    kstr = require './str'
     s = (kstr(s) for s in [].slice.call arguments, 0).join " " 
     
+    post = require './ppost'
     post.emit 'log', s
     console.log s
     slog s
