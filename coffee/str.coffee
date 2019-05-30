@@ -6,19 +6,13 @@
 0000000      000     000   000
 ###
 
-_      = require 'lodash'
-noon   = require 'noon'
-entity = require 'html-entities'
-time   = require 'pretty-time'
-
-xmlEntities = new entity.XmlEntities()
-
 str = (o) ->
     return 'null' if not o?
     if typeof(o) == 'object'
         if o._str?
             o._str()
         else
+            noon = require 'noon'
             "\n" + noon.stringify o, circular: true
     else
         String o
@@ -32,6 +26,10 @@ str = (o) ->
 ###
 
 str.encode = (s, spaces=true) ->
+    
+    entity = require 'html-entities'
+    xmlEntities = new entity.XmlEntities()
+    
     if s
         r = xmlEntities.encode s
         if spaces
@@ -46,14 +44,24 @@ str.escapeRegexp = (s) ->
     s.replace ESCAPEREGEXP, '\\$&'
         
 STRIPANSI = /\x1B[[(?);]{0,2}(;?\d)*./g
-str.stripansi = (s) ->
+str.stripAnsi = (s) ->
     s.replace STRIPANSI, ''
         
+str.lpad = (s, l) ->
+    s = String s
+    while s.length < l then s = ' ' + s
+    s
+
+str.rpad = (s, l) ->
+    s = String s
+    while s.length < l then s += ' '
+    s
+    
 str.replaceTabs = (s) ->
     i = 0
     while i < s.length
         if s[i] == '\t'
-            s = s.splice i, 1, _.padStart "", 4-(i%4)
+            s = s.splice i, 1, str.lpad '', 4-(i%4)
         i += 1
     s
     
@@ -65,6 +73,10 @@ str.time = (t) ->
                 return '' + (1000n * t / f) + u 
             f *= 1000n    
     else
-        time t
+        require('pretty-time') t
+        
+str.ansi2html = (s) ->
+    AnsiDiss = require './ansidiss'
+    AnsiDiss.ansi2html s
         
 module.exports = str

@@ -6,20 +6,11 @@
 0000000   0000000  000   000  0000000   000   000    
 ###
 
-{ fs, os, empty, valid, _ } = require './kxk'
-
+os       = require 'os'
+fs       = require 'fs' 
 path     = require 'path'
-isBinary = require 'isbinaryfile'
 
-textext = _.reduce require('textextensions'), (map, ext) ->
-    map[".#{ext}"] = true
-    map
-, {}
-
-textext['.crypt']  = true
-textext['.bashrc'] = true
-textext['.svg']    = true
-textext['.csv']    = true
+textext  = null
 
 textbase = 
     profile:1
@@ -148,7 +139,7 @@ class Slash
     
     @pathlist: (p) -> # '/root/dir/file.txt' --> ['/', '/root', '/root/dir', '/root/dir/file.txt']
     
-        return [] if empty p
+        return [] if not p.length
         p = Slash.path Slash.sanitize p
         list = [p]
         while Slash.dir(p) != ''
@@ -176,8 +167,9 @@ class Slash
         p = path.dirname p
         if p == '.' then return ''
         Slash.path p
-    @sanitize:   (p)   -> 
-        if empty p
+        
+    @sanitize: (p)   -> 
+        if not p.length
             return Slash.error 'empty path!'
         if p[0] == '\n'
             Slash.error "leading newline in path! '#{p}'"
@@ -219,12 +211,12 @@ class Slash
         Slash.path p
     
     @resolve: (p) ->
-        return Slash.error "Slash.resolve -- no path? #{p}" if empty p
+        return Slash.error "Slash.resolve -- no path? #{p}" if not p.length
         Slash.path path.resolve Slash.unenv Slash.untilde p
     
     @relative: (rel, to) ->
         
-        if empty to
+        if not to.length
             Slash.error "Slash.relative -- to nothing? rel:'#{rel}' to:'#{to}'"
             return rel
             
@@ -283,17 +275,17 @@ class Slash
     
     @exists: (p, cb) ->
         
-        if _.isFunction cb
+        if 'function' == typeof cb
             if not p?
                 cb() 
                 return
             p = Slash.resolve Slash.removeLinePos p
             fs.access p, fs.R_OK | fs.F_OK, (err) ->
-                if valid err
+                if err?
                     cb() 
                 else
                     fs.stat p, (err, stat) ->
-                        if valid err
+                        if err?
                             cb()
                         else
                             cb stat
@@ -314,13 +306,13 @@ class Slash
         
     @touch: (p) ->
         
-        fs.ensureDirSync Slash.dirname p
+        fs.mkdirSync Slash.dirname(p), recursive:true
         if not Slash.fileExists p
             fs.writeFileSync p, ''
         
     @fileExists: (p, cb) ->
         
-        if _.isFunction cb
+        if 'function' == typeof cb
             Slash.exists p, (stat) ->
                 if stat?.isFile() then cb stat
                 else cb()
@@ -330,7 +322,7 @@ class Slash
 
     @dirExists: (p, cb) ->
 
-        if _.isFunction cb
+        if 'function' == typeof cb
             Slash.exists p, (stat) ->
                 if stat?.isDirectory() then cb stat
                 else cb()
@@ -343,10 +335,9 @@ class Slash
     
     @isWritable: (p, cb) ->
         
-        if _.isFunction cb
+        if 'function' == typeof cb
             fs.access Slash.resolve(p), fs.R_OK | fs.W_OK, (err) ->
-                if valid err then cb false
-                else cb true
+                cb not err?
         else
             try
                 fs.accessSync Slash.resolve(p), fs.R_OK | fs.W_OK
@@ -384,16 +375,29 @@ class Slash
     
     @isText: (f) ->
     
+        if not textext
+            _ = require 'lodash'
+            textext = _.reduce require('textextensions'), (map, ext) ->
+                map[".#{ext}"] = true
+                map
+            , {}
+            
+            textext['.crypt']  = true
+            textext['.bashrc'] = true
+            textext['.svg']    = true
+            textext['.csv']    = true
+        
         return true if Slash.extname(f) and textext[Slash.extname f]? 
         return true if textbase[Slash.basename(f).toLowerCase()]
         return false if not Slash.isFile f
+        isBinary = require 'isbinaryfile'
         return not isBinary.isBinaryFileSync f
         
     @readText: (f, cb) ->
         
-        if _.isFunction cb
+        if 'function' == typeof cb
             fs.readFile f, 'utf8', (err, text) -> 
-                cb empty(err) and text or ''
+                cb not err? and text or ''
         else
             try
                 fs.readFileSync f, 'utf8'

@@ -208,7 +208,7 @@ class App
     
     createWindow: (onReadyToShow) =>
     
-        electron = require 'electron'
+        if electron = require 'electron'
         
         bounds = prefs.get 'bounds'
         width  = bounds?.width  ? @opt.width  ? 500

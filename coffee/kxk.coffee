@@ -18,6 +18,7 @@ walkdir   = require 'walkdir'
 atomic    = require 'write-file-atomic'
 post      = require './ppost'
 karg      = require 'karg'
+klor      = require 'klor'
 colors    = require 'colors'
 colorette = require 'colorette'
 
@@ -28,6 +29,8 @@ module.exports =
     fs:fs
     sds:sds
     karg:karg
+    klor:klor
+    kolor:klor.kolor
     colors:colors
     colorette:colorette
     atomic:atomic

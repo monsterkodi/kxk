@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.294.0",
+  "version": "0.295.0",
   "description": "kodi's tool kit",
   "keywords": [
     "coffeescript",
@@ -8,7 +8,8 @@
   ],
   "main": "js/kxk.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -c --require koffee/js/register test/test.coffee"
+    "test": "./node_modules/.bin/mocha -c --require koffee/js/register test/test.coffee",
+    "watch": "./node_modules/.bin/onchange test/test.coffee coffee/*.coffee -- npm run test"
   },
   "repository": {
     "type": "git",
@@ -29,10 +30,11 @@
     "fs-extra": "^8.0.1",
     "html-entities": "^1.2.1",
     "isbinaryfile": "^4.0.0",
-    "karg": "^1.11.0",
+    "karg": "^1.12.0",
     "keycode": "^2.2.0",
+    "klor": "^0.45.0",
     "lodash": "^4.17.11",
-    "noon": ">=2.3.0",
+    "noon": ">=2.4.0",
     "opener": "^1.5.1",
     "pretty-time": "^1.1.0",
     "sds": "^2.1.0",
@@ -44,8 +46,8 @@
     "write-file-atomic": "^3.0.0"
   },
   "devDependencies": {
-    "assert": "^2.0.0",
-    "koffee": "^0.50.0",
-    "mocha": "^6.1.4"
+    "koffee": "^0.56.0",
+    "mocha": "^6.1.4",
+    "onchange": "^6.0.0"
   }
 }
