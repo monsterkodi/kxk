@@ -61,7 +61,7 @@ fileLog = (info) ->
         dumpImmediately() # shell scripts need immediate dump
         
     catch err
-        error "fileLog error -- ", err.stack
+        error "kxk.log.fileLog -- ", err.stack
         slog.file = false
 
 #  0000000  000       0000000    0000000   
@@ -134,8 +134,14 @@ klog = ->
 slog.file = true
 if process.platform == 'win32'
     slog.logFile = '~/AppData/Roaming/klog.txt'
-else
+else if process.platform == 'darwin'
     slog.logFile = '~/Library/Application Support/klog.txt'
+else
+    slash = require './slash'
+    if slash.isFile '~/AppData/Roaming/klog.txt'
+        slog.logFile = '~/AppData/Roaming/klog.txt'
+    else
+        slog.file = false
 
 slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'

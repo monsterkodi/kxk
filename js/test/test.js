@@ -1,4 +1,4 @@
-// koffee 0.56.0
+// koffee 0.50.0
 var _, chai, clamp, empty, expect, filelist, filter, kolor, kpos, kstr, ref, slash, splitFileLine, valid;
 
 ref = require('../'), filelist = ref.filelist, splitFileLine = ref.splitFileLine, slash = ref.slash, kpos = ref.kpos, kstr = ref.kstr, empty = ref.empty, valid = ref.valid, clamp = ref.clamp, chai = ref.chai, kolor = ref.kolor, filter = ref.filter, _ = ref._;

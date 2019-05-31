@@ -211,15 +211,13 @@ class Slash
         Slash.path p
     
     @resolve: (p) ->
-        return Slash.error "Slash.resolve -- no path? #{p}" if not p.length
+        
+        p = process.cwd() if not p?.length
         Slash.path path.resolve Slash.unenv Slash.untilde p
     
     @relative: (rel, to) ->
         
-        if not to.length
-            Slash.error "Slash.relative -- to nothing? rel:'#{rel}' to:'#{to}'"
-            return rel
-            
+        to = process.cwd() if not to?.length
         rel = Slash.resolve rel
         return rel if not Slash.isAbsolute rel
         if Slash.resolve(to) == rel
