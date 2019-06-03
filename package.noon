@@ -1,5 +1,5 @@
 name            kxk
-version         0.298.0
+version         0.300.0
 description     kodi's tool kit
 keywords
                 coffeescript
@@ -19,7 +19,7 @@ homepage        https://github.com/monsterkodi/kxk#readme
 dependencies
                 ansi-keycode    0.0.0
                 chai            ^4.2.0
-                colorette       ^1.0.7
+                colorette       ^1.0.8
                 colors          ^1.3.3
                 convert-source-map  ^1.6.0
                 fs-extra        ^8.0.1
@@ -29,7 +29,7 @@ dependencies
                 keycode         ^2.2.0
                 klor            ^0.45.0
                 lodash          ^4.17.11
-                noon            >=2.4.0
+                noon            >=2.5.0
                 opener          ^1.5.1
                 pretty-time     ^1.1.0
                 sds             ^2.1.0

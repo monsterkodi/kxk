@@ -139,7 +139,7 @@ class Slash
     
     @pathlist: (p) -> # '/root/dir/file.txt' --> ['/', '/root', '/root/dir', '/root/dir/file.txt']
     
-        return [] if not p.length
+        return [] if not p?.length
         p = Slash.path Slash.sanitize p
         list = [p]
         while Slash.dir(p) != ''
@@ -169,7 +169,7 @@ class Slash
         Slash.path p
         
     @sanitize: (p)   -> 
-        if not p.length
+        if not p?.length
             return Slash.error 'empty path!'
         if p[0] == '\n'
             Slash.error "leading newline in path! '#{p}'"
