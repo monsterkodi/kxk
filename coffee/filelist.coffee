@@ -43,6 +43,7 @@ fileList = (paths, opt) ->
         false
     
     for p in paths
+        continue if not p?.length
         try
             [p,pos] = slash.splitFilePos p
             stat = fs.statSync p

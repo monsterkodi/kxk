@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.300.0",
+  "version": "0.301.0",
   "description": "kodi's tool kit",
   "keywords": [
     "coffeescript",
@@ -32,12 +32,12 @@
     "isbinaryfile": "^4.0.0",
     "karg": "^1.13.0",
     "keycode": "^2.2.0",
-    "klor": "^0.45.0",
+    "klor": "^0.46.0",
     "lodash": "^4.17.11",
     "noon": ">=2.5.0",
     "opener": "^1.5.1",
     "pretty-time": "^1.1.0",
-    "sds": "^2.1.0",
+    "sds": "^2.1.1",
     "sorcery": "^0.10.0",
     "source-map": "https://github.com/monsterkodi/source-map.git",
     "stack-utils": "^1.0.2",
