@@ -10,14 +10,6 @@ os       = require 'os'
 fs       = require 'fs' 
 path     = require 'path'
 
-textext  = null
-
-textbase = 
-    profile:1
-    license:1
-    '.gitignore':1
-    '.npmignore':1
-
 class Slash
 
     @reg = new RegExp "\\\\", 'g'
@@ -168,7 +160,7 @@ class Slash
         if p == '.' then return ''
         Slash.path p
         
-    @sanitize: (p)   -> 
+    @sanitize: (p) -> 
         if not p?.length
             return Slash.error 'empty path!'
         if p[0] == '\n'
@@ -179,7 +171,7 @@ class Slash
             return Slash.sanitize p.substr 0, p.length-1
         p
     
-    @parse:      (p)   -> 
+    @parse: (p) -> 
         
         dict = path.parse p
         
@@ -289,17 +281,16 @@ class Slash
                             cb stat
             return
         
-        return false if not p?
-        
-        try
-            p = Slash.resolve Slash.removeLinePos p
-            if stat = fs.statSync(p)
-                fs.accessSync p, fs.R_OK
-                return stat
-        catch err
-            if err.code in ['ENOENT', 'ENOTDIR']
-                return false
-            error err
+        if p?
+            try
+                p = Slash.resolve Slash.removeLinePos p
+                if stat = fs.statSync(p)
+                    fs.accessSync p, fs.R_OK
+                    return stat
+            catch err
+                if err.code in ['ENOENT', 'ENOTDIR']
+                    return false
+                error err
         null     
         
     @touch: (p) ->
@@ -371,22 +362,25 @@ class Slash
     000  0000000      000     00000000  000   000     000   
     ###
     
+    @textext: null
+    
+    @textbase: 
+        profile:1
+        license:1
+        '.gitignore':1
+        '.npmignore':1
+    
     @isText: (f) ->
     
-        if not textext
-            _ = require 'lodash'
-            textext = _.reduce require('textextensions'), (map, ext) ->
-                map[".#{ext}"] = true
-                map
-            , {}
-            
-            textext['.crypt']  = true
-            textext['.bashrc'] = true
-            textext['.svg']    = true
-            textext['.csv']    = true
+        if not Slash.textext
+            Slash.textext = {}
+            for ext in require 'textextensions'
+                Slash.textext[ext] = true
+            Slash.textext['crypt']  = true
         
-        return true if Slash.extname(f) and textext[Slash.extname f]? 
-        return true if textbase[Slash.basename(f).toLowerCase()]
+        ext = Slash.ext f
+        return true if ext and Slash.textext[ext]? 
+        return true if Slash.textbase[Slash.basename(f).toLowerCase()]
         return false if not Slash.isFile f
         isBinary = require 'isbinaryfile'
         return not isBinary.isBinaryFileSync f
