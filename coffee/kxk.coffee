@@ -17,6 +17,7 @@ open      = require 'opener'
 walkdir   = require 'walkdir'
 atomic    = require 'write-file-atomic'
 post      = require './ppost'
+slash     = require 'kslash'
 karg      = require 'karg'
 klor      = require 'klor'
 colors    = require 'colors'
@@ -37,6 +38,7 @@ module.exports =
     walkdir:walkdir
     open:open
     post:post
+    slash:slash
     noon:noon
     childp:childp
 
