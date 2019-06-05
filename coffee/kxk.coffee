@@ -173,7 +173,6 @@ module.exports.kstr        = require './str'
 module.exports.klog        = require './log'
 module.exports.kerror      = require './error'
 module.exports.kpos        = require './pos'
-module.exports.slash       = require './slash'
 
 module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'
 

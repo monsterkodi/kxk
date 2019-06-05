@@ -20,7 +20,7 @@ infos = []
 dumpInfos = ->
     
     fs     = require 'fs'
-    slash  = require './slash'
+    slash  = require('./kxk').slash
     stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
     while infos.length
         info = infos.shift()
@@ -30,7 +30,7 @@ dumpInfos = ->
 dumpImmediately = ->
     
     fs     = require 'fs'
-    slash  = require './slash'
+    slash  = require('./kxk').slash
     data = ''
     while infos.length
         info = infos.shift()
@@ -72,9 +72,7 @@ fileLog = (info) ->
 
 slog = (s) ->
     
-    slash = require './slash'
-    post  = require './ppost'
-    kstr  = require './str'
+    {slash, post, kstr } = require './kxk'
     
     try # fancy log with source-mapped files and line numbers
         f = stack.capture()[slog.depth]
@@ -117,10 +115,9 @@ slog = (s) ->
 
 klog = ->
     
-    kstr = require './str'
+    {post, kstr} = require './kxk'
     s = (kstr(s) for s in [].slice.call arguments, 0).join " " 
     
-    post = require './ppost'
     post.emit 'log', s
     console.log s
     slog s
@@ -137,7 +134,7 @@ if process.platform == 'win32'
 else if process.platform == 'darwin'
     slog.logFile = '~/Library/Application Support/klog.txt'
 else
-    slash = require './slash'
+    {slash} = require './kxk'
     if slash.isFile '~/AppData/Roaming/klog.txt'
         slog.logFile = '~/AppData/Roaming/klog.txt'
     else
@@ -162,11 +159,11 @@ try
     else
         app = electron.app
     slog.id = app.getName()
-    slash = require './slash'
+    {slash} = require './kxk'
     slog.logFile = slash.join app.getPath('appData'), 'klog.txt'
 catch err
     try
-        slash = require './slash'
+        {slash} = require './kxk'
         if process.argv[0].length and slash.base(process.argv[0]) in ['node', 'coffee', 'koffee', 'electron']
             if process.argv[1]?.length
                 slog.id = slash.base process.argv[1]
