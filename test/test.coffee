@@ -9,86 +9,48 @@
 kolor.globalize()
 expect = chai().expect
 
-describe 'kxk', ->
+describe 'kxk' ->
     
-    describe 'kstr', ->
-        
-        it 'replaceTabs', ->
-            kstr.replaceTabs('\t\t').should.eql '        '
-            kstr.replaceTabs('aa\tbb').should.eql 'aa  bb'
-            
-        it 'escapeRegexp', ->
-            kstr.escapeRegexp('a/b.txt').should.eql 'a\\/b\\.txt'
-            
-        it 'lpad' ->
-            kstr.lpad('', 4).should.eql '    '
-            kstr.lpad('x', 4).should.eql '   x'
-            kstr.lpad(' xxx ', 2).should.eql ' xxx '
-
-        it 'rpad' ->
-            kstr.rpad('', 4).should.eql '    '
-            kstr.rpad('x', 4).should.eql 'x   '
-            kstr.rpad(' xxx ', 2).should.eql ' xxx '
-     
-        it 'ansi2html' ->
-            
-            a2h = (s,r) -> kstr.ansi2html(s).should.eql r
-            
-            a2h 'hello', 'hello'
-            a2h r5('red'), '<span style="color:#ff0000;">red</span>'
-            a2h """
-                #{r5('red')}
-                #{g5('green')}
-                """, """
-                <span style="color:#ff0000;">red</span>
-                <span style="color:#00ff00;">green</span>
-                """
-            a2h "#{r5('red')}#{g5('green')}", '<span style="color:#ff0000;">red</span><span style="color:#00ff00;">green</span>'
-            
-        it 'stripAnsi' ->
-            
-            (kstr.stripAnsi g5('green')).should.eql 'green'
-            
     # 00000000  000  000      00000000  000      000   0000000  000000000  
     # 000       000  000      000       000      000  000          000     
     # 000000    000  000      0000000   000      000  0000000      000     
     # 000       000  000      000       000      000       000     000     
     # 000       000  0000000  00000000  0000000  000  0000000      000     
     
-    describe 'filelist', ->
+    describe 'filelist' ->
     
-        it "exists", -> _.isFunction filelist
+        it "exists" -> _.isFunction filelist
         
-        it "chdir", ->
+        it "chdir" ->
             process.chdir "#{__dirname}"
             (process.cwd()).should.eql __dirname
             
-        it "returns an array", -> _.isArray filelist '.'
+        it "returns an array" -> _.isArray filelist '.'
         
-        it "returns empty array", -> _.isEmpty filelist 'foobar', logError: false
+        it "returns empty array" -> _.isEmpty filelist 'foobar', logError: false
         
-        it "finds this file relative", ->
+        it "finds this file relative" ->
             (filelist '.').should.include 'test.coffee'
             
-        it "finds this file absolute", ->
+        it "finds this file absolute" ->
             (filelist __dirname).should.include slash.path __filename
             
-        it "lists relative path with dot", ->
+        it "lists relative path with dot" ->
             (filelist('./dir').length).should.gt 0
             
-        it "lists relative path without dot", ->
+        it "lists relative path without dot" ->
             (filelist('dir').length).should.gt 0
             
-        it "ignores hidden files by default", ->
+        it "ignores hidden files by default" ->
             (filelist 'dir').should.not.include slash.normalize 'dir/.konrad.noon'
             
-        it "includes hidden files", ->
+        it "includes hidden files" ->
             (filelist 'dir', 'ignoreHidden': false).should.include slash.normalize 'dir/.konrad.noon'
             
-        it "doesn't recurse by default", ->
+        it "doesn't recurse by default" ->
             (filelist 'dir').should.eql [slash.normalize('dir/noext'), slash.normalize('dir/test.coffee'), slash.normalize('dir/test.js'), slash.normalize('dir/test.txt')]
             
-        it "recurses if depth set", ->
+        it "recurses if depth set" ->
             (filelist 'dir', depth: 2).should.eql [
                 slash.normalize('dir/noext'), 
                 slash.normalize('dir/test.coffee'), 
@@ -100,7 +62,7 @@ describe 'kxk', ->
                 slash.normalize('dir/level1/level2/level2.coffee'), 
                 slash.normalize('dir/level1b/level1b.coffee')]
                 
-        it "matches extension", ->
+        it "matches extension" ->
             (filelist 'dir', depth: 3, matchExt: slash.ext __filename).should.eql [
                 slash.normalize('dir/test.coffee'), 
                 slash.normalize('dir/level1/test.coffee'), 
@@ -114,15 +76,15 @@ describe 'kxk', ->
     # 000  000   000        000   000       000  
     # 000   000  000         0000000   0000000   
     
-    describe 'kpos', ->
+    describe 'kpos' ->
     
-        it "angle", ->
+        it "angle" ->
             (kpos(1,0).angle(kpos 0,1)).should.eql 90
             (kpos(1,0).angle(kpos 0,-1)).should.eql 90
             (kpos(0,10).angle(kpos 1,0)).should.eql 90
             (kpos(0,-10).angle(kpos 1,0)).should.eql 90
     
-        it "rotation", ->
+        it "rotation" ->
             (Math.round kpos(0,1).rotation(kpos 1,0)).should.eql 90
             (Math.round kpos(0,-1).rotation(kpos 1,0)).should.eql -90
             (Math.round kpos(1,1).rotation(kpos 1,0)).should.eql 45
@@ -130,7 +92,7 @@ describe 'kxk', ->
             (Math.round kpos(1,0).rotation(kpos 0,1)).should.eql -90
             (Math.round kpos(1,0).rotation(kpos 0,-1)).should.eql 90
     
-        it "rotate", ->
+        it "rotate" ->
             (kpos(1,0).rotate(90).rounded()).should.eql kpos(0,1)
             (kpos(1,0).rotate(-90).rounded()).should.eql kpos(0,-1)
             (kpos(1,0).rotate(45).rounded(0.001)).should.eql kpos(1,1).normal().rounded(0.001)
@@ -141,9 +103,9 @@ describe 'kxk', ->
     # 000       000      000   000  000 0 000  000        
     #  0000000  0000000  000   000  000   000  000        
     
-    describe 'clamp', ->
+    describe 'clamp' ->
         
-        it 'clamps', ->
+        it 'clamps' ->
             
             (clamp 0, 1, 1.1).should.eql 1
     
@@ -153,7 +115,7 @@ describe 'kxk', ->
     
             (clamp 3, 2.2, 1.1).should.eql 2.2
             
-        it 'nulls', ->
+        it 'nulls' ->
             
             (clamp 0, 1).should.eql 0
             
@@ -175,9 +137,9 @@ describe 'kxk', ->
     # 000       000 0 000  000           000        000     
     # 00000000  000   000  000           000        000     
     
-    describe 'empty', ->
+    describe 'empty' ->
         
-        it 'true', ->
+        it 'true' ->
             
             (empty ''    ).should.eql true
             
@@ -189,7 +151,7 @@ describe 'kxk', ->
             
             (empty undefined).should.eql true
             
-        it 'false', ->
+        it 'false' ->
             
             (empty 1).should.eql false
             
@@ -209,9 +171,9 @@ describe 'kxk', ->
     #    000     000   000  000      000  000   000  
     #     0      000   000  0000000  000  0000000    
     
-    describe 'valid', ->
+    describe 'valid' ->
         
-        it 'false', ->
+        it 'false' ->
             
             (valid ''    ).should.eql false
             
@@ -223,7 +185,7 @@ describe 'kxk', ->
             
             (valid undefined).should.eql false
             
-        it 'true', ->
+        it 'true' ->
             
             (valid 1).should.eql true
             
@@ -243,23 +205,23 @@ describe 'kxk', ->
     # 000       000  000         000     000       000   000  
     # 000       000  0000000     000     00000000  000   000  
     
-    describe 'filter', ->
+    describe 'filter' ->
         
-        it 'array', ->
+        it 'array' ->
             
             (filter [1,2,3,4], (v,i) -> i % 2).should.eql [2,4]
 
             (filter [1,2,3,4], (v,i) -> v % 2).should.eql [1,3]
             
-        it 'object', ->
+        it 'object' ->
             
             (filter {a:1,b:2,c:3,d:4}, (v,k) -> v % 2).should.eql {a:1,c:3}
 
             (filter {a:1,b:2,c:3,d:4}, (v,k) -> k in ['b', 'c']).should.eql {b:2,c:3}
             
-        it 'value', ->            
+        it 'value' ->            
             
             (filter(1, ->)).should.eql 1
             
-            (filter("hello", ->)).should.eql "hello"
+            (filter("hello" ->)).should.eql "hello"
                 

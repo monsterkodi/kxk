@@ -19,6 +19,7 @@ atomic    = require 'write-file-atomic'
 post      = require './ppost'
 slash     = require 'kslash'
 karg      = require 'karg'
+kstr      = require 'kstr'
 klor      = require 'klor'
 colors    = require 'colors'
 colorette = require 'colorette'
@@ -30,6 +31,7 @@ module.exports =
     fs:fs
     sds:sds
     karg:karg
+    kstr:kstr
     klor:klor
     kolor:klor.kolor
     colors:colors
@@ -169,7 +171,6 @@ if not Array.prototype.reversed
     Array.prototype.reversed = ->
         @.slice(0).reverse()
 
-module.exports.kstr        = require './str'
 module.exports.klog        = require './log'
 module.exports.kerror      = require './error'
 module.exports.kpos        = require './pos'
