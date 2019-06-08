@@ -1,12 +1,16 @@
 {
   "name": "kxk",
-  "version": "0.306.0",
+  "version": "0.307.0",
   "description": "kodi's tool kit",
   "keywords": [
     "coffeescript",
     "toolkit"
   ],
   "main": "js/kxk.js",
+  "files": [
+    "js/*.js",
+    "js/css"
+  ],
   "scripts": {
     "test": "./node_modules/.bin/mocha -c --require koffee/js/register test/test.coffee",
     "watch": "./node_modules/.bin/onchange test/test.coffee coffee/*.coffee -- npm run test"
