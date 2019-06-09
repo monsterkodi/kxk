@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.309.0",
+  "version": "0.310.0",
   "description": "kodi's tool kit",
   "keywords": [
     "coffeescript",
@@ -8,8 +8,10 @@
   ],
   "main": "js/kxk.js",
   "files": [
-    "js/*.js",
-    "js/css/*"
+    "js/css/bright.css",
+    "js/css/dark.css",
+    "js/css/style.css",
+    "js/*.js"
   ],
   "scripts": {
     "test": "./node_modules/.bin/mocha -c --require koffee/js/register test/test.coffee",
