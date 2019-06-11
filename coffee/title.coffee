@@ -20,6 +20,9 @@ class Title
         pkg = @opt.pkg
         
         @elem =$ @opt.elem ? "#titlebar"
+        
+        return if not @elem
+        
         @elem.addEventListener 'dblclick', (event) -> stopEvent event, post.emit 'menuAction', 'Maximize'
                 
         @winicon = elem class: 'winicon'

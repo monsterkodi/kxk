@@ -39,7 +39,7 @@ class App
         
         if @opt.single != false #and os.platform() != 'darwin'
             if @app.makeSingleInstance? and @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
-                klog 'app.quit single'
+                # klog 'app.quit single'
                 @app.quit()
                 return
             else if @app.requestSingleInstanceLock? 
@@ -210,6 +210,8 @@ class App
     
         electron = require 'electron'
         
+        onReadyToShow ?= @opt.onWinReady
+        
         bounds = prefs.get 'bounds'
         width  = bounds?.width  ? @opt.width  ? 500
         height = bounds?.height ? @opt.height ? 500
@@ -224,9 +226,9 @@ class App
             fullscreen:      false
             show:            false
             frame:           false
-            resizable:       true
-            maximizable:     true
-            minimizable:     true
+            resizable:       @opt.resizable   ? true
+            maximizable:     @opt.maximizable ? true
+            minimizable:     @opt.minimizable ? true
             transparent:     true
             autoHideMenuBar: true
             icon:            @resolve @opt.icon 

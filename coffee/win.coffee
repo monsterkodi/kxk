@@ -108,7 +108,7 @@ class Win
                 return
         else
             items.unshift text:'Clear', accel:'cmdctrl+k'
-            
+        
         popup.menu
             items:   items
             x:       absPos.x

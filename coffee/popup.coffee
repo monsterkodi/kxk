@@ -13,7 +13,7 @@ class Popup
     constructor: (opt) ->
         
         @focusElem = document.activeElement
-        @items     = elem class: 'popup', tabindex: 3
+        @items     = elem class:'popup', tabindex:3
         @parent    = opt.parent
         @onClose   = opt.onClose
         
@@ -24,7 +24,8 @@ class Popup
             if empty(item.text) and empty(item.html)
                 div = elem 'hr', class: 'popupItem separator'
             else
-                div = elem class: 'popupItem', text: item.text
+                div = elem class:'popupItem', text:item.text
+                # log 'div', div
                 if not empty item.html
                     div.innerHTML = item.html 
                 div.item = item
