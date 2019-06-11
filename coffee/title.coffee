@@ -11,9 +11,6 @@
 class Title
     
     constructor: (@opt) ->
-
-        post.on 'titlebar',   @onTitlebar
-        post.on 'menuAction', @onMenuAction
         
         @opt ?= {}
         
@@ -22,6 +19,9 @@ class Title
         @elem =$ @opt.elem ? "#titlebar"
         
         return if not @elem
+
+        post.on 'titlebar',   @onTitlebar
+        post.on 'menuAction', @onMenuAction
         
         @elem.addEventListener 'dblclick', (event) -> stopEvent event, post.emit 'menuAction', 'Maximize'
                 
@@ -152,6 +152,8 @@ class Title
                 if maximized then win.unmaximize() else win.maximize()  
 
     menuTemplate: ->
+        
+        return [] if not @opt.dir or not @opt.menu
         
         if empty @templateCache
             @templateCache = @makeTemplate noon.load slash.resolve slash.join @opt.dir, @opt.menu
