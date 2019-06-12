@@ -129,7 +129,6 @@ class Win
     
         @modifiers = info.mod
         
-        # if info.combo
         info.event = event
         post.emit 'combo', info.combo, info
     

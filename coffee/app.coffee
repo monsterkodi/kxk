@@ -229,7 +229,7 @@ class App
             resizable:       @opt.resizable   ? true
             maximizable:     @opt.maximizable ? true
             minimizable:     @opt.minimizable ? true
-            transparent:     true
+            transparent:     @opt.transparent ? false
             autoHideMenuBar: true
             icon:            @resolve @opt.icon 
             webPreferences: 
