@@ -68,7 +68,7 @@ class Store extends Emitter
                     when 'data' then @data = args[0]
                     when 'set'  then sds.set @data, @keypath(args[0]), args[1]
                     when 'get'  then sds.get @data, @keypath(args[0]), args[1]
-                    when 'del'  then sds.set @data, @keypath(args[0])
+                    when 'del'  then sds.del @data, @keypath(args[0])
                 
         @data = @load()
         @data = _.defaults @data, opt.defaults if opt.defaults?
@@ -97,6 +97,7 @@ class Store extends Emitter
         return if not key?.split?
         return if _.isEqual @get(key), value
 
+        @data ?= {}
         sds.set @data, @keypath(key), value
         if @app
             clearTimeout @timer
@@ -105,8 +106,18 @@ class Store extends Emitter
         else
             post.toMain 'store', @name, 'set', key, value
                     
-    del: (key) -> @set key
+    del: (key) -> 
     
+        return if not @data
+        sds.del @data, @keypath key
+        
+        if @app
+            clearTimeout @timer
+            @timer = setTimeout @save, @timeout
+            post.toWins 'store', @name, 'del', key
+        else
+            post.toMain 'store', @name, 'del', key
+                
     clear: ->
         
         @data = {}

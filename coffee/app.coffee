@@ -153,7 +153,8 @@ class App
     quitApp: =>
         
         @stopWatcher()
-        @saveBounds()
+        if @opt.saveBounds != false
+            @saveBounds()
         prefs.save()
         
         if 'delay' != @opt.onQuit?()
@@ -212,7 +213,9 @@ class App
         
         onReadyToShow ?= @opt.onWinReady
         
-        bounds = prefs.get 'bounds'
+        if @opt.saveBounds != false
+            bounds = prefs.get 'bounds'
+            
         width  = bounds?.width  ? @opt.width  ? 500
         height = bounds?.height ? @opt.height ? 500
         
@@ -235,12 +238,12 @@ class App
             webPreferences: 
                 nodeIntegration: true
     
-        @win.setPosition bounds.x, bounds.y if bounds?
-    
         @win.loadURL slash.fileUrl @resolve @opt.index
         @win.webContents.openDevTools() if args.devtools
-        @win.on 'resize', @saveBounds
-        @win.on 'move',   @saveBounds
+        if @opt.saveBounds != false
+            @win.setPosition bounds.x, bounds.y if bounds?
+            @win.on 'resize', @saveBounds
+            @win.on 'move',   @saveBounds
         @win.on 'closed', => @win = null
         @win.on 'close',  => @hideDock()
         @win.on 'ready-to-show', (event) => 
