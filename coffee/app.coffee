@@ -37,11 +37,11 @@ class App
         
         # klog 'app.args', args
         
-        if @opt.single != false #and os.platform() != 'darwin'
-            if @app.makeSingleInstance? and @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
-                # klog 'app.quit single'
-                @app.quit()
-                return
+        if @opt.single != false
+            if @app.makeSingleInstance? 
+                if @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
+                    @app.quit()
+                    return
             else if @app.requestSingleInstanceLock? 
                 if @app.requestSingleInstanceLock()
                     if @opt.onOtherInstance
@@ -191,7 +191,7 @@ class App
     toggleWindowFromTray: => @showWindow()
             
     showWindow: =>
-        
+
         @opt.onWillShowWin?()
         
         if @win?
@@ -242,20 +242,20 @@ class App
         @win.webContents.openDevTools() if args.devtools
         if @opt.saveBounds != false
             @win.setPosition bounds.x, bounds.y if bounds?
-            @win.on 'resize', @saveBounds
-            @win.on 'move',   @saveBounds
-        @win.on 'closed', => @win = null
-        @win.on 'close',  => @hideDock()
+            @win.on 'resize' @saveBounds
+            @win.on 'move'   @saveBounds
+        @win.on 'closed' => @win = null
+        @win.on 'close'  => @hideDock()
         @win.on 'ready-to-show', (event) => 
             win = event.sender
             onReadyToShow? win 
             win.show() 
-            post.emit 'winReady', win.id
+            post.emit 'winReady' win.id
         @showDock()
         
         @win
 
-    saveBounds: => if @win? then prefs.set 'bounds', @win.getBounds()
+    saveBounds: => if @win? then prefs.set 'bounds' @win.getBounds()
     screenSize: -> 
         electron = require 'electron'
         electron.screen.getPrimaryDisplay().workAreaSize

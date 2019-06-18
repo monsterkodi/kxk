@@ -14,7 +14,7 @@ class Win
         
         window.onerror = (msg, source, line, col, err) ->
             
-            error 'window.onerror', msg, source, line, col
+            error 'window.onerror' msg, source, line, col
             srcmap = require './srcmap'
             srcmap.logErr err
             true
@@ -33,7 +33,7 @@ class Win
 
         @userData = slash.userData()
         
-        post.on 'menuAction', @onMenuAction
+        post.on 'menuAction' @onMenuAction
         
         @opt.title ?= process.argv[0].endsWith('Electron Helper') and ['version'] or []
         
@@ -42,19 +42,19 @@ class Win
         document.body.addEventListener 'contextmenu', @onContextMenu
         
         if not @opt.nokeys
-            document.addEventListener 'keydown', @onKeyDown
-            document.addEventListener 'keyup',   @onKeyUp
+            document.addEventListener 'keydown' @onKeyDown
+            document.addEventListener 'keyup'   @onKeyUp
         
         if @opt.scheme != false
-            scheme.set prefs.get 'scheme', 'dark'
+            scheme.set prefs.get 'scheme' 'dark'
             
         if _.isFunction @opt.onShow
-            onShow = => @opt.onShow(); @win.removeListener 'ready-to-show', onShow
-            @win.on 'ready-to-show', onShow
+            onShow = => @opt.onShow(); @win.removeListener 'ready-to-show' onShow
+            @win.on 'ready-to-show' onShow
 
         if _.isFunction @opt.onLoad
-            onLoad = => @opt.onLoad(); @win.webContents.removeListener 'did-finish-load', onLoad
-            @win.webContents.on 'did-finish-load', onLoad
+            onLoad = => @opt.onLoad(); @win.webContents.removeListener 'did-finish-load' onLoad
+            @win.webContents.on 'did-finish-load' onLoad
             
     #  0000000   0000000  00000000   00000000  00000000  000   000   0000000  000   000   0000000   000000000
     # 000       000       000   000  000       000       0000  000  000       000   000  000   000     000
@@ -107,7 +107,7 @@ class Win
             if empty items 
                 return
         else
-            items.unshift text:'Clear', accel:'cmdctrl+k'
+            items.unshift text:'Clear' accel:'cmdctrl+k'
         
         popup.menu
             items:   items
@@ -130,7 +130,7 @@ class Win
         @modifiers = info.mod
         
         info.event = event
-        post.emit 'combo', info.combo, info
+        post.emit 'combo' info.combo, info
     
     onKeyUp: (event) =>
         
