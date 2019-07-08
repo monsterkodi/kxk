@@ -81,14 +81,15 @@ class App
         @app.setName @opt.pkg.name
     
         if not args.noprefs
+            sep = @opt.prefsSeperator ? ':'
             if @opt.shortcut
-                prefs.init shortcut: @opt.shortcut
+                prefs.init separator:sep, defaults:shortcut:@opt.shortcut
             else
-                prefs.init()
+                prefs.init separator:sep
     
         if valid prefs.get 'shortcut'
             electron = require 'electron'
-            electron.globalShortcut.register prefs.get('shortcut'), @showWindow
+            electron.globalShortcut.register prefs.get('shortcut'), @opt.onShortcut ? @showWindow
              
         if args.watch
             klog 'App.onReady startWatcher'
@@ -229,6 +230,7 @@ class App
             fullscreen:      false
             show:            false
             frame:           false
+            thickFrame:      false
             resizable:       @opt.resizable   ? true
             maximizable:     @opt.maximizable ? true
             minimizable:     @opt.minimizable ? true

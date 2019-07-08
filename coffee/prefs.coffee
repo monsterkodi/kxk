@@ -6,19 +6,19 @@
 000        000   000  00000000  000       0000000 
 ###
 
-{ store, slash, fs } = require './kxk'
+{ store, slash, klog, fs } = require './kxk'
 
 class Prefs
     
     @store   = null
     @watcher = null
     
-    @init: (defs={}) -> 
-        
+    @init: (opt={}) ->
+
         return error 'prefs.init -- duplicate stores?' if @store?
-        @store = new store 'prefs', defaults:defs
-        @store.on 'willSave', @unwatch
-        @store.on 'didSave',  @watch
+        @store = new store 'prefs' opt
+        @store.on 'willSave' @unwatch
+        @store.on 'didSave'  @watch
         @watch() 
       
     @unwatch: =>
@@ -37,9 +37,9 @@ class Prefs
         @unwatch()
         @watcher = fs.watch @store.file
         @watcher
-            .on 'change', @onFileChange
-            .on 'rename', @onFileUnlink
-            .on 'error' , (err) -> error 'Prefs watch error', err
+            .on 'change' @onFileChange
+            .on 'rename' @onFileUnlink
+            .on 'error'  (err) -> error 'Prefs watch error' err
         
     @onFileChange: => @store.reload()
     @onFileUnlink: => @unwatch(); @store.clear()

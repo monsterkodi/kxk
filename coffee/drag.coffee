@@ -6,7 +6,7 @@
 0000000    000   000  000   000   0000000 
 ###
 
-{ def, kpos, stopEvent, kerror, $, _ } = require './kxk'
+{ def, kpos, klog, stopEvent, kerror, $, _ } = require './kxk'
 
 class Drag
 
@@ -29,6 +29,9 @@ class Drag
         if not @target?
             return kerror "Drag -- can't find drag target"
         
+        if @target == document.body
+            @useScreenPos = true
+            
         kerror "Drag -- onStart not a function?" if @onStart? and not _.isFunction @onStart
         kerror "Drag -- onMove not a function?" if @onMove? and not _.isFunction @onMove
         kerror "Drag -- onEnd not a function?" if @onEnd? and not _.isFunction @onEnd
@@ -57,15 +60,21 @@ class Drag
                 @dragging = false
                 return @
                 
-            @lastPos  = p
+            @lastPos = p
                     
             stopEvent event
     
-            document.addEventListener 'mousemove', @dragMove
-            document.addEventListener 'mouseup',   @dragUp
+            document.addEventListener 'mousemove' @dragMove
+            document.addEventListener 'mouseup'   @dragUp
         @
     
-    dragStart: (event) => @start kpos(event), event
+    eventPos: (event) =>
+        if @useScreenPos
+            kpos x:event.screenX, y:event.screenY
+        else
+            kpos event
+        
+    dragStart: (event) => @start @eventPos(event), event
         
     # 00     00   0000000   000   000  00000000  
     # 000   000  000   000  000   000  000       
@@ -76,7 +85,7 @@ class Drag
     dragMove: (event) =>
 
         if @dragging
-            @pos      = kpos event
+            @pos      = @eventPos event
             @delta    = @lastPos.to @pos
             @deltaSum = @startPos.to @pos
             

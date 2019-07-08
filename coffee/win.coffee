@@ -19,7 +19,8 @@ class Win
             srcmap.logErr err
             true
         
-        prefs.init()
+        sep = @opt.prefsSeperator ? ':'
+        prefs.init separator:sep
         
         if @opt.icon
             klog.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
