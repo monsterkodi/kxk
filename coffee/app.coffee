@@ -23,6 +23,8 @@ class App
         @app = electron.app
         @userData = slash.userData() #@app.getPath 'userData'
         
+        electron.Menu.setApplicationMenu @opt.menu
+                
         if @opt.tray
             klog.slog.icon = slash.fileUrl @resolve @opt.tray  
             
@@ -262,7 +264,7 @@ class App
             win.show() 
             post.emit 'winReady' win.id
         @showDock()
-        
+                
         @win
 
     saveBounds: => if @win? then prefs.set 'bounds' @win.getBounds()
