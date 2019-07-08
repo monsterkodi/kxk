@@ -146,7 +146,7 @@ class Title
             when 'Close'            then win.close()
             when 'Minimize'         then win.minimize()
             when 'Maximize' 
-                wa = electron.screen.getPrimaryDisplay().workAreaSize
+                wa = electron.remote.screen.getPrimaryDisplay().workAreaSize
                 wb = win.getBounds()
                 maximized = win.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
                 if maximized then win.unmaximize() else win.maximize()  
