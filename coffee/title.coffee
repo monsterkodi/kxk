@@ -144,6 +144,7 @@ class Title
             when 'DevTools'         then win.webContents.toggleDevTools()
             when 'Reload'           then win.webContents.reloadIgnoringCache()
             when 'Close'            then win.close()
+            when 'Hide'             then win.hide()
             when 'Minimize'         then win.minimize()
             when 'Maximize' 
                 wa = electron.remote.screen.getPrimaryDisplay().workAreaSize
