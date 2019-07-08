@@ -236,19 +236,15 @@ class App
             resizable:          @opt.resizable          ? true
             maximizable:        @opt.maximizable        ? true
             minimizable:        @opt.minimizable        ? true
-            # titleBarStyle:      'customButtonsOnHover'
+            closable:           @opt.closable           ? true
             autoHideMenuBar:    true
             thickFrame:         false
             show:               false
-            minimizable:        false
-            maximizable:        false
-            closable:           false
             icon:               @resolve @opt.icon 
             webPreferences: 
                 nodeIntegration: true
     
         @win.setPosition bounds.x, bounds.y if bounds?
-        # @win.setClosable true
     
         @win.loadURL slash.fileUrl @resolve @opt.index
         @win.webContents.openDevTools() if args.devtools
