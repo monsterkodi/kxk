@@ -221,24 +221,32 @@ class App
         height = bounds?.height ? @opt.height ? 500
         
         @win = new electron.BrowserWindow
-            width:           width
-            height:          height
-            minWidth:        @opt.minWidth  ? 250
-            minHeight:       @opt.minHeight ? 250
-            backgroundColor: '#181818'
-            fullscreenenable: true
-            fullscreen:      false
-            show:            false
-            frame:           false
-            thickFrame:      false
-            resizable:       @opt.resizable   ? true
-            maximizable:     @opt.maximizable ? true
-            minimizable:     @opt.minimizable ? true
-            transparent:     @opt.transparent ? false
-            autoHideMenuBar: true
-            icon:            @resolve @opt.icon 
+            width:              width
+            height:             height
+            minWidth:           @opt.minWidth           ? 250
+            minHeight:          @opt.minHeight          ? 250
+            backgroundColor:    @opt.backgroundColor    ? '#181818'
+            frame:              @opt.frame              ? false
+            transparent:        @opt.transparent        ? false
+            fullscreen:         @opt.fullscreen         ? false
+            fullscreenenable:   @opt.fullscreenenable   ? true
+            acceptFirstMouse:   @opt.acceptFirstMouse   ? true
+            resizable:          @opt.resizable          ? true
+            maximizable:        @opt.maximizable        ? true
+            minimizable:        @opt.minimizable        ? true
+            # titleBarStyle:      'customButtonsOnHover'
+            autoHideMenuBar:    true
+            thickFrame:         false
+            show:               false
+            minimizable:        false
+            maximizable:        false
+            closable:           false
+            icon:               @resolve @opt.icon 
             webPreferences: 
                 nodeIntegration: true
+    
+        @win.setPosition bounds.x, bounds.y if bounds?
+        # @win.setClosable true
     
         @win.loadURL slash.fileUrl @resolve @opt.index
         @win.webContents.openDevTools() if args.devtools
