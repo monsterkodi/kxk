@@ -12,7 +12,7 @@ class App
     
     constructor: (@opt) ->
 
-        process.on 'uncaughtException', (err) ->
+        process.on 'uncaughtException' (err) ->
             srcmap = require './srcmap'    
             srcmap.logErr err, '🔻'
             true
@@ -21,7 +21,7 @@ class App
             
         electron = require 'electron'
         @app = electron.app
-        @userData = slash.userData() #@app.getPath 'userData'
+        @userData = slash.userData()
         
         electron.Menu.setApplicationMenu @opt.menu
                 
@@ -37,11 +37,8 @@ class App
         argl = @opt.args + '\n' + argl if @opt.args
         args = args.init argl
         
-        # klog 'app.args', args
-        
         onOther = (event, args, dir) =>
             
-            klog 'onOther' event, args, dir, @opt.onOtherInstance?
             if @opt.onOtherInstance
                 @opt.onOtherInstance args, dir 
             else
@@ -49,12 +46,10 @@ class App
         
         if @opt.single != false
             if @app.makeSingleInstance? 
-                klog 'makeSingleInstance'
                 if @app.makeSingleInstance onOther
                     @app.quit()
                     return
             else if @app.requestSingleInstanceLock? 
-                klog 'requestSingleInstanceLock'
                 if @app.requestSingleInstanceLock()
                     @app.on 'second-instance' onOther                       
                 else
@@ -122,7 +117,7 @@ class App
         electron = require 'electron'
         trayImg = @resolve @opt.tray
         @tray = new electron.Tray trayImg
-        @tray.on 'click', @toggleWindowFromTray
+        @tray.on 'click' @toggleWindowFromTray
         
         if os.platform() != 'darwin'
             template = [
@@ -145,7 +140,7 @@ class App
     
     showAbout: =>
         
-        dark = 'dark' == prefs.get 'scheme', 'dark'
+        dark = 'dark' == prefs.get 'scheme' 'dark'
         about
             img:        @resolve @opt.about
             color:      dark and '#383838' or '#ddd'
@@ -269,7 +264,7 @@ class App
             @win.on 'move'   @saveBounds
         @win.on 'closed' => @win = null
         @win.on 'close'  => @hideDock()
-        @win.on 'ready-to-show', (event) => 
+        @win.on 'ready-to-show' (event) => 
             win = event.sender
             onReadyToShow? win 
             win.show() 
@@ -292,19 +287,19 @@ class App
     startWatcher: =>
         
         @opt.dir = slash.resolve @opt.dir
-        klog 'startWatcher', @opt.dir
+        klog 'startWatcher' @opt.dir
         watcher = watch.dir @opt.dir
-        watcher.on 'change', @onSrcChange
-        watcher.on 'error', (err) -> error err
+        watcher.on 'change' @onSrcChange
+        watcher.on 'error' (err) -> error err
         @watchers.push watcher
         
         return if empty @opt.dirs
         
-        klog 'startWatchers', @opt.dirs
+        klog 'startWatchers' @opt.dirs
         for dir in @opt.dirs
             watcher = watch.dir slash.resolve slash.join @opt.dir, dir
-            watcher.on 'change', @onSrcChange
-            watcher.on 'error', (err) -> error err
+            watcher.on 'change' @onSrcChange
+            watcher.on 'error' (err) -> error err
             @watchers.push watcher 
     
     stopWatcher: =>
@@ -316,7 +311,7 @@ class App
     
     onSrcChange: (info) =>
     
-        klog "onSrcChange '#{info.change}'", info.path
+        klog "onSrcChange '#{info.change}'" info.path
         if slash.base(info.path) == 'main'
             @stopWatcher()
             @app.exit 0
@@ -329,7 +324,7 @@ class App
                         shell:    true
                     process.exit 0
                     return
-        post.toWins 'menuAction', 'Reload'
+        post.toWins 'menuAction' 'Reload'
              
 module.exports = App
     
