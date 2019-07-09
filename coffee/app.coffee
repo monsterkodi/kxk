@@ -39,28 +39,35 @@ class App
         
         # klog 'app.args', args
         
+        onOther = (event, args, dir) =>
+            
+            klog 'onOther' event, args, dir, @opt.onOtherInstance?
+            if @opt.onOtherInstance
+                @opt.onOtherInstance args, dir 
+            else
+                @showWindow()
+        
         if @opt.single != false
             if @app.makeSingleInstance? 
-                if @app.makeSingleInstance @opt.onOtherInstance ? @showWindow
+                klog 'makeSingleInstance'
+                if @app.makeSingleInstance onOther
                     @app.quit()
                     return
             else if @app.requestSingleInstanceLock? 
+                klog 'requestSingleInstanceLock'
                 if @app.requestSingleInstanceLock()
-                    if @opt.onOtherInstance
-                        cb = (event, args, dir) => @opt.onOtherInstance args, dir 
-                    else
-                        cb = @showWindow
-                    @app.on 'second-instance', cb                        
+                    @app.on 'second-instance' onOther                       
                 else
                     @app.quit()
                     return
         
-        post.on 'showAbout', @showAbout
-        post.on 'quitApp',   @quitApp
+        post.on 'showAbout' @showAbout
+        post.on 'quitApp'   @quitApp
 
         @app.setName @opt.pkg.name
-        @app.on 'ready', @onReady
-        @app.on 'window-all-closed', (event) => 
+        @app.on 'ready' @onReady
+        @app.on 'activate' @onActivate
+        @app.on 'window-all-closed' (event) => 
             if not @opt.singleWindow
                 event.preventDefault()        
             else
@@ -192,9 +199,17 @@ class App
             @showWindow()
 
     toggleWindowFromTray: => @showWindow()
-            
+       
+    onActivate: (event, hasVisibleWindows) => 
+        
+        if not hasVisibleWindows
+            klog 'onActivate'
+            @showWindow()
+    
     showWindow: =>
 
+        klog 'showWindow' @win?
+        
         @opt.onWillShowWin?()
         
         if @win?
