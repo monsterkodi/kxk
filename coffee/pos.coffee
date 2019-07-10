@@ -100,7 +100,7 @@ class Pos
         s  = ("<x:#{@x} " if @x?) or "<NaN "
         s += ("y:#{@y}>" if @y?) or "NaN>"
 
-    @isPos: (o) -> o.x? and o.y? and Number.isFinite(o.x) and Number.isFinite(o.y)
+    @isPos: (o) -> o? and o.x? and o.y? and Number.isFinite(o.x) and Number.isFinite(o.y)
     
     #_________________________________________________________ destructive
     

@@ -203,8 +203,6 @@ class App
     
     showWindow: =>
 
-        klog 'showWindow' @win?
-        
         @opt.onWillShowWin?()
         
         if @win?
