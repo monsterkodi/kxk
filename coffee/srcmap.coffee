@@ -173,8 +173,6 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
                     coffeeFile = slash.tilde mapData.sources[0]
                     coffeeLine = pos.line 
                     coffeeCol  = pos.column
-                else
-                    klog 'no pos.line', pos
             else
                 klog 'no consumer originalPositionFor', mapData?, consumer?
         
@@ -204,8 +202,8 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
             poss = consumer.allGeneratedPositionsFor source:mapData.sources[0], line:coffeeLine#, column:coffeeCol
             if valid poss
                 return [jsFile, poss[0]?.line, poss[0]?.column]
-            else
-                log 'srcmap.toJs -- empty poss!'
+            # else
+                # log 'srcmap.toJs -- empty poss!'
         else
             log 'srcmap.toJs -- no allGeneratedPositionsFor in', consumer
         

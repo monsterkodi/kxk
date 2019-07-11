@@ -22,6 +22,8 @@ class Pos
         else if not @y? and Pos.isPos @x
             @y = @x.y
             @x = @x.x
+        @x = 0 if isNaN @x
+        @y = 0 if isNaN @y
         
     copy: -> new Pos @x, @y
 
