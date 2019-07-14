@@ -250,11 +250,16 @@ class App
             show:               false
             icon:               @resolve @opt.icon 
             webPreferences: 
+                webSecurity:    false
                 nodeIntegration: true
     
         @win.setPosition bounds.x, bounds.y if bounds?
     
-        @win.loadURL slash.fileUrl @resolve @opt.index
+        if @opt.indexURL
+            @win.loadURL @opt.index, baseURLForDataURL:@opt.indexURL
+        else
+            @win.loadURL slash.fileUrl @resolve @opt.index
+        
         @win.webContents.openDevTools() if args.devtools
         if @opt.saveBounds != false
             @win.setPosition bounds.x, bounds.y if bounds?
