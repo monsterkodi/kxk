@@ -29,31 +29,31 @@ if process.type == 'renderer'
             @id  = remote.getCurrentWindow().id
             @ipc = electron.ipcRenderer
             @ipc.on POST, (event, type, argl) => @emit.apply @, [type].concat argl
-            window.addEventListener 'beforeunload', @dispose
+            window.addEventListener 'beforeunload' @dispose
 
         dispose: () =>
-            window.removeEventListener 'beforeunload', @dispose
+            window.removeEventListener 'beforeunload' @dispose
             @ipc.removeAllListeners POST
             @ipc = null
 
-        toAll:       (type, args...) -> @send 'toAll',       type, args
-        toOthers:    (type, args...) -> @send 'toOthers',    type, args, @id
-        toMain:      (type, args...) -> @send 'toMain',      type, args
-        toOtherWins: (type, args...) -> @send 'toOtherWins', type, args, @id
-        toWins:      (type, args...) -> @send 'toWins',      type, args
-        toWin:   (id, type, args...) -> @send 'toWin',       type, args, id
+        toAll:       (type, args...) -> @send 'toAll'       type, args
+        toOthers:    (type, args...) -> @send 'toOthers'    type, args, @id
+        toMain:      (type, args...) -> @send 'toMain'      type, args
+        toOtherWins: (type, args...) -> @send 'toOtherWins' type, args, @id
+        toWins:      (type, args...) -> @send 'toWins'      type, args
+        toWin:   (id, type, args...) -> @send 'toWin'       type, args, id
         
-        get:         (type, args...) -> @ipc.sendSync POST, 'get', type, args
+        get:         (type, args...) -> @ipc.sendSync POST, 'get' type, args
 
-        debug: (@dbg=['emit', 'toAll', 'toOthers', 'toMain', 'toOtherWins', 'toWins', 'toWin']) ->
-            log "post.debug id:#{@id}", @dbg
+        debug: (@dbg=['emit' 'toAll' 'toOthers' 'toMain' 'toOtherWins' 'toWins' 'toWin']) ->
+            log "post.debug id:#{@id}" @dbg
 
         emit: (type, args...) -> 
-            if 'emit' in @dbg then log "post.emit #{type}", args.map((a) -> new String(a)).join ' '
+            if 'emit' in @dbg then log "post.emit #{type}" args.map((a) -> new String(a)).join ' '
             super arguments...
             
         send: (receivers, type, args, id) ->
-            if receivers in @dbg then log "post.#{receivers} #{type}", args.map((a) -> new String(a)).join ' '
+            if receivers in @dbg then log "post.#{receivers} #{type}" args.map((a) -> new String(a)).join ' '
             @ipc.send POST, receivers, type, args, id
 
     module.exports = new PostRenderer()
@@ -82,10 +82,10 @@ else
                         when 'toOtherWins' then @sendToWins type, argl, id
                         when 'toWins'      then @sendToWins type, argl
                         when 'toWin'       
-                            if @dbg then log 'to win', id, type, argl
+                            if @dbg then log 'to win' id, type, argl
                             @toWin.apply @, [id, type].concat argl
                         when 'get'
-                            if @dbg then log 'post get', type, argl, @getCallbacks[type]
+                            if @dbg then log 'post get' type, argl, @getCallbacks[type]
                             if _.isFunction @getCallbacks[type]
                                 retval = @getCallbacks[type].apply @getCallbacks[type], argl
                                 event.returnValue = retval ? []
@@ -102,7 +102,7 @@ else
             @
 
         sendToMain: (type, argl) ->
-            if @dbg then log "post to main", type, argl
+            if @dbg then log "post to main" type, argl
             argl.unshift type
             @emit.apply @, argl
             @
@@ -110,12 +110,12 @@ else
         sendToWins: (type, argl, except) ->
             for win in require('electron').BrowserWindow.getAllWindows()
                 if win.id != except
-                    if @dbg then log "post to #{win.id} #{type}" #, argl.map((a) -> new String(a)).join ' '
+                    if @dbg then log "post to #{win.id} #{type}" # argl.map((a) -> new String(a)).join ' '
                     win.webContents.send(POST, type, argl) 
             @
             
         debug: (@dbg=true) ->
-            log "post.debug", @dbg
+            log "post.debug" @dbg
 
     module.exports = new PostMain()
     

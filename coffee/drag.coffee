@@ -54,6 +54,8 @@ class Drag
             @dragging = true
             @startPos = p
             @pos      = p
+            @delta    = kpos 0 0
+            @deltaSum = kpos 0 0
             
             if 'skip' == @onStart? @, event
                 delete @startPos
@@ -114,8 +116,8 @@ class Drag
     dragStop: (event) =>
 
         if @dragging
-            document.removeEventListener 'mousemove', @dragMove
-            document.removeEventListener 'mouseup',   @dragUp
+            document.removeEventListener 'mousemove' @dragMove
+            document.removeEventListener 'mouseup'   @dragUp
             @onStop @, event if @onStop? and event?
             delete @lastPos
             delete @startPos
@@ -132,13 +134,13 @@ class Drag
         
         if not @listening
             @listening = true
-            @handle.addEventListener 'mousedown', @dragStart
+            @handle.addEventListener 'mousedown' @dragStart
         @
 
     deactivate: =>
 
         if @listening
-            @handle.removeEventListener 'mousedown', @dragStart
+            @handle.removeEventListener 'mousedown' @dragStart
             @listening = false
             @dragStop() if @dragging
         @
