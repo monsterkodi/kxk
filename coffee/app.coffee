@@ -314,7 +314,7 @@ class App
     
     onSrcChange: (info) =>
     
-        klog "onSrcChange '#{info.change}'" info.path
+        # log "onSrcChange '#{info.change}'", info.path
         if slash.base(info.path) == 'main'
             @stopWatcher()
             @app.exit 0

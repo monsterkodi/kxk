@@ -163,7 +163,11 @@ try
     slog.logFile = slash.join app.getPath('appData'), 'klog.txt'
 catch err
     try
+<<<<<<< HEAD
         {slash} = require './kxk'
+=======
+        slash = require './slash'
+>>>>>>> koffee
         if process.argv[0].length and slash.base(process.argv[0]) in ['node', 'coffee', 'koffee', 'electron']
             if process.argv[1]?.length
                 slog.id = slash.base process.argv[1]
