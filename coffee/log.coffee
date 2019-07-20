@@ -6,8 +6,8 @@
 000   000  0000000   0000000    0000000     
 ###
 
-sutil   = require 'stack-utils'
-stack   = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
+sutil = require 'stack-utils'
+stack = new sutil cwd: process.cwd(), internals: sutil.nodeInternals()
 
 # 00000000  000  000      00000000  
 # 000       000  000      000       
@@ -20,8 +20,8 @@ infos = []
 dumpInfos = ->
     
     fs     = require 'fs'
-    slash  = require('./kxk').slash
-    stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a', encoding: 'utf8'
+    slash  = require 'kslash'
+    stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a' encoding:'utf8'
     while infos.length
         info = infos.shift()
         stream.write JSON.stringify(info)+'\n'
@@ -29,9 +29,9 @@ dumpInfos = ->
 
 dumpImmediately = ->
     
-    fs     = require 'fs'
-    slash  = require('./kxk').slash
-    data = ''
+    fs    = require 'fs'
+    slash = require 'kslash'
+    data  = ''
     while infos.length
         info = infos.shift()
         data += JSON.stringify(info)+'\n'
@@ -55,9 +55,6 @@ fileLog = (info) ->
         else
             infos.push info
             
-        # clearImmediate dumpTimer
-        # dumpTimer = setImmediate dumpInfos
-        
         dumpImmediately() # shell scripts need immediate dump
         
     catch err
@@ -72,7 +69,8 @@ fileLog = (info) ->
 
 slog = (s) ->
     
-    {slash, post, kstr } = require './kxk'
+    slash = require 'kslash'
+    {post, kstr } = require './kxk'
     
     try # fancy log with source-mapped files and line numbers
         f = stack.capture()[slog.depth]
@@ -99,13 +97,13 @@ slog = (s) ->
         meth = kstr.rpad f.getFunctionName(), slog.methpad
         info.str = s
         s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
-        post.emit 'slog', s, info
+        post.emit 'slog' s, info
         if slog.file
             fileLog info            
             
     catch err
         error err
-        post.emit 'slog', "!#{slog.methsep}#{s} #{err}"
+        post.emit 'slog' "!#{slog.methsep}#{s} #{err}"
 
 # 000       0000000    0000000   
 # 000      000   000  000        
@@ -134,7 +132,7 @@ if process.platform == 'win32'
 else if process.platform == 'darwin'
     slog.logFile = '~/Library/Application Support/klog.txt'
 else
-    {slash} = require './kxk'
+    slash = require 'kslash'
     if slash.isFile '~/AppData/Roaming/klog.txt'
         slog.logFile = '~/AppData/Roaming/klog.txt'
     else
@@ -159,22 +157,18 @@ try
     else
         app = electron.app
     slog.id = app.getName()
-    {slash} = require './kxk'
+    slash = require 'kslash'
     slog.logFile = slash.join app.getPath('appData'), 'klog.txt'
 catch err
     try
-<<<<<<< HEAD
-        {slash} = require './kxk'
-=======
-        slash = require './slash'
->>>>>>> koffee
-        if process.argv[0].length and slash.base(process.argv[0]) in ['node', 'coffee', 'koffee', 'electron']
+        slash = require 'kslash'
+        if process.argv[0].length and slash.base(process.argv[0]) in ['node' 'coffee' 'koffee' 'electron']
             if process.argv[1]?.length
                 slog.id = slash.base process.argv[1]
         else if slash.ext(process.argv[-1]) in ['js']
             slog.id = slash.base process.argv[-1]
         else
-            warn "can't figure out slog.id -- process.argv:", process.argv.join ' '
+            warn "can't figure out slog.id -- process.argv:" process.argv.join ' '
     catch err
         null
     
