@@ -197,10 +197,13 @@ class App
        
     onActivate: (event, hasVisibleWindows) => 
         
+        if @opt.onActivate
+            if @opt.onActivate event, hasVisibleWindows
+                return
+                
         if not hasVisibleWindows
             @showWindow()
-        @opt.onActivate?()
-            
+                
     showWindow: =>
 
         @opt.onWillShowWin?()
