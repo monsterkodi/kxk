@@ -197,6 +197,7 @@ class App
        
     onActivate: (event, hasVisibleWindows) => 
         
+        
         if @opt.onActivate
             if @opt.onActivate event, hasVisibleWindows
                 return
