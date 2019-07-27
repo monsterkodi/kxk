@@ -51,7 +51,7 @@ class App
                     return
             else if @app.requestSingleInstanceLock? 
                 if @app.requestSingleInstanceLock()
-                    @app.on 'second-instance' onOther                       
+                    @app.on 'second-instance' onOther
                 else
                     @app.quit()
                     return
