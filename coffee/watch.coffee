@@ -13,14 +13,15 @@ walkdir = require 'walkdir'
 
 class Watch extends event
 
-    constructor: (path, opt) ->
+    @: (path, opt) ->
         
         super()
         
-        @dir = slash.resolve path
-        @opt = opt ? {}
+        @dir  = slash.resolve path
+        @opt  = opt ? {}
+        @last = {}
         
-        slash.exists @dir, (stat) => if stat then @watchDir() 
+        slash.exists @dir, (stat) => if stat then @watchDir()
        
     @watch: (path, opt) ->
     
@@ -87,13 +88,20 @@ class Watch extends event
         
         return if @ignore path
         
-        if /\d\d\d\d\d\d\d\d?\d?$/.test slash.ext path
-            return
-
         path = slash.join dir, path
         if @file and @file != path
             return
+        
+        if slash.isDir path
+            return
+                        
+        if stat = slash.fileExists path
+        
+            if path == @last?.path and stat.mtime.getTime() == @last?.mtime?.getTime()
+                return # unchanged
             
-        @emit 'change', dir:dir, path:path, change:change, watch:@
+            @last = mtime:stat.mtime, path:path
+                    
+            @emit 'change' dir:dir, path:path, change:change, watch:@
         
 module.exports = Watch
