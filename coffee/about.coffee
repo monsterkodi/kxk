@@ -108,15 +108,15 @@ class About
         </html>
         """
 
-        ipc.on 'openURL',    About.openURL
-        ipc.on 'closeAbout', About.closeAbout
-        ipc.on 'blurAbout',  About.blurAbout
+        ipc.on 'openURL'    About.openURL
+        ipc.on 'closeAbout' About.closeAbout
+        ipc.on 'blurAbout'  About.blurAbout
 
         win.loadURL "data:text/html;charset=utf-8," + encodeURI(html)
-        win.on 'ready-to-show', -> 
+        win.on 'ready-to-show' -> 
             win.show()
             if About.opt?.debug
-                win.openDevTools()
+                win.openDevTools mode:'detach'
                 
         About.win = win
         win

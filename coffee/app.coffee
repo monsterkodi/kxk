@@ -264,7 +264,7 @@ class App
         else
             @win.loadURL slash.fileUrl @resolve @opt.index
         
-        @win.webContents.openDevTools() if args.devtools
+        @win.webContents.openDevTools(mode:'detach') if args.devtools
         if @opt.saveBounds != false
             @win.setPosition bounds.x, bounds.y if bounds?
             @win.on 'resize' @saveBounds
