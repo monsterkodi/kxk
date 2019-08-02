@@ -32,7 +32,7 @@ class udp
                     try
                         msg = JSON.parse messageString
                     catch err
-                        error 'conversion error', err
+                        error 'conversion error', messageString, err
                         return
                     @opt.onMsg msg
                     
