@@ -143,7 +143,9 @@ class Store extends Emitter
         
         if @app
             try
-                noon.load @file
+                d = noon.load @file
+                if _.isPlainObject(d) then return d
+                {}
             catch err
                 {}
         else
