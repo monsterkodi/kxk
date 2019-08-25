@@ -254,8 +254,9 @@ class App
             show:               false
             icon:               @resolve @opt.icon 
             webPreferences: 
-                webSecurity:    false
-                nodeIntegration: true
+                webSecurity:            false
+                backgroundThrottling:   false
+                nodeIntegration:        true
     
         @win.setPosition bounds.x, bounds.y if bounds?
     

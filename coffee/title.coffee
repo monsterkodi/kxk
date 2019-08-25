@@ -6,7 +6,9 @@
    000     000     000     0000000  00000000
 ###
 
-{ elem, sds, prefs, slash, scheme, empty, post, stopEvent, keyinfo, menu, noon, kstr, $, _ } = require './kxk'
+{ post, stopEvent, keyinfo, scheme, slash, empty, prefs, elem, drag, klog, noon, kstr, menu, win, sds, $, _ } = require './kxk'
+
+electron = require 'electron'
 
 class Title
     
@@ -20,16 +22,16 @@ class Title
         
         return if not @elem
 
-        post.on 'titlebar',   @onTitlebar
-        post.on 'menuAction', @onMenuAction
+        post.on 'titlebar'   @onTitlebar
+        post.on 'menuAction' @onMenuAction
         
-        @elem.addEventListener 'dblclick', (event) -> stopEvent event, post.emit 'menuAction', 'Maximize'
+        @elem.addEventListener 'dblclick' (event) -> stopEvent event, post.emit 'menuAction' 'Maximize'
                 
         @winicon = elem class: 'winicon'
         if @opt.icon
-            @winicon.appendChild elem 'img', src:slash.fileUrl slash.join @opt.dir, @opt.icon
+            @winicon.appendChild elem 'img' src:slash.fileUrl slash.join @opt.dir, @opt.icon
         @elem.appendChild @winicon
-        @winicon.addEventListener 'click', -> post.emit 'menuAction', 'Open Menu'   
+        @winicon.addEventListener 'click' -> post.emit 'menuAction' 'Open Menu'   
         
         @title = elem class: 'titlebar-title'
         @elem.appendChild @title
@@ -46,7 +48,7 @@ class Title
         """
         
         @elem.appendChild @minimize
-        @minimize.addEventListener 'click', -> post.emit 'menuAction', 'Minimize'
+        @minimize.addEventListener 'click' -> post.emit 'menuAction' 'Minimize'
         
         @maximize = elem class: 'winbutton maximize gray'
         
@@ -56,7 +58,7 @@ class Title
             </svg>
         """
         @elem.appendChild @maximize
-        @maximize.addEventListener 'click', -> post.emit 'menuAction', 'Maximize'
+        @maximize.addEventListener 'click' -> post.emit 'menuAction' 'Maximize'
 
         @close = elem class: 'winbutton close'
         
@@ -68,7 +70,7 @@ class Title
         """
         
         @elem.appendChild @close
-        @close.addEventListener 'click', -> post.emit 'menuAction', 'Close'
+        @close.addEventListener 'click' -> post.emit 'menuAction' 'Close'
 
         @topframe = elem class: 'topframe'
         @elem.appendChild @topframe
@@ -109,11 +111,29 @@ class Title
             html += "<span class='titlebar-dot'> ► </span>"
             html += "<span class='titlebar-version'>#{opt.pkg.path}</span>"
             
-        if html == ""
-            @title.style.display = 'none'
-            
         @title.innerHTML = html
+        
+        @titleDrag = new drag
+            target:  document.body
+            handle:  @title
+            onStart: @onDragStart
+            onMove:  @onDragMove
+            onStop:  @onDragStop
     
+    onDragStop: (drag, event) => klog 'dargStop' drag
+    onDragStart: (drag, event) => 
+    
+        win = electron.remote.getCurrentWindow()
+        @startBounds = win.getBounds()    
+    
+    onDragMove: (drag, event) => 
+        win = electron.remote.getCurrentWindow()
+        win.setBounds 
+            x:      @startBounds.x + drag.deltaSum.x 
+            y:      @startBounds.y + drag.deltaSum.y 
+            width:  @startBounds.width 
+            height: @startBounds.height
+            
     onTitlebar: (action) =>
         
         switch action
@@ -197,8 +217,8 @@ class Title
         @hideMenu()
 
     menuVisible: => @menu.elem.style.display != 'none'
-    showMenu:    => @menu.elem.style.display = 'inline-block'; @menu?.focus?(); post.emit 'titlebar', 'hideTitle'
-    hideMenu:    => @menu?.close(); @menu.elem.style.display = 'none'; post.emit 'titlebar', 'showTitle'
+    showMenu:    => @menu.elem.style.display = 'inline-block'; @menu?.focus?()#; post.emit 'titlebar' 'hideTitle'
+    hideMenu:    => @menu?.close(); @menu.elem.style.display = 'none'#; post.emit 'titlebar' 'showTitle'
     toggleMenu:  => if @menuVisible() then @hideMenu() else @showMenu()
     openMenu:    => if @menuVisible() then @hideMenu() else @showMenu(); @menu.open()
 
@@ -213,15 +233,15 @@ class Title
         if link =$ "#style-link"
             
             href = slash.fileUrl slash.resolve slash.join __dirname, "css/style.css"
-            titleStyle = elem 'link',
+            titleStyle = elem 'link'
                 href: href
                 rel:  'stylesheet'
                 type: 'text/css'
                 
             link.parentNode.insertBefore titleStyle, link
             
-            href = slash.fileUrl slash.resolve slash.join __dirname, "css/#{prefs.get 'scheme', 'dark'}.css"
-            titleStyle = elem 'link',
+            href = slash.fileUrl slash.resolve slash.join __dirname, "css/#{prefs.get 'scheme' 'dark'}.css"
+            titleStyle = elem 'link'
                 href: href
                 rel:  'stylesheet'
                 type: 'text/css'
@@ -252,7 +272,7 @@ class Title
             if combo in combos
                 keypath.pop()
                 item = sds.get mainMenu, keypath
-                post.emit 'menuAction', item.action ? item.text, item
+                post.emit 'menuAction' item.action ? item.text, item
                 return item
 
         'unhandled'
