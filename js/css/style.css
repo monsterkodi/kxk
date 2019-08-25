@@ -36,7 +36,6 @@ body {
   font-size: 15px;
   font-family: Bahnschrift Light, Helvetica Neue, Ebrima, Varela Round, Helvetica, Arial;
   white-space: nowrap;
-  pointer-events: auto;
   cursor: pointer;
 }
 .titlebar-title {
@@ -56,6 +55,7 @@ body {
   margin-top: -1px;
 }
 #titlebar .winicon img {
+  pointer-events: all;
   padding-left: 6px;
   padding-top: 3px;
   width: 22px;
@@ -68,6 +68,7 @@ body {
   vertical-align: bottom;
   font-size: 18px;
   padding-top: 2px;
+  pointer-events: all;
 }
 #titlebar .winbutton.minimize {
   padding-top: 5px;

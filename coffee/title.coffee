@@ -98,7 +98,7 @@ class Title
         
         @titleDrag = new drag
             target:     document.body
-            handle:     @elem
+            handle:     @opt.dragElem ? @elem
             onStart:    @onDragStart
             onMove:     @onDragMove
             stopEvent:  false
