@@ -8,8 +8,6 @@
 
 { post, stopEvent, keyinfo, scheme, slash, empty, prefs, elem, drag, klog, noon, kstr, menu, win, sds, $, _ } = require './kxk'
 
-electron = require 'electron'
-
 class Title
     
     constructor: (@opt) ->
@@ -35,6 +33,8 @@ class Title
         
         @title = elem class: 'titlebar-title'
         @elem.appendChild @title
+        
+        @initTitleDrag()
         @setTitle @opt
                 
         # — ◻ 🞩
@@ -88,6 +88,37 @@ class Title
     showTitle: -> @title.style.display = 'initial'
     hideTitle: -> @title.style.display = 'none'
 
+    # 000000000  000  000000000  000      00000000  0000000    00000000    0000000    0000000   
+    #    000     000     000     000      000       000   000  000   000  000   000  000        
+    #    000     000     000     000      0000000   000   000  0000000    000000000  000  0000  
+    #    000     000     000     000      000       000   000  000   000  000   000  000   000  
+    #    000     000     000     0000000  00000000  0000000    000   000  000   000   0000000   
+    
+    initTitleDrag: ->
+        
+        @titleDrag = new drag
+            target:  document.body
+            handle:  @elem
+            onStart: @onDragStart
+            onMove:  @onDragMove
+    
+    onDragStart: (drag, event) => 
+    
+        electron = require 'electron'
+        win = electron.remote.getCurrentWindow()
+        @startBounds = win.getBounds()    
+    
+    onDragMove: (drag, event) => 
+        
+        electron = require 'electron'
+        win = electron.remote.getCurrentWindow()
+        win.setBounds 
+            x:      @startBounds.x + drag.deltaSum.x 
+            y:      @startBounds.y + drag.deltaSum.y 
+            width:  @startBounds.width 
+            height: @startBounds.height
+    
+    
     #  0000000  00000000  000000000  000000000  000  000000000  000      00000000  
     # 000       000          000        000     000     000     000      000       
     # 0000000   0000000      000        000     000     000     000      0000000   
@@ -112,28 +143,7 @@ class Title
             html += "<span class='titlebar-version'>#{opt.pkg.path}</span>"
             
         @title.innerHTML = html
-        
-        @titleDrag = new drag
-            target:  document.body
-            handle:  @title
-            onStart: @onDragStart
-            onMove:  @onDragMove
-            onStop:  @onDragStop
-    
-    onDragStop: (drag, event) => klog 'dargStop' drag
-    onDragStart: (drag, event) => 
-    
-        win = electron.remote.getCurrentWindow()
-        @startBounds = win.getBounds()    
-    
-    onDragMove: (drag, event) => 
-        win = electron.remote.getCurrentWindow()
-        win.setBounds 
-            x:      @startBounds.x + drag.deltaSum.x 
-            y:      @startBounds.y + drag.deltaSum.y 
-            width:  @startBounds.width 
-            height: @startBounds.height
-            
+                    
     onTitlebar: (action) =>
         
         switch action
@@ -233,7 +243,7 @@ class Title
         if link =$ "#style-link"
             
             href = slash.fileUrl slash.resolve slash.join __dirname, "css/style.css"
-            titleStyle = elem 'link'
+            titleStyle = elem 'link',
                 href: href
                 rel:  'stylesheet'
                 type: 'text/css'
@@ -241,7 +251,7 @@ class Title
             link.parentNode.insertBefore titleStyle, link
             
             href = slash.fileUrl slash.resolve slash.join __dirname, "css/#{prefs.get 'scheme' 'dark'}.css"
-            titleStyle = elem 'link'
+            titleStyle = elem 'link',
                 href: href
                 rel:  'stylesheet'
                 type: 'text/css'

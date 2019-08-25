@@ -62,7 +62,6 @@ body {
   height: 22px;
 }
 #titlebar .winbutton {
-  -webkit-app-region: no-drag;
   flex: 0 0 45px;
   display: inline-block;
   text-align: center;
@@ -74,7 +73,6 @@ body {
   padding-top: 5px;
 }
 #titlebar .topframe {
-  -webkit-app-region: no-drag;
   height: 2px;
   position: absolute;
   left: 0;
