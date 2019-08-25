@@ -13,7 +13,7 @@ class Popup
     constructor: (opt) ->
         
         @focusElem = document.activeElement
-        @items     = elem class:'popup', tabindex:3
+        @items     = elem class:'popup' tabindex:3
         @parent    = opt.parent
         @onClose   = opt.onClose
         
@@ -22,29 +22,28 @@ class Popup
         for item in opt.items
             continue if item.hide
             if empty(item.text) and empty(item.html)
-                div = elem 'hr', class: 'popupItem separator'
+                div = elem 'hr' class: 'popupItem separator'
             else
-                div = elem class:'popupItem', text:item.text
-                # log 'div', div
+                div = elem class:'popupItem' text:item.text
                 if not empty item.html
                     div.innerHTML = item.html 
                 div.item = item
-                div.addEventListener 'click', @onClick
+                div.addEventListener 'click' @onClick
                 if item.combo ? item.accel
                     text = keyinfo.short if os.platform() == 'darwin'
                         item.combo ? item.accel
                     else
                         item.accel ? item.combo
-                    div.appendChild elem 'span', class:'popupCombo', text:text
+                    div.appendChild elem 'span' class:'popupCombo' text:text
                 else if item.menu 
-                    div.appendChild elem 'span', class:'popupCombo', text:'▶'
+                    div.appendChild elem 'span' class:'popupCombo' text:'▶'
             @items.appendChild div
 
         document.body.appendChild @items
-        @items.addEventListener 'contextmenu', @onContextMenu
-        @items.addEventListener 'keydown',     @onKeyDown
-        @items.addEventListener 'focusout',    @onFocusOut
-        @items.addEventListener 'mouseover',   @onHover
+        @items.addEventListener 'contextmenu' @onContextMenu
+        @items.addEventListener 'keydown'     @onKeyDown
+        @items.addEventListener 'focusout'    @onFocusOut
+        @items.addEventListener 'mouseover'   @onHover
         
         br = @items.getBoundingClientRect()
         
@@ -61,7 +60,7 @@ class Popup
         if opt.selectFirstItem != false
             @select @items.firstChild, selectFirstItem:false
             
-        post.emit 'popup', 'opened'
+        post.emit 'popup' 'opened'
         
     #  0000000  000       0000000    0000000  00000000  
     # 000       000      000   000  000       000       
@@ -72,15 +71,15 @@ class Popup
     close: (opt={})=>
         
         if empty(@parent) or @parentMenu()?.elem?.classList.contains 'menu'
-            post.emit 'popup', 'closed'
+            post.emit 'popup' 'closed'
             @onClose?()
         
         @popup?.close focus:false
         delete @popup
         
-        @items?.removeEventListener 'keydown',   @onKeyDown
-        @items?.removeEventListener 'focusout',  @onFocusOut
-        @items?.removeEventListener 'mouseover', @onHover
+        @items?.removeEventListener 'keydown'   @onKeyDown
+        @items?.removeEventListener 'focusout'  @onFocusOut
+        @items?.removeEventListener 'mouseover' @onHover
         @items?.remove()
         delete @items
         
@@ -209,7 +208,7 @@ class Popup
             item.item.cb item.item.arg ? item.item.text
         else if not item.item.menu
             @close all:true
-            post.emit 'menuAction', item.item.action ? item.item.text, item.item
+            post.emit 'menuAction' item.item.action ? item.item.text, item.item
 
     toggle: (item) ->
         
@@ -268,13 +267,13 @@ class Popup
         { mod, key, combo } = keyinfo.forEvent event
         
         switch combo
-            when 'end', 'page down' then stopEvent event, @select @items.lastChild, selectFirstItem:false 
-            when 'home', 'page up'  then stopEvent event, @select @items.firstChild, selectFirstItem:false 
-            when 'esc'              then stopEvent event, @close()
-            when 'down'             then stopEvent event, @select @nextItem(), selectFirstItem:false 
-            when 'up'               then stopEvent event, @select @prevItem(), selectFirstItem:false 
-            when 'enter', 'space'   then stopEvent event, @activateOrNavigateRight()
-            when 'left'             then stopEvent event, @navigateLeft()
-            when 'right'            then stopEvent event, @navigateRight()
+            when 'end' 'page down' then stopEvent event, @select @items.lastChild, selectFirstItem:false 
+            when 'home' 'page up'  then stopEvent event, @select @items.firstChild, selectFirstItem:false 
+            when 'esc'             then stopEvent event, @close()
+            when 'down'            then stopEvent event, @select @nextItem(), selectFirstItem:false 
+            when 'up'              then stopEvent event, @select @prevItem(), selectFirstItem:false 
+            when 'enter' 'space'   then stopEvent event, @activateOrNavigateRight()
+            when 'left'            then stopEvent event, @navigateLeft()
+            when 'right'           then stopEvent event, @navigateRight()
             
 module.exports = menu: (opt) -> new Popup opt

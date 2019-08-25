@@ -40,7 +40,8 @@ class Win
         
         window.titlebar = new title @opt
         
-        document.body.addEventListener 'contextmenu', @onContextMenu
+        if @opt.context != false
+            document.body.addEventListener 'contextmenu' @onContextMenu
         
         if not @opt.nokeys
             document.addEventListener 'keydown' @onKeyDown

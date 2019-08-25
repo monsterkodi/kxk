@@ -13,12 +13,13 @@ class Drag
     constructor: (cfg) ->
         
         _.extend @, def cfg,
-                target  : null
-                handle  : null
-                onStart : null
-                onMove  : null
-                onStop  : null
-                active  : true
+            target:    null
+            handle:    null
+            onStart:   null
+            onMove:    null
+            onStop:    null
+            active:    true
+            stopEvent: true
 
         if _.isString @target
             t =$ @target
@@ -64,7 +65,8 @@ class Drag
                 
             @lastPos = p
                     
-            stopEvent event
+            if @stopEvent != false
+                stopEvent event
     
             document.addEventListener 'mousemove' @dragMove
             document.addEventListener 'mouseup'   @dragUp

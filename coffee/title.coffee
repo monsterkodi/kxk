@@ -97,10 +97,11 @@ class Title
     initTitleDrag: ->
         
         @titleDrag = new drag
-            target:  document.body
-            handle:  @elem
-            onStart: @onDragStart
-            onMove:  @onDragMove
+            target:     document.body
+            handle:     @elem
+            onStart:    @onDragStart
+            onMove:     @onDragMove
+            stopEvent:  false
     
     onDragStart: (drag, event) => 
     
