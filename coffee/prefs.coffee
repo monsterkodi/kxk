@@ -48,5 +48,15 @@ class Prefs
     @set:  (key, value) -> @unwatch(); @store.set(key, value); @watch()
     @del:  (key, value) -> @unwatch(); @store.del(key); @watch()
     @save:              -> @store?.save()
+    
+    @toggle: (key, cb) -> 
+        val = not @get key, false
+        @set key, val
+        cb? val
+        
+    @apply: (key, deflt=false, cb) ->
+        if not cb? and deflt != false
+            cb = deflt
+        cb? @get key, deflt
         
 module.exports = Prefs

@@ -143,9 +143,9 @@ class App
         dark = 'dark' == prefs.get 'scheme' 'dark'
         about
             img:        @resolve @opt.about
-            color:      dark and '#383838' or '#ddd'
-            background: dark and '#282828' or '#fff'
-            highlight:  dark and '#fff'    or '#000'
+            color:      dark and '#333' or '#ddd'
+            background: dark and '#111' or '#fff'
+            highlight:  dark and '#fff' or '#000'
             pkg:        @opt.pkg
             debug:      @opt.aboutDebug
     
