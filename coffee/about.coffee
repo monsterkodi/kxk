@@ -29,7 +29,7 @@ class About
             About.url = url
 
         win = new Browser
-            backgroundColor: About.opt?.background ? '#222'
+            backgroundColor: About.opt?.background ? '#111'
             preloadWindow:   true
             center:          true
             hasShadow:       true
@@ -40,11 +40,11 @@ class About
             fullscreenable:  false
             minimizable:     false
             maximizable:     false
+            width:           About.opt?.size ? 300
+            height:          About.opt?.size ? 300
             webPreferences:
                 webSecurity: false
                 nodeIntegration: true
-            width:           About.opt?.size ? 300
-            height:          About.opt?.size ? 300
 
         version = About.opt?.version ? About.opt?.pkg?.version
         html = """
