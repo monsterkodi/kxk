@@ -107,10 +107,12 @@ class Title
     
         electron = require 'electron'
         win = electron.remote.getCurrentWindow()
+        win.titleDrag = false
         @startBounds = win.getBounds()    
     
     onDragMove: (drag, event) => 
         
+        win.titleDrag = true
         electron = require 'electron'
         win = electron.remote.getCurrentWindow()
         win.setBounds 
@@ -118,7 +120,6 @@ class Title
             y:      @startBounds.y + drag.deltaSum.y 
             width:  @startBounds.width 
             height: @startBounds.height
-    
     
     #  0000000  00000000  000000000  000000000  000  000000000  000      00000000  
     # 000       000          000        000     000     000     000      000       
@@ -279,7 +280,7 @@ class Title
         
         for keypath in kepaths
             combos = sds.get(mainMenu, keypath).split ' '
-            combos = combos.map (combo) -> keyinfo.convertCmdCtrl combo
+            combos = combos.map (c) -> keyinfo.convertCmdCtrl c
             if combo in combos
                 keypath.pop()
                 item = sds.get mainMenu, keypath
