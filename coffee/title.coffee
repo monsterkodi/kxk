@@ -10,7 +10,7 @@
 
 class Title
     
-    constructor: (@opt) ->
+    @: (@opt) ->
         
         @opt ?= {}
         
