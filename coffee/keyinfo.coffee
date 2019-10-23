@@ -20,11 +20,11 @@ class Keyinfo
         combo: combo
         short: @short combo
     
-    @modifierNames = ['shift', 'ctrl', 'alt', 'command'] 
-    @modifierChars = ['⌂', '⌃', '⌥', '⌘']
+    @modifierNames = ['shift' 'ctrl' 'alt' 'command'] 
+    @modifierChars = ['⌂' '⌃' '⌥' '⌘']
     
-    @iconKeyNames  = ['shift', 'ctrl', 'alt', 'command', 'backspace', 'delete', 'home', 'end', 'page up', 'page down', 'return', 'enter', 'up', 'down', 'left', 'right', 'tab', 'click']
-    @iconKeyChars  = ['⌂', '⌃', '⌥', '⌘', '⌫', '⌦', '↖', '↘', '⇞', '⇟', '↩', '↩', '↑', '↓', '←', '→', '⤠', '⍝'] # '⭲', '🖯']
+    @iconKeyNames  = ['shift' 'ctrl' 'alt' 'command' 'backspace' 'delete' 'home' 'end' 'page up' 'page down' 'return' 'enter' 'up' 'down' 'left' 'right' 'tab'  'space' 'click']
+    @iconKeyChars  = ['⌂' '⌃' '⌥' '⌘' '⌫' '⌦' '↖' '↘' '⇞' '⇟' '↩' '↩' '↑' '↓' '←' '→' '⤠' '␣' '⍝'] # '⭲' '🖯' ]
 
     @forCombo: (combo) ->
         
@@ -69,10 +69,10 @@ class Keyinfo
         index = combo.indexOf 'cmdctrl'
         if index >= 0
             if os.platform() == 'darwin'
-                combo = combo.replace 'cmdctrl', 'command'
-                combo = combo.replace 'alt+command', 'command+alt'
+                combo = combo.replace 'cmdctrl' 'command'
+                combo = combo.replace 'alt+command' 'command+alt'
             else
-                combo = combo.replace 'cmdctrl', 'ctrl'            
+                combo = combo.replace 'cmdctrl' 'ctrl'            
         combo
                 
     @keynameForEvent: (event) ->
@@ -82,7 +82,7 @@ class Keyinfo
             switch event.code
                 when 'NumpadEqual' then return 'numpad ='
                 when 'Numpad5'     then return 'numpad 5'
-        return '' if name in ['left command', 'right command', 'ctrl', 'alt', 'shift']
+        return '' if name in ['left command' 'right command' 'ctrl' 'alt' 'shift']
         name
 
     @characterForEvent: (event) ->
@@ -90,7 +90,7 @@ class Keyinfo
         ansi = ansiKey event 
         return null if not ansi? 
         return null if ansi.length != 1 
-        return null if @modifiersForEvent(event) not in ['', 'shift']
+        return null if @modifiersForEvent(event) not in ['' 'shift']
         return null if /f\d{1,2}/.test @keynameForEvent event
         ansi
         

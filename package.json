@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.340.0",
+  "version": "0.342.0",
   "description": "kodi's tool kit",
   "keywords": [
     "coffeescript",
@@ -28,7 +28,7 @@
     "ansi-keycode": "0.0.0",
     "chai": "^4.2.0",
     "colorette": "^1.1.0",
-    "colors": "^1.3.3",
+    "colors": "^1.4.0",
     "convert-source-map": "^1.6.0",
     "fs-extra": "^8.1.0",
     "html-entities": "^1.2.1",
@@ -36,7 +36,7 @@
     "karg": ">=1.19.0",
     "keycode": "^2.2.0",
     "klor": ">=1.4.0",
-    "kslash": "^1.18.0",
+    "kslash": "^1.19.0",
     "kstr": ">=0.6.0",
     "lodash": "^4.17.15",
     "noon": "^3.0.0",
@@ -48,11 +48,11 @@
     "stack-utils": "^1.0.2",
     "textextensions": "^2.5.0",
     "walkdir": "0.4.1",
-    "write-file-atomic": "^3.0.0"
+    "write-file-atomic": "^3.0.1"
   },
   "devDependencies": {
     "koffee": ">=1.4.0",
-    "mocha": "^6.2.0",
-    "onchange": "^6.0.0"
+    "mocha": "^6.2.2",
+    "onchange": "^6.1.0"
   }
 }
