@@ -6,7 +6,7 @@
 000        000   000  00000000  000       0000000 
 ###
 
-{ store, slash, klog, fs } = require './kxk'
+{ store, slash, klog, fs, _ } = require './kxk'
 
 class Prefs
     
@@ -44,7 +44,7 @@ class Prefs
     @onFileChange: => @store.reload()
     @onFileUnlink: => @unwatch(); @store.clear()
             
-    @get:  (key, value) -> if @store then @store.get(key, value) else value
+    @get:  (key, value) -> if @store then @store.get(key, value) else _.cloneDeep value
     @set:  (key, value) -> @unwatch(); @store.set(key, value); @watch()
     @del:  (key, value) -> @unwatch(); @store.del(key); @watch()
     @save:              -> @store?.save()

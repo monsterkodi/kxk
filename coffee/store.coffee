@@ -83,8 +83,8 @@ class Store extends Emitter
         
     get: (key, value) ->
         
-        return value if not key?.split?
-        _.clone sds.get @data, @keypath(key), value
+        return _.cloneDeep(value) if not key?.split?
+        _.cloneDeep sds.get @data, @keypath(key), value
          
     #  0000000  00000000  000000000  
     # 000       000          000     
