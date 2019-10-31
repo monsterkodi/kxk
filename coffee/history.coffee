@@ -10,7 +10,7 @@
 
 class History
     
-    constructor: (opt) ->
+    @: (opt) ->
         
         @opt  = def opt, list: [], maxLength: 100
         @list = opt.list

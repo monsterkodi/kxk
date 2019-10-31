@@ -26,7 +26,7 @@ class Store extends Emitter
     
         @stores[store.name] = store
 
-    constructor: (name, opt={}) ->
+    @: (name, opt={}) ->
 
         super()
         

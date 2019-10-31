@@ -10,7 +10,7 @@
 
 class Menu
     
-    constructor: (opt) ->
+    @: (opt) ->
         
         @elem = elem class: 'menu', tabindex: 3
         

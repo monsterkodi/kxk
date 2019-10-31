@@ -13,7 +13,7 @@
  
 class Stash
     
-    constructor: (@name, opt) ->
+    @: (@name, opt) ->
 
         return kerror 'stash.constructor -- no name?' if not @name
         

@@ -10,7 +10,7 @@
 
 class Popup
     
-    constructor: (opt) ->
+    @: (opt) ->
         
         @focusElem = document.activeElement
         @items     = elem class:'popup' tabindex:3

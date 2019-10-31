@@ -10,7 +10,7 @@
 
 class Drag
 
-    constructor: (cfg) ->
+    @: (cfg) ->
         
         _.extend @, def cfg,
             target:    null

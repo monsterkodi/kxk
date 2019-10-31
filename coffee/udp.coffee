@@ -10,7 +10,7 @@ dgram = require 'dgram'
 
 class udp
 
-    constructor: (@opt) ->
+    @: (@opt) ->
                 
         @opt ?= {}
         @opt.port ?= 9669

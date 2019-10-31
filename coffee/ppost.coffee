@@ -23,7 +23,7 @@ if process.type == 'renderer'
 
     class PostRenderer extends Emitter
 
-        constructor: () ->
+        @: () ->
             super()
             @dbg = false
             @id  = remote.getCurrentWindow().id
@@ -68,7 +68,7 @@ else
     
     class PostMain extends Emitter
 
-        constructor: () ->
+        @: () ->
             super()
             @getCallbacks = {}
             try

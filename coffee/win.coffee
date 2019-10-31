@@ -6,11 +6,11 @@
 00     00  000  000   000  
 ###
 
-{ post, keyinfo, title, scheme, stopEvent, prefs, slash, elem, empty, valid, popup, fs, kpos, klog, $, _ } = require './kxk'
+{ post, stopEvent, keyinfo, scheme, prefs, slash, title, valid, empty, popup, klog, open, kpos, fs, $, _ } = require './kxk'
 
 class Win
     
-    constructor: (@opt) ->
+    @: (@opt) ->
         
         window.onerror = (msg, source, line, col, err) ->
             
@@ -81,12 +81,13 @@ class Win
     # 000   000  00000000  000   000   0000000   000   000   0000000     000     000   0000000   000   000  
     
     onMenuAction: (action, args) =>
-        
+
         switch action
-            when 'Screenshot' then @screenshot()
-            when 'About'      then post.toMain 'showAbout'
-            when 'Save'       then post.toMain 'saveBuffer'
-            when 'Quit'       then post.toMain 'quitApp'
+            when 'Screenshot'  then @screenshot()
+            when 'Preferences' then open prefs.store.file
+            when 'About'       then post.toMain 'showAbout'
+            when 'Save'        then post.toMain 'saveBuffer'
+            when 'Quit'        then post.toMain 'quitApp'
 
     #  0000000   0000000   000   000  000000000  00000000  000   000  000000000  
     # 000       000   000  0000  000     000     000        000 000      000     

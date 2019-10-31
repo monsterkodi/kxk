@@ -10,7 +10,7 @@
 
 class Tooltip
     
-    constructor: (@opt) ->
+    @: (@opt) ->
         
         return kerror "no elem for tooltip?" if not @opt?.elem
         

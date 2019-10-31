@@ -10,7 +10,7 @@
 
 class Pos
 
-    constructor: (@x, @y) ->
+    @: (@x, @y) ->
         if @x?.clientX?
             event = @x
             if isNaN window.scrollX
