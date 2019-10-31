@@ -1,5 +1,5 @@
 name            kxk
-version         0.346.0
+version         0.348.0
 description     kodi's tool kit
 keywords
                 coffeescript
@@ -30,7 +30,7 @@ dependencies
                 karg            >=1.19.0
                 keycode         ^2.2.0
                 klor            >=1.6.0
-                kslash          ^1.21.0
+                kslash          ^1.22.0
                 kstr            >=0.8.0
                 lodash          ^4.17.15
                 noon            ^3.0.0
