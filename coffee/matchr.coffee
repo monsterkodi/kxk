@@ -37,7 +37,7 @@ sortRanges = (rgs) ->
   
 #     match: the matched substring
 #     start: position of match in str
-#     value: the value for the match
+#     clss:  the value for the match
 #     index: index of the regexp
     
 #     the objects are sorted by start and index
@@ -51,10 +51,7 @@ ranges = (regexes, text, flags) ->
     
     if not _.isArray regexes
         if _.isString regexes
-            if regexes.indexOf('|') >= 0
-                regexes = ([new RegExp(r, flags), 'found'] for r in regexes.split('|'))
-            else
-                regexes = [[new RegExp(regexes, flags), 'found']]
+            regexes = [[new RegExp(regexes, flags), 'found']]
         else
             regexes = [[regexes, 'found']]
     else if valid(regexes) and not _.isArray regexes[0]
@@ -87,7 +84,7 @@ ranges = (regexes, text, flags) ->
                     rgs.push
                         start: match.index + i
                         match: match[0]
-                        value: arg
+                        clss:  arg
                         index: r
                     
                 i += match.index + Math.max 1, match[0].length
@@ -108,7 +105,7 @@ ranges = (regexes, text, flags) ->
                     rgs.push
                         start: match.index + i + gs + gi
                         match: match[j+1]
-                        value: value
+                        clss:  value
                         index: r
                         
                     gs += match[j+1].length
@@ -167,14 +164,14 @@ dissect = (ranges, opt = join:false) ->
             p += 1 
         pn = p
         while d[pn].start < rg.start+rg.match.length
-            if rg.value?
-                if not rg.value.split?
-                    for r in rg.value
+            if rg.clss?
+                if not rg.clss.split?
+                    for r in rg.clss
                         continue if not r?.split?
                         for c in r.split '.' 
                             d[pn].cls.push c if d[pn].cls.indexOf(c) < 0
                 else 
-                    for c in rg.value.split '.' 
+                    for c in rg.clss.split '.' 
                         d[pn].cls.push c if d[pn].cls.indexOf(c) < 0
             if pn+1 < d.length
                 if not d[pn].match
