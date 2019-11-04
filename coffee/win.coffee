@@ -65,9 +65,11 @@ class Win
     # 0000000    0000000  000   000  00000000  00000000  000   000  0000000   000   000   0000000      000
     
     screenshot: ->
-    
-        @win.capturePage (img) =>
+        
+        @win.webContents.capturePage().then (img) =>
+            
             file = slash.resolve "~/Desktop/#{@opt.pkg.name}-screenshot.png"
+            
             fs.writeFile file, img.toPNG(), (err) ->
                 if valid err
                     klog 'saving screenshot failed', err
@@ -83,11 +85,14 @@ class Win
     onMenuAction: (action, args) =>
 
         switch action
-            when 'Screenshot'  then @screenshot()
-            when 'Preferences' then open prefs.store.file
-            when 'About'       then post.toMain 'showAbout'
-            when 'Save'        then post.toMain 'saveBuffer'
-            when 'Quit'        then post.toMain 'quitApp'
+            when 'Screenshot'  then return @screenshot()
+            when 'Preferences' then return open prefs.store.file
+            when 'About'       then return post.toMain 'showAbout'
+            when 'Save'        then return post.toMain 'saveBuffer'
+            when 'Quit'        then return post.toMain 'quitApp'
+          
+        post.toMain 'menuAction' action, args                                
+        'unhandled'
 
     #  0000000   0000000   000   000  000000000  00000000  000   000  000000000  
     # 000       000   000  0000  000     000     000        000 000      000     

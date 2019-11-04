@@ -6,7 +6,7 @@
 000        000   000  00000000  000       0000000 
 ###
 
-{ store, slash, klog, fs, _ } = require './kxk'
+{ store, slash, klog, kerror, fs, _ } = require './kxk'
 
 class Prefs
     
@@ -32,14 +32,18 @@ class Prefs
         
         return if not @store.app?
         
-        slash.touch @store.file
+        slash.error = klog
+        if slash.touch @store.file
         
-        @unwatch()
-        @watcher = fs.watch @store.file
-        @watcher
-            .on 'change' @onFileChange
-            .on 'rename' @onFileUnlink
-            .on 'error'  (err) -> error 'Prefs watch error' err
+            @unwatch()
+            @watcher = fs.watch @store.file
+            @watcher
+                .on 'change' @onFileChange
+                .on 'rename' @onFileUnlink
+                .on 'error'  (err) -> kerror 'Prefs watch error' err
+                
+        else
+            kerror "can't touch prefs file #{@store.file}"
         
     @onFileChange: => @store.reload()
     @onFileUnlink: => @unwatch(); @store.clear()

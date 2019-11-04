@@ -30,7 +30,7 @@ dependencies
                 karg            >=1.19.0
                 keycode         ^2.2.0
                 klor            ^2.0.0
-                kslash          ^1.23.0
+                kslash          ^1.24.0
                 kstr            >=0.11.0
                 lodash          ^4.17.15
                 noon            ^3.0.0
