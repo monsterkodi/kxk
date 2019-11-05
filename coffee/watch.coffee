@@ -68,9 +68,9 @@ class Watch extends event
                         return
             
             if @opt.ignore
-                @walker.on 'path', onPath @opt.ignore
+                @walker.on 'path' onPath @opt.ignore
                 
-            @walker.on 'directory', (path) =>
+            @walker.on 'directory' (path) =>
                 return if @ignore path
                 watch = fs.watch path
                 @watchers.push watch
