@@ -55,8 +55,8 @@ class Watch extends event
         return if not @dir
         
         @watch = fs.watch @dir
-        @watch.on 'error', (err) -> error "fs.watch dir:'#{@dir}' error: #{err.stack}"
-        @watch.on 'change', @onChange
+        @watch.on 'error' (err) -> kerror "watch dir:'#{@dir}' error: #{err}"
+        @watch.on 'change' @onChange
         
         if @opt.recursive
             @watchers = []
@@ -75,7 +75,8 @@ class Watch extends event
                 watch = fs.watch path
                 @watchers.push watch
                 change = (dir) => (chg, pth) => @onChange chg, pth, dir
-                watch.on 'change', change path
+                watch.on 'change' change path
+                watch.on 'error' (err) -> kerror "watch subdir:'#{dir}' error: #{err}"
 
     ignore: (path) ->
         
