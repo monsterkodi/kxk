@@ -68,11 +68,11 @@ class Win
         
         @win.webContents.capturePage().then (img) =>
             
-            file = slash.resolve "~/Desktop/#{@opt.pkg.name}-screenshot.png"
+            file = slash.unused "~/Desktop/#{@opt.pkg.name}.png"
             
             fs.writeFile file, img.toPNG(), (err) ->
                 if valid err
-                    klog 'saving screenshot failed', err
+                    klog 'saving screenshot failed' err
                 else
                     klog "screenshot saved to #{file}"
             
