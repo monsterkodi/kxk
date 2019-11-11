@@ -12,7 +12,7 @@ class Gamepad extends events
 
     @: -> 
     
-        @btns = ['A''B''X''Y''LB''RB''LT''RT''Back''Start''LS''RS''Up''Down''Left''Right']
+        @btns = ['A''B''X''Y''LB''RB''LT''RT''Back''Start''LS''RS''Up''Down''Left''Right''Menu']
         @state = buttons:{}, left:{x:0,y:0}, right:{x:0,y:0}
 
         if 'function' == typeof navigator?.getGamepads
