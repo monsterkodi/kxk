@@ -44,7 +44,9 @@ class Gamepad extends events
     poll: =>
             
         if pad = navigator.getGamepads?()[0]
+            
             state = {}
+            
             changed = false
             for index in [0...pad.buttons.length]
                 button = pad.buttons[index]
@@ -58,13 +60,24 @@ class Gamepad extends events
                     changed = true
                     
             @state.buttons = state
-            @state.left  = x:pad.axes[0], y:-pad.axes[1]
-            @state.right = x:pad.axes[2], y:-pad.axes[3]
                     
             if changed 
                 @emit 'buttons' @state.buttons
             
-            if @axisValue(@state.left.x) or @axisValue(@state.left.y) or @axisValue(@state.right.x) or @axisValue(@state.right.y)
+            changed = false 
+            x = @axisValue  pad.axes[0]
+            y = @axisValue -pad.axes[1]
+            if x != @state.left.x or y != @state.left.y
+                @state.left = x:x, y:y 
+                changed = true
+                
+            x = @axisValue  pad.axes[2]
+            y = @axisValue -pad.axes[3]
+            if x != @state.right.x or y != @state.right.y
+                @state.right = x:x, y:y 
+                changed = true
+                
+            if changed
                 @emit 'axis' @state
 
             window.requestAnimationFrame @poll
