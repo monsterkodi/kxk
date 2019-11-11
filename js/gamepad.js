@@ -1,0 +1,100 @@
+// koffee 1.4.0
+
+/*
+ 0000000    0000000   00     00  00000000  00000000    0000000   0000000  
+000        000   000  000   000  000       000   000  000   000  000   000
+000  0000  000000000  000000000  0000000   00000000   000000000  000   000
+000   000  000   000  000 0 000  000       000        000   000  000   000
+ 0000000   000   000  000   000  00000000  000        000   000  0000000
+ */
+var Gamepad, events,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+events = require('events');
+
+Gamepad = (function(superClass) {
+    extend(Gamepad, superClass);
+
+    function Gamepad() {
+        this.poll = bind(this.poll, this);
+        this.btns = ['A', 'B', 'X', 'Y', 'LB', 'RB', 'LT', 'RT', 'Back', 'Start', 'LS', 'RS', 'Up', 'Down', 'Left', 'Right'];
+        this.state = {
+            buttons: {},
+            left: {
+                x: 0,
+                y: 0
+            },
+            right: {
+                x: 0,
+                y: 0
+            }
+        };
+        if ('function' === typeof (typeof navigator !== "undefined" && navigator !== null ? navigator.getGamepads : void 0)) {
+            this.init();
+        }
+    }
+
+    Gamepad.prototype.init = function() {
+        return window.addEventListener('gamepadconnected', (function(_this) {
+            return function(event) {
+                if (event.gamepad.index === 0 && event.gamepad.axes.length >= 4) {
+                    return window.requestAnimationFrame(_this.poll);
+                }
+            };
+        })(this));
+    };
+
+    Gamepad.prototype.axisValue = function(value) {
+        if (Math.abs(value) < 0.0001) {
+            return 0;
+        }
+        return value;
+    };
+
+    Gamepad.prototype.poll = function() {
+        var button, changed, i, index, pad, ref, state;
+        if (pad = typeof navigator.getGamepads === "function" ? navigator.getGamepads()[0] : void 0) {
+            state = {};
+            changed = false;
+            for (index = i = 0, ref = pad.buttons.length; 0 <= ref ? i < ref : i > ref; index = 0 <= ref ? ++i : --i) {
+                button = pad.buttons[index];
+                if (button.pressed) {
+                    state[this.btns[index]] = button.value;
+                    if (!this.state.buttons[this.btns[index]]) {
+                        this.emit('button', this.btns[index], 1);
+                        changed = true;
+                    }
+                } else if (this.state.buttons[this.btns[index]]) {
+                    this.emit('button', this.btns[index], 0);
+                    changed = true;
+                }
+            }
+            this.state.buttons = state;
+            this.state.left = {
+                x: pad.axes[0],
+                y: -pad.axes[1]
+            };
+            this.state.right = {
+                x: pad.axes[2],
+                y: -pad.axes[3]
+            };
+            if (changed) {
+                this.emit('buttons', this.state.buttons);
+            }
+            if (this.axisValue(this.state.left.x) || this.axisValue(this.state.left.y) || this.axisValue(this.state.right.x) || this.axisValue(this.state.right.y)) {
+                this.emit('axis', this.state);
+            }
+            return window.requestAnimationFrame(this.poll);
+        }
+    };
+
+    return Gamepad;
+
+})(events);
+
+module.exports = new Gamepad;
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2FtZXBhZC5qcyIsInNvdXJjZVJvb3QiOiIuIiwic291cmNlcyI6WyIiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQTs7Ozs7OztBQUFBLElBQUEsZUFBQTtJQUFBOzs7O0FBUUEsTUFBQSxHQUFTLE9BQUEsQ0FBUSxRQUFSOztBQUVIOzs7SUFFQyxpQkFBQTs7UUFFQyxJQUFDLENBQUEsSUFBRCxHQUFRLENBQUMsR0FBRCxFQUFJLEdBQUosRUFBTyxHQUFQLEVBQVUsR0FBVixFQUFhLElBQWIsRUFBaUIsSUFBakIsRUFBcUIsSUFBckIsRUFBeUIsSUFBekIsRUFBNkIsTUFBN0IsRUFBbUMsT0FBbkMsRUFBMEMsSUFBMUMsRUFBOEMsSUFBOUMsRUFBa0QsSUFBbEQsRUFBc0QsTUFBdEQsRUFBNEQsTUFBNUQsRUFBa0UsT0FBbEU7UUFDUixJQUFDLENBQUEsS0FBRCxHQUFTO1lBQUEsT0FBQSxFQUFRLEVBQVI7WUFBWSxJQUFBLEVBQUs7Z0JBQUMsQ0FBQSxFQUFFLENBQUg7Z0JBQUssQ0FBQSxFQUFFLENBQVA7YUFBakI7WUFBNEIsS0FBQSxFQUFNO2dCQUFDLENBQUEsRUFBRSxDQUFIO2dCQUFLLENBQUEsRUFBRSxDQUFQO2FBQWxDOztRQUVULElBQUcsVUFBQSxLQUFjLGlFQUFPLFNBQVMsQ0FBRSxxQkFBbkM7WUFDSSxJQUFDLENBQUEsSUFBRCxDQUFBLEVBREo7O0lBTEQ7O3NCQWNILElBQUEsR0FBTSxTQUFBO2VBRUYsTUFBTSxDQUFDLGdCQUFQLENBQXdCLGtCQUF4QixFQUEyQyxDQUFBLFNBQUEsS0FBQTttQkFBQSxTQUFDLEtBQUQ7Z0JBQ3ZDLElBQUcsS0FBSyxDQUFDLE9BQU8sQ0FBQyxLQUFkLEtBQXVCLENBQXZCLElBQTZCLEtBQUssQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLE1BQW5CLElBQTZCLENBQTdEOzJCQUNJLE1BQU0sQ0FBQyxxQkFBUCxDQUE2QixLQUFDLENBQUEsSUFBOUIsRUFESjs7WUFEdUM7UUFBQSxDQUFBLENBQUEsQ0FBQSxJQUFBLENBQTNDO0lBRkU7O3NCQVlOLFNBQUEsR0FBVyxTQUFDLEtBQUQ7UUFFUCxJQUFHLElBQUksQ0FBQyxHQUFMLENBQVMsS0FBVCxDQUFBLEdBQWtCLE1BQXJCO0FBQWlDLG1CQUFPLEVBQXhDOztlQUNBO0lBSE87O3NCQUtYLElBQUEsR0FBTSxTQUFBO0FBRUYsWUFBQTtRQUFBLElBQUcsR0FBQSxpREFBTSxTQUFTLENBQUMsYUFBZSxDQUFBLENBQUEsVUFBbEM7WUFDSSxLQUFBLEdBQVE7WUFDUixPQUFBLEdBQVU7QUFDVixpQkFBYSxtR0FBYjtnQkFDSSxNQUFBLEdBQVMsR0FBRyxDQUFDLE9BQVEsQ0FBQSxLQUFBO2dCQUNyQixJQUFHLE1BQU0sQ0FBQyxPQUFWO29CQUNJLEtBQU0sQ0FBQSxJQUFDLENBQUEsSUFBSyxDQUFBLEtBQUEsQ0FBTixDQUFOLEdBQXNCLE1BQU0sQ0FBQztvQkFDN0IsSUFBRyxDQUFJLElBQUMsQ0FBQSxLQUFLLENBQUMsT0FBUSxDQUFBLElBQUMsQ0FBQSxJQUFLLENBQUEsS0FBQSxDQUFOLENBQXRCO3dCQUNJLElBQUMsQ0FBQSxJQUFELENBQU0sUUFBTixFQUFlLElBQUMsQ0FBQSxJQUFLLENBQUEsS0FBQSxDQUFyQixFQUE2QixDQUE3Qjt3QkFDQSxPQUFBLEdBQVUsS0FGZDtxQkFGSjtpQkFBQSxNQUtLLElBQUcsSUFBQyxDQUFBLEtBQUssQ0FBQyxPQUFRLENBQUEsSUFBQyxDQUFBLElBQUssQ0FBQSxLQUFBLENBQU4sQ0FBbEI7b0JBQ0QsSUFBQyxDQUFBLElBQUQsQ0FBTSxRQUFOLEVBQWUsSUFBQyxDQUFBLElBQUssQ0FBQSxLQUFBLENBQXJCLEVBQTZCLENBQTdCO29CQUNBLE9BQUEsR0FBVSxLQUZUOztBQVBUO1lBV0EsSUFBQyxDQUFBLEtBQUssQ0FBQyxPQUFQLEdBQWlCO1lBQ2pCLElBQUMsQ0FBQSxLQUFLLENBQUMsSUFBUCxHQUFlO2dCQUFBLENBQUEsRUFBRSxHQUFHLENBQUMsSUFBSyxDQUFBLENBQUEsQ0FBWDtnQkFBZSxDQUFBLEVBQUUsQ0FBQyxHQUFHLENBQUMsSUFBSyxDQUFBLENBQUEsQ0FBM0I7O1lBQ2YsSUFBQyxDQUFBLEtBQUssQ0FBQyxLQUFQLEdBQWU7Z0JBQUEsQ0FBQSxFQUFFLEdBQUcsQ0FBQyxJQUFLLENBQUEsQ0FBQSxDQUFYO2dCQUFlLENBQUEsRUFBRSxDQUFDLEdBQUcsQ0FBQyxJQUFLLENBQUEsQ0FBQSxDQUEzQjs7WUFFZixJQUFHLE9BQUg7Z0JBQ0ksSUFBQyxDQUFBLElBQUQsQ0FBTSxTQUFOLEVBQWdCLElBQUMsQ0FBQSxLQUFLLENBQUMsT0FBdkIsRUFESjs7WUFHQSxJQUFHLElBQUMsQ0FBQSxTQUFELENBQVcsSUFBQyxDQUFBLEtBQUssQ0FBQyxJQUFJLENBQUMsQ0FBdkIsQ0FBQSxJQUE2QixJQUFDLENBQUEsU0FBRCxDQUFXLElBQUMsQ0FBQSxLQUFLLENBQUMsSUFBSSxDQUFDLENBQXZCLENBQTdCLElBQTBELElBQUMsQ0FBQSxTQUFELENBQVcsSUFBQyxDQUFBLEtBQUssQ0FBQyxLQUFLLENBQUMsQ0FBeEIsQ0FBMUQsSUFBd0YsSUFBQyxDQUFBLFNBQUQsQ0FBVyxJQUFDLENBQUEsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUF4QixDQUEzRjtnQkFDSSxJQUFDLENBQUEsSUFBRCxDQUFNLE1BQU4sRUFBYSxJQUFDLENBQUEsS0FBZCxFQURKOzttQkFHQSxNQUFNLENBQUMscUJBQVAsQ0FBNkIsSUFBQyxDQUFBLElBQTlCLEVBeEJKOztJQUZFOzs7O0dBakNZOztBQTZEdEIsTUFBTSxDQUFDLE9BQVAsR0FBaUIsSUFBSSIsInNvdXJjZXNDb250ZW50IjpbIiMjI1xuIDAwMDAwMDAgICAgMDAwMDAwMCAgIDAwICAgICAwMCAgMDAwMDAwMDAgIDAwMDAwMDAwICAgIDAwMDAwMDAgICAwMDAwMDAwICBcbjAwMCAgICAgICAgMDAwICAgMDAwICAwMDAgICAwMDAgIDAwMCAgICAgICAwMDAgICAwMDAgIDAwMCAgIDAwMCAgMDAwICAgMDAwXG4wMDAgIDAwMDAgIDAwMDAwMDAwMCAgMDAwMDAwMDAwICAwMDAwMDAwICAgMDAwMDAwMDAgICAwMDAwMDAwMDAgIDAwMCAgIDAwMFxuMDAwICAgMDAwICAwMDAgICAwMDAgIDAwMCAwIDAwMCAgMDAwICAgICAgIDAwMCAgICAgICAgMDAwICAgMDAwICAwMDAgICAwMDBcbiAwMDAwMDAwICAgMDAwICAgMDAwICAwMDAgICAwMDAgIDAwMDAwMDAwICAwMDAgICAgICAgIDAwMCAgIDAwMCAgMDAwMDAwMCAgXG4jIyNcblxuZXZlbnRzID0gcmVxdWlyZSAnZXZlbnRzJ1xuXG5jbGFzcyBHYW1lcGFkIGV4dGVuZHMgZXZlbnRzXG5cbiAgICBAOiAtPiBcbiAgICBcbiAgICAgICAgQGJ0bnMgPSBbJ0EnJ0InJ1gnJ1knJ0xCJydSQicnTFQnJ1JUJydCYWNrJydTdGFydCcnTFMnJ1JTJydVcCcnRG93bicnTGVmdCcnUmlnaHQnXVxuICAgICAgICBAc3RhdGUgPSBidXR0b25zOnt9LCBsZWZ0Ont4OjAseTowfSwgcmlnaHQ6e3g6MCx5OjB9XG5cbiAgICAgICAgaWYgJ2Z1bmN0aW9uJyA9PSB0eXBlb2YgbmF2aWdhdG9yPy5nZXRHYW1lcGFkc1xuICAgICAgICAgICAgQGluaXQoKVxuICAgICAgICBcbiAgICAjIDAwMCAgMDAwICAgMDAwICAwMDAgIDAwMDAwMDAwMCAgXG4gICAgIyAwMDAgIDAwMDAgIDAwMCAgMDAwICAgICAwMDAgICAgIFxuICAgICMgMDAwICAwMDAgMCAwMDAgIDAwMCAgICAgMDAwICAgICBcbiAgICAjIDAwMCAgMDAwICAwMDAwICAwMDAgICAgIDAwMCAgICAgXG4gICAgIyAwMDAgIDAwMCAgIDAwMCAgMDAwICAgICAwMDAgICAgIFxuICAgIFxuICAgIGluaXQ6IC0+XG5cbiAgICAgICAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIgJ2dhbWVwYWRjb25uZWN0ZWQnIChldmVudCkgPT5cclxuICAgICAgICAgICAgaWYgZXZlbnQuZ2FtZXBhZC5pbmRleCA9PSAwIGFuZCBldmVudC5nYW1lcGFkLmF4ZXMubGVuZ3RoID49IDRcbiAgICAgICAgICAgICAgICB3aW5kb3cucmVxdWVzdEFuaW1hdGlvbkZyYW1lIEBwb2xsXG4gICAgICAgIFxuICAgICMgMDAwMDAwMDAgICAgMDAwMDAwMCAgIDAwMCAgICAgIDAwMCAgICAgIFxuICAgICMgMDAwICAgMDAwICAwMDAgICAwMDAgIDAwMCAgICAgIDAwMCAgICAgIFxuICAgICMgMDAwMDAwMDAgICAwMDAgICAwMDAgIDAwMCAgICAgIDAwMCAgICAgIFxuICAgICMgMDAwICAgICAgICAwMDAgICAwMDAgIDAwMCAgICAgIDAwMCAgICAgIFxuICAgICMgMDAwICAgICAgICAgMDAwMDAwMCAgIDAwMDAwMDAgIDAwMDAwMDAgIFxuICAgIFxuICAgIGF4aXNWYWx1ZTogKHZhbHVlKSAtPlxuICAgICAgICBcbiAgICAgICAgaWYgTWF0aC5hYnModmFsdWUpIDwgMC4wMDAxIHRoZW4gcmV0dXJuIDBcbiAgICAgICAgdmFsdWVcbiAgICBcbiAgICBwb2xsOiA9PlxuICAgICAgICAgICAgXG4gICAgICAgIGlmIHBhZCA9IG5hdmlnYXRvci5nZXRHYW1lcGFkcz8oKVswXVxuICAgICAgICAgICAgc3RhdGUgPSB7fVxuICAgICAgICAgICAgY2hhbmdlZCA9IGZhbHNlXG4gICAgICAgICAgICBmb3IgaW5kZXggaW4gWzAuLi5wYWQuYnV0dG9ucy5sZW5ndGhdXG4gICAgICAgICAgICAgICAgYnV0dG9uID0gcGFkLmJ1dHRvbnNbaW5kZXhdXG4gICAgICAgICAgICAgICAgaWYgYnV0dG9uLnByZXNzZWRcbiAgICAgICAgICAgICAgICAgICAgc3RhdGVbQGJ0bnNbaW5kZXhdXSA9IGJ1dHRvbi52YWx1ZVxuICAgICAgICAgICAgICAgICAgICBpZiBub3QgQHN0YXRlLmJ1dHRvbnNbQGJ0bnNbaW5kZXhdXVxuICAgICAgICAgICAgICAgICAgICAgICAgQGVtaXQgJ2J1dHRvbicgQGJ0bnNbaW5kZXhdLCAxXG4gICAgICAgICAgICAgICAgICAgICAgICBjaGFuZ2VkID0gdHJ1ZVxuICAgICAgICAgICAgICAgIGVsc2UgaWYgQHN0YXRlLmJ1dHRvbnNbQGJ0bnNbaW5kZXhdXVxuICAgICAgICAgICAgICAgICAgICBAZW1pdCAnYnV0dG9uJyBAYnRuc1tpbmRleF0sIDBcbiAgICAgICAgICAgICAgICAgICAgY2hhbmdlZCA9IHRydWVcbiAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBAc3RhdGUuYnV0dG9ucyA9IHN0YXRlXG4gICAgICAgICAgICBAc3RhdGUubGVmdCAgPSB4OnBhZC5heGVzWzBdLCB5Oi1wYWQuYXhlc1sxXVxuICAgICAgICAgICAgQHN0YXRlLnJpZ2h0ID0geDpwYWQuYXhlc1syXSwgeTotcGFkLmF4ZXNbM11cbiAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBpZiBjaGFuZ2VkIFxuICAgICAgICAgICAgICAgIEBlbWl0ICdidXR0b25zJyBAc3RhdGUuYnV0dG9uc1xuICAgICAgICAgICAgXG4gICAgICAgICAgICBpZiBAYXhpc1ZhbHVlKEBzdGF0ZS5sZWZ0LngpIG9yIEBheGlzVmFsdWUoQHN0YXRlLmxlZnQueSkgb3IgQGF4aXNWYWx1ZShAc3RhdGUucmlnaHQueCkgb3IgQGF4aXNWYWx1ZShAc3RhdGUucmlnaHQueSlcbiAgICAgICAgICAgICAgICBAZW1pdCAnYXhpcycgQHN0YXRlXG5cbiAgICAgICAgICAgIHdpbmRvdy5yZXF1ZXN0QW5pbWF0aW9uRnJhbWUgQHBvbGxcblxubW9kdWxlLmV4cG9ydHMgPSBuZXcgR2FtZXBhZFxuIl19
+//# sourceURL=../coffee/gamepad.coffee
