@@ -14,6 +14,7 @@ class Gamepad extends events
     
         @btns = ['A''B''X''Y''LB''RB''LT''RT''Back''Start''LS''RS''Up''Down''Left''Right''Menu']
         @state = buttons:{}, left:{x:0,y:0}, right:{x:0,y:0}
+        @deadZone = 0.1
 
         if 'function' == typeof navigator?.getGamepads
             @init()
@@ -38,7 +39,7 @@ class Gamepad extends events
     
     axisValue: (value) ->
         
-        if Math.abs(value) < 0.0001 then return 0
+        if Math.abs(value) < @deadZone then return 0
         value
     
     poll: =>
