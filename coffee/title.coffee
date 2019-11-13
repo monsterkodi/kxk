@@ -105,6 +105,8 @@ class Title
     
     onDragStart: (drag, event) => 
     
+        if event.target.nodeName == 'INPUT'
+            return 'skip'
         electron = require 'electron'
         win = electron.remote.getCurrentWindow()
         win.titleDrag = false

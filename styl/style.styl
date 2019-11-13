@@ -9,8 +9,12 @@
 frameWidth          = 6px
 titlebarHeight      = 30px
 titlebarFontSize    = 15px
-titlebarFont        = Bahnschrift Light, Helvetica Neue, Ebrima, Varela Round, Helvetica, Arial
-fontMono            = "Meslo LG S", "Liberation Mono", "Menlo", "Cousine", "Andale Mono", monospace
+
+@font-face 
+    font-family     titlebarFont
+    font-weight     normal
+    font-style      normal
+    src             url("../../styl/Bahnschrift.woff")
 
 fill-abs()
     position            absolute
@@ -61,9 +65,9 @@ body
     cursor              pointer
 
 .titlebar-title
-    flex                1 1
     display             inline-block
     flex-direction      row
+    flex                1 1 0px
     padding-top         7px
     padding-left        10px
     padding-right       10px
