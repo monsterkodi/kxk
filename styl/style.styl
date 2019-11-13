@@ -16,6 +16,12 @@ titlebarFontSize    = 15px
     font-style      normal
     src             url("../../styl/Bahnschrift.woff")
 
+@font-face 
+    font-family     fontMono
+    font-weight     normal
+    font-style      normal
+    src             url("../../styl/Meslo.woff")
+    
 fill-abs()
     position            absolute
     bottom              0
@@ -112,6 +118,7 @@ body
 // 000   000  00000000  000   000   0000000   
             
 .menu
+    line-height         1.05
     height              titlebarHeight
     pointer-events      auto
     flex                0 0 0
@@ -134,6 +141,7 @@ body
 // 000         0000000   000         0000000   000
 
 .popup
+    line-height         1.05
     z-index             9999
     position            absolute
     border-radius       3px
@@ -144,7 +152,7 @@ body
         border-top-right-radius  0
     
 .popupItem
-    padding             2px
+    padding             4px
     padding-left        2 * frameWidth
     padding-right       2 * frameWidth + 70px
     cursor              pointer
