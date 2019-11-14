@@ -6,7 +6,7 @@
 000   000  00000000     000     000  000   000  000        0000000   
 ###
 
-{ empty, klog, os } = require './kxk'
+{ empty, os } = require './kxk'
 
 class Keyinfo
     
@@ -19,7 +19,6 @@ class Keyinfo
             char:  @characterForEvent event
             combo: combo
             short: @short combo
-        klog 'code' event.code, 'key' event.key, info
         info
     
     @modifierNames = ['shift' 'ctrl' 'alt' 'command'] 
