@@ -6,21 +6,21 @@
 000   000  00000000     000     000  000   000  000        0000000   
 ###
 
-keycode = require 'keycode'
-ansiKey = require 'ansi-keycode'
-os      = require 'os'
-klog    = require './log'
+{ empty, klog, os } = require './kxk'
 
 class Keyinfo
     
     @forEvent: (event) =>
-        
-        combo = @comboForEvent    event
-        mod:   @modifiersForEvent event
-        key:   @keynameForEvent   event
-        char:  @characterForEvent event
-        combo: combo
-        short: @short combo
+                      
+        combo = @comboForEvent event
+        info =
+            mod:   @modifiersForEvent event
+            key:   @keynameForEvent   event
+            char:  @characterForEvent event
+            combo: combo
+            short: @short combo
+        klog 'code' event.code, 'key' event.key, info
+        info
     
     @modifierNames = ['shift' 'ctrl' 'alt' 'command'] 
     @modifierChars = ['⌂' '⌃' '⌥' '⌘']
@@ -46,12 +46,12 @@ class Keyinfo
     @isModifier: (keyname) -> keyname in @modifierNames
 
     @modifiersForEvent: (event) -> 
-        
+
         mods = []
-        mods.push 'command' if event.metaKey
-        mods.push 'alt'     if event.altKey
-        mods.push 'ctrl'    if event.ctrlKey 
-        mods.push 'shift'   if event.shiftKey
+        mods.push 'command' if event.metaKey  or event.key == 'Meta'
+        mods.push 'alt'     if event.altKey   or event.key == 'Alt'
+        mods.push 'ctrl'    if event.ctrlKey  or event.key == 'Control'
+        mods.push 'shift'   if event.shiftKey or event.key == 'Shift'
         return mods.join '+'
                     
     @comboForEvent: (event) =>
@@ -79,28 +79,48 @@ class Keyinfo
                 
     @keynameForEvent: (event) ->
         
-        name = keycode event
-        if not name?
-            switch event.code
-                when 'NumpadEqual' then return 'numpad ='
-                when 'Numpad5'     then return 'numpad 5'
-        return '' if name in ['left command' 'right command' 'ctrl' 'alt' 'shift']
-        name
+        switch event.code
+            when 'IntlBackslash' 'Backslash'    then '\\'
+            when 'Equal'                        then '=' 
+            when 'Minus'                        then '-' 
+            when 'Plus'                         then '+'
+            when 'Slash'                        then '/'
+            when 'Quote'                        then "'"
+            when 'Comma'                        then ','
+            when 'Period'                       then '.'
+            when 'Space'                        then 'space'
+            when 'Semicolon'                    then ';'
+            when 'BracketLeft'                  then '[' 
+            when 'BracketRight'                 then ']' 
+            when 'Backquote'                    then '`'
+            else
+                if not event.key?
+                    ''
+                else if event.key.startsWith 'Arrow'
+                    event.key.slice(5).toLowerCase()
+                else if event.code.startsWith 'Digit'
+                    event.code.slice(5)
+                else if event.key in ['Delete' 'Insert' 'Enter' 'Backspace' 'Home' 'End']
+                    event.key.toLowerCase()
+                else if event.key == 'PageUp'
+                    'page up'
+                else if event.key == 'Control'
+                    'ctrl'
+                else if event.key == 'Meta'
+                    'command'
+                else if event.key == 'PageDown'
+                    'page down'
+                else if @characterForEvent(event)?.length == 1              
+                    @characterForEvent(event).toLowerCase()
+                else                                    
+                    event.key.toLowerCase()        
 
     @characterForEvent: (event) ->
-        
-        switch event.key
-            when 'NumLock' then return null
-            when 'Clear'   then return '='
-            when '1' '2' '3' '4' '5' '6' '7' '8' '9' '0' '+' '-' '/' '*' '=' '.' then return event.key
-        
-        ansi = ansiKey event
-        klog 'ansi' ansi, keycode(event), event.key
-        return null if not ansi?
-        return null if ansi.length != 1 
-        return null if @modifiersForEvent(event) not in ['' 'shift']
-        return null if /f\d{1,2}/.test @keynameForEvent event
-        ansi
+
+        if event.key?.length == 1 
+            event.key
+        else if event.code == 'NumpadEqual' 
+            '='
         
     @short: (combo) ->
         
