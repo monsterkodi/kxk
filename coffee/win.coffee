@@ -89,7 +89,6 @@ class Win
             when 'Preferences' then return open prefs.store.file
             when 'Fullscreen'  then return @win.setFullScreen !@win.isFullScreen()
             when 'About'       then return post.toMain 'showAbout'
-            when 'Save'        then return post.toMain 'saveBuffer'
             when 'Quit'        then return post.toMain 'quitApp'
           
         post.toMain 'menuAction' action, args                                

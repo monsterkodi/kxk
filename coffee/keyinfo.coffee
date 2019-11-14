@@ -104,12 +104,12 @@ class Keyinfo
                     event.key.toLowerCase()
                 else if event.key == 'PageUp'
                     'page up'
+                else if event.key == 'PageDown'
+                    'page down'
                 else if event.key == 'Control'
                     'ctrl'
                 else if event.key == 'Meta'
                     'command'
-                else if event.key == 'PageDown'
-                    'page down'
                 else if @characterForEvent(event)?.length == 1              
                     @characterForEvent(event).toLowerCase()
                 else                                    
