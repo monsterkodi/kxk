@@ -9,10 +9,12 @@
 keycode = require 'keycode'
 ansiKey = require 'ansi-keycode'
 os      = require 'os'
+klog    = require './log'
 
 class Keyinfo
     
     @forEvent: (event) =>
+        
         combo = @comboForEvent    event
         mod:   @modifiersForEvent event
         key:   @keynameForEvent   event
@@ -87,9 +89,15 @@ class Keyinfo
 
     @characterForEvent: (event) ->
         
-        ansi = ansiKey event 
-        return null if not ansi? 
-        return null if ansi.length != 1 
+        switch event.key
+            when 'NumLock' then return null
+            when 'Clear'   then return '='
+            when '1' '2' '3' '4' '5' '6' '7' '8' '9' '0' '+' '-' '/' '*' '=' '.' then return event.key
+        
+        ansi = ansiKey event
+        klog 'ansi' ansi, keycode(event), event.key
+        return null if not ansi?
+        return null if ansi.length != 1 
         return null if @modifiersForEvent(event) not in ['' 'shift']
         return null if /f\d{1,2}/.test @keynameForEvent event
         ansi

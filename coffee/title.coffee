@@ -139,12 +139,11 @@ class Title
             html += "<span class='titlebar-name'>#{opt.pkg.name}</span>"
         
         if opt.pkg.version and 'version' in parts
-            html += "<span class='titlebar-dot'> ● </span>"
-            html += "<span class='titlebar-version'>#{opt.pkg.version}</span>"
+            html += "<span class='titlebar-dot'>#{opt.pkg.version}</span>"
             
         if opt.pkg.path and 'path' in parts
             html += "<span class='titlebar-dot'> ► </span>"
-            html += "<span class='titlebar-version'>#{opt.pkg.path}</span>"
+            html += "<span class='titlebar-name'>#{opt.pkg.path}</span>"
             
         @title.innerHTML = html
                     
