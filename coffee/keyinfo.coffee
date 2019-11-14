@@ -88,6 +88,7 @@ class Keyinfo
             when 'Comma'                        then ','
             when 'Period'                       then '.'
             when 'Space'                        then 'space'
+            when 'Escape'                       then 'esc'
             when 'Semicolon'                    then ';'
             when 'BracketLeft'                  then '[' 
             when 'BracketRight'                 then ']' 
