@@ -279,6 +279,9 @@ class Title
         
         kepaths = combos.concat accels # swap on win?
         
+        if empty combo
+            return 'unhandled'
+        
         for keypath in kepaths
             combos = sds.get(mainMenu, keypath).split ' '
             combos = combos.map (c) -> keyinfo.convertCmdCtrl c
