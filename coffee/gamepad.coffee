@@ -10,7 +10,7 @@ events = require 'events'
 
 class Gamepad extends events
 
-    @: -> 
+    @: (@continuous=false) -> 
     
         @btns = ['A''B''X''Y''LB''RB''LT''RT''Back''Start''LS''RS''Up''Down''Left''Right''Menu']
         @state = buttons:{}, left:{x:0,y:0}, right:{x:0,y:0}
@@ -78,7 +78,7 @@ class Gamepad extends events
                 @state.right = x:x, y:y 
                 changed = true
                 
-            if changed
+            if changed or @continuous
                 @emit 'axis' @state
 
             window.requestAnimationFrame @poll
