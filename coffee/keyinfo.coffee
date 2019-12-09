@@ -98,6 +98,8 @@ class Keyinfo
                     ''
                 else if event.key.startsWith 'Arrow'
                     event.key.slice(5).toLowerCase()
+                else if event.code.startsWith 'Key'
+                    event.code.slice(3).toLowerCase()
                 else if event.code.startsWith 'Digit'
                     event.code.slice(5)
                 else if event.key in ['Delete' 'Insert' 'Enter' 'Backspace' 'Home' 'End']
