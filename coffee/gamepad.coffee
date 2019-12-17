@@ -10,13 +10,14 @@ events = require 'events'
 
 class Gamepad extends events
 
-    @: (@continuous=false) -> 
+    @: (doPoll=true) -> 
     
         @btns = ['A''B''X''Y''LB''RB''LT''RT''Back''Start''LS''RS''Up''Down''Left''Right''Menu']
         @state = buttons:{}, left:{x:0,y:0}, right:{x:0,y:0}
         @deadZone = 0.1
+        @continuous = false
 
-        if 'function' == typeof navigator?.getGamepads
+        if doPoll and 'function' == typeof navigator?.getGamepads
             @init()
         
     # 000  000   000  000  000000000  
@@ -41,7 +42,27 @@ class Gamepad extends events
         
         if Math.abs(value) < @deadZone then return 0
         value
-    
+   
+    getState: ->
+        
+        if pad = navigator.getGamepads?()[0]
+            
+            state = buttons: {}
+            for index in [0...pad.buttons.length]
+                button = pad.buttons[index]
+                if button.pressed
+                    state.buttons[@btns[index]] = button.value
+            
+            x = @axisValue  pad.axes[0]
+            y = @axisValue -pad.axes[1]
+            state.left = x:x, y:y 
+                
+            x = @axisValue  pad.axes[2]
+            y = @axisValue -pad.axes[3]
+            state.right = x:x, y:y 
+            
+            return state
+        
     poll: =>
             
         if pad = navigator.getGamepads?()[0]
@@ -83,4 +104,4 @@ class Gamepad extends events
 
             window.requestAnimationFrame @poll
 
-module.exports = new Gamepad
+module.exports = Gamepad
