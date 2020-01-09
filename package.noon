@@ -1,5 +1,5 @@
 name            kxk
-version         0.374.0
+version         0.375.0
 description     kodi's tool kit
 keywords
                 coffeescript
@@ -27,11 +27,11 @@ dependencies
                 convert-source-map  ^1.7.0
                 fs-extra        ^8.1.0
                 html-entities   ^1.2.1
-                isbinaryfile    ^4.0.2
-                karg            >=1.19.0
-                klor            ^2.1.0
+                isbinaryfile    ^4.0.3
+                karg            >=1.20.0
+                klor            ^2.3.0
                 kslash          ^1.29.0
-                kstr            >=0.11.0
+                kstr            ^0.11.0
                 lodash          ^4.17.15
                 noon            ^3.0.0
                 opener          ^1.5.1
@@ -39,11 +39,11 @@ dependencies
                 sds             ^3.2.0
                 sorcery         ^0.10.0
                 source-map      https://github.com/monsterkodi/source-map.git
-                stack-utils     ^1.0.2
-                textextensions  ^2.6.0
+                stack-utils     ^2.0.1
+                textextensions  ^3.3.0
                 walkdir         0.4.1
                 write-file-atomic  ^3.0.1
 devDependencies
-                koffee    >=1.4.0
-                mocha     ^6.2.2
+                koffee    >=1.6.0
+                mocha     ^7.0.0
                 onchange  ^6.1.0
