@@ -6,7 +6,7 @@
 000   000  000        000        
 ###
 
-{ args, prefs, watch, empty, valid, slash, about, post, childp, os, fs, kerror, klog, _ } = require './kxk'
+{ about, args, childp, empty, klog, os, post, prefs, slash, srcmap, valid, watch, win } = require './kxk'
 
 class App
     
@@ -303,7 +303,11 @@ class App
         return if empty @opt.dirs
         
         for dir in @opt.dirs
-            watcher = watch.dir slash.resolve slash.join @opt.dir, dir
+            toWatch = if slash.isRelative dir
+                slash.resolve slash.join @opt.dir, dir
+            else
+                slash.resolve dir
+            watcher = watch.dir toWatch
             watcher.on 'change' @onSrcChange
             watcher.on 'error' (err) -> error err
             @watchers.push watcher 

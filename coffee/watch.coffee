@@ -6,7 +6,7 @@
 00     00  000   000     000      0000000  000   000
 ###
 
-{ slash, fs, _ } = require './kxk'
+{ fs, kerror, slash, walkdir } = require './kxk'
 
 event   = require 'events'
 walkdir = require 'walkdir'
