@@ -6,7 +6,7 @@
 0000000   000   000   0000000  000   000  000   000  000        
 ###
 
-{ fs, valid, empty, slash, klog, _ } = require './kxk'
+{ _, empty, klog, slash, valid } = require './kxk'
 
 sourceMap  = require 'source-map'
 mapConvert = require 'convert-source-map'
@@ -158,14 +158,16 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
     jsLine = parseInt jsLine
     jsCol  = parseInt jsCol
     
-    coffeeFile = slash.tilde jsFile
+    coffeeFile = jsFile.replace /\/js\//, '/coffee/'
+    coffeeFile = coffeeFile.replace /\.js$/, '.coffee'
     coffeeLine = jsLine
     coffeeCol  = jsCol
-        
+    
     if slash.fileExists jsFile
-        mapData = mapConvert.fromSource(fs.readFileSync jsFile, 'utf8')?.toObject()
+        mapData = mapConvert.fromSource(slash.readText jsFile)?.toObject()
+        if empty mapData.sources[0]
+            mapData.sources[0] = coffeeFile
         if valid mapData
-            mapData.sources[0] = slash.resolve slash.join slash.dir(jsFile), mapData?.sources[0] if mapData?.sources[0]
             consumer = new sourceMap.SourceMapConsumer mapData
             if consumer.originalPositionFor
                 pos = consumer.originalPositionFor line:jsLine, column:jsCol, bias:sourceMap.SourceMapConsumer.LEAST_UPPER_BOUND
@@ -173,8 +175,12 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
                     coffeeFile = slash.tilde mapData.sources[0]
                     coffeeLine = pos.line 
                     coffeeCol  = pos.column
+                else
+                    klog 'invalid line.column'
             else
                 klog 'no consumer originalPositionFor', mapData?, consumer?
+    else
+        klog "no jsFile #{jsFile}"
         
     [coffeeFile, coffeeLine, coffeeCol]
 
@@ -192,20 +198,21 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
     if not slash.fileExists jsFile
         return [null, null, null]
         
-    if not coffeeLine? then return jsFile
+    if not coffeeLine? then return [jsFile, null, null]
     
-    mapData = mapConvert.fromSource(fs.readFileSync jsFile, 'utf8')?.toObject()
+    mapData = mapConvert.fromSource(slash.readText jsFile)?.toObject()
+    if empty mapData.sources[0]
+        mapData.sources[0] = coffeeFile
     if valid mapData
-        mapData.sources[0] = slash.resolve slash.join slash.dir(jsFile), mapData?.sources[0] if mapData?.sources[0]
         consumer = new sourceMap.SourceMapConsumer mapData
         if consumer?.allGeneratedPositionsFor?
-            poss = consumer.allGeneratedPositionsFor source:mapData.sources[0], line:coffeeLine#, column:coffeeCol
+            poss = consumer.allGeneratedPositionsFor source:mapData.sources[0], line:coffeeLine, column:coffeeCol
             if valid poss
                 return [jsFile, poss[0]?.line, poss[0]?.column]
-            # else
-                # log 'srcmap.toJs -- empty poss!'
+            else
+                log 'srcmap.toJs -- empty poss!' mapData.sources[0]
         else
-            log 'srcmap.toJs -- no allGeneratedPositionsFor in', consumer
+            log 'srcmap.toJs -- no allGeneratedPositionsFor in' consumer
         
     [jsFile, null, null]
         

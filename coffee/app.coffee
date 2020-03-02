@@ -12,9 +12,11 @@ class App
     
     @: (@opt) ->
 
+        process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
+        
         process.on 'uncaughtException' (err) ->
             srcmap = require './srcmap'    
-            srcmap.logErr err, '🔻'
+            srcmap.logErr err '🔻'
             true
         
         @watchers = []
