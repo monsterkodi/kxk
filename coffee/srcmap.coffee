@@ -9,7 +9,6 @@
 { _, empty, klog, slash, valid } = require './kxk'
 
 sourceMap  = require 'source-map'
-mapConvert = require 'convert-source-map'
 
 regex1     = /^\s+at\s+(\S+)\s+\((.*):(\d+):(\d+)\)/
 regex2     = /^\s+at\s+(.*):(\d+):(\d+)/
@@ -153,6 +152,25 @@ errorTrace = (err) ->
 #    000     000   000        000       000   000  000       000       000       000       
 #    000      0000000          0000000   0000000   000       000       00000000  00000000  
 
+readMap = (jsFile) ->
+    
+    source = slash.readText jsFile
+    
+    urlVar = '//# sourceURL='
+    mapVar = '//# sourceMappingURL='
+    for l in source.split /\r?\n/
+        if not url and l.startsWith urlVar then url = l.split(urlVar)[1]
+        if not map and l.startsWith mapVar then map = l.split(mapVar)[1]
+        break if map and url
+    if map
+        map = map.slice 'data:application/json;base64,'.length
+        map = Buffer.from(map, 'base64').toString()
+        map = JSON.parse map
+        if url and empty map.sources[0]
+            klog 'no url' url
+            map.sources[0] = url
+    map
+
 toCoffee = (jsFile, jsLine, jsCol=0) ->
 
     jsLine = parseInt jsLine
@@ -164,10 +182,8 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
     coffeeCol  = jsCol
     
     if slash.fileExists jsFile
-        mapData = mapConvert.fromSource(slash.readText jsFile)?.toObject()
-        if empty mapData.sources[0]
-            mapData.sources[0] = coffeeFile
-        if valid mapData
+        if valid mapData = readMap jsFile
+            klog 'toCoffee' mapData
             consumer = new sourceMap.SourceMapConsumer mapData
             if consumer.originalPositionFor
                 pos = consumer.originalPositionFor line:jsLine, column:jsCol, bias:sourceMap.SourceMapConsumer.LEAST_UPPER_BOUND
@@ -179,6 +195,8 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
                     klog 'invalid line.column'
             else
                 klog 'no consumer originalPositionFor', mapData?, consumer?
+        else
+            klog "no mapData in #{jsFile}"
     else
         klog "no jsFile #{jsFile}"
         
@@ -200,20 +218,19 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
         
     if not coffeeLine? then return [jsFile, null, null]
     
-    mapData = mapConvert.fromSource(slash.readText jsFile)?.toObject()
-    if empty mapData.sources[0]
-        mapData.sources[0] = coffeeFile
-    if valid mapData
+    if valid mapData = readMap jsFile
+        klog 'toJS' mapData
         consumer = new sourceMap.SourceMapConsumer mapData
         if consumer?.allGeneratedPositionsFor?
             poss = consumer.allGeneratedPositionsFor source:mapData.sources[0], line:coffeeLine, column:coffeeCol
             if valid poss
                 return [jsFile, poss[0]?.line, poss[0]?.column]
             else
-                log 'srcmap.toJs -- empty poss!' mapData.sources[0]
+                klog 'srcmap.toJs -- empty poss!' mapData.sources[0]
         else
-            log 'srcmap.toJs -- no allGeneratedPositionsFor in' consumer
+            klog 'srcmap.toJs -- no allGeneratedPositionsFor in' consumer
         
+    klog "no map #{coffeeFile}"
     [jsFile, null, null]
         
 module.exports =
