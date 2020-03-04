@@ -8,8 +8,6 @@
 
 { _, empty, klog, sh, slash, valid } = require './kxk'
 
-sourceMap  = require 'source-map'
-
 regex1     = /^\s+at\s+(\S+)\s+\((.*):(\d+):(\d+)\)/
 regex2     = /^\s+at\s+(.*):(\d+):(\d+)/
 
@@ -146,11 +144,38 @@ errorTrace = (err) ->
     lines:  lines
     text:   text.join '\n'
     
-# 000000000   0000000          0000000   0000000   00000000  00000000  00000000  00000000  
-#    000     000   000        000       000   000  000       000       000       000       
-#    000     000   000        000       000   000  000000    000000    0000000   0000000   
-#    000     000   000        000       000   000  000       000       000       000       
-#    000      0000000          0000000   0000000   000       000       00000000  00000000  
+# 0000000    00000000   0000000   0000000   0000000    00000000  
+# 000   000  000       000       000   000  000   000  000       
+# 000   000  0000000   000       000   000  000   000  0000000   
+# 000   000  000       000       000   000  000   000  000       
+# 0000000    00000000   0000000   0000000   0000000    00000000  
+
+decode = (segment) ->
+    # ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+    rs = []
+    sh = rc = 0
+    for i in [0...segment.length]
+        cc = segment.charCodeAt(i)-65
+        cc -= 6  if cc >=  32
+        cc  = 62 if cc == -22
+        cc  = 63 if cc == -18
+        cc += 69 if cc < 0
+        if cc & 32
+            sh += 5
+            rc = cc & 0b011111
+        else
+            vl = rc + (cc << sh)
+            vs = vl >> 1
+            vs = -vs if vl & 1
+            rs.push vs
+            sh = rc = 0
+    rs
+    
+# 00000000   00000000   0000000   0000000    00     00   0000000   00000000   
+# 000   000  000       000   000  000   000  000   000  000   000  000   000  
+# 0000000    0000000   000000000  000   000  000000000  000000000  00000000   
+# 000   000  000       000   000  000   000  000 0 000  000   000  000        
+# 000   000  00000000  000   000  0000000    000   000  000   000  000        
 
 readMap = (jsFile) ->
     
@@ -171,6 +196,38 @@ readMap = (jsFile) ->
             map.sources[0] = url
     map
 
+#  0000000   0000000   00000000  00000000  00000000  00000000  00000000    0000000    0000000  
+# 000       000   000  000       000       000       000       000   000  000   000  000       
+# 000       000   000  000000    000000    0000000   0000000   00000000   000   000  0000000   
+# 000       000   000  000       000       000       000       000        000   000       000  
+#  0000000   0000000   000       000       00000000  00000000  000         0000000   0000000   
+
+coffeePos = (mapData, sjsLine, sjsCol) ->
+    lines = mapData.mappings.split ';'
+    jsLine = 1
+    coLine = 1
+    coCol  = 0
+    for line in lines
+        jsCol = 0
+        if line.length
+            for segment in line.split ','
+                seg = decode segment
+                jsCol  += seg[0]
+                coLine += seg[2]
+                coCol  += seg[3]
+                if jsLine == sjsLine and jsCol >= sjsCol
+                    return line:coLine, col:coCol
+        if jsLine == sjsLine
+            return line:coLine, col:0
+        jsLine++
+    line:0, col:0
+    
+# 000000000   0000000          0000000   0000000   00000000  00000000  00000000  00000000  
+#    000     000   000        000       000   000  000       000       000       000       
+#    000     000   000        000       000   000  000000    000000    0000000   0000000   
+#    000     000   000        000       000   000  000       000       000       000       
+#    000      0000000          0000000   0000000   000       000       00000000  00000000  
+
 toCoffee = (jsFile, jsLine, jsCol=0) ->
 
     jsLine = parseInt jsLine
@@ -183,90 +240,75 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
     
     if slash.fileExists jsFile
         if valid mapData = readMap jsFile
-            klog 'toCoffee' mapData
-            consumer = new sourceMap.SourceMapConsumer mapData
-            if consumer.originalPositionFor
-                pos = consumer.originalPositionFor line:jsLine, column:jsCol, bias:sourceMap.SourceMapConsumer.LEAST_UPPER_BOUND
-                if valid(pos.line) and valid(pos.column)
-                    coffeeFile = slash.tilde mapData.sources[0]
-                    coffeeLine = pos.line 
-                    coffeeCol  = pos.column
-                else
-                    klog 'invalid line.column'
-            else
-                klog 'no consumer originalPositionFor', mapData?, consumer?
+            coPos = coffeePos mapData, jsLine, jsCol
+            coffeeFile = slash.tilde slash.join mapData.sourceRoot, mapData.sources[0]
+            coffeeLine = coPos.line 
+            coffeeCol  = coPos.col
         else
             klog "no mapData in #{jsFile}"
     else
         klog "no jsFile #{jsFile}"
-        
     [coffeeFile, coffeeLine, coffeeCol]
+
+#       000   0000000       00000000    0000000    0000000  
+#       000  000            000   000  000   000  000       
+#       000  0000000        00000000   000   000  0000000   
+# 000   000       000       000        000   000       000  
+#  0000000   0000000        000         0000000   0000000   
+
+jsPosition = (mapData, coffeeLine, coffeeCol) ->
+    # klog 'jsPosition' coffeeLine, coffeeCol, mapData.file, mapData.sourceRoot, mapData.sources[0] #, mapData.mappings
+    lines = mapData.mappings.split ';'
+    jsLine = 1
+    coLine = 1
+    coCol  = 0
+    dfMin  = line:lines.length, col:9999
+    result = line:0, col:0
+    for line in lines
+        jsCol = 0
+        if line.length
+            for segment in line.split ','
+                seg = decode segment
+                jsCol  += seg[0]
+                coLine += seg[2]
+                coCol  += seg[3]
+                dfLine = Math.abs coffeeLine - coLine
+                dfCol  = Math.abs coffeeCol - coCol
+                if dfLine < dfMin.line or dfLine == dfMin.line and dfCol < dfMin.col
+                    dfMin =
+                        line: dfLine
+                        col:  dfCol
+                    result =
+                        line:   jsLine
+                        col:    jsCol
+        jsLine++
+    result
 
 # 000000000   0000000               000   0000000  
 #    000     000   000              000  000       
 #    000     000   000              000  0000000   
 #    000     000   000        000   000       000  
 #    000      0000000          0000000   0000000   
-
-decode = (segment) ->
-    rs = []
-    sh = rc = 0
-    for i in [0...segment.length]
-        cc = segment.charCodeAt(i)-65
-        cc -= 6  if cc >=  32
-        cc  = 62 if cc == -22
-        cc  = 63 if cc == -18
-        cc += 69 if cc < 0
-        if cc & 32
-            sh += 5
-            rc = cc & 0b011111
-        else
-            rs.push rc + (cc << sh)
-            sh = rc = 0
-    rs
-
-jsPosition = (mapData, coffeeLine, coffeeCol) ->
-    klog 'jsPosition' coffeeLine, coffeeCol, mapData.file, mapData.sourceRoot, mapData.sources[0], mapData.mappings
-    line   = 0
-    column = 0
     
-    jsLines = mapData.mappings.split ';'
-    jsLineIndex = 0
-    for jsLine in jsLines
-        jsLineIndex++
-        if jsLine.length
-            for segment in jsLine.split ','
-                klog jsLineIndex, segment, decode(segment).join ' '
-    
-    line:   line
-    column: column
-
 toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
     
     jsFile = coffeeFile.replace /\/coffee\//, '/js/'
     jsFile = jsFile.replace /\.coffee$/, '.js'
     
     if not slash.fileExists jsFile
+        klog "no jsFile #{jsFile}"
         return [null, null, null]
         
-    if not coffeeLine? then return [jsFile, null, null]
+    if not coffeeLine? 
+        klog "no coffeeLine?"
+        return [jsFile, null, null]
     
     if valid mapData = readMap jsFile
-        # klog 'toJS' mapData
-        # klog decode 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-        klog 'toJS' jsPosition mapData, coffeeLine, coffeeCol
-        consumer = new sourceMap.SourceMapConsumer mapData
-        if consumer?.allGeneratedPositionsFor?
-            poss = consumer.allGeneratedPositionsFor source:mapData.sources[0], line:coffeeLine, column:coffeeCol
-            if valid poss
-                return [jsFile, poss[0]?.line, poss[0]?.column]
-            else
-                log 'srcmap.toJs -- empty poss!' mapData.sources[0]
-        else
-            log 'srcmap.toJs -- no allGeneratedPositionsFor in' consumer
-        
-    log "no map #{coffeeFile}"
-    [jsFile, null, null]
+        jsPos = jsPosition mapData, coffeeLine, coffeeCol
+        [jsFile, jsPos.line, jsPos.col]
+    else    
+        klog "no map #{coffeeFile}"
+        [jsFile, null, null]
         
 module.exports =
     toJs:       toJs

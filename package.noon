@@ -1,5 +1,5 @@
 name            kxk
-version         0.379.0
+version         0.380.0
 description     kodi's tool kit
 keywords
                 coffeescript
@@ -12,9 +12,7 @@ files
 scripts
                 test    ./node_modules/.bin/mocha -c --require koffee/js/register test/test.coffee
                 watch   ./node_modules/.bin/onchange test/test.coffee coffee/*.coffee -- npm run test
-repository
-                type  git
-                url   https://github.com/monsterkodi/kxk.git
+repository      github:monsterkodi/kxk
 author          monsterkodi
 license         Unlicense
 bugs
@@ -28,21 +26,20 @@ dependencies
                 html-entities   ^1.2.1
                 isbinaryfile    ^4.0.4
                 karg            >=1.20.0
-                klor            ^2.6.0
-                kslash          ^1.29.0
-                kstr            ^0.11.0
+                klor            >=2.6.0
+                kslash          >=1.29.0
+                kstr            >=0.11.0
                 lodash          ^4.17.15
-                noon            ^3.0.0
+                noon            >=3.0.0
                 opener          ^1.5.1
                 pretty-time     ^1.1.0
-                sds             ^3.2.0
+                sds             >=3.2.0
                 sorcery         ^0.10.0
-                source-map      https://github.com/monsterkodi/source-map.git
                 stack-utils     ^2.0.1
                 textextensions  ^3.3.0
                 walkdir         0.4.1
                 write-file-atomic  ^3.0.3
 devDependencies
-                koffee    >=1.7.0
+                koffee    >=1.11.0
                 mocha     ^7.1.0
                 onchange  ^6.1.0
