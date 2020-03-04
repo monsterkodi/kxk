@@ -6,7 +6,7 @@
 0000000   000   000   0000000  000   000  000   000  000        
 ###
 
-{ _, empty, klog, slash, valid } = require './kxk'
+{ _, empty, klog, sh, slash, valid } = require './kxk'
 
 sourceMap  = require 'source-map'
 
@@ -208,6 +208,39 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
 #    000     000   000        000   000       000  
 #    000      0000000          0000000   0000000   
 
+decode = (segment) ->
+    rs = []
+    sh = rc = 0
+    for i in [0...segment.length]
+        cc = segment.charCodeAt(i)-65
+        cc -= 6  if cc >=  32
+        cc  = 62 if cc == -22
+        cc  = 63 if cc == -18
+        cc += 69 if cc < 0
+        if cc & 32
+            sh += 5
+            rc = cc & 0b011111
+        else
+            rs.push rc + (cc << sh)
+            sh = rc = 0
+    rs
+
+jsPosition = (mapData, coffeeLine, coffeeCol) ->
+    klog 'jsPosition' coffeeLine, coffeeCol, mapData.file, mapData.sourceRoot, mapData.sources[0], mapData.mappings
+    line   = 0
+    column = 0
+    
+    jsLines = mapData.mappings.split ';'
+    jsLineIndex = 0
+    for jsLine in jsLines
+        jsLineIndex++
+        if jsLine.length
+            for segment in jsLine.split ','
+                klog jsLineIndex, segment, decode(segment).join ' '
+    
+    line:   line
+    column: column
+
 toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
     
     jsFile = coffeeFile.replace /\/coffee\//, '/js/'
@@ -219,18 +252,20 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
     if not coffeeLine? then return [jsFile, null, null]
     
     if valid mapData = readMap jsFile
-        klog 'toJS' mapData
+        # klog 'toJS' mapData
+        # klog decode 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+        klog 'toJS' jsPosition mapData, coffeeLine, coffeeCol
         consumer = new sourceMap.SourceMapConsumer mapData
         if consumer?.allGeneratedPositionsFor?
             poss = consumer.allGeneratedPositionsFor source:mapData.sources[0], line:coffeeLine, column:coffeeCol
             if valid poss
                 return [jsFile, poss[0]?.line, poss[0]?.column]
             else
-                klog 'srcmap.toJs -- empty poss!' mapData.sources[0]
+                log 'srcmap.toJs -- empty poss!' mapData.sources[0]
         else
-            klog 'srcmap.toJs -- no allGeneratedPositionsFor in' consumer
+            log 'srcmap.toJs -- no allGeneratedPositionsFor in' consumer
         
-    klog "no map #{coffeeFile}"
+    log "no map #{coffeeFile}"
     [jsFile, null, null]
         
 module.exports =
