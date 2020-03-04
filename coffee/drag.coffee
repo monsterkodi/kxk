@@ -6,7 +6,7 @@
 0000000    000   000  000   000   0000000 
 ###
 
-{ def, kpos, klog, stopEvent, kerror, $, _ } = require './kxk'
+{ $, _, def, kerror, kpos, stopEvent } = require './kxk'
 
 class Drag
 
