@@ -16,7 +16,7 @@ class App
         
         process.on 'uncaughtException' (err) ->
             srcmap = require './srcmap'    
-            srcmap.logErr err '🔻'
+            srcmap.logErr err, '🔻'
             true
         
         @watchers = []
