@@ -296,18 +296,15 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
     jsFile = jsFile.replace /\.coffee$/, '.js'
     
     if not slash.fileExists jsFile
-        klog "no jsFile #{jsFile}"
         return [null, null, null]
         
     if not coffeeLine? 
-        klog "no coffeeLine?"
         return [jsFile, null, null]
     
     if valid mapData = readMap jsFile
         jsPos = jsPosition mapData, coffeeLine, coffeeCol
         [jsFile, jsPos.line, jsPos.col]
     else    
-        klog "no map #{coffeeFile}"
         [jsFile, null, null]
         
 module.exports =
