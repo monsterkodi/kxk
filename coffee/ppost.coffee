@@ -23,7 +23,7 @@ if process.type == 'renderer'
 
     class PostRenderer extends Emitter
 
-        @: () ->
+        @: ->
             super()
             @dbg = false
             @id  = remote.getCurrentWindow().id
@@ -31,7 +31,7 @@ if process.type == 'renderer'
             @ipc.on POST, (event, type, argl) => @emit.apply @, [type].concat argl
             window.addEventListener 'beforeunload' @dispose
 
-        dispose: () =>
+        dispose: =>
             window.removeEventListener 'beforeunload' @dispose
             @ipc.removeAllListeners POST
             @ipc = null
@@ -54,7 +54,7 @@ if process.type == 'renderer'
             
         send: (receivers, type, args, id) ->
             if receivers in @dbg then log "post.#{receivers} #{type}" args.map((a) -> new String(a)).join ' '
-            @ipc.send POST, receivers, type, args, id
+            @ipc?.send POST, receivers, type, args, id
 
     module.exports = new PostRenderer()
 
@@ -68,7 +68,7 @@ else
     
     class PostMain extends Emitter
 
-        @: () ->
+        @: ->
             super()
             @getCallbacks = {}
             try
