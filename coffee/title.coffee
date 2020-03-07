@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ post, stopEvent, keyinfo, scheme, slash, empty, prefs, elem, drag, klog, noon, kstr, menu, win, sds, $, _ } = require './kxk'
+{ $, _, drag, elem, empty, keyinfo, kstr, menu, noon, post, prefs, scheme, sds, slash, stopEvent, win } = require './kxk'
 
 class Title
     
@@ -228,10 +228,15 @@ class Title
         @menu = new menu items:items
         @elem.insertBefore @menu.elem, @elem.firstChild.nextSibling
         @hideMenu()
+        
+    refreshMenu: ->
+        
+        @menu.del()
+        @initMenu @menuTemplate()
 
     menuVisible: => @menu.elem.style.display != 'none'
-    showMenu:    => @menu.elem.style.display = 'inline-block'; @menu?.focus?()#; post.emit 'titlebar' 'hideTitle'
-    hideMenu:    => @menu?.close(); @menu.elem.style.display = 'none'#; post.emit 'titlebar' 'showTitle'
+    showMenu:    => @menu.elem.style.display = 'inline-block'; @menu?.focus?()
+    hideMenu:    => @menu?.close(); @menu.elem.style.display = 'none'
     toggleMenu:  => if @menuVisible() then @hideMenu() else @showMenu()
     openMenu:    => if @menuVisible() then @hideMenu() else @showMenu(); @menu.open()
 

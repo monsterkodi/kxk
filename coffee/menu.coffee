@@ -6,29 +6,35 @@
 000   000  00000000  000   000   0000000   
 ###
 
-{ post, stopEvent, keyinfo, popup, elem } = require './kxk'
+{ elem, keyinfo, popup, stopEvent } = require './kxk'
 
 class Menu
     
     @: (opt) ->
         
-        @elem = elem class: 'menu', tabindex: 3
+        @elem = elem class:'menu' tabindex:3
         
         for item in opt.items
             continue if item.hide
-            div = elem class: 'menuItem', text: item.text
+            div = elem class: 'menuItem' text: item.text
             div.item = item
-            div.addEventListener 'click', @onClick
+            div.addEventListener 'click' @onClick
             if item.combo?
-                combo = elem 'span', class: 'popupCombo', text: keyinfo.short item.combo
+                combo = elem 'span' class:'popupCombo' text: keyinfo.short item.combo
                 div.appendChild combo
             @elem.appendChild div
 
         @select @elem.firstChild
             
-        @elem.addEventListener 'keydown',   @onKeyDown
-        @elem.addEventListener 'focusout',  @onFocusOut
-        @elem.addEventListener 'mouseover', @onHover
+        @elem.addEventListener 'keydown'   @onKeyDown
+        @elem.addEventListener 'focusout'  @onFocusOut
+        @elem.addEventListener 'mouseover' @onHover
+        
+    del: ->
+        
+        @close()
+        @elem?.remove()
+        @elem = null
         
     # 00000000   0000000    0000000  000   000   0000000  
     # 000       000   000  000       000   000  000       
