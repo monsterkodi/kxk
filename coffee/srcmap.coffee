@@ -192,7 +192,6 @@ readMap = (jsFile) ->
         map = Buffer.from(map, 'base64').toString()
         map = JSON.parse map
         if url and empty map.sources[0]
-            klog 'no url' url
             map.sources[0] = url
     map
 

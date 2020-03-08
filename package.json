@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.386.0",
+  "version": "0.387.0",
   "description": "kodi's tool kit",
   "keywords": [
     "coffeescript",
@@ -31,7 +31,7 @@
     "html-entities": "^1.2.1",
     "isbinaryfile": "^4.0.4",
     "karg": ">=1.20.0",
-    "klor": ">=2.7.0",
+    "klor": ">=2.8.0",
     "kslash": ">=1.29.0",
     "kstr": ">=0.11.0",
     "lodash": "^4.17.15",

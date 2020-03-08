@@ -123,7 +123,7 @@ class Watch extends event
                         
         if stat = slash.exists path
         
-            if path == @remove?.path # and change == 'rename'
+            if @opt.skipSave and path == @remove?.path # and change == 'rename'
                 clearTimeout @remove.timer
                 clearRemove = => delete @remove
                 setTimeout clearRemove, 100
@@ -137,10 +137,13 @@ class Watch extends event
             
         else
             
-            @remove =
-                path:  path
-                timer: setTimeout ((d,p,w)->->
-                    delete w.remove; 
-                    w.emit 'change' dir:d, path:p, change:'remove', watch:w)(dir,path,@), 100
+            if @opt.skipSave
+                @remove =
+                    path:  path
+                    timer: setTimeout ((d,p,w)->->
+                        delete w.remove; 
+                        w.emit 'change' dir:d, path:p, change:'remove', watch:w)(dir,path,@), 100
+            else if @opt.emitRemove
+                @emit 'change' dir:dir, path:path, change:'remove', watch:@
         
 module.exports = Watch
