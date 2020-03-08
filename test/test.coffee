@@ -9,7 +9,7 @@
 kolor.globalize()
 expect = chai().expect
 
-describe 'kxk', ->
+describe 'kxk' ->
 
     # 00000000  000  000      00000000  000      000   0000000  000000000
     # 000       000  000      000       000      000  000          000
@@ -19,20 +19,20 @@ describe 'kxk', ->
 
     describe 'filelist' ->
 
-        it "exists" -> _.isFunction filelist
+        it 'exists' -> _.isFunction filelist
 
-        it "chdir" -> 
+        it 'chdir' -> 
             process.chdir __dirname 
             process.cwd().should.eql __dirname
         
-        it "returns an array", -> _.isArray filelist '.'
+        it 'returns an array', -> _.isArray filelist '.'
 
-        it "returns empty array" -> _.isEmpty filelist 'foobar', logError: false
+        it 'returns empty array' -> _.isEmpty filelist 'foobar' logError: false
 
-        it "finds this file relative" ->
+        it 'finds this file relative' ->
             (filelist '.').should.include 'test.coffee'
 
-        it "finds this file absolute" ->
+        it 'finds this file absolute' ->
             (filelist __dirname).should.include slash.path __filename
 
         it "lists relative path with dot" ->
@@ -45,13 +45,13 @@ describe 'kxk', ->
             (filelist 'dir').should.not.include slash.normalize 'dir/.konrad.noon'
 
         it "includes hidden files" ->
-            (filelist 'dir', 'ignoreHidden': false).should.include slash.normalize 'dir/.konrad.noon'
+            (filelist 'dir' 'ignoreHidden': false).should.include slash.normalize 'dir/.konrad.noon'
 
         it "doesn't recurse by default" ->
             (filelist 'dir').should.eql [slash.normalize('dir/noext'), slash.normalize('dir/test.coffee'), slash.normalize('dir/test.js'), slash.normalize('dir/test.txt')]
 
         it "recurses if depth set" ->
-            (filelist 'dir', depth: 2).should.eql [
+            (filelist 'dir' depth: 2).should.eql [
                 slash.normalize('dir/noext'),
                 slash.normalize('dir/test.coffee'),
                 slash.normalize('dir/test.js'),
@@ -63,7 +63,7 @@ describe 'kxk', ->
                 slash.normalize('dir/level1b/level1b.coffee')]
 
         it "matches extension" ->
-            (filelist 'dir', depth: 3, matchExt: slash.ext __filename).should.eql [
+            (filelist 'dir' depth: 3, matchExt: slash.ext __filename).should.eql [
                 slash.normalize('dir/test.coffee'),
                 slash.normalize('dir/level1/test.coffee'),
                 slash.normalize('dir/level1/level2/level2.coffee'),

@@ -113,8 +113,6 @@ class Watch extends event
         
         path = slash.join dir, path
         
-        # klog 'onChange' path, @file
-        
         if @file and @file != path
             return
         
@@ -126,18 +124,15 @@ class Watch extends event
         if stat = slash.exists path
         
             if path == @remove?.path # and change == 'rename'
-                # klog 'remove->rename' change, path
                 clearTimeout @remove.timer
                 clearRemove = => delete @remove
                 setTimeout clearRemove, 100
                 return
             
             if path == @last?.path and stat.mtime.getTime() == @last?.mtime?.getTime()
-                # klog 'unchanged' path
                 return # unchanged
             
             @last = mtime:stat.mtime, path:path
-            # klog 'emit' change, path        
             @emit 'change' dir:dir, path:path, change:change, watch:@
             
         else
@@ -146,8 +141,6 @@ class Watch extends event
                 path:  path
                 timer: setTimeout ((d,p,w)->->
                     delete w.remove; 
-                    klog 'emit REMOVE' path, d, w.dir;
                     w.emit 'change' dir:d, path:p, change:'remove', watch:w)(dir,path,@), 100
-            # @emit 'change' dir:dir, path:path, change:'remove' watch:@
         
 module.exports = Watch

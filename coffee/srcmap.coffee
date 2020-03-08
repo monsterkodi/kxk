@@ -244,10 +244,6 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
             coffeeFile = slash.tilde slash.join mapData.sourceRoot, mapData.sources[0]
             coffeeLine = coPos.line 
             coffeeCol  = coPos.col
-        else
-            klog "no mapData in #{jsFile}"
-    else
-        klog "no jsFile #{jsFile}"
     [coffeeFile, coffeeLine, coffeeCol]
 
 #       000   0000000       00000000    0000000    0000000  
