@@ -107,29 +107,20 @@ describe 'kxk' ->
 
         it 'clamps' ->
 
-            (clamp 0, 1, 1.1).should.eql 1
-
-            (clamp 1, 0, 1.1).should.eql 1
-
+            (clamp 0,   1, 1.1).should.eql 1
+            (clamp 1,   0, 1.1).should.eql 1
             (clamp 2.2, 3, 1.1).should.eql 2.2
-
             (clamp 3, 2.2, 1.1).should.eql 2.2
 
         it 'nulls' ->
 
-            (clamp 0, 1).should.eql 0
-
-            (clamp 2, 3, undefined).should.eql 2
-
-            (clamp 4, 5, null).should.eql 4
-
-            (clamp 6, 7, {}).should.eql 6
-
-            (clamp 8, 9, []).should.eql 8
-
-            (clamp 10, 11, clamp).should.eql 10
-
-            (clamp -3, -2, 0).should.eql -2
+            (clamp  0,  1           ).should.eql  0
+            (clamp  2,  3, undefined).should.eql  2
+            (clamp  4,  5, null     ).should.eql  4
+            (clamp  6,  7, {}       ).should.eql  6
+            (clamp  8,  9, []       ).should.eql  8
+            (clamp 10, 11, clamp    ).should.eql 10
+            (clamp -3, -2, 0        ).should.eql -2
 
     # 00000000  00     00  00000000   000000000  000   000
     # 000       000   000  000   000     000      000 000
@@ -139,31 +130,18 @@ describe 'kxk' ->
 
     describe 'empty' ->
 
-        it 'true' ->
+        it "''"        -> (empty ''         ).should.eql true
+        it '[]'        -> (empty []         ).should.eql true
+        it '{}'        -> (empty {}         ).should.eql true
+        it 'null'      -> (empty null       ).should.eql true
+        it 'undefined' -> (empty undefined  ).should.eql true
 
-            (empty ''    ).should.eql true
-
-            (empty []    ).should.eql true
-
-            (empty {}    ).should.eql true
-
-            (empty null).should.eql true
-
-            (empty undefined).should.eql true
-
-        it 'false' ->
-
-            (empty 1).should.eql false
-
-            (empty 0).should.eql false
-
-            (empty [[]]).should.eql false
-
-            (empty a:null).should.eql false
-
-            (empty ' ').should.eql false
-
-            (empty Infinity).should.eql false
+        it '1'         -> (empty 1          ).should.eql false
+        it '0'         -> (empty 0          ).should.eql false
+        it '[[]]'      -> (empty [[]]       ).should.eql false
+        it 'a:null'    -> (empty a:null     ).should.eql false
+        it "' '"       -> (empty ' '        ).should.eql false
+        it 'Infinity'  -> (empty Infinity   ).should.eql false
 
     # 000   000   0000000   000      000  0000000
     # 000   000  000   000  000      000  000   000
@@ -175,29 +153,20 @@ describe 'kxk' ->
 
         it 'false' ->
 
-            (valid ''    ).should.eql false
-
-            (valid []    ).should.eql false
-
-            (valid {}    ).should.eql false
-
-            (valid null).should.eql false
-
+            (valid ''       ).should.eql false
+            (valid []       ).should.eql false
+            (valid {}       ).should.eql false
+            (valid null     ).should.eql false
             (valid undefined).should.eql false
 
         it 'true' ->
 
-            (valid 1).should.eql true
-
-            (valid 0).should.eql true
-
-            (valid [[]]).should.eql true
-
-            (valid a:null).should.eql true
-
-            (valid ' ').should.eql true
-
-            (valid Infinity).should.eql true
+            (valid 1        ).should.eql true
+            (valid 0        ).should.eql true
+            (valid [[]]     ).should.eql true
+            (valid a:null   ).should.eql true
+            (valid ' '      ).should.eql true
+            (valid Infinity ).should.eql true
 
     # 00000000  000  000      000000000  00000000  00000000
     # 000       000  000         000     000       000   000

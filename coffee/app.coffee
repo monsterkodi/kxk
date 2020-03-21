@@ -87,7 +87,7 @@ class App
         @app.setName @opt.pkg.name
     
         if not args.noprefs
-            sep = @opt.prefsSeperator ? ':'
+            sep = @opt.prefsSeperator ? '▸'
             if @opt.shortcut
                 prefs.init separator:sep, defaults:shortcut:@opt.shortcut
             else

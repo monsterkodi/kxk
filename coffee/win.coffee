@@ -6,7 +6,7 @@
 00     00  000  000   000  
 ###
 
-{ post, stopEvent, keyinfo, scheme, prefs, slash, title, valid, empty, popup, klog, open, kpos, fs, $, _ } = require './kxk'
+{ $, _, args, empty, fs, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, srcmap, stopEvent, title, valid } = require './kxk'
 
 class Win
     
@@ -19,7 +19,7 @@ class Win
             srcmap.logErr err
             true
         
-        sep = @opt.prefsSeperator ? ':'
+        sep = @opt.prefsSeperator ? '▸'
         prefs.init separator:sep
         
         if @opt.icon

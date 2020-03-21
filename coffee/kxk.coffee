@@ -24,6 +24,8 @@ klor      = require 'klor'
 colors    = require 'colors'
 colorette = require 'colorette'
 
+empty = (a) -> (a == '' or a == null or a == undefined or a == []) or (typeof(a) == 'object' and Object.keys(a).length == 0) or (a.length? and a.length == 0)
+
 module.exports =
 
     _:_
@@ -99,8 +101,8 @@ module.exports =
     fade:  (s,e,v) -> s*(1-v)+e*(v)
     last:  (a) -> _.last a
     first: (a) -> _.first a
-    empty: (a) -> not _.isNumber(a) and _.isEmpty(a) or a == ''
-    valid: (a) -> _.isNumber(a) or (_.isString(a) and a != '') or not _.isEmpty(a)
+    empty: empty
+    valid: (a) -> not empty a
 
     absMax: (a,b) -> if Math.abs(a) >= Math.abs(b) then a else b
     absMin: (a,b) -> if Math.abs(a)  < Math.abs(b) then a else b

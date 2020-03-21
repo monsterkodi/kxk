@@ -10,7 +10,7 @@ _ = require 'lodash'
 
 elem = (typ, opt) ->
     
-    if _.isPlainObject typ
+    if typ and typeof(typ) == 'object'
         opt = typ 
         typ = opt.typ
         

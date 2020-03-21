@@ -192,7 +192,7 @@ class Title
         if empty @templateCache
             @templateCache = @makeTemplate noon.load slash.resolve slash.join @opt.dir, @opt.menu
             
-        if @opt.menuTemplate?
+        if @opt.menuTemplate? and _.isFunction @opt.menuTemplate
             @opt.menuTemplate @templateCache
         else
             @templateCache

@@ -20,10 +20,11 @@ regex2     = /^\s+at\s+(.*):(\d+):(\d+)/
 logErr = (err, sep='💥') ->
     
     # log errorStack err
-    log err
+    console.log "#{err}"
+    return
     trace = errorTrace err
-    # console.log 'trace:', str(trace)
-    if valid trace.lines
+    # console.log 'trace:', kstr(trace)
+    if valid trace?.lines
         klog.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
         for line in trace.lines
             sep = if slash.isAbsolute(line.file) or line.file[0]=='~' then '🐞' else '🔼'
@@ -57,17 +58,17 @@ filePos = (line) ->
                 result.line = mappedLine[1]
                 result.col  = mappedLine[2]
                 
-        else if slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file
+        else if false and slash.ext(result.file) == 'coffee' and not slash.isAbsolute result.file
             
             # seems like chrome is resolving to relative paths already without mapping the line numbers correctly :(
             
-            # console.log "filePos1 line:'#{line}' result:", str result
+            # console.log "filePos1 line:'#{line}' result:", kstr result
             # console.log 'process.cwd', process.cwd()
             # try
                 # console.log 'app.getPath("exe")', require('electron').remote.app.getPath 'exe'
             # catch err
                 # console.log err.stack
-                
+
             absFile = slash.resolve slash.join process.cwd(), 'coffee', result.file
             if slash.fileExists absFile
                 [jsFile,a,b] = toJs absFile, 1, 0
@@ -119,7 +120,6 @@ errorStack = (err) ->
         else
             lines.push stackLine 
 
-  
     lines.join '\n'
 
 # 000000000  00000000    0000000    0000000  00000000  
@@ -140,7 +140,6 @@ errorTrace = (err) ->
         else
             text.push stackLine 
 
-  
     lines:  lines
     text:   text.join '\n'
     
@@ -202,6 +201,7 @@ readMap = (jsFile) ->
 #  0000000   0000000   000       000       00000000  00000000  000         0000000   0000000   
 
 coffeePos = (mapData, sjsLine, sjsCol) ->
+    
     lines = mapData.mappings.split ';'
     jsLine = 1
     coLine = 1
