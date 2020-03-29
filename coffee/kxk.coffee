@@ -21,8 +21,6 @@ slash     = require 'kslash'
 karg      = require 'karg'
 kstr      = require 'kstr'
 klor      = require 'klor'
-colors    = require 'colors'
-colorette = require 'colorette'
 
 empty = (a) -> (a == '' or a == null or a == undefined or a == []) or (typeof(a) == 'object' and Object.keys(a).length == 0) or (a.length? and a.length == 0)
 
@@ -36,8 +34,6 @@ module.exports =
     kstr:kstr
     klor:klor
     kolor:klor.kolor
-    colors:colors
-    colorette:colorette
     atomic:atomic
     walkdir:walkdir
     open:open
