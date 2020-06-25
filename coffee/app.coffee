@@ -259,6 +259,7 @@ class App
                 webSecurity:            false
                 backgroundThrottling:   false
                 nodeIntegration:        true
+                enableRemoteModule:     true
     
         @win.setPosition bounds.x, bounds.y if bounds?
     
