@@ -6,7 +6,7 @@
 000         0000000   000         0000000   000      
 ###
 
-{ post, stopEvent, keyinfo, empty, elem, menu, os } = require './kxk'
+{ elem, empty, keyinfo, os, post, stopEvent } = require './kxk'
 
 class Popup
     
@@ -152,8 +152,8 @@ class Popup
         
         if @popup 
             @closePopup()
-        else if menu = @parentMenu()
-            menu.navigateLeft()
+        else if m = @parentMenu()
+            m.navigateLeft()
         else if @parent
             @close focus:false
 
@@ -170,8 +170,8 @@ class Popup
             @popup.select @popup.items.firstChild
         else if @selected?.item.menu
             @select @selected, selectFirstItem:true
-        else if menu = @parentMenu()
-            menu.navigateRight()
+        else 
+            @parentMenu()?.navigateRight()
             
     parentMenu: -> 
         if @parent? and not @parent.parent

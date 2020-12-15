@@ -6,7 +6,7 @@
 000   000  000        000        
 ###
 
-{ about, args, childp, empty, klog, os, post, prefs, slash, srcmap, valid, watch, win } = require './kxk'
+{ about, args, childp, empty, klog, os, post, prefs, slash, srcmap, valid, watch } = require './kxk'
 
 class App
     
@@ -258,6 +258,7 @@ class App
             webPreferences: 
                 webSecurity:            false
                 backgroundThrottling:   false
+                contextIsolation:       false
                 nodeIntegration:        true
                 enableRemoteModule:     true
     
@@ -276,10 +277,10 @@ class App
         @win.on 'closed' => @win = null
         @win.on 'close'  => @hideDock()
         @win.on 'ready-to-show' (event) => 
-            win = event.sender
-            onReadyToShow? win 
-            win.show() 
-            post.emit 'winReady' win.id
+            w = event.sender
+            onReadyToShow? w
+            w.show() 
+            post.emit 'winReady' w.id
         @showDock()
                 
         @win

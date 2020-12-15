@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ $, _, drag, elem, empty, keyinfo, kstr, menu, noon, post, prefs, scheme, sds, slash, stopEvent, win } = require './kxk'
+{ $, _, drag, elem, empty, keyinfo, kstr, menu, noon, post, prefs, scheme, sds, slash, stopEvent } = require './kxk'
 
 class Title
     
@@ -108,16 +108,16 @@ class Title
         if event.target.nodeName == 'INPUT'
             return 'skip'
         electron = require 'electron'
-        win = electron.remote.getCurrentWindow()
-        win.titleDrag = false
-        @startBounds = win.getBounds()    
+        w = electron.remote.getCurrentWindow()
+        w.titleDrag = false
+        @startBounds = w.getBounds()    
     
     onDragMove: (drag, event) => 
         
-        win.titleDrag = true
         electron = require 'electron'
-        win = electron.remote.getCurrentWindow()
-        win.setBounds 
+        w = electron.remote.getCurrentWindow()
+        w.titleDrag = true
+        w.setBounds 
             x:      @startBounds.x + drag.deltaSum.x 
             y:      @startBounds.y + drag.deltaSum.y 
             width:  @startBounds.width 
@@ -165,7 +165,7 @@ class Title
     onMenuAction: (action, args) =>
         
         electron = require 'electron'  
-        win = electron.remote.getCurrentWindow()
+        w = electron.remote.getCurrentWindow()
         
         switch action
             when 'Toggle Menu'      then @toggleMenu()
@@ -174,16 +174,16 @@ class Title
             when 'Hide Menu'        then @hideMenu()
             when 'Toggle Scheme'    
                 if @opt.scheme != false then scheme.toggle()
-            when 'DevTools'         then win.webContents.toggleDevTools()
-            when 'Reload'           then win.webContents.reloadIgnoringCache()
-            when 'Close'            then win.close()
-            when 'Hide'             then win.hide()
-            when 'Minimize'         then win.minimize()
+            when 'DevTools'         then w.webContents.toggleDevTools()
+            when 'Reload'           then w.webContents.reloadIgnoringCache()
+            when 'Close'            then w.close()
+            when 'Hide'             then w.hide()
+            when 'Minimize'         then w.minimize()
             when 'Maximize' 
                 wa = electron.remote.screen.getPrimaryDisplay().workAreaSize
-                wb = win.getBounds()
-                maximized = win.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
-                if maximized then win.unmaximize() else win.maximize()  
+                wb = w.getBounds()
+                maximized = w.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
+                if maximized then w.unmaximize() else w.maximize()  
 
     menuTemplate: ->
         
