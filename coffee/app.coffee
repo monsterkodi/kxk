@@ -241,6 +241,8 @@ class App
             height:             height
             minWidth:           @opt.minWidth           ? 250
             minHeight:          @opt.minHeight          ? 250
+            maxWidth:           @opt.maxWidth           ? 100000
+            maxHeight:          @opt.maxHeight          ? 100000
             backgroundColor:    @opt.backgroundColor    ? '#181818'
             frame:              @opt.frame              ? false
             transparent:        @opt.transparent        ? false
@@ -276,13 +278,12 @@ class App
             @win.on 'move'   @saveBounds
         @win.on 'closed' => @win = null
         @win.on 'close'  => @hideDock()
-        @win.on 'ready-to-show' (event) => 
-            w = event.sender
-            onReadyToShow? w
-            w.show() 
-            post.emit 'winReady' w.id
+        @win.on 'ready-to-show' () => 
+            onReadyToShow? @win
+            @win.show() 
+            post.emit 'winReady' @win.id
+            
         @showDock()
-                
         @win
 
     saveBounds: => if @win? then prefs.set 'bounds' @win.getBounds()

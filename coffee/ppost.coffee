@@ -74,7 +74,7 @@ else
             try
                 ipc = require('electron').ipcMain
                 ipc?.on POST, (event, kind, type, argl, id) =>
-                    id = id or event.sender.id
+                    id = id or event?.sender.id
                     switch kind
                         when 'toMain'      then @sendToMain type, argl
                         when 'toAll'       then @sendToWins(type, argl).sendToMain(type, argl)
