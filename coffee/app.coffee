@@ -259,7 +259,7 @@ class App
             icon:               @resolve @opt.icon 
             webPreferences: 
                 webSecurity:            false
-                backgroundThrottling:   false
+                # backgroundThrottling:   false
                 contextIsolation:       false
                 nodeIntegration:        true
                 enableRemoteModule:     true
