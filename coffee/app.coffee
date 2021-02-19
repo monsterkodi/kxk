@@ -6,6 +6,10 @@
 000   000  000        000        
 ###
 
+delete process.env.ELECTRON_ENABLE_SECURITY_WARNINGS
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
+process.env.NODE_NO_WARNINGS = 1
+
 { about, args, childp, empty, klog, os, post, prefs, slash, srcmap, valid, watch } = require './kxk'
 
 class App
@@ -262,6 +266,7 @@ class App
                 # backgroundThrottling:   false
                 contextIsolation:       false
                 nodeIntegration:        true
+                nodeIntegrationInWorker: true,
                 enableRemoteModule:     true
     
         @win.setPosition bounds.x, bounds.y if bounds?

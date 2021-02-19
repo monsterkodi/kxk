@@ -17,7 +17,13 @@ class About
     @show: (opt) ->
 
         About.opt = opt
+        # About.opt.debug = true
+        
         electron  = require 'electron'
+        
+        electron.protocol.registerFileProtocol 'file', (request, callback) -> 
+            callback decodeURI request.url.replace 'file:///', ''
+        
         Browser   = electron.BrowserWindow
         ipc       = electron.ipcMain
 
@@ -43,8 +49,11 @@ class About
             width:           About.opt?.size ? 300
             height:          About.opt?.size ? 300
             webPreferences:
-                webSecurity: false
-                nodeIntegration: true
+                webSecurity:             false
+                contextIsolation:        false
+                nodeIntegration:         true
+                enableRemoteModule:      true
+                nodeIntegrationInWorker: true,
 
         version = About.opt?.version ? About.opt?.pkg?.version
         html = """
@@ -101,8 +110,8 @@ class About
                     var a = document.getElementById('about');
                     a.onclick   = function () { ipc.send('closeAbout'); }
                     a.onblur    = function () { ipc.send('blurAbout');  }
-                    a.onkeydown = function () { console.log('close'); ipc.send('closeAbout'); }
-                    a.focus()
+                    a.onkeydown = function () { ipc.send('closeAbout'); }
+                    a.focus()                    
                 </script>
             </body>
         </html>
