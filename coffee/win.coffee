@@ -15,7 +15,6 @@ class Win
         window.onerror = (msg, source, line, col, err) ->
             
             error 'window.onerror' msg, source, line, col
-            srcmap = require './srcmap'
             srcmap.logErr err
             true
         
@@ -53,6 +52,8 @@ class Win
         if _.isFunction @opt.onShow
             onShow = => @opt.onShow(); @win.removeListener 'ready-to-show' onShow
             @win.on 'ready-to-show' onShow
+        else
+            @win.on 'ready-to-show' => @win.show()
 
         if _.isFunction @opt.onLoad
             onLoad = => @opt.onLoad(); @win.webContents.removeListener 'did-finish-load' onLoad
