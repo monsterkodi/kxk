@@ -251,7 +251,7 @@ class App
             frame:              @opt.frame              ? false
             transparent:        @opt.transparent        ? false
             fullscreen:         @opt.fullscreen         ? false
-            fullscreenenable:   @opt.fullscreenenable   ? true
+            fullscreenable:     @opt.fullscreenable     ? true
             acceptFirstMouse:   @opt.acceptFirstMouse   ? true
             resizable:          @opt.resizable          ? true
             maximizable:        @opt.maximizable        ? true
