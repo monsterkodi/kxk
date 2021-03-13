@@ -25,8 +25,11 @@ class Pos
         @x = 0 if isNaN @x
         @y = 0 if isNaN @y
         
-    copy: -> new Pos @x, @y
+    copy:  -> new Pos @x, @y
+    clone: -> new Pos @x, @y
 
+    reset: -> @x = @y = 0
+    
     plus: (val) ->
         newPos = @copy()
         if val?

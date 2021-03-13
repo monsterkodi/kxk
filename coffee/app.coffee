@@ -15,7 +15,7 @@ process.env.NODE_NO_WARNINGS = 1
 class App
     
     @: (@opt) ->
-
+        
         process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
         
         process.on 'uncaughtException' (err) ->
@@ -28,6 +28,8 @@ class App
         electron = require 'electron'
         @app = electron.app
         @userData = slash.userData()
+        
+        @app.commandLine.appendSwitch 'disable-site-isolation-trials'
         
         electron.Menu.setApplicationMenu @opt.menu
                 

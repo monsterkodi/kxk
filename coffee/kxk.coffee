@@ -126,7 +126,7 @@ module.exports =
             msg = chai.util.flag(obj, 'negate') and args[2] or args[1]
             if typeof msg == "function" then msg = msg()
             msg ?= ''
-            msg .replace /#\{this\}/g, -> yellowBright '\n'+noon.stringify(chai.util.flag obj, 'object')+'\n\n'
+            msg .replace /#\{this\}/g, -> yellow bold  '\n'+noon.stringify(chai.util.flag obj, 'object')+'\n\n'
                 .replace /#\{act\}/g,  -> magenta      '\n'+noon.stringify(chai.util.getActual obj, args)+'\n'
                 .replace /#\{exp\}/g,  -> green        '\n'+noon.stringify(args[3])+'\n'
         chai
