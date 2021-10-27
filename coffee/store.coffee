@@ -6,7 +6,7 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ noon, post, atomic, first, sds, slash, fs, kerror, _ } = require './kxk'
+{ _, atomic, kerror, noon, post, sds, slash } = require './kxk'
 
 Emitter = require 'events'
 
@@ -45,30 +45,30 @@ class Store extends Emitter
             Store.addStore @
             
             @timer   = null
-            @file    = opt.file ? slash.join slash.userData(), "#{@name}.noon"
+            @file    = opt.file ? slash.join post.get('userData'), "#{@name}.noon"
             @timeout = opt.timeout
                 
-            post.on 'store', (name, action, args...) =>
+            post.on 'store', (name, action, argl...) =>
                 return if @name != name
                 switch action
-                    when 'set'   then @set.apply @, args
-                    when 'get'   then @get.apply @, args
-                    when 'del'   then @del.apply @, args
+                    when 'set'   then @set.apply @, argl
+                    when 'get'   then @get.apply @, argl
+                    when 'del'   then @del.apply @, argl
                     when 'clear' then @clear()
                     when 'save'  then @save()
                 @
                 
         else
             
-            @file = slash.join slash.userData(), "#{@name}.noon"
+            @file = slash.join post.get('userData'), "#{@name}.noon"
             
-            post.on 'store', (name, action, args...) =>
+            post.on 'store', (name, action, argl...) =>
                 return if @name != name
                 switch action
-                    when 'data' then @data = args[0]
-                    when 'set'  then sds.set @data, @keypath(args[0]), args[1]
-                    when 'get'  then sds.get @data, @keypath(args[0]), args[1]
-                    when 'del'  then sds.del @data, @keypath(args[0])
+                    when 'data' then @data = argl[0]
+                    when 'set'  then sds.set @data, @keypath(argl[0]), argl[1]
+                    when 'get'  then sds.get @data, @keypath(argl[0]), argl[1]
+                    when 'del'  then sds.del @data, @keypath(argl[0])
                 
         @data = @load()
         @data = _.defaults @data, opt.defaults if opt.defaults?

@@ -12,9 +12,6 @@ POST    = '__POST__'
 
 if process.type == 'renderer'
 
-    electron = require 'electron'
-    remote   = electron.remote
-    
     # 000   000  000  000   000    
     # 000 0 000  000  0000  000    
     # 000000000  000  000 0 000    
@@ -25,9 +22,8 @@ if process.type == 'renderer'
 
         @: ->
             super()
-            @dbg = false
-            @id  = remote.getCurrentWindow().id
-            @ipc = electron.ipcRenderer
+            @dbg = true
+            @ipc = require('electron').ipcRenderer
             @ipc.on POST, (event, type, argl) => @emit.apply @, [type].concat argl
             window.addEventListener 'beforeunload' @dispose
 
@@ -37,16 +33,13 @@ if process.type == 'renderer'
             @ipc = null
 
         toAll:       (type, args...) -> @send 'toAll'       type, args
-        toOthers:    (type, args...) -> @send 'toOthers'    type, args, @id
         toMain:      (type, args...) -> @send 'toMain'      type, args
-        toOtherWins: (type, args...) -> @send 'toOtherWins' type, args, @id
-        toWins:      (type, args...) -> @send 'toWins'      type, args
-        toWin:   (id, type, args...) -> @send 'toWin'       type, args, id
+        toOtherWins: (type, args...) -> @send 'toOtherWins' type, args
         
         get:         (type, args...) -> @ipc.sendSync POST, 'get' type, args
 
-        debug: (@dbg=['emit' 'toAll' 'toOthers' 'toMain' 'toOtherWins' 'toWins' 'toWin']) ->
-            log "post.debug id:#{@id}" @dbg
+        debug: (@dbg=['emit' 'toAll' 'toMain' 'toOtherWins']) ->
+            log "post.debug id:#{@winid()}" @dbg
 
         emit: (type, args...) -> 
             if 'emit' in @dbg then log "post.emit #{type}" args.map((a) -> new String(a)).join ' '
@@ -73,20 +66,17 @@ else
             @getCallbacks = {}
             try
                 ipc = require('electron').ipcMain
-                ipc?.on POST, (event, kind, type, argl, id) =>
-                    id = id or event?.sender?.id
+                ipc?.on POST, (event, kind, type, argl) =>
+                    id = event?.sender?.id
                     switch kind
-                        when 'toMain'      then @sendToMain type, argl
                         when 'toAll'       then @sendToWins(type, argl).sendToMain(type, argl)
-                        when 'toOthers'    then @sendToWins(type, argl, id).sendToMain(type, argl)
+                        when 'toMain'      then @sendToMain type, argl
                         when 'toOtherWins' then @sendToWins type, argl, id
-                        when 'toWins'      then @sendToWins type, argl
-                        when 'toWin'       
-                            if @dbg then log 'to win' id, type, argl
-                            @toWin.apply @, [id, type].concat argl
                         when 'get'
                             if @dbg then log 'post get' type, argl, @getCallbacks[type]
-                            if _.isFunction @getCallbacks[type]
+                            if type == 'winID'
+                                event.returnValue = id
+                            else if _.isFunction @getCallbacks[type]
                                 retval = @getCallbacks[type].apply @getCallbacks[type], argl
                                 event.returnValue = retval ? []
             catch err
@@ -100,6 +90,8 @@ else
         onGet: (type, cb) ->
             @getCallbacks[type] = cb
             @
+            
+        get: (type) -> @getCallbacks[type]()
 
         sendToMain: (type, argl) ->
             if @dbg then log "post to main" type, argl

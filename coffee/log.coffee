@@ -19,8 +19,7 @@ infos = []
 
 dumpInfos = ->
     
-    fs     = require 'fs'
-    slash  = require 'kslash'
+    { fs, kstr, post, slash } = require './kxk'
     stream = fs.createWriteStream slash.resolve(slog.logFile), flags:'a' encoding:'utf8'
     while infos.length
         info = infos.shift()
@@ -29,8 +28,7 @@ dumpInfos = ->
 
 dumpImmediately = ->
     
-    fs    = require 'fs'
-    slash = require 'kslash'
+    { fs, slash } = require './kxk'
     data  = ''
     while infos.length
         info = infos.shift()
@@ -69,8 +67,7 @@ fileLog = (info) ->
 
 slog = (s) ->
     
-    slash = require 'kslash'
-    {post, kstr } = require './kxk'
+    { kstr, post, slash } = require './kxk'
     
     try # fancy log with source-mapped files and line numbers
         f = stack.capture()[slog.depth]
@@ -131,12 +128,12 @@ if process.platform == 'win32'
     slog.logFile = '~/AppData/Roaming/klog.txt'
 else if process.platform == 'darwin'
     slog.logFile = '~/Library/Application Support/klog.txt'
-else
-    slash = require 'kslash'
-    if slash.isFile '~/AppData/Roaming/klog.txt'
-        slog.logFile = '~/AppData/Roaming/klog.txt'
-    else
-        slog.file = false
+# else
+    # slash = require 'kslash'
+    # if slash.isFile '~/AppData/Roaming/klog.txt'
+        # slog.logFile = '~/AppData/Roaming/klog.txt'
+    # else
+        # slog.file = false
 
 slog.id      = '???'
 slog.type    = if process.type == 'renderer' then 'win' else 'main'
@@ -150,27 +147,27 @@ slog.methpad = 15
 klog.slog    = slog
 klog.flog    = fileLog
 
-try
-    electron = require 'electron'
-    if process.type == 'renderer'
-        app = electron.remote.app
-    else
-        app = electron.app
-    slog.id = app.getName()
-    slash = require 'kslash'
-    slog.logFile = slash.join app.getPath('appData'), 'klog.txt'
-catch err
-    try
-        slash = require 'kslash'
-        if process.argv[0].length and slash.base(process.argv[0]) in ['node' 'coffee' 'koffee' 'electron']
-            if process.argv[1]?.length
-                slog.id = slash.base process.argv[1]
-        else if slash.ext(process.argv[-1]) in ['js']
-            slog.id = slash.base process.argv[-1]
-        else
-            warn "can't figure out slog.id -- process.argv:" process.argv.join ' '
-    catch err
-        null
+# try
+    # electron = require 'electron'
+    # if process.type == 'renderer'
+        # slog.id = 'todo'
+    # else
+        # slog.id = electron.app.getName()
+    # # slash = require 'kslash'
+    # # slog.logFile = slash.join slash.userData(), 'klog.txt'
+# catch err
+    # warn err
+    # try
+        # slash = require 'kslash'
+        # if process.argv[0].length and slash.base(process.argv[0]) in ['node' 'coffee' 'koffee' 'electron']
+            # if process.argv[1]?.length
+                # slog.id = slash.base process.argv[1]
+        # else if slash.ext(process.argv[-1]) in ['js']
+            # slog.id = slash.base process.argv[-1]
+        # else
+            # warn "can't figure out slog.id -- process.argv:" process.argv.join ' '
+    # catch err
+        # null
     
 module.exports = klog
 

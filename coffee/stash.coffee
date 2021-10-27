@@ -6,7 +6,7 @@
 0000000      000     000   000  0000000   000   000  
 ###
 
-{ noon, atomic, slash, fs, sds, kerror, _ } = require './kxk'
+{ _, atomic, fs, kerror, noon, post, sds, slash } = require './kxk'
 
 # simple key value store with delayed saving to userData folder
 # does not sync between processes
@@ -17,12 +17,9 @@ class Stash
 
         return kerror 'stash.constructor -- no name?' if not @name
         
-        electron = require 'electron'
-        app  = electron.app ? electron.remote.app
-
         @sep = opt?.separator ? ':'
         @timer   = null
-        @file    = slash.path opt?.file ? "#{slash.userData()}/#{@name}.noon"
+        @file    = slash.path opt?.file ? "#{post.get 'userData'}/#{@name}.noon"
         @timeout = opt?.timeout ? 4000
         @changes = []
         

@@ -6,14 +6,14 @@
 000   000  000   000   0000000   0000000 
 ###
 
-{ karg, post, slash, noon, empty, valid, fs, kerror, _ } = require './kxk'
-
 if process.type == 'renderer'
     
-    module.exports = post.get 'args'
+    module.exports = require('./kxk').post.get 'args'
     
 else
-        
+
+    { empty, karg, kerror, noon, post, slash, valid } = require './kxk'
+    
     args = {} 
         
     args.init = (cfg, kargOpt) ->
@@ -66,6 +66,6 @@ else
             
         args
     
-    post?.onGet 'args', => args
+    post.onGet 'args' => args
     
     module.exports = args

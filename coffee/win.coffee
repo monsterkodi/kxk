@@ -23,15 +23,14 @@ class Win
         
         if @opt.icon
             klog.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
-        
-        electron = require 'electron'
-        
-        @win = window.win = electron.remote.getCurrentWindow()
-        @id  = window.winID = @win.id
+               
+        @id = window.winID = post.get 'winID'
         
         @modifiers = ''
 
-        @userData = slash.userData()
+        @userData = post.get 'userData'
+        
+        klog 'kxk.Win id' @id, 'userData' @userData
         
         post.on 'menuAction' @onMenuAction
         
@@ -52,8 +51,8 @@ class Win
         if _.isFunction @opt.onShow
             onShow = => @opt.onShow(); @win.removeListener 'ready-to-show' onShow
             @win.on 'ready-to-show' onShow
-        else
-            @win.on 'ready-to-show' => @win.show()
+        # else
+            # @win.on 'ready-to-show' => @win.show()
 
         if _.isFunction @opt.onLoad
             onLoad = => @opt.onLoad(); @win.webContents.removeListener 'did-finish-load' onLoad

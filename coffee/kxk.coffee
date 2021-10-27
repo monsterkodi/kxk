@@ -172,6 +172,7 @@ if not Array.prototype.reversed
 module.exports.klog        = require './log'
 module.exports.kerror      = require './error'
 module.exports.kpos        = require './pos'
+module.exports.args        = require './args'
 
 module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'
 
@@ -191,7 +192,6 @@ module.exports.menu        = require './menu'
 module.exports.title       = require './title'
 module.exports.matchr      = require './matchr'
 module.exports.tooltip     = require './tooltip'
-module.exports.args        = require './args'
 module.exports.srcmap      = require './srcmap'
 module.exports.watch       = require './watch'
 module.exports.app         = require './app'

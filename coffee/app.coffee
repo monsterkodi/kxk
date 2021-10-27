@@ -27,7 +27,10 @@ class App
             
         electron = require 'electron'
         @app = electron.app
-        @userData = slash.userData()
+        @userData = @app.getPath 'userData'
+        
+        post.onGet 'appName'  @onGetAppName
+        post.onGet 'userData' @onGetUserData
         
         @app.commandLine.appendSwitch 'disable-site-isolation-trials'
         
@@ -64,8 +67,12 @@ class App
                     @app.quit()
                     return
         
-        post.on 'showAbout' @showAbout
-        post.on 'quitApp'   @quitApp
+        electron.ipcMain.on 'menuAction'   @onMenuAction
+        electron.ipcMain.on 'getWinBounds' @onGetWinBounds
+        electron.ipcMain.on 'setWinBounds' @onSetWinBounds
+                    
+        post.on 'showAbout'   @showAbout
+        post.on 'quitApp'     @quitApp
 
         @app.setName @opt.pkg.name
         @app.on 'ready' @onReady
@@ -178,6 +185,9 @@ class App
         @app.exit 0
         process.exit 0
         
+    onGetAppName:  => @app.getName()
+    onGetUserData: => @userData
+        
     # 0000000     0000000    0000000  000   000  
     # 000   000  000   000  000       000  000   
     # 000   000  000   000  000       0000000    
@@ -268,9 +278,9 @@ class App
                 # backgroundThrottling:   false
                 contextIsolation:       false
                 nodeIntegration:        true
-                nodeIntegrationInWorker: true,
-                enableRemoteModule:     true
-    
+                nodeIntegrationInWorker: true
+                # enableRemoteModule:     true
+   
         @win.setPosition bounds.x, bounds.y if bounds?
     
         if @opt.indexURL
@@ -298,6 +308,31 @@ class App
         electron = require 'electron'
         electron.screen.getPrimaryDisplay().workAreaSize
     
+    onMenuAction: (event, action) ->
+        
+        electron = require 'electron'
+        w = electron.BrowserWindow.fromId event.sender.id
+        return if not w
+        switch action
+            when 'DevTools'         then w.webContents.toggleDevTools()
+            when 'Reload'           then w.webContents.reloadIgnoringCache()
+            when 'Close'            then w.close()
+            when 'Hide'             then w.hide()
+            when 'Minimize'         then w.minimize()
+            when 'Maximize' 
+                wa = electron.screen.getPrimaryDisplay().workAreaSize
+                wb = w.getBounds()
+                maximized = w.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
+                if maximized then w.unmaximize() else w.maximize()  
+      
+    onSetWinBounds: (event, bounds) ->
+        w = require('electron').BrowserWindow.fromId event.sender.id
+        w.setBounds bounds
+        
+    onGetWinBounds: (event) ->
+        w = require('electron').BrowserWindow.fromId event.sender.id
+        event.returnValue = w.getBounds()
+        
     # 000   000   0000000   000000000   0000000  000   000  00000000  00000000     
     # 000 0 000  000   000     000     000       000   000  000       000   000    
     # 000000000  000000000     000     000       000000000  0000000   0000000      
