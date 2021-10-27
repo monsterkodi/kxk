@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ $, _, drag, elem, empty, keyinfo, klog, kstr, menu, noon, post, prefs, scheme, sds, slash, stopEvent } = require './kxk'
+{ $, _, drag, elem, empty, keyinfo, kstr, menu, noon, post, prefs, scheme, sds, slash, stopEvent } = require './kxk'
 
 class Title
     
@@ -108,15 +108,16 @@ class Title
         if event.target.nodeName == 'INPUT'
             return 'skip'
             
-        @startBounds = require('electron').ipcRenderer.sendSync 'getWinBounds'
+        @startBounds = window.win.getBounds()
     
     onDragMove: (drag, event) => 
 
-        require('electron').ipcRenderer.send 'setWinBounds', 
-            x:      @startBounds.x + drag.deltaSum.x 
-            y:      @startBounds.y + drag.deltaSum.y 
-            width:  @startBounds.width 
-            height: @startBounds.height
+        if @startBounds
+            window.win.setBounds
+                x:      @startBounds.x + drag.deltaSum.x 
+                y:      @startBounds.y + drag.deltaSum.y 
+                width:  @startBounds.width 
+                height: @startBounds.height
     
     #  0000000  00000000  000000000  000000000  000  000000000  000      00000000  
     # 000       000          000        000     000     000     000      000       
@@ -259,7 +260,7 @@ class Title
 
         { mod, key, combo } = keyinfo.forEvent event
         
-        klog "mod #{mod} key #{key} combo #{combo}"
+        # klog "mod #{mod} key #{key} combo #{combo}"
         
         mainMenu = @menuTemplate()
             
@@ -277,7 +278,7 @@ class Title
             if combo in combos
                 keypath.pop()
                 item = sds.get mainMenu, keypath
-                klog 'kxk.title.handleKey item' item
+                # klog 'kxk.title.handleKey item' item
                 post.emit 'menuAction' item.action ? item.text, item
                 return item
 

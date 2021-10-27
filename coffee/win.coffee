@@ -6,7 +6,9 @@
 00     00  000  000   000  
 ###
 
-{ $, _, empty, fs, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, srcmap, stopEvent, title, valid } = require './kxk'
+{ $, _, empty, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, srcmap, stopEvent, title } = require './kxk'
+
+electron = require 'electron'
 
 class Win
     
@@ -24,8 +26,9 @@ class Win
         if @opt.icon
             klog.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
                
-        @id = window.winID = post.get 'winID'
-        
+        @id = window.winID = electron.ipcRenderer.sendSync 'getWinID'
+        window.win = @
+
         @modifiers = ''
 
         @userData = post.get 'userData'
@@ -33,6 +36,7 @@ class Win
         klog 'kxk.Win id' @id, 'userData' @userData
         
         post.on 'menuAction' @onMenuAction
+        post.on 'winMoved'   @onMoved
         
         @opt.title ?= process.argv[0].endsWith('Electron Helper') and ['version'] or []
         
@@ -58,24 +62,10 @@ class Win
             # onLoad = => @opt.onLoad(); @win.webContents.removeListener 'did-finish-load' onLoad
             # @win.webContents.on 'did-finish-load' onLoad
             
-    #  0000000   0000000  00000000   00000000  00000000  000   000   0000000  000   000   0000000   000000000
-    # 000       000       000   000  000       000       0000  000  000       000   000  000   000     000
-    # 0000000   000       0000000    0000000   0000000   000 0 000  0000000   000000000  000   000     000
-    #      000  000       000   000  000       000       000  0000       000  000   000  000   000     000
-    # 0000000    0000000  000   000  00000000  00000000  000   000  0000000   000   000   0000000      000
-    
-    screenshot: ->
+    getBounds:     -> electron.ipcRenderer.sendSync 'getWinBounds'
+    setBounds: (b) -> electron.ipcRenderer.send 'setWinBounds' b
+    onMoved:       =>
         
-        @win.webContents.capturePage().then (img) =>
-            
-            file = slash.unused "~/Desktop/#{@opt.pkg.name}.png"
-            
-            fs.writeFile file, img.toPNG(), (err) ->
-                if valid err
-                    klog 'saving screenshot failed' err
-                else
-                    klog "screenshot saved to #{file}"
-            
     # 00     00  00000000  000   000  000   000   0000000    0000000  000000000  000   0000000   000   000  
     # 000   000  000       0000  000  000   000  000   000  000          000     000  000   000  0000  000  
     # 000000000  0000000   000 0 000  000   000  000000000  000          000     000  000   000  000 0 000  
@@ -87,10 +77,9 @@ class Win
         klog 'kxk.win.onMenuAction' action
         
         switch action
-            when 'Screenshot'  then return @screenshot()
             when 'Preferences' then return open prefs.store.file
           
-        require('electron').ipcRenderer.send 'menuAction' action
+        electron.ipcRenderer.send 'menuAction' action
         'unhandled'
 
     #  0000000   0000000   000   000  000000000  00000000  000   000  000000000  
@@ -129,10 +118,8 @@ class Win
     # 000   000  00000000     000
     
     onKeyDown: (event) =>
-    
-        return stopEvent(event) if 'unhandled' != window.titlebar.handleKey event, true
         
-        info = keyinfo.forEvent event
+        return stopEvent(event) if 'unhandled' != window.titlebar.handleKey event, true
     
         @modifiers = info.mod
         

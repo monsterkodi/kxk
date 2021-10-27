@@ -10,14 +10,14 @@ delete process.env.ELECTRON_ENABLE_SECURITY_WARNINGS
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 process.env.NODE_NO_WARNINGS = 1
 
-{ about, args, childp, empty, klog, os, post, prefs, slash, srcmap, valid, watch } = require './kxk'
+{ about, args, childp, empty, fs, klog, os, post, prefs, slash, srcmap, valid, watch, win } = require './kxk'
 
+electron = require 'electron'
+        
 class App
     
     @: (@opt) ->
-        
-        process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
-        
+                
         process.on 'uncaughtException' (err) ->
             srcmap = require './srcmap'    
             srcmap.logErr err, '🔻'
@@ -25,7 +25,6 @@ class App
         
         @watchers = []
             
-        electron = require 'electron'
         @app = electron.app
         @userData = @app.getPath 'userData'
         
@@ -70,12 +69,13 @@ class App
         electron.ipcMain.on 'menuAction'   @onMenuAction
         electron.ipcMain.on 'getWinBounds' @onGetWinBounds
         electron.ipcMain.on 'setWinBounds' @onSetWinBounds
+        electron.ipcMain.on 'getWinID'     @onGetWinID
                     
         @app.setName @opt.pkg.name
         @app.on 'ready' @onReady
         @app.on 'activate' @onActivate
         @app.on 'window-all-closed' (event) => 
-            if not @opt.singleWindow
+            if @opt.tray
                 event.preventDefault()        
             else
                 @quitApp()
@@ -104,7 +104,6 @@ class App
                 prefs.init separator:sep
     
         if valid prefs.get 'shortcut'
-            electron = require 'electron'
             electron.globalShortcut.register prefs.get('shortcut'), @opt.onShortcut ? @showWindow
              
         if args.watch
@@ -126,7 +125,6 @@ class App
     
     initTray: =>
         
-        electron = require 'electron'
         trayImg = @resolve @opt.tray
         @tray = new electron.Tray trayImg
         @tray.on 'click' @toggleWindowFromTray
@@ -200,18 +198,9 @@ class App
     #000   000  000  000  0000  000   000  000   000  000   000
     #00     00  000  000   000  0000000     0000000   00     00
     
-    toggleWindow: =>
-         
-        if @win?.isVisible()
-            @win.hide()
-            @hideDock()
-        else
-            @showWindow()
-
     toggleWindowFromTray: => @showWindow()
        
-    onActivate: (event, hasVisibleWindows) => 
-        
+    onActivate: (event, hasVisibleWindows) =>
         
         if @opt.onActivate
             if @opt.onActivate event, hasVisibleWindows
@@ -239,8 +228,6 @@ class App
     
     createWindow: (onReadyToShow) =>
     
-        electron = require 'electron'
-        
         onReadyToShow ?= @opt.onWinReady
         
         if @opt.saveBounds != false
@@ -283,17 +270,22 @@ class App
         else
             @win.loadURL slash.fileUrl @resolve @opt.index
         
+        @win.webContents.on 'devtools-opened' (event) -> post.toWin event.sender.id, 'devTools' true
+        @win.webContents.on 'devtools-closed' (event) -> post.toWin event.sender.id, 'devTools' false
+            
         @win.webContents.openDevTools(mode:'detach') if args.devtools
         if @opt.saveBounds != false
             @win.setPosition bounds.x, bounds.y if bounds?
             @win.on 'resize' @saveBounds
             @win.on 'move'   @saveBounds
         @win.on 'closed' => @win = null
-        @win.on 'close'  => @hideDock()
-        @win.on 'ready-to-show' => 
-            onReadyToShow? @win
-            @win.show() 
-            post.emit 'winReady' @win.id
+        @win.on 'close'  => if @opt.single then @hideDock()
+        @win.on 'moved'  (event) => post.toWin event.sender, 'winMoved' event.sender.getBounds()
+        @win.on 'ready-to-show' ((w, orts) -> -> 
+            orts? w
+            w.show() 
+            post.emit 'winReady' w.id
+            ) @win, onReadyToShow 
             
         @showDock()
         @win
@@ -311,17 +303,23 @@ class App
     onGetWinBounds: (event) =>
         
         event.returnValue = @winForEvent(event)?.getBounds()
-        
+       
+    onGetWinID: (event) => event.returnValue = event.sender.id
+ 
     saveBounds: => if @win? then prefs.set 'bounds' @win.getBounds()
-    screenSize: -> 
         
-        electron = require 'electron'
-        electron.screen.getPrimaryDisplay().workAreaSize
+    screenSize: -> electron.screen.getPrimaryDisplay().workAreaSize
         
-    winForEvent: (event) ->
+    allWins: -> electron.BrowserWindow.getAllWindows().sort (a,b) -> a.id - b.id
+        
+    winForEvent: (event) =>
                 
-        electron = require 'electron'
-        electron.BrowserWindow.fromId event.sender.id
+        win = electron.BrowserWindow.fromId event.sender.id
+        if not win
+            klog 'no win?' event.sender.id
+            for w in @allWins()
+                klog 'win' w.id, w.webContents.id
+        win
     
     # 00     00  00000000  000   000  000   000   0000000    0000000  000000000  000   0000000   000   000  
     # 000   000  000       0000  000  000   000  000   000  000          000     000  000   000  0000  000  
@@ -335,11 +333,10 @@ class App
         
         if w = @winForEvent event
             
-            klog 'kxk.app.onMenuAction got win!' 
-            
             switch action.toLowerCase()
                 when 'about'       then @showAbout()
                 when 'quit'        then @quitApp()
+                when 'screenshot'  then @screenshot w
                 when 'fullscreen'  then w.setFullScreen !w.isFullScreen()
                 when 'devtools'    then w.webContents.toggleDevTools()
                 when 'reload'      then w.webContents.reloadIgnoringCache()
@@ -351,7 +348,27 @@ class App
                     wb = w.getBounds()
                     maximized = w.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
                     if maximized then w.unmaximize() else w.maximize()  
+        else
+            klog "kxk.app.onMenuAction NO WIN!"
               
+    #  0000000   0000000  00000000   00000000  00000000  000   000   0000000  000   000   0000000   000000000
+    # 000       000       000   000  000       000       0000  000  000       000   000  000   000     000
+    # 0000000   000       0000000    0000000   0000000   000 0 000  0000000   000000000  000   000     000
+    #      000  000       000   000  000       000       000  0000       000  000   000  000   000     000
+    # 0000000    0000000  000   000  00000000  00000000  000   000  0000000   000   000   0000000      000
+    
+    screenshot: (w) ->
+        
+        w.webContents.capturePage().then (img) =>
+            
+            file = slash.unused "~/Desktop/#{@opt.pkg.name}.png"
+            
+            fs.writeFile file, img.toPNG(), (err) ->
+                if valid err
+                    klog 'saving screenshot failed' err
+                else
+                    klog "screenshot saved to #{file}"
+            
     # 000   000   0000000   000000000   0000000  000   000  00000000  00000000     
     # 000 0 000  000   000     000     000       000   000  000       000   000    
     # 000000000  000000000     000     000       000000000  0000000   0000000      
