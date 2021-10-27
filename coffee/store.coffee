@@ -19,7 +19,7 @@ class Store extends Emitter
     @addStore: (store) ->
 
         if _.isEmpty @stores
-            post.onGet 'store', (name, action) =>
+            post.onGet 'store' (name, action) =>
                 switch action
                     when 'data'
                         return @stores[name]?.data
@@ -48,7 +48,7 @@ class Store extends Emitter
             @file    = opt.file ? slash.join post.get('userData'), "#{@name}.noon"
             @timeout = opt.timeout
                 
-            post.on 'store', (name, action, argl...) =>
+            post.on 'store' (name, action, argl...) =>
                 return if @name != name
                 switch action
                     when 'set'   then @set.apply @, argl
@@ -62,7 +62,7 @@ class Store extends Emitter
             
             @file = slash.join post.get('userData'), "#{@name}.noon"
             
-            post.on 'store', (name, action, argl...) =>
+            post.on 'store' (name, action, argl...) =>
                 return if @name != name
                 switch action
                     when 'data' then @data = argl[0]
