@@ -71,9 +71,6 @@ class App
         electron.ipcMain.on 'getWinBounds' @onGetWinBounds
         electron.ipcMain.on 'setWinBounds' @onSetWinBounds
                     
-        post.on 'showAbout'   @showAbout
-        post.on 'quitApp'     @quitApp
-
         @app.setName @opt.pkg.name
         @app.on 'ready' @onReady
         @app.on 'activate' @onActivate
@@ -274,12 +271,10 @@ class App
             show:               false
             icon:               @resolve @opt.icon 
             webPreferences: 
-                webSecurity:            false
-                # backgroundThrottling:   false
-                contextIsolation:       false
-                nodeIntegration:        true
+                webSecurity:             false
+                contextIsolation:        false
+                nodeIntegration:         true
                 nodeIntegrationInWorker: true
-                # enableRemoteModule:     true
    
         @win.setPosition bounds.x, bounds.y if bounds?
     
@@ -295,7 +290,7 @@ class App
             @win.on 'move'   @saveBounds
         @win.on 'closed' => @win = null
         @win.on 'close'  => @hideDock()
-        @win.on 'ready-to-show' () => 
+        @win.on 'ready-to-show' => 
             onReadyToShow? @win
             @win.show() 
             post.emit 'winReady' @win.id
@@ -303,36 +298,60 @@ class App
         @showDock()
         @win
 
+    # 0000000     0000000   000   000  000   000  0000000     0000000  
+    # 000   000  000   000  000   000  0000  000  000   000  000       
+    # 0000000    000   000  000   000  000 0 000  000   000  0000000   
+    # 000   000  000   000  000   000  000  0000  000   000       000  
+    # 0000000     0000000    0000000   000   000  0000000    0000000   
+    
+    onSetWinBounds: (event, bounds) =>
+
+        @winForEvent(event)?.setBounds bounds
+        
+    onGetWinBounds: (event) =>
+        
+        event.returnValue = @winForEvent(event)?.getBounds()
+        
     saveBounds: => if @win? then prefs.set 'bounds' @win.getBounds()
     screenSize: -> 
+        
         electron = require 'electron'
         electron.screen.getPrimaryDisplay().workAreaSize
-    
-    onMenuAction: (event, action) ->
         
+    winForEvent: (event) ->
+                
         electron = require 'electron'
-        w = electron.BrowserWindow.fromId event.sender.id
-        return if not w
-        switch action
-            when 'DevTools'         then w.webContents.toggleDevTools()
-            when 'Reload'           then w.webContents.reloadIgnoringCache()
-            when 'Close'            then w.close()
-            when 'Hide'             then w.hide()
-            when 'Minimize'         then w.minimize()
-            when 'Maximize' 
-                wa = electron.screen.getPrimaryDisplay().workAreaSize
-                wb = w.getBounds()
-                maximized = w.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
-                if maximized then w.unmaximize() else w.maximize()  
-      
-    onSetWinBounds: (event, bounds) ->
-        w = require('electron').BrowserWindow.fromId event.sender.id
-        w.setBounds bounds
+        electron.BrowserWindow.fromId event.sender.id
+    
+    # 00     00  00000000  000   000  000   000   0000000    0000000  000000000  000   0000000   000   000  
+    # 000   000  000       0000  000  000   000  000   000  000          000     000  000   000  0000  000  
+    # 000000000  0000000   000 0 000  000   000  000000000  000          000     000  000   000  000 0 000  
+    # 000 0 000  000       000  0000  000   000  000   000  000          000     000  000   000  000  0000  
+    # 000   000  00000000  000   000   0000000   000   000   0000000     000     000   0000000   000   000  
+    
+    onMenuAction: (event, action) =>
         
-    onGetWinBounds: (event) ->
-        w = require('electron').BrowserWindow.fromId event.sender.id
-        event.returnValue = w.getBounds()
+        klog 'kxk.app.onMenuAction' action, event.sender.id
         
+        if w = @winForEvent event
+            
+            klog 'kxk.app.onMenuAction got win!' 
+            
+            switch action.toLowerCase()
+                when 'about'       then @showAbout()
+                when 'quit'        then @quitApp()
+                when 'fullscreen'  then w.setFullScreen !w.isFullScreen()
+                when 'devtools'    then w.webContents.toggleDevTools()
+                when 'reload'      then w.webContents.reloadIgnoringCache()
+                when 'close'       then w.close()
+                when 'hide'        then w.hide()
+                when 'minimize'    then w.minimize()
+                when 'maximize' 
+                    wa = @screenSize()
+                    wb = w.getBounds()
+                    maximized = w.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
+                    if maximized then w.unmaximize() else w.maximize()  
+              
     # 000   000   0000000   000000000   0000000  000   000  00000000  00000000     
     # 000 0 000  000   000     000     000       000   000  000       000   000    
     # 000000000  000000000     000     000       000000000  0000000   0000000      

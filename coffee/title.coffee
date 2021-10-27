@@ -6,7 +6,7 @@
    000     000     000     0000000  00000000
 ###
 
-{ $, _, args, drag, elem, empty, keyinfo, kstr, menu, noon, post, prefs, scheme, sds, slash, stopEvent } = require './kxk'
+{ $, _, drag, elem, empty, keyinfo, klog, kstr, menu, noon, post, prefs, scheme, sds, slash, stopEvent } = require './kxk'
 
 class Title
     
@@ -166,8 +166,6 @@ class Title
             when 'Hide Menu'        then @hideMenu()
             when 'Toggle Scheme'    
                 if @opt.scheme != false then scheme.toggle()
-            else
-                require('electron').ipcRenderer.send 'menuAction' action, args
 
     menuTemplate: ->
         
@@ -259,7 +257,9 @@ class Title
 
     handleKey: (event) ->
 
-        { combo } = keyinfo.forEvent event
+        { mod, key, combo } = keyinfo.forEvent event
+        
+        klog "mod #{mod} key #{key} combo #{combo}"
         
         mainMenu = @menuTemplate()
             
@@ -277,6 +277,7 @@ class Title
             if combo in combos
                 keypath.pop()
                 item = sds.get mainMenu, keypath
+                klog 'kxk.title.handleKey item' item
                 post.emit 'menuAction' item.action ? item.text, item
                 return item
 

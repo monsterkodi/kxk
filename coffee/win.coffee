@@ -6,7 +6,7 @@
 00     00  000  000   000  
 ###
 
-{ $, _, args, empty, fs, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, srcmap, stopEvent, title, valid } = require './kxk'
+{ $, _, empty, fs, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, srcmap, stopEvent, title, valid } = require './kxk'
 
 class Win
     
@@ -84,14 +84,13 @@ class Win
     
     onMenuAction: (action, args) =>
 
+        klog 'kxk.win.onMenuAction' action
+        
         switch action
             when 'Screenshot'  then return @screenshot()
             when 'Preferences' then return open prefs.store.file
-            when 'Fullscreen'  then return @win.setFullScreen !@win.isFullScreen()
-            when 'About'       then return post.toMain 'showAbout'
-            when 'Quit'        then return post.toMain 'quitApp'
           
-        post.toMain 'menuAction' action, args                                
+        require('electron').ipcRenderer.send 'menuAction' action
         'unhandled'
 
     #  0000000   0000000   000   000  000000000  00000000  000   000  000000000  
