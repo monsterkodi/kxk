@@ -6,7 +6,7 @@
 00     00  000  000   000  
 ###
 
-{ $, _, empty, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, srcmap, stopEvent, title } = require './kxk'
+{ $, _, empty, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, stopEvent, title } = require './kxk'
 
 electron = require 'electron'
 
@@ -14,10 +14,13 @@ class Win
     
     @: (@opt) ->
         
-        window.onerror = (msg, source, line, col, err) ->
+        window.onerror = (msg, source, line, col, error) ->
             
-            error 'window.onerror' msg, source, line, col
-            srcmap.logErr err
+            try
+                error 'window.onerror' msg, source, line, col
+            catch err
+                console.log 'dafuk?' err
+            # srcmap.logErr err
             true
         
         sep = @opt.prefsSeperator ? '▸'

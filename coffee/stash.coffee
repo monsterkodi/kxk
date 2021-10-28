@@ -6,7 +6,7 @@
 0000000      000     000   000  0000000   000   000  
 ###
 
-{ _, atomic, fs, kerror, noon, post, sds, slash } = require './kxk'
+{ _, fs, kerror, noon, post, sds, slash } = require './kxk'
 
 # simple key value store with delayed saving to userData folder
 # does not sync between processes
@@ -88,9 +88,11 @@ class Stash
         clearTimeout @timer
         @timer = null
         try
-            # log 'save stash', @file
-            fs.ensureDirSync slash.dir @file
-            atomic.sync @file, noon.stringify @data, { indent: 2, maxalign: 8 }
+            fs.ensureDir slash.dir(@file), (err) ->
+                if not err
+                    text = noon.stringify @data, { indent: 2, maxalign: 8 }
+                    slash.writeText @file, text, (p) ->
+                        post.toMain 'stashSaved'
         catch err
             kerror "stash.save -- can't save to '#{@file}': #{err}"
         
