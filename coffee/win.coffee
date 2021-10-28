@@ -94,7 +94,7 @@ class Win
     
     onContextMenu: (event) =>
 
-        @win.focus()
+        @win?.focus()
         
         absPos = kpos event
         if not absPos?
@@ -125,6 +125,7 @@ class Win
         
         return stopEvent(event) if 'unhandled' != window.titlebar.handleKey event, true
     
+        info = keyinfo.forEvent event
         @modifiers = info.mod
         
         info.event = event

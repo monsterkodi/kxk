@@ -88,7 +88,7 @@ class Stash
         clearTimeout @timer
         @timer = null
         try
-            fs.ensureDir slash.dir(@file), (err) ->
+            fs.ensureDir slash.dir(@file), (err) =>
                 if not err
                     text = noon.stringify @data, { indent: 2, maxalign: 8 }
                     slash.writeText @file, text, (p) ->

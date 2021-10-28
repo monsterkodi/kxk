@@ -10,9 +10,9 @@ if process.type == 'renderer'
     
     module.exports = require('./kxk').post.get 'args'
     
-else if process.type == 'browser'
+else
 
-    { empty, karg, kerror, noon, post, slash, valid } = require './kxk'
+    { empty, karg, kerror, noon, slash, valid } = require './kxk'
     
     args = {} 
         
@@ -66,6 +66,6 @@ else if process.type == 'browser'
             
         args
     
-    post.onGet 'args' => args
+    post?.onGet 'args' => args
     
     module.exports = args

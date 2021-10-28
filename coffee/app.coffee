@@ -10,7 +10,7 @@ delete process.env.ELECTRON_ENABLE_SECURITY_WARNINGS
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 process.env.NODE_NO_WARNINGS = 1
 
-{ about, args, childp, empty, fs, klog, os, post, prefs, slash, srcmap, valid, watch, win } = require './kxk'
+{ about, args, childp, empty, fs, klog, os, post, prefs, slash, srcmap, valid, watch } = require './kxk'
 
 if process.type == 'browser'
     electron = require 'electron'
@@ -312,13 +312,20 @@ class App
         
     winForEvent: (event) =>
                 
-        win = electron.BrowserWindow.fromWebContents event.sender
-        if not win
+        w = electron.BrowserWindow.fromWebContents event.sender
+        if not w
             klog 'no win?' event.sender.id
             for w in @allWins()
                 klog 'win' w.id, w.webContents.id
-        win
-    
+        w
+
+    toggleDevTools: (wc) ->
+        
+        if wc.isDevToolsOpened()
+            wc.closeDevTools()
+        else
+            wc.openDevTools mode:'detach'
+        
     # 00     00  00000000  000   000  000   000   0000000    0000000  000000000  000   0000000   000   000  
     # 000   000  000       0000  000  000   000  000   000  000          000     000  000   000  0000  000  
     # 000000000  0000000   000 0 000  000   000  000000000  000          000     000  000   000  000 0 000  
@@ -336,7 +343,7 @@ class App
                 when 'quit'        then @quitApp()
                 when 'screenshot'  then @screenshot w
                 when 'fullscreen'  then w.setFullScreen !w.isFullScreen()
-                when 'devtools'    then w.webContents.toggleDevTools()
+                when 'devtools'    then @toggleDevTools w.webContents
                 when 'reload'      then w.webContents.reloadIgnoringCache()
                 when 'close'       then w.close()
                 when 'hide'        then w.hide()
@@ -348,7 +355,7 @@ class App
                     if maximized then w.unmaximize() else w.maximize()  
         else
             klog "kxk.app.onMenuAction NO WIN!"
-              
+                          
     #  0000000   0000000  00000000   00000000  00000000  000   000   0000000  000   000   0000000   000000000
     # 000       000       000   000  000       000       0000  000  000       000   000  000   000     000
     # 0000000   000       0000000    0000000   0000000   000 0 000  0000000   000000000  000   000     000

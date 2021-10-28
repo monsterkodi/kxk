@@ -94,7 +94,7 @@ slog = (s) ->
         meth = kstr.rpad f.getFunctionName(), slog.methpad
         info.str = s
         s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
-        post.emit 'slog' s, info
+        post?.emit? 'slog' s, info
         if slog.file
             fileLog info            
             
@@ -113,7 +113,7 @@ klog = ->
     {post, kstr} = require './kxk'
     s = (kstr(s) for s in [].slice.call arguments, 0).join " " 
     
-    post.emit 'log', s
+    post?.emit? 'log' s
     console.log s
     slog s
 
@@ -147,16 +147,16 @@ slog.methpad = 15
 klog.slog    = slog
 klog.flog    = fileLog
 
-# try
-    # electron = require 'electron'
-    # if process.type == 'renderer'
-        # slog.id = 'todo'
-    # else
-        # slog.id = electron.app.getName()
-    # # slash = require 'kslash'
-    # # slog.logFile = slash.join slash.userData(), 'klog.txt'
-# catch err
-    # warn err
+try
+    if process.type == 'renderer'
+        { post } = require './kxk'
+        slog.id = post.get 'appName'
+    else if process.type == 'browser'
+        slog.id = require('electron').app.getName()
+    # slash = require 'kslash'
+    # slog.logFile = slash.join slash.userData(), 'klog.txt'
+catch err
+    warn err
     # try
         # slash = require 'kslash'
         # if process.argv[0].length and slash.base(process.argv[0]) in ['node' 'coffee' 'koffee' 'electron']

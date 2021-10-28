@@ -6,7 +6,7 @@
 000       000  0000000  00000000  0000000  000  0000000      000     
 ###
 
-{ slash, fs, _ } = require './kxk'
+{ _, filter, fs, slash } = require './kxk'
 
 #   synchronous file list
 #
