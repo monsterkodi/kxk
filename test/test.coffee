@@ -4,10 +4,10 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ filelist, splitFileLine, slash, kpos, kstr, empty, valid, clamp, chai, kolor, filter, _ } = require '../'
+{ filelist, slash, empty, clamp, kpos, noon, kolor, filter, chai, _ } = require '../'
 
 kolor.globalize()
-expect = chai().expect
+chai()
 
 describe 'kxk' ->
 
@@ -63,7 +63,7 @@ describe 'kxk' ->
                 slash.normalize('dir/level1b/level1b.coffee')]
 
         it "matches extension" ->
-            (filelist 'dir' depth: 3, matchExt: slash.ext __filename).should.eql [
+            (filelist 'dir' depth: 3, matchExt: 'coffee').should.eql [
                 slash.normalize('dir/test.coffee'),
                 slash.normalize('dir/level1/test.coffee'),
                 slash.normalize('dir/level1/level2/level2.coffee'),
@@ -151,6 +151,8 @@ describe 'kxk' ->
 
     describe 'valid' ->
 
+        {valid} = require '../'
+        
         it 'false' ->
 
             (valid ''       ).should.eql false

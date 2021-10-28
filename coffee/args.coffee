@@ -10,7 +10,7 @@ if process.type == 'renderer'
     
     module.exports = require('./kxk').post.get 'args'
     
-else
+else if process.type == 'browser'
 
     { empty, karg, kerror, noon, post, slash, valid } = require './kxk'
     

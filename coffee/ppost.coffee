@@ -7,10 +7,11 @@
 ###
 _        = require 'lodash'
 Emitter  = require 'events'
-electron = require 'electron'
 POST     = '__POST__'
 
 if process.type == 'renderer'
+    
+    electron = require 'electron'
 
     # 000   000  000  000   000    
     # 000 0 000  000  0000  000    
@@ -43,6 +44,8 @@ if process.type == 'renderer'
 
 else if process.type == 'browser'
 
+    electron = require 'electron'
+    
     # 00     00   0000000   000  000   000  
     # 000   000  000   000  000  0000  000  
     # 000000000  000000000  000  000 0 000  

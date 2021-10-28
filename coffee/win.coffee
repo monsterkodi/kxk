@@ -8,7 +8,8 @@
 
 { $, _, empty, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, stopEvent, title } = require './kxk'
 
-electron = require 'electron'
+if process.type == 'renderer'
+    electron = require 'electron'
 
 class Win
     

@@ -12,7 +12,8 @@ process.env.NODE_NO_WARNINGS = 1
 
 { about, args, childp, empty, fs, klog, os, post, prefs, slash, srcmap, valid, watch, win } = require './kxk'
 
-electron = require 'electron'
+if process.type == 'browser'
+    electron = require 'electron'
         
 class App
     
