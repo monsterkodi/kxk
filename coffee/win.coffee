@@ -37,7 +37,7 @@ class Win
 
         @userData = post.get 'userData'
         
-        klog 'kxk.Win id' @id, 'userData' @userData
+        # klog 'kxk.Win id' @id, 'userData' @userData
         
         post.on 'menuAction' @onMenuAction
         post.on 'winMoved'   @onMoved
@@ -78,7 +78,7 @@ class Win
     
     onMenuAction: (action, args) =>
 
-        klog 'kxk.win.onMenuAction' action
+        # klog 'kxk.win.onMenuAction' action
         
         switch action
             when 'Preferences' then return open prefs.store.file

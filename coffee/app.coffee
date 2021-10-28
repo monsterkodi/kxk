@@ -14,7 +14,10 @@ process.env.NODE_NO_WARNINGS = 1
 
 if process.type == 'browser'
     electron = require 'electron'
-        
+    
+    post.onGet 'appName'  -> electron.app.getName()
+    post.onGet 'userData' -> electron.app.getPath 'userData'
+    
 class App
     
     @: (@opt) ->
@@ -28,10 +31,7 @@ class App
             
         @app = electron.app
         @userData = @app.getPath 'userData'
-        
-        post.onGet 'appName'  @onGetAppName
-        post.onGet 'userData' @onGetUserData
-        
+                
         @app.commandLine.appendSwitch 'disable-site-isolation-trials'
         
         electron.Menu.setApplicationMenu @opt.menu
@@ -180,10 +180,7 @@ class App
         
         @app.exit 0
         process.exit 0
-        
-    onGetAppName:  => @app.getName()
-    onGetUserData: => @userData
-        
+                
     # 0000000     0000000    0000000  000   000  
     # 000   000  000   000  000       000  000   
     # 000   000  000   000  000       0000000    
@@ -315,7 +312,7 @@ class App
         
     winForEvent: (event) =>
                 
-        win = electron.BrowserWindow.fromId event.sender.id
+        win = electron.BrowserWindow.fromWebContents event.sender
         if not win
             klog 'no win?' event.sender.id
             for w in @allWins()

@@ -102,9 +102,9 @@ class Store extends Emitter
         if @app
             clearTimeout @timer
             @timer = setTimeout @save, @timeout
-            post.toWins 'store', @name, 'set', key, value
+            post.toWins 'store' @name, 'set' key, value
         else
-            post.toMain 'store', @name, 'set', key, value
+            post.toMain 'store' @name, 'set' key, value
                     
     del: (key) -> 
     
@@ -114,9 +114,9 @@ class Store extends Emitter
         if @app
             clearTimeout @timer
             @timer = setTimeout @save, @timeout
-            post.toWins 'store', @name, 'del', key
+            post.toWins 'store' @name, 'del' key
         else
-            post.toMain 'store', @name, 'del', key
+            post.toMain 'store' @name, 'del' key
                 
     clear: ->
         
@@ -137,7 +137,7 @@ class Store extends Emitter
     reload: ->
         if @app
             @data = @load()
-            post.toWins 'store', @name, 'data', @data
+            post.toWins 'store' @name, 'data' @data
     
     load: ->
         
@@ -149,7 +149,7 @@ class Store extends Emitter
             catch err
                 {}
         else
-            post.get 'store', @name, 'data'
+            post.get 'store' @name, 'data'
         
     #  0000000   0000000   000   000  00000000
     # 000       000   000  000   000  000     
@@ -175,6 +175,6 @@ class Store extends Emitter
                 
             @emit 'didSave'
         else 
-            post.toMain 'store', @name, 'save' 
+            post.toMain 'store' @name, 'save' 
         
 module.exports = Store
