@@ -6,8 +6,6 @@
 000   000  0000000     0000000    0000000      000
 ###
 
-opener = require 'opener'
-
 class About
 
     @win = null
@@ -144,6 +142,9 @@ class About
         About.win?.close()
         About.win = null
 
-    @openURL: -> if About.url? then opener About.url
+    @openURL: ->
+    
+        opener = require 'opener'
+        if About.url? then opener About.url
 
 module.exports = About.show

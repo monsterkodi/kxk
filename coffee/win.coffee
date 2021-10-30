@@ -6,10 +6,12 @@
 00     00  000  000   000  
 ###
 
-{ $, _, empty, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, stopEvent, title } = require './kxk'
+{ $, _, empty, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, stopEvent, title, valid } = require './kxk'
 
 if process.type == 'renderer'
     electron = require 'electron'
+else
+    error "this should be used in renderer process only! process.type: #{process.type} grandpa: #{module.parent.parent?.filename} parent: #{module.parent.filename} module: #{module.filename}"
 
 class Win
     
@@ -115,6 +117,33 @@ class Win
             y:       absPos.y
             onClose: -> post.emit 'contextClosed'
     
+    openFileDialog: (title:'Open File', defaultPath:, properties:, cb:) ->
+        
+        post.toMain 'openFileDialog' title:title, defaultPath:defaultPath, properties:properties
+        if _.isFunction cb then post.once 'openFileDialogResult' (r) -> if not r.cancelled and valid r.filePaths then cb r.filePaths
+        
+    saveFileDialog: (title:'Save File', defaultPath:, cb:) ->      
+        
+        post.toMain 'saveFileDialog' title:title, defaultPath:defaultPath
+        if _.isFunction cb then post.once 'saveFileDialogResult' (r) -> klog 'r' r; if not r.cancelled and valid r.filePath then cb r.filePath
+
+    messageBox: (
+            type:       'warning'
+            buttons:    ['Ok']
+            defaultId:  0
+            cancelId:   0
+            title:      ''
+            message:    'no message!'
+            detail:     'no details!'
+            cb: 
+            ) ->
+                        
+        options = arguments[0]
+        cb = options.cb
+        delete options.cb
+        post.toMain 'messageBox' options
+        if _.isFunction cb then post.once 'messageBoxResult' (r) -> cb r
+            
     # 000   000  00000000  000   000
     # 000  000   000        000 000
     # 0000000    0000000     00000

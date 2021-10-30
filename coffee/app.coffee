@@ -18,6 +18,21 @@ if process.type == 'browser'
     post.onGet 'appName'  -> electron.app.getName()
     post.onGet 'userData' -> electron.app.getPath 'userData'
     
+    post.on 'openFileDialog' (options) ->
+        winID = post.senderWinID
+        electron.dialog.showOpenDialog(options).then (result) -> post.toWin winID, 'openFileDialogResult' result
+
+    post.on 'saveFileDialog' (options) ->
+        winID = post.senderWinID
+        electron.dialog.showSaveDialog(options).then (result) -> post.toWin winID, 'saveFileDialogResult' result
+        
+    post.on 'messageBox' (options) ->
+        winID = post.senderWinID
+        electron.dialog.showMessageBox(options).then (result) -> 
+            post.toWin winID, 'messageBoxResult' result.response
+else
+    error "this should be used in main process only! process.type: #{process.type} grandpa: #{module.parent.parent?.filename} parent: #{module.parent.filename} module: #{module.filename}"
+    
 class App
     
     @: (@opt) ->

@@ -62,8 +62,8 @@ else if process.type == 'browser'
                 ipc.on POST, (event, kind, type, argl) =>
                     id = electron.BrowserWindow.fromWebContents(event.sender).id
                     switch kind
-                        when 'toAll'       then @sendToWins(type, argl).sendToMain(type, argl)
-                        when 'toMain'      then @sendToMain type, argl
+                        when 'toAll'       then @sendToWins(type, argl).sendToMain(type, argl, id)
+                        when 'toMain'      then @sendToMain type, argl, id
                         when 'toOtherWins' then @sendToWins type, argl, id
                         when 'get'
                             if type == 'winID'
@@ -86,9 +86,12 @@ else if process.type == 'browser'
             
         get: (type) -> @getCallbacks[type]()
 
-        sendToMain: (type, argl) ->
+        sendToMain: (type, argl, id) ->
+            
+            @senderWinID = id
             argl.unshift type
             @emit.apply @, argl
+            delete @senderWinID
 
         sendToWins: (type, argl, except) ->
             for win in electron.BrowserWindow.getAllWindows()
