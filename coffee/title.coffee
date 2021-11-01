@@ -160,12 +160,12 @@ class Title
 
     onMenuAction: (action, args) =>
                 
-        switch action
-            when 'Toggle Menu'      then @toggleMenu()
-            when 'Open Menu'        then @openMenu()
-            when 'Show Menu'        then @showMenu()
-            when 'Hide Menu'        then @hideMenu()
-            when 'Toggle Scheme'    
+        switch action.toLowerCase()
+            when 'toggle menu'      then @toggleMenu()
+            when 'open menu'        then @openMenu()
+            when 'show menu'        then @showMenu()
+            when 'hide menu'        then @hideMenu()
+            when 'toggle scheme'    
                 if @opt.scheme != false then scheme.toggle()
 
     menuTemplate: ->

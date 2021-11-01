@@ -80,10 +80,8 @@ class Win
     
     onMenuAction: (action, args) =>
 
-        # klog 'kxk.win.onMenuAction' action
-        
-        switch action
-            when 'Preferences' then return open prefs.store.file
+        switch action.toLowerCase()
+            when 'preferences' then return open prefs.store.file
           
         electron.ipcRenderer.send 'menuAction' action
         'unhandled'

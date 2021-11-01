@@ -349,7 +349,7 @@ class App
     
     onMenuAction: (event, action) =>
         
-        klog 'kxk.app.onMenuAction' action, event.sender.id
+        # klog 'kxk.app.onMenuAction' action, event.sender.id
         
         if w = @winForEvent event
             

@@ -8,7 +8,7 @@
 
 if process.type == 'renderer'
     
-    module.exports = require('./kxk').post.get 'args'
+    module.exports = -> require('./kxk').post.get 'args'
     
 else
 
