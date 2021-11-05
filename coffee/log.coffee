@@ -56,7 +56,7 @@ fileLog = (info) ->
         dumpImmediately() # shell scripts need immediate dump
         
     catch err
-        error "kxk.log.fileLog -- ", err.stack
+        error "kxk.log.fileLog -- " err.stack
         slog.file = false
 
 #  0000000  000       0000000    0000000   
@@ -101,6 +101,8 @@ slog = (s) ->
     catch err
         error err
         post.emit 'slog' "!#{slog.methsep}#{s} #{err}"
+        if slog.file
+            fileLog str:s + err
 
 # 000       0000000    0000000   
 # 000      000   000  000        
