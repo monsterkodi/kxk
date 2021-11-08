@@ -195,6 +195,7 @@ module.exports.tooltip     = require './tooltip'
 module.exports.srcmap      = require './srcmap'
 module.exports.watch       = require './watch'
 module.exports.udp         = require './udp'
+
 if process.type == 'browser'
     module.exports.app     = require './app'
 else if process.type == 'renderer'

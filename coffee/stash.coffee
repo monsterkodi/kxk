@@ -23,7 +23,8 @@ class Stash
         @timeout = opt?.timeout ? 4000
         @changes = []
         
-        fs.ensureDirSync slash.dirname @file
+        # fs.ensureDirSync slash.dirname @file
+        fs.ensureDir slash.dir(@file), ->
         @data = @load()
         @data = _.defaults @data, opt.defaults if opt?.defaults?
 
@@ -88,11 +89,11 @@ class Stash
         clearTimeout @timer
         @timer = null
         try
-            fs.ensureDir slash.dir(@file), (err) =>
-                if not err
-                    text = noon.stringify @data, { indent: 2, maxalign: 8 }
-                    slash.writeText @file, text, (p) ->
-                        post.toMain 'stashSaved'
+            # fs.ensureDir slash.dir(@file), (err) =>
+            if not err
+                text = noon.stringify @data, { indent: 2, maxalign: 8 }
+                slash.writeText @file, text, (p) ->
+                    post.toMain 'stashSaved'
         catch err
             kerror "stash.save -- can't save to '#{@file}': #{err}"
         

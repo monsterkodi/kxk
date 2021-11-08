@@ -6,13 +6,11 @@
 00000000  000   000  000   000   0000000   000   000  
 ###
 
-error = ->
+module.exports =  ->
 
-    { klog, kstr } = require './kxk'
+    kxk = require './kxk'
     
-    s = '[ERROR] ' + (kstr(s) for s in [].slice.call arguments, 0).join " "
+    s = '[ERROR] ' + (kxk.kstr(s) for s in [].slice.call arguments, 0).join " "
         
     error s
-    klog.slog s
-
-module.exports = error
+    kxk.klog?.slog s
