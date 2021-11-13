@@ -27,8 +27,14 @@ class Watch extends event
     
     @watch: (path, opt) ->
     
-        slash.isDir path, (stat) ->
-            if stat
+        if opt.cb
+            slash.isDir path, (stat) ->
+                if stat
+                    opt.cb Watch.dir path, opt
+                else
+                    opt.cb Watch.file path, opt
+        else
+            if slash.isDir path
                 Watch.dir path, opt
             else
                 Watch.file path, opt
