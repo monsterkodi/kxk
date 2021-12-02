@@ -22,7 +22,7 @@ karg      = require 'karg'
 kstr      = require 'kstr'
 klor      = require 'klor'
 
-empty = (a) -> (a == '' or a == null or a == undefined or a == []) or (typeof(a) == 'object' and Object.keys(a).length == 0) or (a.length? and a.length == 0)
+empty = (a) -> a in ['' null undefined] or (typeof(a) == 'object' and not a.size? and Object.keys(a).length == 0) or a.size == 0
 
 module.exports =
 

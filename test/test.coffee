@@ -4,7 +4,7 @@
 #    000     000            000     000
 #    000     00000000  0000000      000
 
-{ filelist, slash, empty, clamp, kpos, noon, kolor, filter, chai, _ } = require '../'
+{ filelist, slash, empty, valid, clamp, kpos, noon, kolor, filter, chai, _ } = require '../'
 
 kolor.globalize()
 chai()
@@ -129,19 +129,28 @@ describe 'kxk' ->
     # 00000000  000   000  000           000        000
 
     describe 'empty' ->
-
+        
         it "''"        -> (empty ''         ).should.eql true
         it '[]'        -> (empty []         ).should.eql true
         it '{}'        -> (empty {}         ).should.eql true
         it 'null'      -> (empty null       ).should.eql true
         it 'undefined' -> (empty undefined  ).should.eql true
+        it 'map'       -> (empty new Map    ).should.eql true
+        it 'set'       -> (empty new Set    ).should.eql true
 
+        m = new Map
+        s = new Set
+        s.add 's'
+        m.set 'm' 1
+        
         it '1'         -> (empty 1          ).should.eql false
         it '0'         -> (empty 0          ).should.eql false
         it '[[]]'      -> (empty [[]]       ).should.eql false
         it 'a:null'    -> (empty a:null     ).should.eql false
         it "' '"       -> (empty ' '        ).should.eql false
         it 'Infinity'  -> (empty Infinity   ).should.eql false
+        it 'Map'       -> (empty m          ).should.eql false
+        it 'Set'       -> (empty s          ).should.eql false
 
     # 000   000   0000000   000      000  0000000
     # 000   000  000   000  000      000  000   000
@@ -151,8 +160,6 @@ describe 'kxk' ->
 
     describe 'valid' ->
 
-        {valid} = require '../'
-        
         it 'false' ->
 
             (valid ''       ).should.eql false
@@ -160,16 +167,25 @@ describe 'kxk' ->
             (valid {}       ).should.eql false
             (valid null     ).should.eql false
             (valid undefined).should.eql false
+            (valid new Map  ).should.eql false
+            (valid new Set  ).should.eql false
 
         it 'true' ->
 
+            m = new Map
+            s = new Set
+            s.add 's'
+            m.set 'm' 1
+            
             (valid 1        ).should.eql true
             (valid 0        ).should.eql true
             (valid [[]]     ).should.eql true
             (valid a:null   ).should.eql true
             (valid ' '      ).should.eql true
             (valid Infinity ).should.eql true
-
+            (valid m        ).should.eql true
+            (valid s        ).should.eql true
+            
     # 00000000  000  000      000000000  00000000  00000000
     # 000       000  000         000     000       000   000
     # 000000    000  000         000     0000000   0000000

@@ -6,7 +6,7 @@
 000   000  00000000     000     000  000   000  000        0000000   
 ###
 
-{ empty, os } = require './kxk'
+{ args, os } = require './kxk'
 
 class Keyinfo
     
@@ -25,7 +25,7 @@ class Keyinfo
     @modifierChars = ['⌂' '⌃' '⌥' '⌘']
     
     @iconKeyNames  = ['shift' 'ctrl' 'alt' 'command' 'backspace' 'delete' 'home' 'end' 'page up' 'page down' 'return' 'enter' 'up' 'down' 'left' 'right' 'tab'  'space' 'click']
-    @iconKeyChars  = ['⌂' '⌃' '⌥' '⌘' '⌫' '⌦' '↖' '↘' '⇞' '⇟' '↩' '↩' '↑' '↓' '←' '→' '⤠' '␣' '⍝'] # '⭲' '🖯' ]
+    @iconKeyChars  = ['⌂' '⌃' '⌥' '⌘' '⌫' '⌦' '↖' '↘' '⇞' '⇟' '↩' '↩' '↑' '↓' '←' '→' '⤠' '␣' '⍝']
 
     @forCombo: (combo) ->
         
