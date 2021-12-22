@@ -2,7 +2,7 @@
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}}
 
-var args, karg, kerror, slash
+var args, karg, kerror, kxk, post, slash
 
 if (process.type === 'renderer')
 {
@@ -13,12 +13,12 @@ if (process.type === 'renderer')
 }
 else
 {
-    empty = require('./kxk').empty
-    karg = require('./kxk').karg
-    kerror = require('./kxk').kerror
-    noon = require('./kxk').noon
-    slash = require('./kxk').slash
-    valid = require('./kxk').valid
+    kxk = require('./kxk')
+    karg = kxk.karg
+    kerror = kxk.kerror
+    noon = kxk.noon
+    post = kxk.post
+    slash = kxk.slash
 
     args = {}
     args.init = function (cfg, kargOpt)
@@ -102,9 +102,12 @@ else
         }
         return args
     }
-    (post != null ? post.onGet('args',(function () : undefined)
+    if ((post != null))
     {
-        return args
-    }).bind(this))
+        post.onGet('args',(function ()
+        {
+            return args
+        }).bind(this))
+    }
     module.exports = args
 }
