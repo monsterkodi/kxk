@@ -21,6 +21,8 @@ Store = (function ()
 
     Store["addStore"] = function (store)
     {
+        var _28_36_, _28_51_
+
         if (_k_.empty(this.stores))
         {
             post.onGet('store',(function (name, action)
@@ -34,20 +36,21 @@ Store = (function ()
 
             }).bind(this))
         }
-        return this.stores[store.name] = store
+        console.log('Store@addStore',(this.stores != null),(Store.stores != null),(store != null ? store.name : undefined))
+        return Store.stores[store.name] = store
     }
 
     function Store (name, opt = {})
     {
-        var electron, _38_22_, _39_22_, _53_32_, _79_62_
+        var electron, _39_22_, _40_22_, _54_32_, _80_62_
 
         this["save"] = this["save"].bind(this)
         console.log('Store')
         Store.__super__.constructor.call(this)
         console.log('Store.name',name)
         this.name = name
-        opt.separator = ((_38_22_=opt.separator) != null ? _38_22_ : ':')
-        opt.timeout = ((_39_22_=opt.timeout) != null ? _39_22_ : 4000)
+        opt.separator = ((_39_22_=opt.separator) != null ? _39_22_ : ':')
+        opt.timeout = ((_40_22_=opt.timeout) != null ? _40_22_ : 4000)
         if (!this.name)
         {
             return kerror('no name for store?')
@@ -60,7 +63,7 @@ Store = (function ()
             console.log('Store.addStore')
             Store.addStore(this)
             this.timer = null
-            this.file = ((_53_32_=opt.file) != null ? _53_32_ : slash.join(post.get('userData'),`${this.name}.noon`))
+            this.file = ((_54_32_=opt.file) != null ? _54_32_ : slash.join(post.get('userData'),`${this.name}.noon`))
             this.timeout = opt.timeout
             post.on('store',(function (name, action, ...argl)
             {
@@ -132,7 +135,7 @@ Store = (function ()
 
     Store.prototype["get"] = function (key, value)
     {
-        var _91_51_
+        var _92_51_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -143,7 +146,7 @@ Store = (function ()
 
     Store.prototype["set"] = function (key, value)
     {
-        var _102_32_, _105_14_
+        var _103_32_, _106_14_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -153,7 +156,7 @@ Store = (function ()
         {
             return
         }
-        this.data = ((_105_14_=this.data) != null ? _105_14_ : {})
+        this.data = ((_106_14_=this.data) != null ? _106_14_ : {})
         sds.set(this.data,this.keypath(key),value)
         if (this.app)
         {

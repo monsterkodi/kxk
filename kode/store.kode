@@ -25,7 +25,8 @@ function Store extends Emitter
                     when 'data'
                         return @stores[name]?.data
     
-        @stores[store.name] = store
+        log 'Store@addStore' @stores?, Store.stores?, store?.name
+        Store.stores[store.name] = store
 
     @: (name, opt={}) ->
 
