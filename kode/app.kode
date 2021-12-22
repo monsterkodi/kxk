@@ -37,7 +37,9 @@ else
 function App
     
     @: (@opt) ->
-                
+          
+        log 'App'
+        
         process.on 'uncaughtException' (err) ->
             srcmap = require './srcmap'    
             srcmap.logErr err, '🔻'
