@@ -149,7 +149,7 @@ if not String.prototype.strip
     String.prototype.strip = String.prototype.trim
 
 if not String.prototype.hash
-    String.prototype.hash = -> crypto.createHash('md5').update(@.valueOf(), 'utf8').digest('hex')
+    String.prototype.hash = -> crypto.createHash('md5').update(@valueOf(), 'utf8').digest('hex')
 
 #  0000000   00000000   00000000    0000000   000   000
 # 000   000  000   000  000   000  000   000   000 000
@@ -159,11 +159,11 @@ if not String.prototype.hash
 
 if not Array.prototype.clone
     Array.prototype.clone = ->
-        @.slice 0
+        @slice 0
 
 if not Array.prototype.reversed
     Array.prototype.reversed = ->
-        @.slice(0).reverse()
+        @slice(0).reverse()
 
 module.exports.klog        = require './log'
 module.exports.kerror      = require './error'

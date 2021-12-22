@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.187.0
+// monsterkodi/kode 0.189.0
 
-var _k_ = {noon: function (obj) { var pad = function (s, l) { while (s.length < l) { s += ' ' }; return s }; var esc = function (k, arry) { var es, sp; if (0 <= k.indexOf('\n')) { sp = k.split('\n'); es = sp.map(function (s) { return esc(s,arry) }); es.unshift('...'); es.push('...'); return es.join('\n') } if (k === '' || k === '...' || _k_.in(k[0],[' ','#','|']) || _k_.in(k[k.length - 1],[' ','#','|'])) { k = '|' + k + '|' } else if (arry && /  /.test(k)) { k = '|' + k + '|' }; return k }; var pretty = function (o, ind, seen) { var k, kl, l, v, mk = 4; if (Object.keys(o).length > 1) { for (k in o) { v = o[k]; if (o.hasOwnProperty(k)) { kl = parseInt(Math.ceil((k.length + 2) / 4) * 4); mk = Math.max(mk,kl); if (mk > 32) { mk = 32; break } } } }; l = []; var keyValue = function (k, v) { var i, ks, s, vs; s = ind; k = esc(k,true); if (k.indexOf('  ') > 0 && k[0] !== '|') { k = `|${k}|` } else if (k[0] !== '|' && k[k.length - 1] === '|') { k = '|' + k } else if (k[0] === '|' && k[k.length - 1] !== '|') { k += '|' }; ks = pad(k,Math.max(mk,k.length + 2)); i = pad(ind + '    ',mk); s += ks; vs = toStr(v,i,false,seen); if (vs[0] === '\n') { while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) } }; s += vs; while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) }; return s }; for (k in o) { v = o[k]; if (o.hasOwnProperty(k)) { l.push(keyValue(k,v)) } }; return l.join('\n') }; var toStr = function (o, ind = '', arry = false, seen = []) { var s, t, v; if (!(o != null)) { if (o === null) { return 'null' }; if (o === undefined) { return 'undefined' }; return '<?>' }; switch (t = typeof(o)) { case 'string': {return esc(o,arry)}; case 'object': { if (_k_.in(o,seen)) { return '<v>' }; seen.push(o); if ((o.constructor != null ? o.constructor.name : undefined) === 'Array') { s = ind !== '' && arry && '.' || ''; if (o.length && ind !== '') { s += '\n' }; s += (function () { var result = []; var list = _k_.list(o); for (var li = 0; li < list.length; li++)  { v = list[li];result.push(ind + toStr(v,ind + '    ',true,seen))  } return result }).bind(this)().join('\n') } else if ((o.constructor != null ? o.constructor.name : undefined) === 'RegExp') { return o.source } else { s = (arry && '.\n') || ((ind !== '') && '\n' || ''); s += pretty(o,ind,seen) }; return s } default: return String(o) }; return '<???>' }; return toStr(obj) }, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}}
+var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
 var atomic, childp, crypto, fs, k, karg, klor, kstr, noon, open, os, post, sds, slash, walkdir, _
 
@@ -19,7 +19,7 @@ slash = require('kslash')
 karg = require('karg')
 kstr = require('kstr')
 klor = require('klor')
-module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:klor.kolor,atomic:atomic,walkdir:walkdir,open:open,post:post,slash:slash,noon:_k_.noon({childp:childp,def:function (c, d)
+module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:klor.kolor,atomic:atomic,walkdir:walkdir,open:open,post:post,slash:slash,noon:noon,childp:childp,def:function (c, d)
 {
     if ((c != null))
     {
@@ -186,7 +186,7 @@ module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:kl
     var l
 
     return (function () { var result = []; var list = _k_.list(script.split("\n")); for (var _136_72_ = 0; _136_72_ < list.length; _136_72_++)  { l = list[_136_72_];result.push(`-e \"${l.replace(/\"/g,"\\\"")}\"`)  } return result }).bind(this)().join(" ")
-}})}
+}}
 if (!String.prototype.splice)
 {
     String.prototype.splice = function (start, delCount, newSubStr = '')
@@ -202,25 +202,21 @@ if (!String.prototype.hash)
 {
     String.prototype.hash = function ()
     {
-        return crypto.createHash('md5').update(this,.,valueOf(),'utf8').digest('hex')
+        return crypto.createHash('md5').update(this.valueOf(),'utf8').digest('hex')
     }
 }
 if (!Array.prototype.clone)
 {
-}
-Array.prototype.clone = function ()
-{
-    this
-    .
-    return slice(0)
+    Array.prototype.clone = function ()
+    {
+        return this.slice(0)
+    }
 }
 if (!Array.prototype.reversed)
 {
     Array.prototype.reversed = function ()
     {
-        this
-        .
-        return slice(0).reverse()
+        return this.slice(0).reverse()
     }
 }
 module.exports.klog = require('./log')
