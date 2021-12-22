@@ -475,7 +475,8 @@ watch       watch sources for changes   false`
                     return this.screenshot(w)
 
                 case 'fullscreen':
-                    return w.setFullScreen(!,w.isFullScreen())
+                    w.setFullScreen
+                    return !w.isFullScreen()
 
                 case 'devtools':
                     return this.toggleDevTools(w.webContents)
