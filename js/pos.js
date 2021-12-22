@@ -258,16 +258,10 @@ class Pos
 
     _str ()
     {
-        var s, _105_31_, _106_30_
+        var s
 
-        s = (if ((this.x != null))
-        {
-            `<x:${this.x} `
-        }) || "<NaN "
-        return s += (if ((this.y != null))
-        {
-            `y:${this.y}>`
-        }) || "NaN>"
+        s = (this.x ? `<x:${this.x} ` : "<NaN ")
+        return s += (this.y ? `y:${this.y}>` : "NaN>")
     }
 
     static isPos (o)
