@@ -38,8 +38,6 @@ function App
     
     @: (@opt) ->
           
-        log 'App'
-        
         process.on 'uncaughtException' (err) ->
             srcmap = require './srcmap'    
             srcmap.logErr err, '🔻'
@@ -99,8 +97,6 @@ function App
             else
                 @quitApp()
                 
-        log 'App~'
-        
     resolve: (file) => slash.resolve slash.join @opt.dir, file
     
     # 00000000   00000000   0000000   0000000    000   000
@@ -119,6 +115,8 @@ function App
          
         @app.setName @opt.pkg.name
     
+        log 'app.onReady2'
+        
         if not args.noprefs
             sep = @opt.prefsSeperator ? '▸'
             if @opt.shortcut
@@ -126,6 +124,8 @@ function App
             else
                 prefs.init separator:sep
     
+        log 'app.onReady3'
+                
         if valid prefs.get 'shortcut'
             electron.globalShortcut.register prefs.get('shortcut'), @opt.onShortcut ? @showWindow
              
@@ -138,7 +138,9 @@ function App
         else
             @showWindow()
 
+        log 'app.onReady4'
         post.emit 'appReady'
+        log 'app.onReady5'
         
     # 000000000  00000000    0000000   000   000  
     #    000     000   000  000   000   000 000   
