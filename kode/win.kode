@@ -115,28 +115,33 @@ class Win
             y:       absPos.y
             onClose: -> post.emit 'contextClosed'
     
-    openFileDialog: (title:'Open File', defaultPath:, properties:, cb:) ->
+    openFileDialog: (options) ->
         
-        post.toMain 'openFileDialog' title:title, defaultPath:defaultPath, properties:properties
+        options.title ?= 'Open File'
+        cb = options.cb
+        delete options.cb
+        
+        post.toMain 'openFileDialog' options
         if _.isFunction cb then post.once 'openFileDialogResult' (r) -> if not r.cancelled and valid r.filePaths then cb r.filePaths
         
-    saveFileDialog: (title:'Save File', defaultPath:, cb:) ->      
+    saveFileDialog: (options) ->      
         
-        post.toMain 'saveFileDialog' title:title, defaultPath:defaultPath
+        options.title ?= 'Save File'
+        cb = options.cb
+        delete options.cb
+        
+        post.toMain 'saveFileDialog' options
         if _.isFunction cb then post.once 'saveFileDialogResult' (r) -> klog 'r' r; if not r.cancelled and valid r.filePath then cb r.filePath
 
-    messageBox: (
-            type:       'warning'
-            buttons:    ['Ok']
-            defaultId:  0
-            cancelId:   0
-            title:      ''
-            message:    'no message!'
-            detail:     'no details!'
-            cb: 
-            ) ->
-                        
-        options = arguments[0]
+    messageBox: (options) ->
+            
+        options.type        ?= 'warning'
+        options.buttons     ?= ['Ok']
+        options.defaultId   ?= 0
+        options.cancelId    ?= 0
+        options.title       ?= ''
+        options.message     ?= 'no message!'
+        options.detail      ?= 'no details!'
         cb = options.cb
         delete options.cb
         post.toMain 'messageBox' options

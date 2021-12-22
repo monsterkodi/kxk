@@ -1,50 +1,47 @@
-// koffee 1.19.0
+// monsterkodi/kode 0.187.0
 
-/*
-000   000  000   0000000  000000000   0000000   00000000   000   000
-000   000  000  000          000     000   000  000   000   000 000 
-000000000  000  0000000      000     000   000  0000000      00000  
-000   000  000       000     000     000   000  000   000     000   
-000   000  000  0000000      000      0000000   000   000     000
- */
-var History, _, def, last, ref;
+var _k_
 
-ref = require('./kxk'), def = ref.def, last = ref.last, _ = ref._;
+var def, last, _
 
-History = (function() {
-    function History(opt) {
-        this.opt = def(opt, {
-            list: [],
-            maxLength: 100
-        });
-        this.list = opt.list;
+def = require('./kxk').def
+last = require('./kxk').last
+_ = require('./kxk')._
+
+class History
+{
+    constructor (opt)
+    {
+        this.opt = def(opt,{list:[],maxLength:100})
+        this.list = opt.list
     }
 
-    History.prototype.add = function(i) {
-        _.pullAllWith(this.list, [i], _.isEqual);
-        this.list.push(i);
-        if (this.list.length > this.opt.maxLength) {
-            return this.list.shift();
+    add (i)
+    {
+        _.pullAllWith(this.list,[i],_.isEqual)
+        this.list.push(i)
+        if (this.list.length > this.opt.maxLength)
+        {
+            return this.list.shift()
         }
-    };
+    }
 
-    History.prototype.previous = function() {
-        if (this.list.length > 1) {
-            return this.list[this.list.length - 2];
-        } else {
-            return null;
+    previous ()
+    {
+        if (this.list.length > 1)
+        {
+            return this.list[this.list.length - 2]
         }
-    };
+        else
+        {
+            return null
+        }
+    }
 
-    History.prototype.current = function() {
-        return last(this.list);
-    };
+    current ()
+    {
+        return last(this.list)
+    }
+}
 
-    return History;
-
-})();
-
-module.exports = History;
-
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaGlzdG9yeS5qcyIsInNvdXJjZVJvb3QiOiIuLi9jb2ZmZWUiLCJzb3VyY2VzIjpbImhpc3RvcnkuY29mZmVlIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUE7Ozs7Ozs7QUFBQSxJQUFBOztBQVFBLE1BQW1CLE9BQUEsQ0FBUSxPQUFSLENBQW5CLEVBQUUsYUFBRixFQUFPLGVBQVAsRUFBYTs7QUFFUDtJQUVDLGlCQUFDLEdBQUQ7UUFFQyxJQUFDLENBQUEsR0FBRCxHQUFRLEdBQUEsQ0FBSSxHQUFKLEVBQVM7WUFBQSxJQUFBLEVBQU0sRUFBTjtZQUFVLFNBQUEsRUFBVyxHQUFyQjtTQUFUO1FBQ1IsSUFBQyxDQUFBLElBQUQsR0FBUSxHQUFHLENBQUM7SUFIYjs7c0JBS0gsR0FBQSxHQUFLLFNBQUMsQ0FBRDtRQUVELENBQUMsQ0FBQyxXQUFGLENBQWMsSUFBQyxDQUFBLElBQWYsRUFBcUIsQ0FBQyxDQUFELENBQXJCLEVBQTBCLENBQUMsQ0FBQyxPQUE1QjtRQUVBLElBQUMsQ0FBQSxJQUFJLENBQUMsSUFBTixDQUFXLENBQVg7UUFDQSxJQUFHLElBQUMsQ0FBQSxJQUFJLENBQUMsTUFBTixHQUFlLElBQUMsQ0FBQSxHQUFHLENBQUMsU0FBdkI7bUJBQ0ksSUFBQyxDQUFBLElBQUksQ0FBQyxLQUFOLENBQUEsRUFESjs7SUFMQzs7c0JBUUwsUUFBQSxHQUFVLFNBQUE7UUFFTixJQUFHLElBQUMsQ0FBQSxJQUFJLENBQUMsTUFBTixHQUFlLENBQWxCO21CQUF5QixJQUFDLENBQUEsSUFBSyxDQUFBLElBQUMsQ0FBQSxJQUFJLENBQUMsTUFBTixHQUFhLENBQWIsRUFBL0I7U0FBQSxNQUFBO21CQUNLLEtBREw7O0lBRk07O3NCQUtWLE9BQUEsR0FBUyxTQUFBO2VBQUcsSUFBQSxDQUFLLElBQUMsQ0FBQSxJQUFOO0lBQUg7Ozs7OztBQUViLE1BQU0sQ0FBQyxPQUFQLEdBQWlCIiwic291cmNlc0NvbnRlbnQiOlsiIyMjXG4wMDAgICAwMDAgIDAwMCAgIDAwMDAwMDAgIDAwMDAwMDAwMCAgIDAwMDAwMDAgICAwMDAwMDAwMCAgIDAwMCAgIDAwMFxuMDAwICAgMDAwICAwMDAgIDAwMCAgICAgICAgICAwMDAgICAgIDAwMCAgIDAwMCAgMDAwICAgMDAwICAgMDAwIDAwMCBcbjAwMDAwMDAwMCAgMDAwICAwMDAwMDAwICAgICAgMDAwICAgICAwMDAgICAwMDAgIDAwMDAwMDAgICAgICAwMDAwMCAgXG4wMDAgICAwMDAgIDAwMCAgICAgICAwMDAgICAgIDAwMCAgICAgMDAwICAgMDAwICAwMDAgICAwMDAgICAgIDAwMCAgIFxuMDAwICAgMDAwICAwMDAgIDAwMDAwMDAgICAgICAwMDAgICAgICAwMDAwMDAwICAgMDAwICAgMDAwICAgICAwMDAgICBcbiMjI1xuXG57IGRlZiwgbGFzdCwgXyB9ID0gcmVxdWlyZSAnLi9reGsnXG5cbmNsYXNzIEhpc3RvcnlcbiAgICBcbiAgICBAOiAob3B0KSAtPlxuICAgICAgICBcbiAgICAgICAgQG9wdCAgPSBkZWYgb3B0LCBsaXN0OiBbXSwgbWF4TGVuZ3RoOiAxMDBcbiAgICAgICAgQGxpc3QgPSBvcHQubGlzdFxuICAgICAgICBcbiAgICBhZGQ6IChpKSAtPlxuICAgICAgICBcbiAgICAgICAgXy5wdWxsQWxsV2l0aCBAbGlzdCwgW2ldLCBfLmlzRXF1YWxcbiAgICAgICAgXG4gICAgICAgIEBsaXN0LnB1c2ggaVxuICAgICAgICBpZiBAbGlzdC5sZW5ndGggPiBAb3B0Lm1heExlbmd0aFxuICAgICAgICAgICAgQGxpc3Quc2hpZnQoKVxuICAgICAgICBcbiAgICBwcmV2aW91czogLT5cbiAgICAgICAgXG4gICAgICAgIGlmIEBsaXN0Lmxlbmd0aCA+IDEgdGhlbiBAbGlzdFtAbGlzdC5sZW5ndGgtMl1cbiAgICAgICAgZWxzZSBudWxsXG4gICAgXG4gICAgY3VycmVudDogLT4gbGFzdCBAbGlzdFxuICAgICAgICAgICAgXG5tb2R1bGUuZXhwb3J0cyA9IEhpc3RvcnlcbiJdfQ==
-//# sourceURL=../coffee/history.coffee
+module.exports = History

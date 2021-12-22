@@ -148,7 +148,7 @@ class Watch extends event
                 @remove =
                     path:  path
                     timer: setTimeout ((d,p,w)->->
-                        delete w.remove; 
+                        delete w.remove 
                         w.emit 'change' dir:d, path:p, change:'remove', watch:w)(dir,path,@), 100
             else if @opt.emitRemove
                 @emit 'change' dir:dir, path:path, change:'remove', watch:@

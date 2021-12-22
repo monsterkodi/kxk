@@ -1,177 +1,190 @@
-// koffee 1.19.0
+// monsterkodi/kode 0.187.0
 
-/*
-0000000    00000000    0000000    0000000 
-000   000  000   000  000   000  000      
-000   000  0000000    000000000  000  0000
-000   000  000   000  000   000  000   000
-0000000    000   000  000   000   0000000
- */
-var $, Drag, _, def, kerror, kpos, ref, stopEvent,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var _k_
 
-ref = require('./kxk'), $ = ref.$, _ = ref._, def = ref.def, kerror = ref.kerror, kpos = ref.kpos, stopEvent = ref.stopEvent;
+var $, def, kerror, kpos, stopEvent, _
 
-Drag = (function() {
-    function Drag(cfg) {
-        this.deactivate = bind(this.deactivate, this);
-        this.activate = bind(this.activate, this);
-        this.dragStop = bind(this.dragStop, this);
-        this.dragUp = bind(this.dragUp, this);
-        this.dragMove = bind(this.dragMove, this);
-        this.dragStart = bind(this.dragStart, this);
-        this.eventPos = bind(this.eventPos, this);
-        var t;
-        _.extend(this, def(cfg, {
-            target: null,
-            handle: null,
-            onStart: null,
-            onMove: null,
-            onStop: null,
-            active: true,
-            stopEvent: true
-        }));
-        if (_.isString(this.target)) {
-            t = $(this.target);
-            if (t == null) {
-                return kerror("Drag -- can't find drag target with id", this.target);
+$ = require('./kxk').$
+_ = require('./kxk')._
+def = require('./kxk').def
+kerror = require('./kxk').kerror
+kpos = require('./kxk').kpos
+stopEvent = require('./kxk').stopEvent
+
+class Drag
+{
+    constructor (cfg)
+    {
+        var t, _30_22_, _36_60_, _37_58_, _38_56_, _43_18_
+
+        this.deactivate = this.deactivate.bind(this)
+        this.activate = this.activate.bind(this)
+        this.dragStop = this.dragStop.bind(this)
+        this.dragUp = this.dragUp.bind(this)
+        this.dragMove = this.dragMove.bind(this)
+        this.dragStart = this.dragStart.bind(this)
+        this.eventPos = this.eventPos.bind(this)
+        _.extend(this,def(cfg,{target:null,handle:null,onStart:null,onMove:null,onStop:null,active:true,stopEvent:true}))
+        if (_.isString(this.target))
+        {
+            t = $(this.target)
+            if (!(t != null))
+            {
+                return kerror("Drag -- can't find drag target with id",this.target)
             }
-            this.target = t;
+            this.target = t
         }
-        if (this.target == null) {
-            return kerror("Drag -- can't find drag target");
+        if (!(this.target != null))
+        {
+            return kerror("Drag -- can't find drag target")
         }
-        if (this.target === document.body) {
-            this.useScreenPos = true;
+        if (this.target === document.body)
+        {
+            this.useScreenPos = true
         }
-        if ((this.onStart != null) && !_.isFunction(this.onStart)) {
-            kerror("Drag -- onStart not a function?");
+        if ((this.onStart != null) && !_.isFunction(this.onStart))
+        {
+            kerror("Drag -- onStart not a function?")
         }
-        if ((this.onMove != null) && !_.isFunction(this.onMove)) {
-            kerror("Drag -- onMove not a function?");
+        if ((this.onMove != null) && !_.isFunction(this.onMove))
+        {
+            kerror("Drag -- onMove not a function?")
         }
-        if ((this.onEnd != null) && !_.isFunction(this.onEnd)) {
-            kerror("Drag -- onEnd not a function?");
+        if ((this.onEnd != null) && !_.isFunction(this.onEnd))
+        {
+            kerror("Drag -- onEnd not a function?")
         }
-        this.dragging = false;
-        this.listening = false;
-        if (_.isString(this.handle)) {
-            this.handle = $(this.handle);
+        this.dragging = false
+        this.listening = false
+        if (_.isString(this.handle))
+        {
+            this.handle = $(this.handle)
         }
-        if (this.handle != null) {
-            this.handle;
-        } else {
-            this.handle = this.target;
-        }
-        if (this.active) {
-            this.activate();
+        this.handle = ((_43_18_=this.handle) != null ? _43_18_ : this.target)
+        if (this.active)
+        {
+            this.activate()
         }
     }
 
-    Drag.prototype.start = function(p, event) {
-        if (!this.dragging && this.listening) {
-            this.dragging = true;
-            this.startPos = p;
-            this.pos = p;
-            this.delta = kpos(0, 0);
-            this.deltaSum = kpos(0, 0);
-            if ('skip' === (typeof this.onStart === "function" ? this.onStart(this, event) : void 0)) {
-                delete this.startPos;
-                this.dragging = false;
-                return this;
+    start (p, event)
+    {
+        var _61_33_
+
+        if (!this.dragging && this.listening)
+        {
+            this.dragging = true
+            this.startPos = p
+            this.pos = p
+            this.delta = kpos(0,0)
+            this.deltaSum = kpos(0,0)
+            if ('skip' === (typeof this.onStart === "function" ? this.onStart(this,event) : undefined))
+            {
+                delete this.startPos
+                this.dragging = false
+                return this
             }
-            this.lastPos = p;
-            if (this.stopEvent !== false) {
-                stopEvent(event);
+            this.lastPos = p
+            if (this.stopEvent !== false)
+            {
+                stopEvent(event)
             }
-            document.addEventListener('mousemove', this.dragMove);
-            document.addEventListener('mouseup', this.dragUp);
+            document.addEventListener('mousemove',this.dragMove)
+            document.addEventListener('mouseup',this.dragUp)
         }
-        return this;
-    };
+        return this
+    }
 
-    Drag.prototype.eventPos = function(event) {
-        if (this.useScreenPos) {
-            return kpos({
-                x: event.screenX,
-                y: event.screenY
-            });
-        } else {
-            return kpos(event);
+    eventPos (event)
+    {
+        if (this.useScreenPos)
+        {
+            return kpos({x:event.screenX,y:event.screenY})
         }
-    };
+        else
+        {
+            return kpos(event)
+        }
+    }
 
-    Drag.prototype.dragStart = function(event) {
-        return this.start(this.eventPos(event), event);
-    };
+    dragStart (event)
+    {
+        return this.start(this.eventPos(event),event)
+    }
 
-    Drag.prototype.dragMove = function(event) {
-        if (this.dragging) {
-            this.pos = this.eventPos(event);
-            this.delta = this.lastPos.to(this.pos);
-            this.deltaSum = this.startPos.to(this.pos);
-            if ((this.constrainKey != null) && event[this.constrainKey]) {
-                if (this.constrain != null) {
-                    this.constrain;
-                } else {
-                    this.constrain = Math.abs(this.delta.x) >= Math.abs(this.delta.y) ? kpos(1, 0) : kpos(0, 1);
-                }
-                this.delta.x *= this.constrain.x;
-                this.delta.y *= this.constrain.y;
-            } else {
-                delete this.constrain;
+    dragMove (event)
+    {
+        var _103_19_, _96_28_, _97_27_
+
+        if (this.dragging)
+        {
+            this.pos = this.eventPos(event)
+            this.delta = this.lastPos.to(this.pos)
+            this.deltaSum = this.startPos.to(this.pos)
+            if ((this.constrainKey != null) && event[this.constrainKey])
+            {
+                this.constrain = ((_97_27_=this.constrain) != null ? _97_27_ : Math.abs(this.delta.x) >= Math.abs(this.delta.y) ? kpos(1,0) : kpos(0,1))
+                this.delta.x *= this.constrain.x
+                this.delta.y *= this.constrain.y
             }
-            if (typeof this.onMove === "function") {
-                this.onMove(this, event);
+            else
+            {
+                delete this.constrain
             }
-            this.lastPos = this.pos;
+            (typeof this.onMove === "function" ? this.onMove(this,event) : undefined)
+            this.lastPos = this.pos
         }
-        return this;
-    };
+        return this
+    }
 
-    Drag.prototype.dragUp = function(event) {
-        delete this.constrain;
-        return this.dragStop(event);
-    };
+    dragUp (event)
+    {
+        delete this.constrain
+        return this.dragStop(event)
+    }
 
-    Drag.prototype.dragStop = function(event) {
-        if (this.dragging) {
-            document.removeEventListener('mousemove', this.dragMove);
-            document.removeEventListener('mouseup', this.dragUp);
-            if ((this.onStop != null) && (event != null)) {
-                this.onStop(this, event);
+    dragStop (event)
+    {
+        var _123_39_
+
+        if (this.dragging)
+        {
+            document.removeEventListener('mousemove',this.dragMove)
+            document.removeEventListener('mouseup',this.dragUp)
+            if ((this.onStop != null) && (event != null))
+            {
+                this.onStop(this,event)
             }
-            delete this.lastPos;
-            delete this.startPos;
-            this.dragging = false;
+            delete this.lastPos
+            delete this.startPos
+            this.dragging = false
         }
-        return this;
-    };
+        return this
+    }
 
-    Drag.prototype.activate = function() {
-        if (!this.listening) {
-            this.listening = true;
-            this.handle.addEventListener('mousedown', this.dragStart);
+    activate ()
+    {
+        if (!this.listening)
+        {
+            this.listening = true
+            this.handle.addEventListener('mousedown',this.dragStart)
         }
-        return this;
-    };
+        return this
+    }
 
-    Drag.prototype.deactivate = function() {
-        if (this.listening) {
-            this.handle.removeEventListener('mousedown', this.dragStart);
-            this.listening = false;
-            if (this.dragging) {
-                this.dragStop();
+    deactivate ()
+    {
+        if (this.listening)
+        {
+            this.handle.removeEventListener('mousedown',this.dragStart)
+            this.listening = false
+            if (this.dragging)
+            {
+                this.dragStop()
             }
         }
-        return this;
-    };
+        return this
+    }
+}
 
-    return Drag;
-
-})();
-
-module.exports = Drag;
-
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZHJhZy5qcyIsInNvdXJjZVJvb3QiOiIuLi9jb2ZmZWUiLCJzb3VyY2VzIjpbImRyYWcuY29mZmVlIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUE7Ozs7Ozs7QUFBQSxJQUFBLDZDQUFBO0lBQUE7O0FBUUEsTUFBeUMsT0FBQSxDQUFRLE9BQVIsQ0FBekMsRUFBRSxTQUFGLEVBQUssU0FBTCxFQUFRLGFBQVIsRUFBYSxtQkFBYixFQUFxQixlQUFyQixFQUEyQjs7QUFFckI7SUFFQyxjQUFDLEdBQUQ7Ozs7Ozs7O0FBRUMsWUFBQTtRQUFBLENBQUMsQ0FBQyxNQUFGLENBQVMsSUFBVCxFQUFZLEdBQUEsQ0FBSSxHQUFKLEVBQ1I7WUFBQSxNQUFBLEVBQVcsSUFBWDtZQUNBLE1BQUEsRUFBVyxJQURYO1lBRUEsT0FBQSxFQUFXLElBRlg7WUFHQSxNQUFBLEVBQVcsSUFIWDtZQUlBLE1BQUEsRUFBVyxJQUpYO1lBS0EsTUFBQSxFQUFXLElBTFg7WUFNQSxTQUFBLEVBQVcsSUFOWDtTQURRLENBQVo7UUFTQSxJQUFHLENBQUMsQ0FBQyxRQUFGLENBQVcsSUFBQyxDQUFBLE1BQVosQ0FBSDtZQUNJLENBQUEsR0FBRyxDQUFBLENBQUUsSUFBQyxDQUFBLE1BQUg7WUFDSCxJQUFPLFNBQVA7QUFDSSx1QkFBTyxNQUFBLENBQU8sd0NBQVAsRUFBaUQsSUFBQyxDQUFBLE1BQWxELEVBRFg7O1lBRUEsSUFBQyxDQUFBLE1BQUQsR0FBVSxFQUpkOztRQU1BLElBQU8sbUJBQVA7QUFDSSxtQkFBTyxNQUFBLENBQU8sZ0NBQVAsRUFEWDs7UUFHQSxJQUFHLElBQUMsQ0FBQSxNQUFELEtBQVcsUUFBUSxDQUFDLElBQXZCO1lBQ0ksSUFBQyxDQUFBLFlBQUQsR0FBZ0IsS0FEcEI7O1FBR0EsSUFBNEMsc0JBQUEsSUFBYyxDQUFJLENBQUMsQ0FBQyxVQUFGLENBQWEsSUFBQyxDQUFBLE9BQWQsQ0FBOUQ7WUFBQSxNQUFBLENBQU8saUNBQVAsRUFBQTs7UUFDQSxJQUEyQyxx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QUFNLENBQUMsbUJBQVIsQ0FBNEIsV0FBNUIsRUFBd0MsSUFBQyxDQUFBLFNBQXpDO1lBQ0EsSUFBQyxDQUFBLFNBQUQsR0FBYTtZQUNiLElBQWUsSUFBQyxDQUFBLFFBQWhCO2dCQUFBLElBQUMsQ0FBQSxRQUFELENBQUEsRUFBQTthQUhKOztlQUlBO0lBTlE7Ozs7OztBQVFoQixNQUFNLENBQUMsT0FBUCxHQUFpQiIsInNvdXJjZXNDb250ZW50IjpbIiMjI1xuMDAwMDAwMCAgICAwMDAwMDAwMCAgICAwMDAwMDAwICAgIDAwMDAwMDAgXG4wMDAgICAwMDAgIDAwMCAgIDAwMCAgMDAwICAgMDAwICAwMDAgICAgICBcbjAwMCAgIDAwMCAgMDAwMDAwMCAgICAwMDAwMDAwMDAgIDAwMCAgMDAwMFxuMDAwICAgMDAwICAwMDAgICAwMDAgIDAwMCAgIDAwMCAgMDAwICAgMDAwXG4wMDAwMDAwICAgIDAwMCAgIDAwMCAgMDAwICAgMDAwICAgMDAwMDAwMCBcbiMjI1xuXG57ICQsIF8sIGRlZiwga2Vycm9yLCBrcG9zLCBzdG9wRXZlbnQgfSA9IHJlcXVpcmUgJy4va3hrJ1xuXG5jbGFzcyBEcmFnXG5cbiAgICBAOiAoY2ZnKSAtPlxuICAgICAgICBcbiAgICAgICAgXy5leHRlbmQgQCwgZGVmIGNmZyxcbiAgICAgICAgICAgIHRhcmdldDogICAgbnVsbFxuICAgICAgICAgICAgaGFuZGxlOiAgICBudWxsXG4gICAgICAgICAgICBvblN0YXJ0OiAgIG51bGxcbiAgICAgICAgICAgIG9uTW92ZTogICAgbnVsbFxuICAgICAgICAgICAgb25TdG9wOiAgICBudWxsXG4gICAgICAgICAgICBhY3RpdmU6ICAgIHRydWVcbiAgICAgICAgICAgIHN0b3BFdmVudDogdHJ1ZVxuXG4gICAgICAgIGlmIF8uaXNTdHJpbmcgQHRhcmdldFxuICAgICAgICAgICAgdCA9JCBAdGFyZ2V0XG4gICAgICAgICAgICBpZiBub3QgdD9cbiAgICAgICAgICAgICAgICByZXR1cm4ga2Vycm9yIFwiRHJhZyAtLSBjYW4ndCBmaW5kIGRyYWcgdGFyZ2V0IHdpdGggaWRcIiwgQHRhcmdldFxuICAgICAgICAgICAgQHRhcmdldCA9IHRcbiAgICAgICAgICAgIFxuICAgICAgICBpZiBub3QgQHRhcmdldD9cbiAgICAgICAgICAgIHJldHVybiBrZXJyb3IgXCJEcmFnIC0tIGNhbid0IGZpbmQgZHJhZyB0YXJnZXRcIlxuICAgICAgICBcbiAgICAgICAgaWYgQHRhcmdldCA9PSBkb2N1bWVudC5ib2R5XG4gICAgICAgICAgICBAdXNlU2NyZWVuUG9zID0gdHJ1ZVxuICAgICAgICAgICAgXG4gICAgICAgIGtlcnJvciBcIkRyYWcgLS0gb25TdGFydCBub3QgYSBmdW5jdGlvbj9cIiBpZiBAb25TdGFydD8gYW5kIG5vdCBfLmlzRnVuY3Rpb24gQG9uU3RhcnRcbiAgICAgICAga2Vycm9yIFwiRHJhZyAtLSBvbk1vdmUgbm90IGEgZnVuY3Rpb24/XCIgaWYgQG9uTW92ZT8gYW5kIG5vdCBfLmlzRnVuY3Rpb24gQG9uTW92ZVxuICAgICAgICBrZXJyb3IgXCJEcmFnIC0tIG9uRW5kIG5vdCBhIGZ1bmN0aW9uP1wiIGlmIEBvbkVuZD8gYW5kIG5vdCBfLmlzRnVuY3Rpb24gQG9uRW5kXG4gICAgICAgICAgICAgICAgXG4gICAgICAgIEBkcmFnZ2luZyAgPSBmYWxzZVxuICAgICAgICBAbGlzdGVuaW5nID0gZmFsc2VcbiAgICAgICAgQGhhbmRsZSAgICA9ICQoQGhhbmRsZSkgaWYgXy5pc1N0cmluZyBAaGFuZGxlXG4gICAgICAgIEBoYW5kbGUgICA/PSBAdGFyZ2V0XG4gICAgICAgIEBhY3RpdmF0ZSgpIGlmIEBhY3RpdmVcblxuICAgICMgIDAwMDAwMDAgIDAwMDAwMDAwMCAgIDAwMDAwMDAgICAwMDAwMDAwMCAgIDAwMDAwMDAwMCAgXG4gICAgIyAwMDAgICAgICAgICAgMDAwICAgICAwMDAgICAwMDAgIDAwMCAgIDAwMCAgICAgMDAwICAgICBcbiAgICAjIDAwMDAwMDAgICAgICAwMDAgICAgIDAwMDAwMDAwMCAgMDAwMDAwMCAgICAgICAwMDAgICAgIFxuICAgICMgICAgICAwMDAgICAgIDAwMCAgICAgMDAwICAgMDAwICAwMDAgICAwMDAgICAgIDAwMCAgICAgXG4gICAgIyAwMDAwMDAwICAgICAgMDAwICAgICAwMDAgICAwMDAgIDAwMCAgIDAwMCAgICAgMDAwICAgICBcbiAgICBcbiAgICBzdGFydDogKHAsIGV2ZW50KSAtPlxuICAgICAgICBcbiAgICAgICAgaWYgbm90IEBkcmFnZ2luZyBhbmQgQGxpc3RlbmluZ1xuICAgICAgICAgICAgQGRyYWdnaW5nID0gdHJ1ZVxuICAgICAgICAgICAgQHN0YXJ0UG9zID0gcFxuICAgICAgICAgICAgQHBvcyAgICAgID0gcFxuICAgICAgICAgICAgQGRlbHRhICAgID0ga3BvcyAwIDBcbiAgICAgICAgICAgIEBkZWx0YVN1bSA9IGtwb3MgMCAwXG4gICAgICAgICAgICBcbiAgICAgICAgICAgIGlmICdza2lwJyA9PSBAb25TdGFydD8gQCwgZXZlbnRcbiAgICAgICAgICAgICAgICBkZWxldGUgQHN0YXJ0UG9zXG4gICAgICAgICAgICAgICAgQGRyYWdnaW5nID0gZmFsc2VcbiAgICAgICAgICAgICAgICByZXR1cm4gQFxuICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgQGxhc3RQb3MgPSBwXG4gICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgaWYgQHN0b3BFdmVudCAhPSBmYWxzZVxuICAgICAgICAgICAgICAgIHN0b3BFdmVudCBldmVudFxuICAgIFxuICAgICAgICAgICAgZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lciAnbW91c2Vtb3ZlJyBAZHJhZ01vdmVcbiAgICAgICAgICAgIGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIgJ21vdXNldXAnICAgQGRyYWdVcFxuICAgICAgICBAXG4gICAgXG4gICAgZXZlbnRQb3M6IChldmVudCkgPT5cbiAgICAgICAgaWYgQHVzZVNjcmVlblBvc1xuICAgICAgICAgICAga3BvcyB4OmV2ZW50LnNjcmVlblgsIHk6ZXZlbnQuc2NyZWVuWVxuICAgICAgICBlbHNlXG4gICAgICAgICAgICBrcG9zIGV2ZW50XG4gICAgICAgIFxuICAgIGRyYWdTdGFydDogKGV2ZW50KSA9PiBAc3RhcnQgQGV2ZW50UG9zKGV2ZW50KSwgZXZlbnRcbiAgICAgICAgXG4gICAgIyAwMCAgICAgMDAgICAwMDAwMDAwICAgMDAwICAgMDAwICAwMDAwMDAwMCAgXG4gICAgIyAwMDAgICAwMDAgIDAwMCAgIDAwMCAgMDAwICAgMDAwICAwMDAgICAgICAgXG4gICAgIyAwMDAwMDAwMDAgIDAwMCAgIDAwMCAgIDAwMCAwMDAgICAwMDAwMDAwICAgXG4gICAgIyAwMDAgMCAwMDAgIDAwMCAgIDAwMCAgICAgMDAwICAgICAwMDAgICAgICAgXG4gICAgIyAwMDAgICAwMDAgICAwMDAwMDAwICAgICAgIDAgICAgICAwMDAwMDAwMCAgXG4gICAgXG4gICAgZHJhZ01vdmU6IChldmVudCkgPT5cblxuICAgICAgICBpZiBAZHJhZ2dpbmdcbiAgICAgICAgICAgIEBwb3MgICAgICA9IEBldmVudFBvcyBldmVudFxuICAgICAgICAgICAgQGRlbHRhICAgID0gQGxhc3RQb3MudG8gQHBvc1xuICAgICAgICAgICAgQGRlbHRhU3VtID0gQHN0YXJ0UG9zLnRvIEBwb3NcbiAgICAgICAgICAgIFxuICAgICAgICAgICAgaWYgQGNvbnN0cmFpbktleT8gYW5kIGV2ZW50W0Bjb25zdHJhaW5LZXldXG4gICAgICAgICAgICAgICAgQGNvbnN0cmFpbiA/PSBpZiBNYXRoLmFicyhAZGVsdGEueCkgPj0gTWF0aC5hYnMoQGRlbHRhLnkpIHRoZW4ga3BvcyAxLDAgZWxzZSBrcG9zIDAsMVxuICAgICAgICAgICAgICAgIEBkZWx0YS54ICo9IEBjb25zdHJhaW4ueFxuICAgICAgICAgICAgICAgIEBkZWx0YS55ICo9IEBjb25zdHJhaW4ueVxuICAgICAgICAgICAgZWxzZVxuICAgICAgICAgICAgICAgIGRlbGV0ZSBAY29uc3RyYWluXG4gICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBAb25Nb3ZlPyBALCBldmVudCBcbiAgICAgICAgICAgIEBsYXN0UG9zID0gQHBvc1xuICAgICAgICBAXG4gICAgICAgICAgICAgICAgXG4gICAgZHJhZ1VwOiAoZXZlbnQpID0+IFxuICAgICAgICBcbiAgICAgICAgZGVsZXRlIEBjb25zdHJhaW5cbiAgICAgICAgQGRyYWdTdG9wIGV2ZW50XG5cbiAgICAjICAwMDAwMDAwICAwMDAwMDAwMDAgICAwMDAwMDAwICAgMDAwMDAwMDAgICBcbiAgICAjIDAwMCAgICAgICAgICAwMDAgICAgIDAwMCAgIDAwMCAgMDAwICAgMDAwICBcbiAgICAjIDAwMDAwMDAgICAgICAwMDAgICAgIDAwMCAgIDAwMCAgMDAwMDAwMDAgICBcbiAgICAjICAgICAgMDAwICAgICAwMDAgICAgIDAwMCAgIDAwMCAgMDAwICAgICAgICBcbiAgICAjIDAwMDAwMDAgICAgICAwMDAgICAgICAwMDAwMDAwICAgMDAwICAgICAgICBcbiAgICBcbiAgICBkcmFnU3RvcDogKGV2ZW50KSA9PlxuXG4gICAgICAgIGlmIEBkcmFnZ2luZ1xuICAgICAgICAgICAgZG9jdW1lbnQucmVtb3ZlRXZlbnRMaXN0ZW5lciAnbW91c2Vtb3ZlJyBAZHJhZ01vdmVcbiAgICAgICAgICAgIGRvY3VtZW50LnJlbW92ZUV2ZW50TGlzdGVuZXIgJ21vdXNldXAnICAgQGRyYWdVcFxuICAgICAgICAgICAgQG9uU3RvcCBALCBldmVudCBpZiBAb25TdG9wPyBhbmQgZXZlbnQ/XG4gICAgICAgICAgICBkZWxldGUgQGxhc3RQb3NcbiAgICAgICAgICAgIGRlbGV0ZSBAc3RhcnRQb3NcbiAgICAgICAgICAgIEBkcmFnZ2luZyA9IGZhbHNlXG4gICAgICAgIEBcblxuICAgICMgIDAwMDAwMDAgICAgMDAwMDAwMCAgMDAwMDAwMDAwICAwMDAgIDAwMCAgIDAwMCAgIDAwMDAwMDAgICAwMDAwMDAwMDAgIDAwMDAwMDAwICBcbiAgICAjIDAwMCAgIDAwMCAgMDAwICAgICAgICAgIDAwMCAgICAgMDAwICAwMDAgICAwMDAgIDAwMCAgIDAwMCAgICAgMDAwICAgICAwMDAgICAgICAgXG4gICAgIyAwMDAwMDAwMDAgIDAwMCAgICAgICAgICAwMDAgICAgIDAwMCAgIDAwMCAwMDAgICAwMDAwMDAwMDAgICAgIDAwMCAgICAgMDAwMDAwMCAgIFxuICAgICMgMDAwICAgMDAwICAwMDAgICAgICAgICAgMDAwICAgICAwMDAgICAgIDAwMCAgICAgMDAwICAgMDAwICAgICAwMDAgICAgIDAwMCAgICAgICBcbiAgICAjIDAwMCAgIDAwMCAgIDAwMDAwMDAgICAgIDAwMCAgICAgMDAwICAgICAgMCAgICAgIDAwMCAgIDAwMCAgICAgMDAwICAgICAwMDAwMDAwMCAgXG4gICAgXG4gICAgYWN0aXZhdGU6ID0+XG4gICAgICAgIFxuICAgICAgICBpZiBub3QgQGxpc3RlbmluZ1xuICAgICAgICAgICAgQGxpc3RlbmluZyA9IHRydWVcbiAgICAgICAgICAgIEBoYW5kbGUuYWRkRXZlbnRMaXN0ZW5lciAnbW91c2Vkb3duJyBAZHJhZ1N0YXJ0XG4gICAgICAgIEBcblxuICAgIGRlYWN0aXZhdGU6ID0+XG5cbiAgICAgICAgaWYgQGxpc3RlbmluZ1xuICAgICAgICAgICAgQGhhbmRsZS5yZW1vdmVFdmVudExpc3RlbmVyICdtb3VzZWRvd24nIEBkcmFnU3RhcnRcbiAgICAgICAgICAgIEBsaXN0ZW5pbmcgPSBmYWxzZVxuICAgICAgICAgICAgQGRyYWdTdG9wKCkgaWYgQGRyYWdnaW5nXG4gICAgICAgIEBcblxubW9kdWxlLmV4cG9ydHMgPSBEcmFnXG4iXX0=
-//# sourceURL=../coffee/drag.coffee
+module.exports = Drag

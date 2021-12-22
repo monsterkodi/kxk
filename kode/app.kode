@@ -10,7 +10,8 @@ delete process.env.ELECTRON_ENABLE_SECURITY_WARNINGS
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 process.env.NODE_NO_WARNINGS = 1
 
-{ about, args, childp, empty, fs, klog, os, post, prefs, slash, srcmap, valid, watch } = require './kxk'
+kxk = require './kxk'
+{ about, args, childp, fs, klog, os, post, prefs, slash, srcmap, watch } = kxk
 
 if process.type == 'browser'
     electron = require 'electron'
@@ -406,10 +407,11 @@ class App
         return if empty @opt.dirs
         
         for dir in @opt.dirs
-            toWatch = if slash.isRelative dir
-                slash.resolve slash.join @opt.dir, dir
-            else
-                slash.resolve dir
+            toWatch = 
+                if slash.isRelative dir
+                    slash.resolve slash.join @opt.dir, dir
+                else
+                    slash.resolve dir
             watcher = watch.dir toWatch
             watcher.on 'change' @onSrcChange
             watcher.on 'error' (err) -> error err

@@ -15,7 +15,7 @@ Emitter = require 'events'
 
 class Store extends Emitter
 
-    @stores = {}
+    @stores: {}
     @addStore: (store) ->
 
         if _.isEmpty @stores

@@ -139,29 +139,29 @@ class AnsiDiss
         
         ansiCode = (m, c) ->
             ansiMatch = true
-            c = '0' if c.trim().length is 0            
+            c = '0' if c.trim().length == 0            
             cs = c.trimRight(';').split(';')            
             for code in cs
                 code = parseInt code, 10
-                switch 
-                    when code is 0          then resetStyle()
-                    when code is 1          
+                if 
+                    code == 0          ➜ resetStyle()
+                    code == 1          
                         addStyle 'font-weight:bold'
                         fg = toHighIntensity fg
-                    when code is 2          then addStyle 'opacity:0.5'
-                    when code is 4          then addStyle 'text-decoration:underline'
-                    when code is 8          then addStyle 'display:none'
-                    when code is 9          then addStyle 'text-decoration:line-through'
-                    when code is 39         then fg = STYLES["f15"] # default foreground
-                    when code is 49         then bg = STYLES["b0"]  # default background
-                    when code is 38         then fg = STYLES["f#{cs[2]}"] # extended fg 38;5;[0-255]
-                    when code is 48         then bg = STYLES["b#{cs[2]}"] # extended bg 48;5;[0-255]
-                    when  30 <= code <= 37  then fg = STYLES["f#{code - 30}"] # normal intensity
-                    when  40 <= code <= 47  then bg = STYLES["b#{code - 40}"]
-                    when  90 <= code <= 97  then fg = STYLES["f#{8+code - 90}"]  # high intensity
-                    when 100 <= code <= 107 then bg = STYLES["b#{8+code - 100}"]
-                    when code is 28         then delStyle 'display:none'
-                    when code is 22         
+                    code == 2          ➜ addStyle 'opacity:0.5'
+                    code == 4          ➜ addStyle 'text-decoration:underline'
+                    code == 8          ➜ addStyle 'display:none'
+                    code == 9          ➜ addStyle 'text-decoration:line-through'
+                    code == 39         ➜ fg = STYLES["f15"] # default foreground
+                    code == 49         ➜ bg = STYLES["b0"]  # default background
+                    code == 38         ➜ fg = STYLES["f#{cs[2]}"] # extended fg 38;5;[0-255]
+                    code == 48         ➜ bg = STYLES["b#{cs[2]}"] # extended bg 48;5;[0-255]
+                    30 <= code <= 37   ➜ fg = STYLES["f#{code - 30}"] # normal intensity
+                    40 <= code <= 47   ➜ bg = STYLES["b#{code - 40}"]
+                    90 <= code <= 97   ➜ fg = STYLES["f#{8+code - 90}"]  # high intensity
+                    100 <= code <= 107 ➜ bg = STYLES["b#{8+code - 100}"]
+                    code == 28         ➜ delStyle 'display:none'
+                    code == 22         
                         delStyle 'font-weight:bold'
                         delStyle 'opacity:0.5'
                 break if code in [38, 48]
