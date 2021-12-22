@@ -2,20 +2,20 @@
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}}
 
-var elem, keyinfo, os, post, stopEvent
+var elem, keyinfo, kxk, os, post, stopEvent
 
-elem = require('./kxk').elem
-empty = require('./kxk').empty
-keyinfo = require('./kxk').keyinfo
-os = require('./kxk').os
-post = require('./kxk').post
-stopEvent = require('./kxk').stopEvent
+kxk = require('./kxk')
+elem = kxk.elem
+keyinfo = kxk.keyinfo
+os = kxk.os
+post = kxk.post
+stopEvent = kxk.stopEvent
 
 class Popup
 {
     constructor (opt)
     {
-        var br, div, item, text, _32_30_, _35_39_, _37_39_
+        var br, div, item, text, _34_30_, _35_109_, _35_81_
 
         this.onKeyDown = this.onKeyDown.bind(this)
         this.onFocusOut = this.onFocusOut.bind(this)
@@ -33,9 +33,9 @@ class Popup
             this.items.classList.add(opt.class)
         }
         var list = _k_.list(opt.items)
-        for (var _22_17_ = 0; _22_17_ < list.length; _22_17_++)
+        for (var _24_17_ = 0; _24_17_ < list.length; _24_17_++)
         {
-            item = list[_22_17_]
+            item = list[_24_17_]
             if (item.hide)
             {
                 continue
@@ -53,16 +53,9 @@ class Popup
                 }
                 div.item = item
                 div.addEventListener('click',this.onClick)
-                if (((_32_30_=item.combo) != null ? _32_30_ : item.accel))
+                if (((_34_30_=item.combo) != null ? _34_30_ : item.accel))
                 {
-                    text = keyinfo.short(if (os.platform() === 'darwin')
-                    {
-                        ((_35_39_=item.combo) != null ? _35_39_ : item.accel)
-                    }
-                    else
-                    {
-                        ((_37_39_=item.accel) != null ? _37_39_ : item.combo)
-                    })
+                    text = keyinfo.short((os.platform() === 'darwin' ? (((_35_81_=item.combo) != null ? _35_81_ : item.accel)) : (((_35_109_=item.accel) != null ? _35_109_ : item.combo))))
                     div.appendChild(elem('span',{class:'popupCombo',text:text}))
                 }
                 else if (item.menu)
@@ -103,9 +96,9 @@ class Popup
 
     close (opt = {})
     {
-        var _74_42_, _74_48_, _76_20_, _78_14_, _81_14_, _82_14_, _83_14_, _84_14_, _87_15_, _90_22_, _94_22_
+        var _72_42_, _72_48_, _74_20_, _76_14_, _79_14_, _80_14_, _81_14_, _82_14_, _85_15_, _88_22_, _92_22_
 
-        if (_k_.empty((this.parent)) || ((_74_42_=this.parentMenu()) != null ? (_74_48_=_74_42_.elem) != null ? _74_48_.classList.contains('menu') : undefined : undefined))
+        if (_k_.empty((this.parent)) || ((_72_42_=this.parentMenu()) != null ? (_72_48_=_72_42_.elem) != null ? _72_48_.classList.contains('menu') : undefined : undefined))
         {
             post.emit('popup','closed')
             (typeof this.onClose === "function" ? this.onClose() : undefined)
@@ -145,7 +138,7 @@ class Popup
 
     select (item, opt = {})
     {
-        var _113_17_, _116_17_, _120_20_
+        var _111_17_, _114_17_, _118_20_
 
         if (!(item != null))
         {
@@ -186,7 +179,7 @@ class Popup
 
     closePopup ()
     {
-        var _143_14_
+        var _141_14_
 
         ;(this.popup != null ? this.popup.close({focus:false}) : undefined)
         return delete this.popup
@@ -212,7 +205,7 @@ class Popup
 
     activateOrNavigateRight ()
     {
-        var _163_20_
+        var _161_20_
 
         if ((this.selected != null))
         {
@@ -229,7 +222,7 @@ class Popup
 
     navigateRight ()
     {
-        var _172_25_, _175_25_
+        var _170_25_, _173_25_
 
         if (this.popup)
         {
@@ -247,7 +240,7 @@ class Popup
 
     parentMenu ()
     {
-        var _178_18_
+        var _176_18_
 
         if ((this.parent != null) && !this.parent.parent)
         {
@@ -257,7 +250,7 @@ class Popup
 
     nextItem ()
     {
-        var next, _190_38_
+        var next, _188_38_
 
         if (next = this.selected)
         {
@@ -273,7 +266,7 @@ class Popup
 
     prevItem ()
     {
-        var prev, _196_38_
+        var prev, _194_38_
 
         if (prev = this.selected)
         {
@@ -289,17 +282,17 @@ class Popup
 
     activate (item)
     {
-        var _207_20_, _207_24_, _209_39_, _212_52_
+        var _205_20_, _205_24_, _207_39_, _210_52_
 
         if (((item.item != null ? item.item.cb : undefined) != null))
         {
             this.close({all:true})
-            return item.item.cb(((_209_39_=item.item.arg) != null ? _209_39_ : item.item.text))
+            return item.item.cb(((_207_39_=item.item.arg) != null ? _207_39_ : item.item.text))
         }
         else if (!item.item.menu)
         {
             this.close({all:true})
-            return post.emit('menuAction',((_212_52_=item.item.action) != null ? _212_52_ : item.item.text),item.item)
+            return post.emit('menuAction',((_210_52_=item.item.action) != null ? _210_52_ : item.item.text),item.item)
         }
     }
 
@@ -353,14 +346,14 @@ class Popup
 
     focus ()
     {
-        var _253_20_
+        var _251_20_
 
         return (this.items != null ? this.items.focus() : undefined)
     }
 
     onFocusOut (event)
     {
-        var _257_34_
+        var _255_34_
 
         if (!(event.relatedTarget != null ? event.relatedTarget.classList.contains('popup') : undefined))
         {

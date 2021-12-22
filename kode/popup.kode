@@ -6,7 +6,9 @@
 000         0000000   000         0000000   000      
 ###
 
-{ elem, empty, keyinfo, os, post, stopEvent } = require './kxk'
+kxk = require './kxk'
+
+{ elem, keyinfo, os, post, stopEvent } = kxk
 
 class Popup
     
@@ -30,11 +32,7 @@ class Popup
                 div.item = item
                 div.addEventListener 'click' @onClick
                 if item.combo ? item.accel
-                    text = keyinfo.short 
-                        if os.platform() == 'darwin'
-                            item.combo ? item.accel
-                        else
-                            item.accel ? item.combo
+                    text = keyinfo.short os.platform() == 'darwin' ? (item.combo ? item.accel) : (item.accel ? item.combo)
                     div.appendChild elem 'span' class:'popupCombo' text:text
                 else if item.menu 
                     div.appendChild elem 'span' class:'popupCombo' text:'▶'
@@ -268,13 +266,13 @@ class Popup
         { mod, key, combo } = keyinfo.forEvent event
         
         switch combo
-            when 'end' 'page down' then stopEvent event, @select @items.lastChild, selectFirstItem:false 
-            when 'home' 'page up'  then stopEvent event, @select @items.firstChild, selectFirstItem:false 
-            when 'esc'             then stopEvent event, @close()
-            when 'down'            then stopEvent event, @select @nextItem(), selectFirstItem:false 
-            when 'up'              then stopEvent event, @select @prevItem(), selectFirstItem:false 
-            when 'enter' 'space'   then stopEvent event, @activateOrNavigateRight()
-            when 'left'            then stopEvent event, @navigateLeft()
-            when 'right'           then stopEvent event, @navigateRight()
+            'end' 'page down' ➜ stopEvent event, @select @items.lastChild, selectFirstItem:false 
+            'home' 'page up'  ➜ stopEvent event, @select @items.firstChild, selectFirstItem:false 
+            'esc'             ➜ stopEvent event, @close()
+            'down'            ➜ stopEvent event, @select @nextItem(), selectFirstItem:false 
+            'up'              ➜ stopEvent event, @select @prevItem(), selectFirstItem:false 
+            'enter' 'space'   ➜ stopEvent event, @activateOrNavigateRight()
+            'left'            ➜ stopEvent event, @navigateLeft()
+            'right'           ➜ stopEvent event, @navigateRight()
             
 module.exports = menu: (opt) -> new Popup opt

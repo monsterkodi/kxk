@@ -2,14 +2,13 @@
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var coffeePos, decode, errorStack, errorTrace, filePos, jsPosition, klog, logErr, readMap, regex1, regex2, sh, slash, toCoffee, toJs, _
+var coffeePos, decode, errorStack, errorTrace, filePos, jsPosition, klog, kxk, logErr, readMap, regex1, regex2, sh, slash, toCoffee, toJs, _
 
-_ = require('./kxk')._
-empty = require('./kxk').empty
-klog = require('./kxk').klog
-sh = require('./kxk').sh
-slash = require('./kxk').slash
-valid = require('./kxk').valid
+kxk = require('./kxk')
+_ = kxk._
+klog = kxk.klog
+sh = kxk.sh
+slash = kxk.slash
 
 regex1 = /^\s+at\s+(\S+)\s+\((.*):(\d+):(\d+)\)/
 regex2 = /^\s+at\s+(.*):(\d+):(\d+)/
@@ -25,9 +24,9 @@ logErr = function (err, sep = '💥')
     {
         klog.flog({str:trace.text,source:trace.lines[0].file,line:trace.lines[0].line,sep:sep})
         var list = _k_.list(trace.lines)
-        for (var _29_17_ = 0; _29_17_ < list.length; _29_17_++)
+        for (var _30_17_ = 0; _30_17_ < list.length; _30_17_++)
         {
-            line = list[_29_17_]
+            line = list[_30_17_]
             sep = slash.isAbsolute(line.file) || line.file[0] === '~' ? '🐞' : '🔼'
             if (sep === '🐞' || line.file[0] === '.')
             {
@@ -63,11 +62,11 @@ filePos = function (line)
             absFile = slash.resolve(slash.join(process.cwd(),'coffee',result.file))
             if (slash.fileExists(absFile))
             {
-                var _74_29_ = toJs(absFile,1,0) ; jsFile = _74_29_[0]                ; a = _74_29_[1]                ; b = _74_29_[2]
+                var _75_29_ = toJs(absFile,1,0) ; jsFile = _75_29_[0]                ; a = _75_29_[1]                ; b = _75_29_[2]
 
                 if (slash.fileExists(jsFile))
                 {
-                    var _76_56_ = toCoffee(jsFile,result.line,result.col) ; coffeeFile = _76_56_[0]                    ; coffeeLine = _76_56_[1]                    ; coffeeCol = _76_56_[2]
+                    var _77_56_ = toCoffee(jsFile,result.line,result.col) ; coffeeFile = _77_56_[0]                    ; coffeeLine = _77_56_[1]                    ; coffeeCol = _77_56_[2]
 
                     if (slash.fileExists(coffeeFile))
                     {
@@ -102,9 +101,9 @@ errorStack = function (err)
 
     lines = []
     var list = _k_.list(err.stack.split('\n'))
-    for (var _116_18_ = 0; _116_18_ < list.length; _116_18_++)
+    for (var _117_18_ = 0; _117_18_ < list.length; _117_18_++)
     {
-        stackLine = list[_116_18_]
+        stackLine = list[_117_18_]
         if (fp = filePos(stackLine))
         {
             lines.push(`       ${_.padEnd(fp.func,30)} ${fp.file}:${fp.line}`)
@@ -124,9 +123,9 @@ errorTrace = function (err)
     lines = []
     text = []
     var list = _k_.list(err.stack.split('\n'))
-    for (var _136_18_ = 0; _136_18_ < list.length; _136_18_++)
+    for (var _137_18_ = 0; _137_18_ < list.length; _137_18_++)
     {
-        stackLine = list[_136_18_]
+        stackLine = list[_137_18_]
         if (fp = filePos(stackLine))
         {
             lines.push(fp)
@@ -145,7 +144,7 @@ decode = function (segment)
 
     rs = []
     sh = rc = 0
-    for (var _156_14_ = i = 0, _156_18_ = segment.length; (_156_14_ <= _156_18_ ? i < segment.length : i > segment.length); (_156_14_ <= _156_18_ ? ++i : --i))
+    for (var _157_14_ = i = 0, _157_18_ = segment.length; (_157_14_ <= _157_18_ ? i < segment.length : i > segment.length); (_157_14_ <= _157_18_ ? ++i : --i))
     {
         cc = segment.charCodeAt(i) - 65
         if (cc >= 32)
@@ -192,9 +191,9 @@ readMap = function (jsFile)
     urlVar = '//# sourceURL='
     mapVar = '//# sourceMappingURL='
     var list = _k_.list(source.split(/\r?\n/))
-    for (var _185_10_ = 0; _185_10_ < list.length; _185_10_++)
+    for (var _186_10_ = 0; _186_10_ < list.length; _186_10_++)
     {
-        l = list[_185_10_]
+        l = list[_186_10_]
         if (!url && l.startsWith(urlVar))
         {
             url = l.split(urlVar)[1]
@@ -230,16 +229,16 @@ coffeePos = function (mapData, sjsLine, sjsCol)
     coLine = 1
     coCol = 0
     var list = _k_.list(lines)
-    for (var _209_13_ = 0; _209_13_ < list.length; _209_13_++)
+    for (var _210_13_ = 0; _210_13_ < list.length; _210_13_++)
     {
-        line = list[_209_13_]
+        line = list[_210_13_]
         jsCol = 0
         if (line.length)
         {
             var list1 = _k_.list(line.split(','))
-            for (var _212_24_ = 0; _212_24_ < list1.length; _212_24_++)
+            for (var _213_24_ = 0; _213_24_ < list1.length; _213_24_++)
             {
-                segment = list1[_212_24_]
+                segment = list1[_213_24_]
                 seg = decode(segment)
                 jsCol += seg[0]
                 coLine += seg[2]
@@ -261,7 +260,7 @@ coffeePos = function (mapData, sjsLine, sjsCol)
 
 toCoffee = function (jsFile, jsLine, jsCol = 0)
 {
-    var coffeeCol, coffeeFile, coffeeLine, coPos
+    var coffeeCol, coffeeFile, coffeeLine, coPos, mapData
 
     jsLine = parseInt(jsLine)
     jsCol = parseInt(jsCol)
@@ -271,7 +270,7 @@ toCoffee = function (jsFile, jsLine, jsCol = 0)
     coffeeCol = jsCol
     if (slash.fileExists(jsFile))
     {
-        if (!_k_.empty(mapData) = readMap(jsFile))
+        if (!_k_.empty((mapData = readMap(jsFile))))
         {
             coPos = coffeePos(mapData,jsLine,jsCol)
             coffeeFile = slash.tilde(slash.join(mapData.sourceRoot,mapData.sources[0]))
@@ -293,16 +292,16 @@ jsPosition = function (mapData, coffeeLine, coffeeCol)
     dfMin = {line:lines.length,col:9999}
     result = {line:0,col:0}
     var list = _k_.list(lines)
-    for (var _262_13_ = 0; _262_13_ < list.length; _262_13_++)
+    for (var _263_13_ = 0; _263_13_ < list.length; _263_13_++)
     {
-        line = list[_262_13_]
+        line = list[_263_13_]
         jsCol = 0
         if (line.length)
         {
             var list1 = _k_.list(line.split(','))
-            for (var _265_24_ = 0; _265_24_ < list1.length; _265_24_++)
+            for (var _266_24_ = 0; _266_24_ < list1.length; _266_24_++)
             {
-                segment = list1[_265_24_]
+                segment = list1[_266_24_]
                 seg = decode(segment)
                 jsCol += seg[0]
                 coLine += seg[2]
@@ -323,7 +322,7 @@ jsPosition = function (mapData, coffeeLine, coffeeCol)
 
 toJs = function (coffeeFile, coffeeLine, coffeeCol = 0)
 {
-    var jsFile, jsPos
+    var jsFile, jsPos, mapData
 
     jsFile = coffeeFile.replace(/\/coffee\//,'/js/')
     jsFile = jsFile.replace(/\.coffee$/,'.js')
@@ -335,7 +334,7 @@ toJs = function (coffeeFile, coffeeLine, coffeeCol = 0)
     {
         return [jsFile,null,null]
     }
-    if (!_k_.empty(mapData) = readMap(jsFile))
+    if (!_k_.empty((mapData = readMap(jsFile))))
     {
         jsPos = jsPosition(mapData,coffeeLine,coffeeCol)
         return [jsFile,jsPos.line,jsPos.col]

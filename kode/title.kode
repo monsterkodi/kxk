@@ -185,27 +185,27 @@ class Title
         
         tmpl = []
         for text,menuOrAccel of obj
-            tmpl.push 
+            item = =>
                 if
-                    empty(menuOrAccel) and text.startsWith '-'
+                    empty menuOrAccel and text.startsWith '-'
                         text: ''
-                    _.isNumber menuOrAccel
+                    menuOrAccel is num
                         text:text
                         accel:kstr menuOrAccel
-                    _.isString menuOrAccel
+                    menuOrAccel is str
                         text:text
                         accel:keyinfo.convertCmdCtrl menuOrAccel
                     empty menuOrAccel
                         text:text
                         accel: ''
+                    menuOrAccel.accel? or menuOrAccel.command? # needs better test!
+                        item = _.clone menuOrAccel
+                        item.text = text
+                        item
                     else
-                        if menuOrAccel.accel? or menuOrAccel.command? # needs better test!
-                            item = _.clone menuOrAccel
-                            item.text = text
-                            item
-                        else
-                            text:text
-                            menu:@makeTemplate menuOrAccel
+                        text:text
+                        menu:@makeTemplate menuOrAccel
+            tmpl.push item()
         tmpl
 
     initMenu: (items) ->

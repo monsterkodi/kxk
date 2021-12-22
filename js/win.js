@@ -2,23 +2,22 @@
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined}
 
-var $, electron, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, stopEvent, title, _, _1_20_
+var $, electron, keyinfo, klog, kpos, kxk, open, popup, post, prefs, scheme, slash, stopEvent, title, _, _1_20_
 
-$ = require('./kxk').$
-_ = require('./kxk')._
-empty = require('./kxk').empty
-keyinfo = require('./kxk').keyinfo
-klog = require('./kxk').klog
-kpos = require('./kxk').kpos
-open = require('./kxk').open
-popup = require('./kxk').popup
-post = require('./kxk').post
-prefs = require('./kxk').prefs
-scheme = require('./kxk').scheme
-slash = require('./kxk').slash
-stopEvent = require('./kxk').stopEvent
-title = require('./kxk').title
-valid = require('./kxk').valid
+kxk = require('./kxk')
+$ = kxk.$
+_ = kxk._
+keyinfo = kxk.keyinfo
+klog = kxk.klog
+kpos = kxk.kpos
+open = kxk.open
+popup = kxk.popup
+post = kxk.post
+prefs = kxk.prefs
+scheme = kxk.scheme
+slash = kxk.slash
+stopEvent = kxk.stopEvent
+title = kxk.title
 
 if (process.type === 'renderer')
 {
@@ -32,7 +31,7 @@ class Win
 {
     constructor (opt)
     {
-        var sep, _29_34_, _47_19_
+        var sep, _30_34_, _48_19_
 
         this.opt = opt
         this.onKeyUp = this.onKeyUp.bind(this)
@@ -52,7 +51,7 @@ class Win
             }
             return true
         }
-        sep = ((_29_34_=this.opt.prefsSeperator) != null ? _29_34_ : '▸')
+        sep = ((_30_34_=this.opt.prefsSeperator) != null ? _30_34_ : '▸')
         prefs.init({separator:sep})
         if (this.opt.icon)
         {
@@ -64,7 +63,7 @@ class Win
         this.userData = post.get('userData')
         post.on('menuAction',this.onMenuAction)
         post.on('winMoved',this.onMoved)
-        this.opt.title = ((_47_19_=this.opt.title) != null ? _47_19_ : process.argv[0].endsWith('Electron Helper') && ['version'] || [])
+        this.opt.title = ((_48_19_=this.opt.title) != null ? _48_19_ : process.argv[0].endsWith('Electron Helper') && ['version'] || [])
         window.titlebar = new title(this.opt)
         if (this.opt.context !== false)
         {
@@ -109,7 +108,7 @@ class Win
 
     onContextMenu (event)
     {
-        var absPos, items, _97_12_
+        var absPos, items, _98_12_
 
         ;(this.win != null ? this.win.focus() : undefined)
         absPos = kpos(event)
@@ -138,9 +137,9 @@ class Win
 
     openFileDialog (options)
     {
-        var cb, _120_22_
+        var cb, _121_22_
 
-        options.title = ((_120_22_=options.title) != null ? _120_22_ : 'Open File')
+        options.title = ((_121_22_=options.title) != null ? _121_22_ : 'Open File')
         cb = options.cb
         delete options.cb
         post.toMain('openFileDialog',options)
@@ -158,9 +157,9 @@ class Win
 
     saveFileDialog (options)
     {
-        var cb, _129_22_
+        var cb, _130_22_
 
-        options.title = ((_129_22_=options.title) != null ? _129_22_ : 'Save File')
+        options.title = ((_130_22_=options.title) != null ? _130_22_ : 'Save File')
         cb = options.cb
         delete options.cb
         post.toMain('saveFileDialog',options)
@@ -179,15 +178,15 @@ class Win
 
     messageBox (options)
     {
-        var cb, _138_28_, _139_28_, _140_28_, _141_28_, _142_28_, _143_28_, _144_28_
+        var cb, _139_28_, _140_28_, _141_28_, _142_28_, _143_28_, _144_28_, _145_28_
 
-        options.type = ((_138_28_=options.type) != null ? _138_28_ : 'warning')
-        options.buttons = ((_139_28_=options.buttons) != null ? _139_28_ : ['Ok'])
-        options.defaultId = ((_140_28_=options.defaultId) != null ? _140_28_ : 0)
-        options.cancelId = ((_141_28_=options.cancelId) != null ? _141_28_ : 0)
-        options.title = ((_142_28_=options.title) != null ? _142_28_ : '')
-        options.message = ((_143_28_=options.message) != null ? _143_28_ : 'no message!')
-        options.detail = ((_144_28_=options.detail) != null ? _144_28_ : 'no details!')
+        options.type = ((_139_28_=options.type) != null ? _139_28_ : 'warning')
+        options.buttons = ((_140_28_=options.buttons) != null ? _140_28_ : ['Ok'])
+        options.defaultId = ((_141_28_=options.defaultId) != null ? _141_28_ : 0)
+        options.cancelId = ((_142_28_=options.cancelId) != null ? _142_28_ : 0)
+        options.title = ((_143_28_=options.title) != null ? _143_28_ : '')
+        options.message = ((_144_28_=options.message) != null ? _144_28_ : 'no message!')
+        options.detail = ((_145_28_=options.detail) != null ? _145_28_ : 'no details!')
         cb = options.cb
         delete options.cb
         post.toMain('messageBox',options)

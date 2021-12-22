@@ -2,19 +2,19 @@
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}}
 
-var $, elem, kerror, _
+var $, elem, kerror, kxk, _
 
-elem = require('./kxk').elem
-empty = require('./kxk').empty
-kerror = require('./kxk').kerror
-$ = require('./kxk').$
-_ = require('./kxk')._
+kxk = require('./kxk')
+elem = kxk.elem
+kerror = kxk.kerror
+$ = kxk.$
+_ = kxk._
 
 class Tooltip
 {
     constructor (opt)
     {
-        var _15_56_, _17_19_, _18_19_
+        var _16_56_, _18_19_, _19_19_
 
         this.opt = opt
         this.onLeave = this.onLeave.bind(this)
@@ -25,8 +25,8 @@ class Tooltip
         {
             return kerror("no elem for tooltip?")
         }
-        this.opt.delay = ((_17_19_=this.opt.delay) != null ? _17_19_ : 700)
-        this.opt.html = ((_18_19_=this.opt.html) != null ? _18_19_ : this.opt.text)
+        this.opt.delay = ((_18_19_=this.opt.delay) != null ? _18_19_ : 700)
+        this.opt.html = ((_19_19_=this.opt.html) != null ? _19_19_ : this.opt.text)
         this.elem = this.opt.elem
         if (_.isString(this.opt.elem))
         {
@@ -39,7 +39,7 @@ class Tooltip
 
     del (event)
     {
-        var _30_27_
+        var _31_27_
 
         if (this.opt.keep)
         {
@@ -60,7 +60,7 @@ class Tooltip
 
     onHover (event)
     {
-        var _40_27_, _41_22_
+        var _41_27_, _42_22_
 
         if (!(this.elem != null))
         {
@@ -78,7 +78,7 @@ class Tooltip
 
     popup (event)
     {
-        var br, _51_27_, _52_22_, _61_67_, _62_59_, _63_60_
+        var br, _52_27_, _53_22_, _62_67_, _63_59_, _64_60_
 
         if (!(this.elem != null))
         {
@@ -116,7 +116,7 @@ class Tooltip
 
     onLeave (event, e)
     {
-        var _67_16_, _73_12_
+        var _68_16_, _74_12_
 
         if ((this.elem != null))
         {

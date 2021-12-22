@@ -234,41 +234,44 @@ class Title
 
     makeTemplate (obj)
     {
-        var item, menuOrAccel, text, tmpl, _202_44_, _202_68_
+        var item, menuOrAccel, text, tmpl
 
         tmpl = []
         for (text in obj)
         {
             menuOrAccel = obj[text]
-            tmpl.push(if (_k_.empty((menuOrAccel)) && text.startsWith('-'))
+            item = (function ()
             {
-                {text:''}
-            }
-            else if (_.isNumber(menuOrAccel))
-            {
-                {text:text,accel:kstr(menuOrAccel)}
-            }
-            else if (_.isString(menuOrAccel))
-            {
-                {text:text,accel:keyinfo.convertCmdCtrl(menuOrAccel)}
-            }
-            else if (_k_.empty(menuOrAccel))
-            {
-                {text:text,accel:''}
-            }
-            else
-            {
-                if ((menuOrAccel.accel != null) || (menuOrAccel.command != null))
+                var _201_37_, _201_61_
+
+                if (_k_.empty(menuOrAccel) && text.startsWith('-'))
+                {
+                    return {text:''}
+                }
+                else if ((function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(menuOrAccel))
+                {
+                    return {text:text,accel:kstr(menuOrAccel)}
+                }
+                else if ((function(o){return typeof o === 'string' || o instanceof String})(menuOrAccel))
+                {
+                    return {text:text,accel:keyinfo.convertCmdCtrl(menuOrAccel)}
+                }
+                else if (_k_.empty(menuOrAccel))
+                {
+                    return {text:text,accel:''}
+                }
+                else if ((menuOrAccel.accel != null) || (menuOrAccel.command != null))
                 {
                     item = _.clone(menuOrAccel)
                     item.text = text
-                    item
+                    return item
                 }
                 else
                 {
-                    {text:text,menu:this.makeTemplate(menuOrAccel)}
+                    return {text:text,menu:this.makeTemplate(menuOrAccel)}
                 }
-            })
+            }).bind(this)
+            tmpl.push(item())
         }
         return tmpl
     }

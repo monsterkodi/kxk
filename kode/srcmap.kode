@@ -6,7 +6,8 @@
 0000000   000   000   0000000  000   000  000   000  000        
 ###
 
-{ _, empty, klog, sh, slash, valid } = require './kxk'
+kxk = require './kxk'
+{ _, klog, sh, slash } = kxk
 
 regex1     = /^\s+at\s+(\S+)\s+\((.*):(\d+):(\d+)\)/
 regex2     = /^\s+at\s+(.*):(\d+):(\d+)/
@@ -238,7 +239,7 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
     coffeeCol  = jsCol
     
     if slash.fileExists jsFile
-        if valid mapData = readMap jsFile
+        if valid (mapData = readMap jsFile)
             coPos = coffeePos mapData, jsLine, jsCol
             coffeeFile = slash.tilde slash.join mapData.sourceRoot, mapData.sources[0]
             coffeeLine = coPos.line 
@@ -296,7 +297,7 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
     if not coffeeLine? 
         return [jsFile, null, null]
     
-    if valid mapData = readMap jsFile
+    if valid (mapData = readMap jsFile)
         jsPos = jsPosition mapData, coffeeLine, coffeeCol
         [jsFile, jsPos.line, jsPos.col]
     else    

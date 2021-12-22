@@ -2,12 +2,11 @@
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var config, dissect, last, merge, ranges, sortRanges, _
+var config, dissect, kxk, last, merge, ranges, sortRanges, _
 
-empty = require('./kxk').empty
-valid = require('./kxk').valid
-last = require('./kxk').last
-_ = require('./kxk')._
+kxk = require('./kxk')
+last = kxk.last
+_ = kxk._
 
 
 config = function (patterns, flags)
@@ -34,7 +33,7 @@ sortRanges = function (rgs)
 
 ranges = function (regexes, text, flags)
 {
-    var arg, gi, gs, i, j, match, r, reg, rgs, s, value, _67_35_
+    var arg, gi, gs, i, j, match, r, reg, rgs, s, value, _69_35_
 
     if (!_.isArray(regexes))
     {
@@ -56,7 +55,7 @@ ranges = function (regexes, text, flags)
     {
         return rgs
     }
-    for (var _63_14_ = r = 0, _63_18_ = regexes.length; (_63_14_ <= _63_18_ ? r < regexes.length : r > regexes.length); (_63_14_ <= _63_18_ ? ++r : --r))
+    for (var _65_14_ = r = 0, _65_18_ = regexes.length; (_65_14_ <= _65_18_ ? r < regexes.length : r > regexes.length); (_65_14_ <= _65_18_ ? ++r : --r))
     {
         reg = regexes[r][0]
         if (!(reg != null) || !(reg.exec != null))
@@ -86,7 +85,7 @@ ranges = function (regexes, text, flags)
             else
             {
                 gs = 0
-                for (var _97_26_ = j = 0, _97_29_ = match.length - 2; (_97_26_ <= _97_29_ ? j <= match.length - 2 : j >= match.length - 2); (_97_26_ <= _97_29_ ? ++j : --j))
+                for (var _99_26_ = j = 0, _99_29_ = match.length - 2; (_99_26_ <= _99_29_ ? j <= match.length - 2 : j >= match.length - 2); (_99_26_ <= _99_29_ ? ++j : --j))
                 {
                     value = arg
                     if (_.isArray(value) && j < value.length)
@@ -115,7 +114,7 @@ ranges = function (regexes, text, flags)
 
 dissect = function (ranges, opt = {join:false})
 {
-    var c, d, di, dps, i, p, pn, r, rg, ri, si, _167_22_, _168_36_, _170_48_
+    var c, d, di, dps, i, p, pn, r, rg, ri, si, _169_22_, _170_36_, _172_48_
 
     if (!ranges.length)
     {
@@ -123,9 +122,9 @@ dissect = function (ranges, opt = {join:false})
     }
     di = []
     var list = _k_.list(ranges)
-    for (var _140_11_ = 0; _140_11_ < list.length; _140_11_++)
+    for (var _142_11_ = 0; _142_11_ < list.length; _142_11_++)
     {
-        rg = list[_140_11_]
+        rg = list[_142_11_]
         di.push([rg.start,rg.index])
         di.push([rg.start + rg.match.length,rg.index])
     }
@@ -143,9 +142,9 @@ dissect = function (ranges, opt = {join:false})
     d = []
     si = -1
     var list1 = _k_.list(di)
-    for (var _153_12_ = 0; _153_12_ < list1.length; _153_12_++)
+    for (var _155_12_ = 0; _155_12_ < list1.length; _155_12_++)
     {
-        dps = list1[_153_12_]
+        dps = list1[_155_12_]
         if (dps[0] > si)
         {
             si = dps[0]
@@ -153,7 +152,7 @@ dissect = function (ranges, opt = {join:false})
         }
     }
     p = 0
-    for (var _161_15_ = ri = 0, _161_19_ = ranges.length; (_161_15_ <= _161_19_ ? ri < ranges.length : ri > ranges.length); (_161_15_ <= _161_19_ ? ++ri : --ri))
+    for (var _163_15_ = ri = 0, _163_19_ = ranges.length; (_163_15_ <= _163_19_ ? ri < ranges.length : ri > ranges.length); (_163_15_ <= _163_19_ ? ++ri : --ri))
     {
         rg = ranges[ri]
         while (d[p].start < rg.start)
@@ -168,17 +167,17 @@ dissect = function (ranges, opt = {join:false})
                 if (!(rg.clss.split != null))
                 {
                     var list2 = _k_.list(rg.clss)
-                    for (var _169_26_ = 0; _169_26_ < list2.length; _169_26_++)
+                    for (var _171_26_ = 0; _171_26_ < list2.length; _171_26_++)
                     {
-                        r = list2[_169_26_]
+                        r = list2[_171_26_]
                         if (!((r != null ? r.split : undefined) != null))
                         {
                             continue
                         }
                         var list3 = _k_.list(r.split('.'))
-                        for (var _171_30_ = 0; _171_30_ < list3.length; _171_30_++)
+                        for (var _173_30_ = 0; _173_30_ < list3.length; _173_30_++)
                         {
-                            c = list3[_171_30_]
+                            c = list3[_173_30_]
                             if (d[pn].cls.indexOf(c) < 0)
                             {
                                 d[pn].cls.push(c)
@@ -189,9 +188,9 @@ dissect = function (ranges, opt = {join:false})
                 else
                 {
                     var list4 = _k_.list(rg.clss.split('.'))
-                    for (var _174_26_ = 0; _174_26_ < list4.length; _174_26_++)
+                    for (var _176_26_ = 0; _176_26_ < list4.length; _176_26_++)
                     {
-                        c = list4[_174_26_]
+                        c = list4[_176_26_]
                         if (d[pn].cls.indexOf(c) < 0)
                         {
                             d[pn].cls.push(c)
@@ -219,20 +218,20 @@ dissect = function (ranges, opt = {join:false})
     }
     d = d.filter(function (i)
     {
-        var _185_31_
+        var _187_31_
 
         return (i.match != null ? i.match.trim().length : undefined)
     })
     var list5 = _k_.list(d)
-    for (var _187_10_ = 0; _187_10_ < list5.length; _187_10_++)
+    for (var _189_10_ = 0; _189_10_ < list5.length; _189_10_++)
     {
-        i = list5[_187_10_]
+        i = list5[_189_10_]
         i.clss = i.cls.join(' ')
         delete i.cls
     }
     if (d.length > 1)
     {
-        for (var _192_18_ = i = d.length - 2, _192_30_ = 0; (_192_18_ <= _192_30_ ? i <= 0 : i >= 0); (_192_18_ <= _192_30_ ? ++i : --i))
+        for (var _194_18_ = i = d.length - 2, _194_30_ = 0; (_194_18_ <= _194_30_ ? i <= 0 : i >= 0); (_194_18_ <= _194_30_ ? ++i : --i))
         {
             if (d[i].start + d[i].match.length === d[i + 1].start)
             {

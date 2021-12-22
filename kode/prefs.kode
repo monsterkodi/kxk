@@ -43,6 +43,7 @@ class Prefs
                 
         else
             kerror "can't touch prefs file #{@store.file}"
+        @watcher
         
     @onFileChange: => @store.reload()
     @onFileUnlink: => @unwatch(); @store.clear()

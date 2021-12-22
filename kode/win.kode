@@ -6,7 +6,8 @@
 00     00  000  000   000  
 ###
 
-{ $, _, empty, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, stopEvent, title, valid } = require './kxk'
+kxk = require './kxk'
+{ $, _, keyinfo, klog, kpos, open, popup, post, prefs, scheme, slash, stopEvent, title } = kxk
 
 if process.type == 'renderer'
     electron = require 'electron'
