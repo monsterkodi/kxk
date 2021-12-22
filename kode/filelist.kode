@@ -6,7 +6,7 @@
 000       000  0000000  00000000  0000000  000  0000000      000     
 ###
 
-{ _, filter, fs, slash } = require './kxk'
+{ filter, fs, slash } = require './kxk'
 
 #   synchronous file list
 #
@@ -27,7 +27,7 @@ fileList = (paths, opt) ->
     opt.ignoreHidden ?= true
     opt.logError     ?= true
     files = []
-    paths = [paths] if _.isString paths
+    paths = [paths] if paths is str
     
     filter = (p) ->
         
@@ -36,9 +36,9 @@ fileList = (paths, opt) ->
         if opt.ignoreHidden and slash.file(p).startsWith '.'
             return true
         else if opt.matchExt? 
-            if _.isString(opt.matchExt) and slash.ext(p) != opt.matchExt
+            if opt.matchExt is str and slash.ext(p) != opt.matchExt
                 return true
-            else if _.isArray(opt.matchExt) and slash.ext(p) not in opt.matchExt
+            else if opt.matchExt is Array and slash.ext(p) not in opt.matchExt
                 return true
         false
     
@@ -63,8 +63,8 @@ fileList = (paths, opt) ->
                             else
                                 files.push slash.normalize p 
                                     
-                if opt.depth? and _.isInteger(opt.depth) and opt.depth > 0
-                    copt = _.clone opt
+                if opt.depth is num and opt.depth > 0
+                    copt = clone opt
                     copt.depth -= 1
                     for d in childdirs
                         files = files.concat fileList d, copt 

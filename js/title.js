@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.190.0
+// monsterkodi/kode 0.195.0
 
 var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -252,7 +252,7 @@ class Title
                 {
                     return {text:text,accel:kstr(menuOrAccel)}
                 }
-                else if ((function(o){return typeof o === 'string' || o instanceof String})(menuOrAccel))
+                else if ((function(o){return (typeof o === 'string' || o instanceof String)})(menuOrAccel))
                 {
                     return {text:text,accel:keyinfo.convertCmdCtrl(menuOrAccel)}
                 }

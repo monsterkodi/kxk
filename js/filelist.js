@@ -1,10 +1,9 @@
-// monsterkodi/kode 0.190.0
+// monsterkodi/kode 0.195.0
 
-var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o);}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) {var r = {}; v.set(o,r); for (k in o) {if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k])}; }; return v.get(o) } else {return o} }}
 
-var fileList, filter, fs, slash, _
+var fileList, filter, fs, slash
 
-_ = require('./kxk')._
 filter = require('./kxk').filter
 fs = require('./kxk').fs
 slash = require('./kxk').slash
@@ -12,13 +11,13 @@ slash = require('./kxk').slash
 
 fileList = function (paths, opt)
 {
-    var childdirs, children, copt, d, f, files, p, pos, ps, stat, _27_21_, _28_21_, _66_28_
+    var childdirs, children, copt, d, f, files, p, pos, ps, stat, _27_21_, _28_21_
 
     opt = (opt != null ? opt : {})
     opt.ignoreHidden = ((_27_21_=opt.ignoreHidden) != null ? _27_21_ : true)
     opt.logError = ((_28_21_=opt.logError) != null ? _28_21_ : true)
     files = []
-    if (_.isString(paths))
+    if ((function(o){return (typeof o === 'string' || o instanceof String)})(paths))
     {
         paths = [paths]
     }
@@ -36,11 +35,11 @@ fileList = function (paths, opt)
         }
         else if ((opt.matchExt != null))
         {
-            if (_.isString(opt.matchExt) && slash.ext(p) !== opt.matchExt)
+            if ((function(o){return (typeof o === 'string' || o instanceof String)})(opt.matchExt) && slash.ext(p) !== opt.matchExt)
             {
                 return true
             }
-            else if (_.isArray(opt.matchExt) && !(_k_.in(slash.ext(p),opt.matchExt)))
+            else if (opt.matchExt instanceof Array && !(_k_.in(slash.ext(p),opt.matchExt)))
             {
                 return true
             }
@@ -89,9 +88,9 @@ fileList = function (paths, opt)
                         }
                     }
                 }
-                if ((opt.depth != null) && _.isInteger(opt.depth) && opt.depth > 0)
+                if ((function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(opt.depth) && opt.depth > 0)
                 {
-                    copt = _.clone(opt)
+                    copt = _k_.clone(opt)
                     copt.depth -= 1
                     var list3 = _k_.list(childdirs)
                     for (var _69_26_ = 0; _69_26_ < list3.length; _69_26_++)

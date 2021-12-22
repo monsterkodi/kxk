@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.190.0
+// monsterkodi/kode 0.195.0
 
-var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var electron, Emitter, POST, _
+var electron, Emitter, POST, PostMain, PostRenderer, _
 
 _ = require('lodash')
 Emitter = require('events')
@@ -10,67 +10,74 @@ POST = '__POST__'
 if (process.type === 'renderer')
 {
     electron = require('electron')
-    class PostRenderer extends Emitter
+    
+PostRenderer = (function ()
 {
-    constructor ()
+    _k_.extend(PostRenderer, Emitter);
+    function PostRenderer ()
     {
-        this.dispose = this.dispose.bind(this)
-        super.constructor()
+        this["dispose"] = this["dispose"].bind(this)
+        PostRenderer.__super__.constructor.call(this)
         this.ipc = electron.ipcRenderer
         this.ipc.on(POST,(function (event, type, argl)
         {
             return this.emit.apply(this,[type].concat(argl))
         }).bind(this))
         window.addEventListener('beforeunload',this.dispose)
+        return PostRenderer.__super__.constructor.apply(this, arguments)
     }
 
-    dispose ()
+    PostRenderer.prototype["dispose"] = function ()
     {
         window.removeEventListener('beforeunload',this.dispose)
         this.ipc.removeAllListeners(POST)
         return this.ipc = null
     }
 
-    toAll (type, ...args)
+    PostRenderer.prototype["toAll"] = function (type, ...args)
     {
         return this.send('toAll',type,args)
     }
 
-    toMain (type, ...args)
+    PostRenderer.prototype["toMain"] = function (type, ...args)
     {
         return this.send('toMain',type,args)
     }
 
-    toOtherWins (type, ...args)
+    PostRenderer.prototype["toOtherWins"] = function (type, ...args)
     {
         return this.send('toOtherWins',type,args)
     }
 
-    get (type, ...args)
+    PostRenderer.prototype["get"] = function (type, ...args)
     {
         return this.ipc.sendSync(POST,'get',type,args)
     }
 
-    send (receivers, type, args, id)
+    PostRenderer.prototype["send"] = function (receivers, type, args, id)
     {
         var _41_49_
 
         return (this.ipc != null ? this.ipc.send(POST,receivers,type,args,id) : undefined)
     }
-}
+
+    return PostRenderer
+})()
 
 module.exports = new PostRenderer()
 }
 else if (process.type === 'browser')
 {
 electron = require('electron')
-class PostMain extends Emitter
+
+PostMain = (function ()
 {
-    constructor ()
+    _k_.extend(PostMain, Emitter);
+    function PostMain ()
     {
         var ipc
 
-        super.constructor()
+        PostMain.__super__.constructor.call(this)
         this.getCallbacks = {}
         try
         {
@@ -110,25 +117,26 @@ class PostMain extends Emitter
         {
             kerror(err)
         }
+        return PostMain.__super__.constructor.apply(this, arguments)
     }
 
-    toAll (type, ...args)
+    PostMain.prototype["toAll"] = function (type, ...args)
     {
         this.sendToWins(type,args)
         return this.sendToMain(type,args)
     }
 
-    toMain (type, ...args)
+    PostMain.prototype["toMain"] = function (type, ...args)
     {
         return this.sendToMain(type,args)
     }
 
-    toWins (type, ...args)
+    PostMain.prototype["toWins"] = function (type, ...args)
     {
         return this.sendToWins(type,args)
     }
 
-    toWin (id, type, ...args)
+    PostMain.prototype["toWin"] = function (id, type, ...args)
     {
         var w, _83_26_
 
@@ -143,17 +151,17 @@ class PostMain extends Emitter
         return (w != null ? (_83_26_=w.webContents) != null ? _83_26_.send(POST,type,args) : undefined : undefined)
     }
 
-    onGet (type, cb)
+    PostMain.prototype["onGet"] = function (type, cb)
     {
         return this.getCallbacks[type] = cb
     }
 
-    get (type)
+    PostMain.prototype["get"] = function (type)
     {
         return this.getCallbacks[type]()
     }
 
-    sendToMain (type, argl, id)
+    PostMain.prototype["sendToMain"] = function (type, argl, id)
     {
         this.senderWinID = id
         argl.unshift(type)
@@ -161,7 +169,7 @@ class PostMain extends Emitter
         return delete this.senderWinID
     }
 
-    sendToWins (type, argl, except)
+    PostMain.prototype["sendToWins"] = function (type, argl, except)
     {
         var win
 
@@ -175,7 +183,9 @@ class PostMain extends Emitter
             }
         }
     }
-}
+
+    return PostMain
+})()
 
 module.exports = new PostMain()
 }

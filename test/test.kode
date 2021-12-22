@@ -53,7 +53,7 @@ kxk =  require '../'
             # (filelist 'dir') ▸ [slash.normalize('dir/noext'), slash.normalize('dir/test.coffee'), slash.normalize('dir/test.js'), slash.normalize('dir/test.txt')]
 
         ▸ recurses if depth set
-            (filelist 'dir' depth: 2) ▸ [
+            filelist 'dir' depth:2 ▸ [
                 slash.normalize('dir/noext'),
                 slash.normalize('dir/test.coffee'),
                 slash.normalize('dir/test.js'),
@@ -65,7 +65,7 @@ kxk =  require '../'
                 slash.normalize('dir/level1b/level1b.coffee')]
 
         ▸ matches extension
-            (filelist 'dir' depth: 3, matchExt: 'coffee') ▸ [
+            filelist 'dir' depth:3 matchExt:'coffee' ▸ [
                 slash.normalize('dir/test.coffee'),
                 slash.normalize('dir/level1/test.coffee'),
                 slash.normalize('dir/level1/level2/level2.coffee'),

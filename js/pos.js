@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.190.0
+// monsterkodi/kode 0.195.0
 
 var _k_
 
@@ -356,7 +356,10 @@ class Pos
         {
             angle += 360
         }
-        return this.if(angle === 0)
+        if (angle === 0)
+        {
+            return this
+        }
         rad = this.deg2rad(angle)
         cos = Math.cos(rad)
         sin = Math.sin(rad)
