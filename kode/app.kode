@@ -107,18 +107,17 @@ function App
     
     onReady: =>
     
-        log 'app.onReady'
-        
         if @opt.tray then @initTray()
          
         @hideDock()
          
         @app.setName @opt.pkg.name
     
-        log 'app.onReady2'
+        log 'app.onReady' args
         
         if not args.noprefs
             sep = @opt.prefsSeperator ? '▸'
+            log 'app.onReady prefs?' prefs?, kxk.prefs?
             if @opt.shortcut
                 prefs.init separator:sep, defaults:shortcut:@opt.shortcut
             else
