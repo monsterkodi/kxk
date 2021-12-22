@@ -22,7 +22,7 @@ karg      = require 'karg'
 kstr      = require 'kstr'
 klor      = require 'klor'
 
-empty = (a) -> a in ['' null undefined] or (typeof(a) == 'object' and not a.size? and Object.keys(a).length == 0) or a.size == 0
+# empty = (a) -> a in ['' null undefined] or (typeof(a) == 'object' and not a.size? and Object.keys(a).length == 0) or a.size == 0
 
 module.exports =
 
@@ -97,8 +97,8 @@ module.exports =
     fade:  (s,e,v) -> s*(1-v)+e*(v)
     last:  (a) -> _.last a
     first: (a) -> _.first a
-    empty: empty
-    valid: (a) -> not empty a
+    # empty: empty
+    # valid: (a) -> not empty a
 
     absMax: (a,b) -> if Math.abs(a) >= Math.abs(b) then a else b
     absMin: (a,b) -> if Math.abs(a)  < Math.abs(b) then a else b
