@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.189.0
+// monsterkodi/kode 0.190.0
 
 var _k_
 
@@ -96,7 +96,7 @@ class Pos
 
     rounded (v = 1.0)
     {
-        return new Pos(Math.round(this.x,/v)*v, Math.round(@y/,v) * v)
+        return new Pos(Math.round(this.x / v) * v,Math.round(this.y / v) * v)
     }
 
     to (other)
