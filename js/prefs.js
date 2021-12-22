@@ -56,10 +56,12 @@ class Prefs
         {
             this.unwatch()
             this.watcher = fs.watch(this.store.file)
-            return this.watcher(.,on('change',this.onFileChange.on('rename',this.onFileUnlink.on('error',function (err)
+            this.watcher.on('change',this.onFileChange)
+            this.watcher.on('rename',this.onFileUnlink)
+            return this.watcher.on('error',function (err)
             {
                 return kerror('Prefs watch error',err)
-            }))))
+            })
         }
         else
         {
@@ -106,7 +108,7 @@ class Prefs
 
     static save ()
     {
-        var _54_33_
+        var _53_33_
 
         return (this.store != null ? this.store.save() : undefined)
     }

@@ -37,10 +37,9 @@ class Prefs
         
             @unwatch()
             @watcher = fs.watch @store.file
-            @watcher
-                .on 'change' @onFileChange
-                .on 'rename' @onFileUnlink
-                .on 'error'  (err) -> kerror 'Prefs watch error' err
+            @watcher.on 'change' @onFileChange
+            @watcher.on 'rename' @onFileUnlink
+            @watcher.on 'error'  (err) -> kerror 'Prefs watch error' err
                 
         else
             kerror "can't touch prefs file #{@store.file}"
