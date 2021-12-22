@@ -355,16 +355,16 @@ class App
         if w = @winForEvent event
             
             switch action.toLowerCase()
-                when 'about'       then @showAbout()
-                when 'quit'        then @quitApp()
-                when 'screenshot'  then @screenshot w
-                when 'fullscreen'  then w.setFullScreen !w.isFullScreen()
-                when 'devtools'    then @toggleDevTools w.webContents
-                when 'reload'      then w.webContents.reloadIgnoringCache()
-                when 'close'       then w.close()
-                when 'hide'        then w.hide()
-                when 'minimize'    then w.minimize()
-                when 'maximize' 
+                'about'       ➜ @showAbout()
+                'quit'        ➜ @quitApp()
+                'screenshot'  ➜ @screenshot w
+                'fullscreen'  ➜ w.setFullScreen not w.isFullScreen()
+                'devtools'    ➜ @toggleDevTools w.webContents
+                'reload'      ➜ w.webContents.reloadIgnoringCache()
+                'close'       ➜ w.close()
+                'hide'        ➜ w.hide()
+                'minimize'    ➜ w.minimize()
+                'maximize' 
                     wa = @screenSize()
                     wb = w.getBounds()
                     maximized = w.isMaximized() or (wb.width == wa.width and wb.height == wa.height)
