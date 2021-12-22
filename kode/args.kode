@@ -67,7 +67,7 @@ else
             
         args
     
-    if post?
+    if post?.onGet is 'function'
         post.onGet 'args' => args
     
     module.exports = args

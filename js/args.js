@@ -102,7 +102,7 @@ else
         }
         return args
     }
-    if ((post != null))
+    if (typeof((post != null ? post.onGet : undefined)) === 'function')
     {
         post.onGet('args',(function ()
         {
