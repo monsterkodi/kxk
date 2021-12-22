@@ -172,10 +172,13 @@ module.exports.args        = require './args'
 
 module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'
 
+log Object.keys(module.exports).length
+    
 module.exports.drag        = require './drag'
 module.exports.elem        = require './elem'
 module.exports.stash       = require './stash'
 module.exports.store       = require './store'
+log Object.keys(module.exports).length
 module.exports.prefs       = require './prefs'
 module.exports.filelist    = require './filelist'
 module.exports.keyinfo     = require './keyinfo'

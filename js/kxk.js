@@ -229,10 +229,12 @@ for (var _173_55_ = 0; _173_55_ < list.length; _173_55_++)
     k = list[_173_55_]
     module.exports[k] = require('./dom')[k]
 }
+console.log(Object.keys(module.exports).length)
 module.exports.drag = require('./drag')
 module.exports.elem = require('./elem')
 module.exports.stash = require('./stash')
 module.exports.store = require('./store')
+console.log(Object.keys(module.exports).length)
 module.exports.prefs = require('./prefs')
 module.exports.filelist = require('./filelist')
 module.exports.keyinfo = require('./keyinfo')
