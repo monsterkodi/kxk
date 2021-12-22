@@ -7,7 +7,7 @@
 ###
 
 kxk = require './kxk'
-{ elem, kerror, $, _ } = kxk
+{ elem, kerror, $ } = kxk
 
 function Tooltip
     
@@ -19,7 +19,7 @@ function Tooltip
         @opt.html  ?= @opt.text
         
         @elem =  @opt.elem
-        @elem =$ @opt.elem if _.isString @opt.elem
+        @elem =$ @opt.elem if @opt.elem is str
         @elem.tooltip = @      
 
         @elem.addEventListener 'mouseenter', @onHover

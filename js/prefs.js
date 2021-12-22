@@ -1,23 +1,24 @@
 // monsterkodi/kode 0.196.0
 
-var _k_
+var _k_ = {clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o);}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) {var r = {}; v.set(o,r); for (k in o) {if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k])}; }; return v.get(o) } else {return o} }}
 
-var fs, kerror, klog, slash, store, _
+var fs, kerror, klog, Prefs, slash, store
 
-_ = require('./kxk')._
 fs = require('./kxk').fs
 kerror = require('./kxk').kerror
 klog = require('./kxk').klog
 slash = require('./kxk').slash
 store = require('./kxk').store
 
-class Prefs
+
+Prefs = (function ()
 {
-    static store = null
+    function Prefs ()
+    {}
 
-    static watcher = null
 
-    static init (opt = {})
+
+    Prefs["init"] = function (opt = {})
     {
         var _18_64_
 
@@ -31,7 +32,7 @@ class Prefs
         return this.watch()
     }
 
-    static unwatch ()
+    Prefs["unwatch"] = function ()
     {
         var _26_32_, _28_16_
 
@@ -43,7 +44,7 @@ class Prefs
         return this.watcher = null
     }
 
-    static watch ()
+    Prefs["watch"] = function ()
     {
         var _33_32_
 
@@ -70,18 +71,18 @@ class Prefs
         return this.watcher
     }
 
-    static onFileChange ()
+    Prefs["onFileChange"] = function ()
     {
         return this.store.reload()
     }
 
-    static onFileUnlink ()
+    Prefs["onFileUnlink"] = function ()
     {
         this.unwatch()
         return this.store.clear()
     }
 
-    static get (key, value)
+    Prefs["get"] = function (key, value)
     {
         if (this.store)
         {
@@ -89,32 +90,32 @@ class Prefs
         }
         else
         {
-            return _.cloneDeep(value)
+            return _k_.clone(value)
         }
     }
 
-    static set (key, value)
+    Prefs["set"] = function (key, value)
     {
         this.unwatch()
         this.store.set(key,value)
         return this.watch()
     }
 
-    static del (key, value)
+    Prefs["del"] = function (key, value)
     {
         this.unwatch()
         this.store.del(key)
         return this.watch()
     }
 
-    static save ()
+    Prefs["save"] = function ()
     {
         var _54_33_
 
         return (this.store != null ? this.store.save() : undefined)
     }
 
-    static toggle (key, cb)
+    Prefs["toggle"] = function (key, cb)
     {
         var val
 
@@ -123,7 +124,7 @@ class Prefs
         return (typeof cb === "function" ? cb(val) : undefined)
     }
 
-    static apply (key, deflt = false, cb)
+    Prefs["apply"] = function (key, deflt = false, cb)
     {
         if (!(cb != null) && deflt !== false)
         {
@@ -131,6 +132,8 @@ class Prefs
         }
         return (typeof cb === "function" ? cb(this.get(key,deflt)) : undefined)
     }
-}
+
+    return Prefs
+})()
 
 module.exports = Prefs

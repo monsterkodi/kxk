@@ -2,13 +2,12 @@
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}}
 
-var $, elem, kerror, kxk, Tooltip, _
+var $, elem, kerror, kxk, Tooltip
 
 kxk = require('./kxk')
 elem = kxk.elem
 kerror = kxk.kerror
 $ = kxk.$
-_ = kxk._
 
 
 Tooltip = (function ()
@@ -29,7 +28,7 @@ Tooltip = (function ()
         this.opt.delay = ((_18_19_=this.opt.delay) != null ? _18_19_ : 700)
         this.opt.html = ((_19_19_=this.opt.html) != null ? _19_19_ : this.opt.text)
         this.elem = this.opt.elem
-        if (_.isString(this.opt.elem))
+        if ((function(o){return (typeof o === 'string' || o instanceof String)})(this.opt.elem))
         {
             this.elem = $(this.opt.elem)
         }

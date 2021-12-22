@@ -8,7 +8,7 @@
 
 kxk = require './kxk'
 
-{ last, _ } = kxk
+{ last } = kxk
 
 #  0000000   0000000   000   000  00000000  000   0000000 
 # 000       000   000  0000  000  000       000  000      
@@ -51,12 +51,12 @@ sortRanges = (rgs) ->
 
 ranges = (regexes, text, flags) ->
     
-    if not _.isArray regexes
-        if _.isString regexes
+    if not regexes is Array
+        if regexes is str
             regexes = [[new RegExp(regexes, flags), 'found']]
         else
             regexes = [[regexes, 'found']]
-    else if valid(regexes) and not _.isArray regexes[0]
+    else if valid(regexes) and not regexes[0] is Array
         regexes = [regexes]
 
     rgs = []
@@ -98,9 +98,11 @@ ranges = (regexes, text, flags) ->
                 
                 for j in [0..match.length-2]
                     value = arg
-                    if _.isArray(value) and j < value.length then value = value[j]
-                    else if _.isObject(value) and j < _.size(value) 
-                        value = [_.keys(value)[j], value[_.keys(value)[j]]]
+                    if value is Array and j < value.length then value = value[j]
+                    # else if _.isObject(value) and j < _.size(value) 
+                        # value = [_.keys(value)[j], value[_.keys(value)[j]]]
+                    else if value is obj and j < Object.keys(value).length 
+                        value = [Object.keys(value)[j], value[Object.keys(value)[j]]]
                     break if not match[j+1]?
                     gi = match[0].slice(gs).indexOf match[j+1]
                     

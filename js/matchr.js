@@ -2,11 +2,10 @@
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var config, dissect, kxk, last, merge, ranges, sortRanges, _
+var config, dissect, kxk, last, merge, ranges, sortRanges
 
 kxk = require('./kxk')
 last = kxk.last
-_ = kxk._
 
 
 config = function (patterns, flags)
@@ -35,9 +34,9 @@ ranges = function (regexes, text, flags)
 {
     var arg, gi, gs, i, j, match, r, reg, rgs, s, value, _69_35_
 
-    if (!_.isArray(regexes))
+    if (!regexes instanceof Array)
     {
-        if (_.isString(regexes))
+        if ((function(o){return (typeof o === 'string' || o instanceof String)})(regexes))
         {
             regexes = [[new RegExp(regexes,flags),'found']]
         }
@@ -46,7 +45,7 @@ ranges = function (regexes, text, flags)
             regexes = [[regexes,'found']]
         }
     }
-    else if (!_k_.empty((regexes)) && !_.isArray(regexes[0]))
+    else if (!_k_.empty((regexes)) && !regexes[0] instanceof Array)
     {
         regexes = [regexes]
     }
@@ -88,13 +87,13 @@ ranges = function (regexes, text, flags)
                 for (var _99_26_ = j = 0, _99_29_ = match.length - 2; (_99_26_ <= _99_29_ ? j <= match.length - 2 : j >= match.length - 2); (_99_26_ <= _99_29_ ? ++j : --j))
                 {
                     value = arg
-                    if (_.isArray(value) && j < value.length)
+                    if (value instanceof Array && j < value.length)
                     {
                         value = value[j]
                     }
-                    else if (_.isObject(value) && j < _.size(value))
+                    else if ((function(o){return !(o == null || typeof o != 'object' || o.constructor.name !== 'Object')})(value) && j < Object.keys(value).length)
                     {
-                        value = [_.keys(value)[j],value[_.keys(value)[j]]]
+                        value = [Object.keys(value)[j],value[Object.keys(value)[j]]]
                     }
                     if (!(match[j + 1] != null))
                     {
@@ -114,7 +113,7 @@ ranges = function (regexes, text, flags)
 
 dissect = function (ranges, opt = {join:false})
 {
-    var c, d, di, dps, i, p, pn, r, rg, ri, si, _169_22_, _170_36_, _172_48_
+    var c, d, di, dps, i, p, pn, r, rg, ri, si, _171_22_, _172_36_, _174_48_
 
     if (!ranges.length)
     {
@@ -122,9 +121,9 @@ dissect = function (ranges, opt = {join:false})
     }
     di = []
     var list = _k_.list(ranges)
-    for (var _142_11_ = 0; _142_11_ < list.length; _142_11_++)
+    for (var _144_11_ = 0; _144_11_ < list.length; _144_11_++)
     {
-        rg = list[_142_11_]
+        rg = list[_144_11_]
         di.push([rg.start,rg.index])
         di.push([rg.start + rg.match.length,rg.index])
     }
@@ -142,9 +141,9 @@ dissect = function (ranges, opt = {join:false})
     d = []
     si = -1
     var list1 = _k_.list(di)
-    for (var _155_12_ = 0; _155_12_ < list1.length; _155_12_++)
+    for (var _157_12_ = 0; _157_12_ < list1.length; _157_12_++)
     {
-        dps = list1[_155_12_]
+        dps = list1[_157_12_]
         if (dps[0] > si)
         {
             si = dps[0]
@@ -152,7 +151,7 @@ dissect = function (ranges, opt = {join:false})
         }
     }
     p = 0
-    for (var _163_15_ = ri = 0, _163_19_ = ranges.length; (_163_15_ <= _163_19_ ? ri < ranges.length : ri > ranges.length); (_163_15_ <= _163_19_ ? ++ri : --ri))
+    for (var _165_15_ = ri = 0, _165_19_ = ranges.length; (_165_15_ <= _165_19_ ? ri < ranges.length : ri > ranges.length); (_165_15_ <= _165_19_ ? ++ri : --ri))
     {
         rg = ranges[ri]
         while (d[p].start < rg.start)
@@ -167,17 +166,17 @@ dissect = function (ranges, opt = {join:false})
                 if (!(rg.clss.split != null))
                 {
                     var list2 = _k_.list(rg.clss)
-                    for (var _171_26_ = 0; _171_26_ < list2.length; _171_26_++)
+                    for (var _173_26_ = 0; _173_26_ < list2.length; _173_26_++)
                     {
-                        r = list2[_171_26_]
+                        r = list2[_173_26_]
                         if (!((r != null ? r.split : undefined) != null))
                         {
                             continue
                         }
                         var list3 = _k_.list(r.split('.'))
-                        for (var _173_30_ = 0; _173_30_ < list3.length; _173_30_++)
+                        for (var _175_30_ = 0; _175_30_ < list3.length; _175_30_++)
                         {
-                            c = list3[_173_30_]
+                            c = list3[_175_30_]
                             if (d[pn].cls.indexOf(c) < 0)
                             {
                                 d[pn].cls.push(c)
@@ -188,9 +187,9 @@ dissect = function (ranges, opt = {join:false})
                 else
                 {
                     var list4 = _k_.list(rg.clss.split('.'))
-                    for (var _176_26_ = 0; _176_26_ < list4.length; _176_26_++)
+                    for (var _178_26_ = 0; _178_26_ < list4.length; _178_26_++)
                     {
-                        c = list4[_176_26_]
+                        c = list4[_178_26_]
                         if (d[pn].cls.indexOf(c) < 0)
                         {
                             d[pn].cls.push(c)
@@ -218,20 +217,20 @@ dissect = function (ranges, opt = {join:false})
     }
     d = d.filter(function (i)
     {
-        var _187_31_
+        var _189_31_
 
         return (i.match != null ? i.match.trim().length : undefined)
     })
     var list5 = _k_.list(d)
-    for (var _189_10_ = 0; _189_10_ < list5.length; _189_10_++)
+    for (var _191_10_ = 0; _191_10_ < list5.length; _191_10_++)
     {
-        i = list5[_189_10_]
+        i = list5[_191_10_]
         i.clss = i.cls.join(' ')
         delete i.cls
     }
     if (d.length > 1)
     {
-        for (var _194_18_ = i = d.length - 2, _194_30_ = 0; (_194_18_ <= _194_30_ ? i <= 0 : i >= 0); (_194_18_ <= _194_30_ ? ++i : --i))
+        for (var _196_18_ = i = d.length - 2, _196_30_ = 0; (_196_18_ <= _196_30_ ? i <= 0 : i >= 0); (_196_18_ <= _196_30_ ? ++i : --i))
         {
             if (d[i].start + d[i].match.length === d[i + 1].start)
             {

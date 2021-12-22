@@ -6,7 +6,8 @@
 0000000      000      0000000   000   000  00000000  
 ###
 
-{ _, atomic, kerror, noon, post, sds, slash } = require './kxk'
+kxk = require './kxk'
+{ _, atomic, kerror, noon, post, sds, slash } = kxk
 
 Emitter = require 'events'
 
@@ -18,7 +19,7 @@ function Store extends Emitter
     @stores: {}
     @addStore: (store) ->
 
-        if _.isEmpty @stores
+        if empty @stores
             post.onGet 'store' (name, action) =>
                 switch action
                     when 'data'
@@ -84,7 +85,7 @@ function Store extends Emitter
     get: (key, value) ->
         
         return _.cloneDeep(value) if not key?.split?
-        _.cloneDeep sds.get @data, @keypath(key), value
+        clone sds.get @data, @keypath(key), value
          
     #  0000000  00000000  000000000  
     # 000       000          000     
@@ -144,7 +145,7 @@ function Store extends Emitter
         if @app
             try
                 d = noon.load @file
-                if _.isPlainObject(d) then return d
+                if d is obj then return d
                 {}
             catch err
                 {}
@@ -161,7 +162,7 @@ function Store extends Emitter
         
         if @app
             return if not @file
-            return if _.isEmpty @data
+            return if empty @data
             
             @emit 'willSave'
             

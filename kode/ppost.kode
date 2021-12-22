@@ -78,7 +78,7 @@ else if process.type == 'browser'
         toMain: (    type, args...) -> @sendToMain type, args
         toWins: (    type, args...) -> @sendToWins type, args
         toWin:  (id, type, args...) -> 
-            if _.isNumber(id) then w = electron.BrowserWindow.fromId id
+            if id is num then w = electron.BrowserWindow.fromId id
             else w = id
             w?.webContents?.send POST, type, args
 

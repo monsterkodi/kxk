@@ -26,7 +26,7 @@ Drag = (function ()
         this["dragStart"] = this["dragStart"].bind(this)
         this["eventPos"] = this["eventPos"].bind(this)
         _.extend(this,def(cfg,{target:null,handle:null,onStart:null,onMove:null,onStop:null,active:true,stopEvent:true}))
-        if (_.isString(this.target))
+        if ((function(o){return (typeof o === 'string' || o instanceof String)})(this.target))
         {
             t = $(this.target)
             if (!(t != null))
@@ -43,21 +43,21 @@ Drag = (function ()
         {
             this.useScreenPos = true
         }
-        if ((this.onStart != null) && !_.isFunction(this.onStart))
+        if ((this.onStart != null) && !typeof(this.onStart) === 'function')
         {
             kerror("Drag -- onStart not a function?")
         }
-        if ((this.onMove != null) && !_.isFunction(this.onMove))
+        if ((this.onMove != null) && !typeof(this.onMove) === 'function')
         {
             kerror("Drag -- onMove not a function?")
         }
-        if ((this.onEnd != null) && !_.isFunction(this.onEnd))
+        if ((this.onEnd != null) && !typeof(this.onEnd) === 'function')
         {
             kerror("Drag -- onEnd not a function?")
         }
         this.dragging = false
         this.listening = false
-        if (_.isString(this.handle))
+        if ((function(o){return (typeof o === 'string' || o instanceof String)})(this.handle))
         {
             this.handle = $(this.handle)
         }

@@ -1,16 +1,17 @@
 // monsterkodi/kode 0.196.0
 
-var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}}
+var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o);}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) {var r = {}; v.set(o,r); for (k in o) {if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k])}; }; return v.get(o) } else {return o} }}
 
-var atomic, Emitter, kerror, post, sds, slash, Store, _
+var atomic, Emitter, kerror, kxk, post, sds, slash, Store, _
 
-_ = require('./kxk')._
-atomic = require('./kxk').atomic
-kerror = require('./kxk').kerror
-noon = require('./kxk').noon
-post = require('./kxk').post
-sds = require('./kxk').sds
-slash = require('./kxk').slash
+kxk = require('./kxk')
+_ = kxk._
+atomic = kxk.atomic
+kerror = kxk.kerror
+noon = kxk.noon
+post = kxk.post
+sds = kxk.sds
+slash = kxk.slash
 
 Emitter = require('events')
 
@@ -20,7 +21,7 @@ Store = (function ()
 
     Store["addStore"] = function (store)
     {
-        if (_.isEmpty(this.stores))
+        if (_k_.empty(this.stores))
         {
             post.onGet('store',(function (name, action)
             {
@@ -38,13 +39,13 @@ Store = (function ()
 
     function Store (name, opt = {})
     {
-        var electron, _34_22_, _35_22_, _48_32_, _74_62_
+        var electron, _35_22_, _36_22_, _49_32_, _75_62_
 
         this["save"] = this["save"].bind(this)
         Store.__super__.constructor.call(this)
         this.name = name
-        opt.separator = ((_34_22_=opt.separator) != null ? _34_22_ : ':')
-        opt.timeout = ((_35_22_=opt.timeout) != null ? _35_22_ : 4000)
+        opt.separator = ((_35_22_=opt.separator) != null ? _35_22_ : ':')
+        opt.timeout = ((_36_22_=opt.timeout) != null ? _36_22_ : 4000)
         if (!this.name)
         {
             return kerror('no name for store?')
@@ -56,7 +57,7 @@ Store = (function ()
         {
             Store.addStore(this)
             this.timer = null
-            this.file = ((_48_32_=opt.file) != null ? _48_32_ : slash.join(post.get('userData'),`${this.name}.noon`))
+            this.file = ((_49_32_=opt.file) != null ? _49_32_ : slash.join(post.get('userData'),`${this.name}.noon`))
             this.timeout = opt.timeout
             post.on('store',(function (name, action, ...argl)
             {
@@ -128,18 +129,18 @@ Store = (function ()
 
     Store.prototype["get"] = function (key, value)
     {
-        var _86_51_
+        var _87_51_
 
         if (!((key != null ? key.split : undefined) != null))
         {
             return _.cloneDeep(value)
         }
-        return _.cloneDeep(sds.get(this.data,this.keypath(key),value))
+        return _k_.clone(sds.get(this.data,this.keypath(key),value))
     }
 
     Store.prototype["set"] = function (key, value)
     {
-        var _100_14_, _97_32_
+        var _101_14_, _98_32_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -149,7 +150,7 @@ Store = (function ()
         {
             return
         }
-        this.data = ((_100_14_=this.data) != null ? _100_14_ : {})
+        this.data = ((_101_14_=this.data) != null ? _101_14_ : {})
         sds.set(this.data,this.keypath(key),value)
         if (this.app)
         {
@@ -217,7 +218,7 @@ Store = (function ()
             try
             {
                 d = noon.load(this.file)
-                if (_.isPlainObject(d))
+                if ((function(o){return !(o == null || typeof o != 'object' || o.constructor.name !== 'Object')})(d))
                 {
                     return d
                 }
@@ -242,7 +243,7 @@ Store = (function ()
             {
                 return
             }
-            if (_.isEmpty(this.data))
+            if (_k_.empty(this.data))
             {
                 return
             }

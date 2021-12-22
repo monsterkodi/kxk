@@ -1,6 +1,6 @@
 // monsterkodi/kode 0.196.0
 
-var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o);}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) {var r = {}; v.set(o,r); for (k in o) {if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k])}; }; return v.get(o) } else {return o} }, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
 var $, drag, elem, keyinfo, kstr, kxk, menu, post, prefs, scheme, sds, slash, stopEvent, Title, _
 
@@ -223,7 +223,7 @@ Title = (function ()
         {
             this.templateCache = this.makeTemplate(noon.load(slash.resolve(slash.join(this.opt.dir,this.opt.menu))))
         }
-        if ((this.opt.menuTemplate != null) && _.isFunction(this.opt.menuTemplate))
+        if ((this.opt.menuTemplate != null) && typeof(this.opt.menuTemplate) === 'function')
         {
             return this.opt.menuTemplate(this.templateCache)
         }
@@ -263,7 +263,7 @@ Title = (function ()
                 }
                 else if ((menuOrAccel.accel != null) || (menuOrAccel.command != null))
                 {
-                    item = _.clone(menuOrAccel)
+                    item = _k_.clone(menuOrAccel)
                     item.text = text
                     return item
                 }

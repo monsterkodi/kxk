@@ -176,7 +176,7 @@ function Title
         if empty @templateCache
             @templateCache = @makeTemplate noon.load slash.resolve slash.join @opt.dir, @opt.menu
             
-        if @opt.menuTemplate? and _.isFunction @opt.menuTemplate
+        if @opt.menuTemplate? and @opt.menuTemplate is 'function'
             @opt.menuTemplate @templateCache
         else
             @templateCache
@@ -199,7 +199,7 @@ function Title
                         text:text
                         accel: ''
                     menuOrAccel.accel? or menuOrAccel.command? # needs better test!
-                        item = _.clone menuOrAccel
+                        item = clone menuOrAccel
                         item.text = text
                         item
                     else

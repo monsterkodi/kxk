@@ -101,9 +101,9 @@ function Win
         if not absPos?
             absPos = kpos $("#main").getBoundingClientRect().left, $("#main").getBoundingClientRect().top
         
-        items = _.clone window.titlebar.menuTemplate()
+        items = clone window.titlebar.menuTemplate()
         
-        if _.isFunction @opt.context
+        if @opt.context is 'function'
             items = @opt.context items
             if empty items 
                 return
@@ -123,7 +123,7 @@ function Win
         delete options.cb
         
         post.toMain 'openFileDialog' options
-        if _.isFunction cb then post.once 'openFileDialogResult' (r) -> if not r.cancelled and valid r.filePaths then cb r.filePaths
+        if cb is 'function' then post.once 'openFileDialogResult' (r) -> if not r.cancelled and valid r.filePaths then cb r.filePaths
         
     saveFileDialog: (options) ->      
         
@@ -132,7 +132,7 @@ function Win
         delete options.cb
         
         post.toMain 'saveFileDialog' options
-        if _.isFunction cb then post.once 'saveFileDialogResult' (r) -> klog 'r' r; if not r.cancelled and valid r.filePath then cb r.filePath
+        if cb is 'function' then post.once 'saveFileDialogResult' (r) -> klog 'r' r; if not r.cancelled and valid r.filePath then cb r.filePath
 
     messageBox: (options) ->
             
@@ -146,7 +146,7 @@ function Win
         cb = options.cb
         delete options.cb
         post.toMain 'messageBox' options
-        if _.isFunction cb then post.once 'messageBoxResult' (r) -> cb r
+        if cb is 'function' then post.once 'messageBoxResult' (r) -> cb r
             
     # 000   000  00000000  000   000
     # 000  000   000        000 000

@@ -21,7 +21,7 @@ function Drag
             active:    true
             stopEvent: true
 
-        if _.isString @target
+        if @target is str
             t =$ @target
             if not t?
                 return kerror "Drag -- can't find drag target with id", @target
@@ -33,13 +33,13 @@ function Drag
         if @target == document.body
             @useScreenPos = true
             
-        kerror "Drag -- onStart not a function?" if @onStart? and not _.isFunction @onStart
-        kerror "Drag -- onMove not a function?" if @onMove? and not _.isFunction @onMove
-        kerror "Drag -- onEnd not a function?" if @onEnd? and not _.isFunction @onEnd
+        kerror "Drag -- onStart not a function?" if @onStart? and not @onStart is 'function'
+        kerror "Drag -- onMove not a function?" if @onMove? and not @onMove is 'function'
+        kerror "Drag -- onEnd not a function?" if @onEnd? and not @onEnd is 'function'
                 
         @dragging  = false
         @listening = false
-        @handle    = $(@handle) if _.isString @handle
+        @handle    = $(@handle) if @handle is str
         @handle   ?= @target
         @activate() if @active
 

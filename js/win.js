@@ -1,6 +1,6 @@
 // monsterkodi/kode 0.196.0
 
-var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined}
+var _k_ = {clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o);}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) {var r = {}; v.set(o,r); for (k in o) {if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k])}; }; return v.get(o) } else {return o} }, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined}
 
 var $, electron, keyinfo, klog, kpos, kxk, open, popup, post, prefs, scheme, slash, stopEvent, title, Win, _, _1_20_
 
@@ -117,8 +117,8 @@ Win = (function ()
         {
             absPos = kpos($("#main").getBoundingClientRect().left,$("#main").getBoundingClientRect().top)
         }
-        items = _.clone(window.titlebar.menuTemplate())
-        if (_.isFunction(this.opt.context))
+        items = _k_.clone(window.titlebar.menuTemplate())
+        if (typeof(this.opt.context) === 'function')
         {
             items = this.opt.context(items)
             if (_k_.empty(items))
@@ -144,7 +144,7 @@ Win = (function ()
         cb = options.cb
         delete options.cb
         post.toMain('openFileDialog',options)
-        if (_.isFunction(cb))
+        if (typeof(cb) === 'function')
         {
             return post.once('openFileDialogResult',function (r)
             {
@@ -164,7 +164,7 @@ Win = (function ()
         cb = options.cb
         delete options.cb
         post.toMain('saveFileDialog',options)
-        if (_.isFunction(cb))
+        if (typeof(cb) === 'function')
         {
             return post.once('saveFileDialogResult',function (r)
             {
@@ -191,7 +191,7 @@ Win = (function ()
         cb = options.cb
         delete options.cb
         post.toMain('messageBox',options)
-        if (_.isFunction(cb))
+        if (typeof(cb) === 'function')
         {
             return post.once('messageBoxResult',function (r)
             {

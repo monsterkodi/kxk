@@ -7,7 +7,7 @@ var _
 _ = require('lodash')
 module.exports = {$:function (idOrQueryOrElement, queryOrElement = document)
 {
-    if (_.isString(idOrQueryOrElement))
+    if ((function(o){return (typeof o === 'string' || o instanceof String)})(idOrQueryOrElement))
     {
         if (_k_.in(idOrQueryOrElement[0],['.',"#"]) || queryOrElement !== document)
         {
@@ -18,7 +18,7 @@ module.exports = {$:function (idOrQueryOrElement, queryOrElement = document)
             return document.getElementById(idOrQueryOrElement)
         }
     }
-    else if (_.isElement(idOrQueryOrElement) && _.isString(queryOrElement))
+    else if (_.isElement(idOrQueryOrElement) && (function(o){return (typeof o === 'string' || o instanceof String)})(queryOrElement))
     {
         return idOrQueryOrElement.querySelector(queryOrElement)
     }

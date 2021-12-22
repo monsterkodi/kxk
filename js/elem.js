@@ -18,12 +18,12 @@ elem = function (typ, opt)
     opt = (opt != null ? opt : {})
     typ = (typ != null ? typ : 'div')
     e = document.createElement(typ)
-    if ((opt.text != null) && (_.isString(opt.text) || _.isNumber(opt.text)))
+    if ((opt.text != null) && (opt.text instanceof str || (function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(opt.text)))
     {
         e.textContent = opt.text
         delete opt.text
     }
-    if ((opt.html != null) && _.isString(opt.html))
+    if ((opt.html != null) && (function(o){return (typeof o === 'string' || o instanceof String)})(opt.html))
     {
         e.innerHTML = opt.html
         delete opt.html
@@ -33,7 +33,7 @@ elem = function (typ, opt)
         e.appendChild(opt.child)
         delete opt.child
     }
-    if ((opt.children != null) && _.isArray(opt.children))
+    if ((opt.children != null) && opt.children instanceof Array)
     {
         var list = _k_.list(opt.children)
         for (var _35_14_ = 0; _35_14_ < list.length; _35_14_++)
@@ -55,7 +55,7 @@ elem = function (typ, opt)
     for (var _43_14_ = 0; _43_14_ < list1.length; _43_14_++)
     {
         event = list1[_43_14_]
-        if (opt[event] && _.isFunction(opt[event]))
+        if (opt[event] && typeof(opt[event]) === 'function')
         {
             e.addEventListener(event,opt[event])
             delete opt[event]

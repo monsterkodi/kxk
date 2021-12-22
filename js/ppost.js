@@ -140,7 +140,7 @@ PostMain = (function ()
     {
         var w, _83_26_
 
-        if (_.isNumber(id))
+        if ((function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(id))
         {
             w = electron.BrowserWindow.fromId(id)
         }

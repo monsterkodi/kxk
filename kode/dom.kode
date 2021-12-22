@@ -11,12 +11,12 @@ _ = require 'lodash'
 module.exports =
     
     $: (idOrQueryOrElement, queryOrElement=document) ->
-        if _.isString idOrQueryOrElement
+        if idOrQueryOrElement is str
             if idOrQueryOrElement[0] in ['.' "#"] or queryOrElement != document
                 queryOrElement.querySelector idOrQueryOrElement
             else
                 document.getElementById idOrQueryOrElement
-        else if _.isElement(idOrQueryOrElement) and _.isString queryOrElement
+        else if _.isElement(idOrQueryOrElement) and queryOrElement is str
             idOrQueryOrElement.querySelector queryOrElement
         else
             idOrQueryOrElement
