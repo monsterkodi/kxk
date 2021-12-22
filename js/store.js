@@ -39,13 +39,15 @@ Store = (function ()
 
     function Store (name, opt = {})
     {
-        var electron, _35_22_, _36_22_, _49_32_, _75_62_
+        var electron, _38_22_, _39_22_, _53_32_, _79_62_
 
         this["save"] = this["save"].bind(this)
+        console.log('Store')
         Store.__super__.constructor.call(this)
+        console.log('Store.name',name)
         this.name = name
-        opt.separator = ((_35_22_=opt.separator) != null ? _35_22_ : ':')
-        opt.timeout = ((_36_22_=opt.timeout) != null ? _36_22_ : 4000)
+        opt.separator = ((_38_22_=opt.separator) != null ? _38_22_ : ':')
+        opt.timeout = ((_39_22_=opt.timeout) != null ? _39_22_ : 4000)
         if (!this.name)
         {
             return kerror('no name for store?')
@@ -55,9 +57,10 @@ Store = (function ()
         this.sep = opt.separator
         if (this.app)
         {
+            console.log('Store.addStore')
             Store.addStore(this)
             this.timer = null
-            this.file = ((_49_32_=opt.file) != null ? _49_32_ : slash.join(post.get('userData'),`${this.name}.noon`))
+            this.file = ((_53_32_=opt.file) != null ? _53_32_ : slash.join(post.get('userData'),`${this.name}.noon`))
             this.timeout = opt.timeout
             post.on('store',(function (name, action, ...argl)
             {
@@ -129,7 +132,7 @@ Store = (function ()
 
     Store.prototype["get"] = function (key, value)
     {
-        var _87_51_
+        var _91_51_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -140,7 +143,7 @@ Store = (function ()
 
     Store.prototype["set"] = function (key, value)
     {
-        var _101_14_, _98_32_
+        var _102_32_, _105_14_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -150,7 +153,7 @@ Store = (function ()
         {
             return
         }
-        this.data = ((_101_14_=this.data) != null ? _101_14_ : {})
+        this.data = ((_105_14_=this.data) != null ? _105_14_ : {})
         sds.set(this.data,this.keypath(key),value)
         if (this.app)
         {

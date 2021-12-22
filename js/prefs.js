@@ -26,15 +26,18 @@ Prefs = (function ()
         {
             return console.error('prefs.init -- duplicate stores?')
         }
+        console.log('new store')
         this.store = new store('prefs',opt)
+        console.log('store newd')
         this.store.on('willSave',this.unwatch)
         this.store.on('didSave',this.watch)
-        return this.watch()
+        this.watch()
+        console.log('watch')
     }
 
     Prefs["unwatch"] = function ()
     {
-        var _26_32_, _28_16_
+        var _29_32_, _31_16_
 
         if (!(this.store.app != null))
         {
@@ -46,7 +49,7 @@ Prefs = (function ()
 
     Prefs["watch"] = function ()
     {
-        var _33_32_
+        var _36_32_
 
         if (!(this.store.app != null))
         {
@@ -110,7 +113,7 @@ Prefs = (function ()
 
     Prefs["save"] = function ()
     {
-        var _54_33_
+        var _57_33_
 
         return (this.store != null ? this.store.save() : undefined)
     }

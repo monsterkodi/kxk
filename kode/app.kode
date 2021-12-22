@@ -122,6 +122,7 @@ function App
                 prefs.init separator:sep, defaults:shortcut:@opt.shortcut
             else
                 prefs.init separator:sep
+            log 'app.onReady prefs init'
     
         log 'app.onReady3'
                 
