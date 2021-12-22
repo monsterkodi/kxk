@@ -8,7 +8,7 @@
 
 { $, _, def, kerror, kpos, stopEvent } = require './kxk'
 
-class Drag
+function Drag
 
     @: (cfg) ->
         

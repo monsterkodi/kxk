@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined}
 
-var $, electron, keyinfo, klog, kpos, kxk, open, popup, post, prefs, scheme, slash, stopEvent, title, _, _1_20_
+var $, electron, keyinfo, klog, kpos, kxk, open, popup, post, prefs, scheme, slash, stopEvent, title, Win, _, _1_20_
 
 kxk = require('./kxk')
 $ = kxk.$
@@ -27,18 +27,19 @@ else
 {
     console.error(`this should be used in renderer process only! process.type: ${process.type} grandpa: ${(module.parent.parent != null ? module.parent.parent.filename : undefined)} parent: ${module.parent.filename} module: ${module.filename}`)
 }
-class Win
+
+Win = (function ()
 {
-    constructor (opt)
+    function Win (opt)
     {
         var sep, _30_34_, _48_19_
 
         this.opt = opt
-        this.onKeyUp = this.onKeyUp.bind(this)
-        this.onKeyDown = this.onKeyDown.bind(this)
-        this.onContextMenu = this.onContextMenu.bind(this)
-        this.onMenuAction = this.onMenuAction.bind(this)
-        this.onMoved = this.onMoved.bind(this)
+        this["onKeyUp"] = this["onKeyUp"].bind(this)
+        this["onKeyDown"] = this["onKeyDown"].bind(this)
+        this["onContextMenu"] = this["onContextMenu"].bind(this)
+        this["onMenuAction"] = this["onMenuAction"].bind(this)
+        this["onMoved"] = this["onMoved"].bind(this)
         window.onerror = function (msg, source, line, col, error)
         {
             try
@@ -80,20 +81,20 @@ class Win
         }
     }
 
-    getBounds ()
+    Win.prototype["getBounds"] = function ()
     {
         return electron.ipcRenderer.sendSync('getWinBounds')
     }
 
-    setBounds (b)
+    Win.prototype["setBounds"] = function (b)
     {
         return electron.ipcRenderer.send('setWinBounds',b)
     }
 
-    onMoved ()
+    Win.prototype["onMoved"] = function ()
     {}
 
-    onMenuAction (action, args)
+    Win.prototype["onMenuAction"] = function (action, args)
     {
         switch (action.toLowerCase())
         {
@@ -106,7 +107,7 @@ class Win
         return 'unhandled'
     }
 
-    onContextMenu (event)
+    Win.prototype["onContextMenu"] = function (event)
     {
         var absPos, items, _98_12_
 
@@ -135,7 +136,7 @@ class Win
         }})
     }
 
-    openFileDialog (options)
+    Win.prototype["openFileDialog"] = function (options)
     {
         var cb, _121_22_
 
@@ -155,7 +156,7 @@ class Win
         }
     }
 
-    saveFileDialog (options)
+    Win.prototype["saveFileDialog"] = function (options)
     {
         var cb, _130_22_
 
@@ -176,7 +177,7 @@ class Win
         }
     }
 
-    messageBox (options)
+    Win.prototype["messageBox"] = function (options)
     {
         var cb, _139_28_, _140_28_, _141_28_, _142_28_, _143_28_, _144_28_, _145_28_
 
@@ -199,7 +200,7 @@ class Win
         }
     }
 
-    onKeyDown (event)
+    Win.prototype["onKeyDown"] = function (event)
     {
         var info
 
@@ -213,13 +214,15 @@ class Win
         return post.emit('combo',info.combo,info)
     }
 
-    onKeyUp (event)
+    Win.prototype["onKeyUp"] = function (event)
     {
         var info
 
         info = keyinfo.forEvent(event)
         return this.modifiers = info.mod
     }
-}
+
+    return Win
+})()
 
 module.exports = Win

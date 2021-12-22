@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var $, drag, elem, keyinfo, kstr, kxk, menu, post, prefs, scheme, sds, slash, stopEvent, _
+var $, drag, elem, keyinfo, kstr, kxk, menu, post, prefs, scheme, sds, slash, stopEvent, Title, _
 
 kxk = require('./kxk')
 $ = kxk.$
@@ -20,22 +20,23 @@ sds = kxk.sds
 slash = kxk.slash
 stopEvent = kxk.stopEvent
 
-class Title
+
+Title = (function ()
 {
-    constructor (opt)
+    function Title (opt)
     {
         var pkg, _16_13_, _20_27_
 
         this.opt = opt
-        this.openMenu = this.openMenu.bind(this)
-        this.toggleMenu = this.toggleMenu.bind(this)
-        this.hideMenu = this.hideMenu.bind(this)
-        this.showMenu = this.showMenu.bind(this)
-        this.menuVisible = this.menuVisible.bind(this)
-        this.onMenuAction = this.onMenuAction.bind(this)
-        this.onTitlebar = this.onTitlebar.bind(this)
-        this.onDragMove = this.onDragMove.bind(this)
-        this.onDragStart = this.onDragStart.bind(this)
+        this["openMenu"] = this["openMenu"].bind(this)
+        this["toggleMenu"] = this["toggleMenu"].bind(this)
+        this["hideMenu"] = this["hideMenu"].bind(this)
+        this["showMenu"] = this["showMenu"].bind(this)
+        this["menuVisible"] = this["menuVisible"].bind(this)
+        this["onMenuAction"] = this["onMenuAction"].bind(this)
+        this["onTitlebar"] = this["onTitlebar"].bind(this)
+        this["onDragMove"] = this["onDragMove"].bind(this)
+        this["onDragStart"] = this["onDragStart"].bind(this)
         this.opt = ((_16_13_=this.opt) != null ? _16_13_ : {})
         pkg = this.opt.pkg
         this.elem = $(((_20_27_=this.opt.elem) != null ? _20_27_ : "#titlebar"))
@@ -100,29 +101,29 @@ class Title
         }
     }
 
-    pushElem (elem)
+    Title.prototype["pushElem"] = function (elem)
     {
         return this.elem.insertBefore(elem,this.minimize)
     }
 
-    showTitle ()
+    Title.prototype["showTitle"] = function ()
     {
         return this.title.style.display = 'initial'
     }
 
-    hideTitle ()
+    Title.prototype["hideTitle"] = function ()
     {
         return this.title.style.display = 'none'
     }
 
-    initTitleDrag ()
+    Title.prototype["initTitleDrag"] = function ()
     {
         var _102_38_
 
         return this.titleDrag = new drag({target:document.body,handle:((_102_38_=this.opt.dragElem) != null ? _102_38_ : this.elem),onStart:this.onDragStart,onMove:this.onDragMove,stopEvent:false})
     }
 
-    onDragStart (drag, event)
+    Title.prototype["onDragStart"] = function (drag, event)
     {
         if (event.target.nodeName === 'INPUT')
         {
@@ -131,7 +132,7 @@ class Title
         return this.startBounds = window.win.getBounds()
     }
 
-    onDragMove (drag, event)
+    Title.prototype["onDragMove"] = function (drag, event)
     {
         if (this.startBounds)
         {
@@ -139,7 +140,7 @@ class Title
         }
     }
 
-    setTitle (opt)
+    Title.prototype["setTitle"] = function (opt)
     {
         var html, parts, _133_26_
 
@@ -161,7 +162,7 @@ class Title
         return this.title.innerHTML = html
     }
 
-    onTitlebar (action)
+    Title.prototype["onTitlebar"] = function (action)
     {
         switch (action)
         {
@@ -184,7 +185,7 @@ class Title
 
     }
 
-    onMenuAction (action, args)
+    Title.prototype["onMenuAction"] = function (action, args)
     {
         switch (action.toLowerCase())
         {
@@ -210,7 +211,7 @@ class Title
 
     }
 
-    menuTemplate ()
+    Title.prototype["menuTemplate"] = function ()
     {
         var _179_28_
 
@@ -232,7 +233,7 @@ class Title
         }
     }
 
-    makeTemplate (obj)
+    Title.prototype["makeTemplate"] = function (obj)
     {
         var item, menuOrAccel, text, tmpl
 
@@ -276,25 +277,25 @@ class Title
         return tmpl
     }
 
-    initMenu (items)
+    Title.prototype["initMenu"] = function (items)
     {
         this.menu = new menu({items:items})
         this.elem.insertBefore(this.menu.elem,this.elem.firstChild.nextSibling)
         return this.hideMenu()
     }
 
-    refreshMenu ()
+    Title.prototype["refreshMenu"] = function ()
     {
         this.menu.del()
         return this.initMenu(this.menuTemplate())
     }
 
-    menuVisible ()
+    Title.prototype["menuVisible"] = function ()
     {
         return this.menu.elem.style.display !== 'none'
     }
 
-    showMenu ()
+    Title.prototype["showMenu"] = function ()
     {
         var _223_68_, _223_75_
 
@@ -302,7 +303,7 @@ class Title
         return ((_223_68_=this.menu) != null ? typeof (_223_75_=_223_68_.focus) === "function" ? _223_75_() : undefined : undefined)
     }
 
-    hideMenu ()
+    Title.prototype["hideMenu"] = function ()
     {
         var _224_25_
 
@@ -310,7 +311,7 @@ class Title
         return this.menu.elem.style.display = 'none'
     }
 
-    toggleMenu ()
+    Title.prototype["toggleMenu"] = function ()
     {
         if (this.menuVisible())
         {
@@ -322,7 +323,7 @@ class Title
         }
     }
 
-    openMenu ()
+    Title.prototype["openMenu"] = function ()
     {
         if (this.menuVisible())
         {
@@ -335,7 +336,7 @@ class Title
         }
     }
 
-    initStyle ()
+    Title.prototype["initStyle"] = function ()
     {
         var href, link, titleStyle
 
@@ -350,7 +351,7 @@ class Title
         }
     }
 
-    handleKey (event)
+    Title.prototype["handleKey"] = function (event)
     {
         var accels, combo, combos, item, kepaths, key, keypath, mainMenu, mod, _284_51_
 
@@ -385,6 +386,8 @@ class Title
         }
         return 'unhandled'
     }
-}
+
+    return Title
+})()
 
 module.exports = Title

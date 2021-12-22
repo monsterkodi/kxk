@@ -1,15 +1,17 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
-var _k_
+var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}}
 
-var events
+var events, Gamepad
 
 events = require('events')
-class Gamepad extends events
+
+Gamepad = (function ()
 {
-    constructor (doPoll = true)
+    _k_.extend(Gamepad, events);
+    function Gamepad (doPoll = true)
     {
-        this.poll = this.poll.bind(this)
+        this["poll"] = this["poll"].bind(this)
         this.btns = ['A','B','X','Y','LB','RB','LT','RT','Back','Start','LS','RS','Up','Down','Left','Right','Menu']
         this.state = {buttons:{},left:{x:0,y:0},right:{x:0,y:0}}
         this.deadZone = 0.1
@@ -18,9 +20,10 @@ class Gamepad extends events
         {
             this.init()
         }
+        return Gamepad.__super__.constructor.apply(this, arguments)
     }
 
-    init ()
+    Gamepad.prototype["init"] = function ()
     {
         return window.addEventListener('gamepadconnected',(function (event)
         {
@@ -31,7 +34,7 @@ class Gamepad extends events
         }).bind(this))
     }
 
-    axisValue (value)
+    Gamepad.prototype["axisValue"] = function (value)
     {
         if (Math.abs(value) < this.deadZone)
         {
@@ -40,7 +43,7 @@ class Gamepad extends events
         return value
     }
 
-    getState ()
+    Gamepad.prototype["getState"] = function ()
     {
         var button, index, pad, state, x, y, _48_38_
 
@@ -65,7 +68,7 @@ class Gamepad extends events
         }
     }
 
-    poll ()
+    Gamepad.prototype["poll"] = function ()
     {
         var button, changed, index, pad, state, x, y, _68_38_
 
@@ -118,6 +121,8 @@ class Gamepad extends events
             return window.requestAnimationFrame(this.poll)
         }
     }
-}
+
+    return Gamepad
+})()
 
 module.exports = Gamepad

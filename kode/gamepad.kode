@@ -8,7 +8,7 @@
 
 events = require 'events'
 
-class Gamepad extends events
+function Gamepad extends events
 
     @: (doPoll=true) -> 
     

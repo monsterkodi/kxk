@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_
 
-var $, def, kerror, kpos, stopEvent, _
+var $, def, Drag, kerror, kpos, stopEvent, _
 
 $ = require('./kxk').$
 _ = require('./kxk')._
@@ -11,19 +11,20 @@ kerror = require('./kxk').kerror
 kpos = require('./kxk').kpos
 stopEvent = require('./kxk').stopEvent
 
-class Drag
+
+Drag = (function ()
 {
-    constructor (cfg)
+    function Drag (cfg)
     {
         var t, _30_22_, _36_60_, _37_58_, _38_56_, _43_18_
 
-        this.deactivate = this.deactivate.bind(this)
-        this.activate = this.activate.bind(this)
-        this.dragStop = this.dragStop.bind(this)
-        this.dragUp = this.dragUp.bind(this)
-        this.dragMove = this.dragMove.bind(this)
-        this.dragStart = this.dragStart.bind(this)
-        this.eventPos = this.eventPos.bind(this)
+        this["deactivate"] = this["deactivate"].bind(this)
+        this["activate"] = this["activate"].bind(this)
+        this["dragStop"] = this["dragStop"].bind(this)
+        this["dragUp"] = this["dragUp"].bind(this)
+        this["dragMove"] = this["dragMove"].bind(this)
+        this["dragStart"] = this["dragStart"].bind(this)
+        this["eventPos"] = this["eventPos"].bind(this)
         _.extend(this,def(cfg,{target:null,handle:null,onStart:null,onMove:null,onStop:null,active:true,stopEvent:true}))
         if (_.isString(this.target))
         {
@@ -67,7 +68,7 @@ class Drag
         }
     }
 
-    start (p, event)
+    Drag.prototype["start"] = function (p, event)
     {
         var _61_33_
 
@@ -95,7 +96,7 @@ class Drag
         return this
     }
 
-    eventPos (event)
+    Drag.prototype["eventPos"] = function (event)
     {
         if (this.useScreenPos)
         {
@@ -107,12 +108,12 @@ class Drag
         }
     }
 
-    dragStart (event)
+    Drag.prototype["dragStart"] = function (event)
     {
         return this.start(this.eventPos(event),event)
     }
 
-    dragMove (event)
+    Drag.prototype["dragMove"] = function (event)
     {
         var _103_19_, _96_28_, _97_27_
 
@@ -137,13 +138,13 @@ class Drag
         return this
     }
 
-    dragUp (event)
+    Drag.prototype["dragUp"] = function (event)
     {
         delete this.constrain
         return this.dragStop(event)
     }
 
-    dragStop (event)
+    Drag.prototype["dragStop"] = function (event)
     {
         var _123_39_
 
@@ -162,7 +163,7 @@ class Drag
         return this
     }
 
-    activate ()
+    Drag.prototype["activate"] = function ()
     {
         if (!this.listening)
         {
@@ -172,7 +173,7 @@ class Drag
         return this
     }
 
-    deactivate ()
+    Drag.prototype["deactivate"] = function ()
     {
         if (this.listening)
         {
@@ -185,6 +186,8 @@ class Drag
         }
         return this
     }
-}
+
+    return Drag
+})()
 
 module.exports = Drag

@@ -13,7 +13,7 @@ Emitter = require 'events'
 # simple key value store with delayed saving to userData folder
 # does sync changes between processes
 
-class Store extends Emitter
+function Store extends Emitter
 
     @stores: {}
     @addStore: (store) ->

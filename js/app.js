@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var about, args, childp, electron, fs, klog, kxk, os, post, prefs, slash, srcmap, watch, _1_20_
+var about, App, args, childp, electron, fs, klog, kxk, os, post, prefs, slash, srcmap, watch, _1_20_
 
 delete process.env.ELECTRON_ENABLE_SECURITY_WARNINGS
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
@@ -66,34 +66,35 @@ else
 {
     console.error(`this should be used in main process only! process.type: ${process.type} grandpa: ${(module.parent.parent != null ? module.parent.parent.filename : undefined)} parent: ${module.parent.filename} module: ${module.filename}`)
 }
-class App
+
+App = (function ()
 {
-    constructor (opt)
+    function App (opt)
     {
         var argl, onOther, _75_38_, _79_50_
 
         this.opt = opt
-        this.onSrcChange = this.onSrcChange.bind(this)
-        this.stopWatcher = this.stopWatcher.bind(this)
-        this.startWatcher = this.startWatcher.bind(this)
-        this.onMenuAction = this.onMenuAction.bind(this)
-        this.winForEvent = this.winForEvent.bind(this)
-        this.saveBounds = this.saveBounds.bind(this)
-        this.onGetWinID = this.onGetWinID.bind(this)
-        this.onGetWinBounds = this.onGetWinBounds.bind(this)
-        this.onSetWinBounds = this.onSetWinBounds.bind(this)
-        this.createWindow = this.createWindow.bind(this)
-        this.showWindow = this.showWindow.bind(this)
-        this.onActivate = this.onActivate.bind(this)
-        this.toggleWindowFromTray = this.toggleWindowFromTray.bind(this)
-        this.showDock = this.showDock.bind(this)
-        this.hideDock = this.hideDock.bind(this)
-        this.exitApp = this.exitApp.bind(this)
-        this.quitApp = this.quitApp.bind(this)
-        this.showAbout = this.showAbout.bind(this)
-        this.initTray = this.initTray.bind(this)
-        this.onReady = this.onReady.bind(this)
-        this.resolve = this.resolve.bind(this)
+        this["onSrcChange"] = this["onSrcChange"].bind(this)
+        this["stopWatcher"] = this["stopWatcher"].bind(this)
+        this["startWatcher"] = this["startWatcher"].bind(this)
+        this["onMenuAction"] = this["onMenuAction"].bind(this)
+        this["winForEvent"] = this["winForEvent"].bind(this)
+        this["saveBounds"] = this["saveBounds"].bind(this)
+        this["onGetWinID"] = this["onGetWinID"].bind(this)
+        this["onGetWinBounds"] = this["onGetWinBounds"].bind(this)
+        this["onSetWinBounds"] = this["onSetWinBounds"].bind(this)
+        this["createWindow"] = this["createWindow"].bind(this)
+        this["showWindow"] = this["showWindow"].bind(this)
+        this["onActivate"] = this["onActivate"].bind(this)
+        this["toggleWindowFromTray"] = this["toggleWindowFromTray"].bind(this)
+        this["showDock"] = this["showDock"].bind(this)
+        this["hideDock"] = this["hideDock"].bind(this)
+        this["exitApp"] = this["exitApp"].bind(this)
+        this["quitApp"] = this["quitApp"].bind(this)
+        this["showAbout"] = this["showAbout"].bind(this)
+        this["initTray"] = this["initTray"].bind(this)
+        this["onReady"] = this["onReady"].bind(this)
+        this["resolve"] = this["resolve"].bind(this)
         process.on('uncaughtException',function (err)
         {
             srcmap = require('./srcmap')
@@ -171,12 +172,12 @@ watch       watch sources for changes   false`
         }).bind(this))
     }
 
-    resolve (file)
+    App.prototype["resolve"] = function (file)
     {
         return slash.resolve(slash.join(this.opt.dir,file))
     }
 
-    onReady ()
+    App.prototype["onReady"] = function ()
     {
         var sep, _117_38_, _124_84_
 
@@ -218,7 +219,7 @@ watch       watch sources for changes   false`
         return post.emit('appReady')
     }
 
-    initTray ()
+    App.prototype["initTray"] = function ()
     {
         var template, trayImg
 
@@ -232,7 +233,7 @@ watch       watch sources for changes   false`
         }
     }
 
-    showAbout ()
+    App.prototype["showAbout"] = function ()
     {
         var dark
 
@@ -240,7 +241,7 @@ watch       watch sources for changes   false`
         return about({img:this.resolve(this.opt.about),color:dark && '#333' || '#ddd',background:dark && '#111' || '#fff',highlight:dark && '#fff' || '#000',pkg:this.opt.pkg,debug:this.opt.aboutDebug})
     }
 
-    quitApp ()
+    App.prototype["quitApp"] = function ()
     {
         var _192_33_
 
@@ -256,32 +257,32 @@ watch       watch sources for changes   false`
         }
     }
 
-    exitApp ()
+    App.prototype["exitApp"] = function ()
     {
         this.app.exit(0)
         return process.exit(0)
     }
 
-    hideDock ()
+    App.prototype["hideDock"] = function ()
     {
         var _206_26_
 
         return (this.app.dock != null ? this.app.dock.hide() : undefined)
     }
 
-    showDock ()
+    App.prototype["showDock"] = function ()
     {
         var _207_26_
 
         return (this.app.dock != null ? this.app.dock.show() : undefined)
     }
 
-    toggleWindowFromTray ()
+    App.prototype["toggleWindowFromTray"] = function ()
     {
         return this.showWindow()
     }
 
-    onActivate (event, hasVisibleWindows)
+    App.prototype["onActivate"] = function (event, hasVisibleWindows)
     {
         if (this.opt.onActivate)
         {
@@ -296,7 +297,7 @@ watch       watch sources for changes   false`
         }
     }
 
-    showWindow ()
+    App.prototype["showWindow"] = function ()
     {
         var _228_26_, _230_15_
 
@@ -312,7 +313,7 @@ watch       watch sources for changes   false`
         return this.showDock()
     }
 
-    createWindow (onReadyToShow)
+    App.prototype["createWindow"] = function (onReadyToShow)
     {
         var bounds, height, width, _250_32_, _250_46_, _251_32_, _251_46_, _256_56_, _257_56_, _258_56_, _259_56_, _260_56_, _261_56_, _262_56_, _263_56_, _264_56_, _265_56_, _266_56_, _267_56_, _268_56_, _269_56_
 
@@ -385,26 +386,26 @@ watch       watch sources for changes   false`
         return this.win
     }
 
-    onSetWinBounds (event, bounds)
+    App.prototype["onSetWinBounds"] = function (event, bounds)
     {
         var _315_27_
 
         return (this.winForEvent(event) != null ? this.winForEvent(event).setBounds(bounds) : undefined)
     }
 
-    onGetWinBounds (event)
+    App.prototype["onGetWinBounds"] = function (event)
     {
         var _319_47_
 
         return event.returnValue = (this.winForEvent(event) != null ? this.winForEvent(event).getBounds() : undefined)
     }
 
-    onGetWinID (event)
+    App.prototype["onGetWinID"] = function (event)
     {
         return event.returnValue = event.sender.id
     }
 
-    saveBounds ()
+    App.prototype["saveBounds"] = function ()
     {
         var _323_26_
 
@@ -414,12 +415,12 @@ watch       watch sources for changes   false`
         }
     }
 
-    screenSize ()
+    App.prototype["screenSize"] = function ()
     {
         return electron.screen.getPrimaryDisplay().workAreaSize
     }
 
-    allWins ()
+    App.prototype["allWins"] = function ()
     {
         return electron.BrowserWindow.getAllWindows().sort(function (a, b)
         {
@@ -427,7 +428,7 @@ watch       watch sources for changes   false`
         })
     }
 
-    winForEvent (event)
+    App.prototype["winForEvent"] = function (event)
     {
         var w
 
@@ -445,7 +446,7 @@ watch       watch sources for changes   false`
         return w
     }
 
-    toggleDevTools (wc)
+    App.prototype["toggleDevTools"] = function (wc)
     {
         if (wc.isDevToolsOpened())
         {
@@ -457,7 +458,7 @@ watch       watch sources for changes   false`
         }
     }
 
-    onMenuAction (event, action)
+    App.prototype["onMenuAction"] = function (event, action)
     {
         var maximized, w, wa, wb
 
@@ -515,7 +516,7 @@ watch       watch sources for changes   false`
         }
     }
 
-    screenshot (w)
+    App.prototype["screenshot"] = function (w)
     {
         return w.webContents.capturePage().then((function (img)
         {
@@ -536,7 +537,7 @@ watch       watch sources for changes   false`
         }).bind(this))
     }
 
-    startWatcher ()
+    App.prototype["startWatcher"] = function ()
     {
         var dir, toWatch, watcher
 
@@ -567,7 +568,7 @@ watch       watch sources for changes   false`
         }
     }
 
-    stopWatcher ()
+    App.prototype["stopWatcher"] = function ()
     {
         var watcher
 
@@ -584,7 +585,7 @@ watch       watch sources for changes   false`
         return this.watchers = []
     }
 
-    onSrcChange (info)
+    App.prototype["onSrcChange"] = function (info)
     {
         var pkg
 
@@ -604,6 +605,8 @@ watch       watch sources for changes   false`
         }
         return post.toWins('menuAction','Reload')
     }
-}
+
+    return App
+})()
 
 module.exports = App

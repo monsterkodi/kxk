@@ -9,7 +9,7 @@
 kxk = require './kxk'
 { $, _, drag, elem, keyinfo, kstr, menu, noon, post, prefs, scheme, sds, slash, stopEvent } = kxk
 
-class Title
+function Title
     
     @: (@opt) ->
         

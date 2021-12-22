@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
-var _k_
+var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}}
 
-var atomic, Emitter, kerror, post, sds, slash, _
+var atomic, Emitter, kerror, post, sds, slash, Store, _
 
 _ = require('./kxk')._
 atomic = require('./kxk').atomic
@@ -13,11 +13,12 @@ sds = require('./kxk').sds
 slash = require('./kxk').slash
 
 Emitter = require('events')
-class Store extends Emitter
-{
-    static stores = {}
 
-    static addStore (store)
+Store = (function ()
+{
+    _k_.extend(Store, Emitter);
+
+    Store["addStore"] = function (store)
     {
         if (_.isEmpty(this.stores))
         {
@@ -35,12 +36,12 @@ class Store extends Emitter
         return this.stores[store.name] = store
     }
 
-    constructor (name, opt = {})
+    function Store (name, opt = {})
     {
         var electron, _34_22_, _35_22_, _48_32_, _74_62_
 
-        this.save = this.save.bind(this)
-        super.constructor()
+        this["save"] = this["save"].bind(this)
+        Store.__super__.constructor.call(this)
         this.name = name
         opt.separator = ((_34_22_=opt.separator) != null ? _34_22_ : ':')
         opt.timeout = ((_35_22_=opt.timeout) != null ? _35_22_ : 4000)
@@ -117,14 +118,15 @@ class Store extends Emitter
         {
             this.data = _.defaults(this.data,opt.defaults)
         }
+        return Store.__super__.constructor.apply(this, arguments)
     }
 
-    keypath (key)
+    Store.prototype["keypath"] = function (key)
     {
         return key.split(this.sep)
     }
 
-    get (key, value)
+    Store.prototype["get"] = function (key, value)
     {
         var _86_51_
 
@@ -135,7 +137,7 @@ class Store extends Emitter
         return _.cloneDeep(sds.get(this.data,this.keypath(key),value))
     }
 
-    set (key, value)
+    Store.prototype["set"] = function (key, value)
     {
         var _100_14_, _97_32_
 
@@ -161,7 +163,7 @@ class Store extends Emitter
         }
     }
 
-    del (key)
+    Store.prototype["del"] = function (key)
     {
         if (!this.data)
         {
@@ -180,7 +182,7 @@ class Store extends Emitter
         }
     }
 
-    clear ()
+    Store.prototype["clear"] = function ()
     {
         this.data = {}
         if (this.app)
@@ -197,7 +199,7 @@ class Store extends Emitter
         }
     }
 
-    reload ()
+    Store.prototype["reload"] = function ()
     {
         if (this.app)
         {
@@ -206,7 +208,7 @@ class Store extends Emitter
         }
     }
 
-    load ()
+    Store.prototype["load"] = function ()
     {
         var d
 
@@ -232,7 +234,7 @@ class Store extends Emitter
         }
     }
 
-    save ()
+    Store.prototype["save"] = function ()
     {
         if (this.app)
         {
@@ -262,6 +264,8 @@ class Store extends Emitter
             return post.toMain('store',this.name,'save')
         }
     }
-}
+
+    return Store
+})()
 
 module.exports = Store

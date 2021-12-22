@@ -8,7 +8,7 @@
 
 { elem, keyinfo, popup, stopEvent } = require './kxk'
 
-class Menu
+function Menu
     
     @: (opt) ->
         

@@ -10,7 +10,7 @@ kxk = require './kxk'
 
 { elem, keyinfo, os, post, stopEvent } = kxk
 
-class Popup
+function Popup
     
     @: (opt) ->
         

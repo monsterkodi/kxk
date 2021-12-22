@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
-var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var event, fs, kerror, klog, slash, walkdir
+var event, fs, kerror, klog, slash, walkdir, Watch
 
 fs = require('./kxk').fs
 kerror = require('./kxk').kerror
@@ -12,12 +12,14 @@ walkdir = require('./kxk').walkdir
 
 event = require('events')
 walkdir = require('walkdir')
-class Watch extends event
+
+Watch = (function ()
 {
-    constructor (path, opt)
+    _k_.extend(Watch, event);
+    function Watch (path, opt)
     {
-        this.onChange = this.onChange.bind(this)
-        super.constructor()
+        this["onChange"] = this["onChange"].bind(this)
+        Watch.__super__.constructor.call(this)
         this.dir = slash.resolve(path)
         this.opt = (opt != null ? opt : {})
         this.last = {}
@@ -28,14 +30,15 @@ class Watch extends event
                 return this.watchDir()
             }
         }).bind(this))
+        return Watch.__super__.constructor.apply(this, arguments)
     }
 
-    static dir (path, opt)
+    Watch["dir"] = function (path, opt)
     {
         return new Watch(path,opt)
     }
 
-    static watch (path, opt)
+    Watch["watch"] = function (path, opt)
     {
         if (opt.cb)
         {
@@ -64,7 +67,7 @@ class Watch extends event
         }
     }
 
-    static file (path, opt)
+    Watch["file"] = function (path, opt)
     {
         var w
 
@@ -73,7 +76,7 @@ class Watch extends event
         return w
     }
 
-    watchDir ()
+    Watch.prototype["watchDir"] = function ()
     {
         var onPath
 
@@ -139,7 +142,7 @@ class Watch extends event
         }
     }
 
-    ignore (path)
+    Watch.prototype["ignore"] = function (path)
     {
         var regex
 
@@ -157,7 +160,7 @@ class Watch extends event
         }
     }
 
-    close ()
+    Watch.prototype["close"] = function ()
     {
         var watch, _103_14_
 
@@ -176,7 +179,7 @@ class Watch extends event
         }
     }
 
-    onChange (change, path, dir = this.dir)
+    Watch.prototype["onChange"] = function (change, path, dir = this.dir)
     {
         var clearRemove, stat, _133_48_, _139_28_, _139_68_, _139_75_
 
@@ -235,6 +238,8 @@ class Watch extends event
             }
         }
     }
-}
+
+    return Watch
+})()
 
 module.exports = Watch

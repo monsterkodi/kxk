@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}}
 
-var elem, keyinfo, kxk, os, post, stopEvent
+var elem, keyinfo, kxk, os, Popup, post, stopEvent
 
 kxk = require('./kxk')
 elem = kxk.elem
@@ -11,19 +11,20 @@ os = kxk.os
 post = kxk.post
 stopEvent = kxk.stopEvent
 
-class Popup
+
+Popup = (function ()
 {
-    constructor (opt)
+    function Popup (opt)
     {
         var br, div, item, text, _34_30_, _35_109_, _35_81_
 
-        this.onKeyDown = this.onKeyDown.bind(this)
-        this.onFocusOut = this.onFocusOut.bind(this)
-        this.onContextMenu = this.onContextMenu.bind(this)
-        this.onClick = this.onClick.bind(this)
-        this.onHover = this.onHover.bind(this)
-        this.activate = this.activate.bind(this)
-        this.close = this.close.bind(this)
+        this["onKeyDown"] = this["onKeyDown"].bind(this)
+        this["onFocusOut"] = this["onFocusOut"].bind(this)
+        this["onContextMenu"] = this["onContextMenu"].bind(this)
+        this["onClick"] = this["onClick"].bind(this)
+        this["onHover"] = this["onHover"].bind(this)
+        this["activate"] = this["activate"].bind(this)
+        this["close"] = this["close"].bind(this)
         this.focusElem = document.activeElement
         this.items = elem({class:'popup',tabindex:3})
         this.parent = opt.parent
@@ -94,7 +95,7 @@ class Popup
         post.emit('popup','opened')
     }
 
-    close (opt = {})
+    Popup.prototype["close"] = function (opt = {})
     {
         var _72_42_, _72_48_, _74_20_, _76_14_, _79_14_, _80_14_, _81_14_, _82_14_, _85_15_, _88_22_, _92_22_
 
@@ -124,7 +125,7 @@ class Popup
         }
     }
 
-    childClosed (child, opt)
+    Popup.prototype["childClosed"] = function (child, opt)
     {
         if (child === this.popup)
         {
@@ -136,7 +137,7 @@ class Popup
         }
     }
 
-    select (item, opt = {})
+    Popup.prototype["select"] = function (item, opt = {})
     {
         var _111_17_, _114_17_, _118_20_
 
@@ -159,7 +160,7 @@ class Popup
         return this.focus()
     }
 
-    popupChild (item, opt = {})
+    Popup.prototype["popupChild"] = function (item, opt = {})
     {
         var br, items
 
@@ -177,7 +178,7 @@ class Popup
         }
     }
 
-    closePopup ()
+    Popup.prototype["closePopup"] = function ()
     {
         var _141_14_
 
@@ -185,7 +186,7 @@ class Popup
         return delete this.popup
     }
 
-    navigateLeft ()
+    Popup.prototype["navigateLeft"] = function ()
     {
         var m
 
@@ -203,7 +204,7 @@ class Popup
         }
     }
 
-    activateOrNavigateRight ()
+    Popup.prototype["activateOrNavigateRight"] = function ()
     {
         var _161_20_
 
@@ -220,7 +221,7 @@ class Popup
         }
     }
 
-    navigateRight ()
+    Popup.prototype["navigateRight"] = function ()
     {
         var _170_25_, _173_25_
 
@@ -238,7 +239,7 @@ class Popup
         }
     }
 
-    parentMenu ()
+    Popup.prototype["parentMenu"] = function ()
     {
         var _176_18_
 
@@ -248,7 +249,7 @@ class Popup
         }
     }
 
-    nextItem ()
+    Popup.prototype["nextItem"] = function ()
     {
         var next, _188_38_
 
@@ -264,7 +265,7 @@ class Popup
         }
     }
 
-    prevItem ()
+    Popup.prototype["prevItem"] = function ()
     {
         var prev, _194_38_
 
@@ -280,7 +281,7 @@ class Popup
         }
     }
 
-    activate (item)
+    Popup.prototype["activate"] = function (item)
     {
         var _205_20_, _205_24_, _207_39_, _210_52_
 
@@ -296,7 +297,7 @@ class Popup
         }
     }
 
-    toggle (item)
+    Popup.prototype["toggle"] = function (item)
     {
         if (this.popup)
         {
@@ -309,7 +310,7 @@ class Popup
         }
     }
 
-    onHover (event)
+    Popup.prototype["onHover"] = function (event)
     {
         var item
 
@@ -320,7 +321,7 @@ class Popup
         }
     }
 
-    onClick (event)
+    Popup.prototype["onClick"] = function (event)
     {
         var item
 
@@ -339,19 +340,19 @@ class Popup
         }
     }
 
-    onContextMenu (event)
+    Popup.prototype["onContextMenu"] = function (event)
     {
         return stopEvent(event)
     }
 
-    focus ()
+    Popup.prototype["focus"] = function ()
     {
         var _251_20_
 
         return (this.items != null ? this.items.focus() : undefined)
     }
 
-    onFocusOut (event)
+    Popup.prototype["onFocusOut"] = function (event)
     {
         var _255_34_
 
@@ -361,7 +362,7 @@ class Popup
         }
     }
 
-    onKeyDown (event)
+    Popup.prototype["onKeyDown"] = function (event)
     {
         var combo, key, mod
 
@@ -401,7 +402,9 @@ class Popup
         }
 
     }
-}
+
+    return Popup
+})()
 
 module.exports = {menu:function (opt)
 {

@@ -1,13 +1,14 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_
 
-var dgram
+var dgram, udp
 
 dgram = require('dgram')
-class udp
+
+udp = (function ()
 {
-    constructor (opt)
+    function udp (opt)
     {
         var _15_13_, _16_18_
 
@@ -69,7 +70,7 @@ class udp
         }
     }
 
-    send (...args)
+    udp.prototype["send"] = function (...args)
     {
         var buf, msg
 
@@ -90,13 +91,15 @@ class udp
         {})
     }
 
-    close ()
+    udp.prototype["close"] = function ()
     {
         var _65_13_
 
         ;(this.port != null ? this.port.close() : undefined)
         return this.port = null
     }
-}
+
+    return udp
+})()
 
 module.exports = udp

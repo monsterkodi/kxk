@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}}
 
-var $, elem, kerror, kxk, _
+var $, elem, kerror, kxk, Tooltip, _
 
 kxk = require('./kxk')
 elem = kxk.elem
@@ -10,17 +10,18 @@ kerror = kxk.kerror
 $ = kxk.$
 _ = kxk._
 
-class Tooltip
+
+Tooltip = (function ()
 {
-    constructor (opt)
+    function Tooltip (opt)
     {
         var _16_56_, _18_19_, _19_19_
 
         this.opt = opt
-        this.onLeave = this.onLeave.bind(this)
-        this.popup = this.popup.bind(this)
-        this.onHover = this.onHover.bind(this)
-        this.del = this.del.bind(this)
+        this["onLeave"] = this["onLeave"].bind(this)
+        this["popup"] = this["popup"].bind(this)
+        this["onHover"] = this["onHover"].bind(this)
+        this["del"] = this["del"].bind(this)
         if (!(this.opt != null ? this.opt.elem : undefined))
         {
             return kerror("no elem for tooltip?")
@@ -37,7 +38,7 @@ class Tooltip
         this.elem.addEventListener('DOMNodeRemoved',this.del)
     }
 
-    del (event)
+    Tooltip.prototype["del"] = function (event)
     {
         var _31_27_
 
@@ -58,7 +59,7 @@ class Tooltip
         }
     }
 
-    onHover (event)
+    Tooltip.prototype["onHover"] = function (event)
     {
         var _41_27_, _42_22_
 
@@ -76,7 +77,7 @@ class Tooltip
         return this.elem.addEventListener('mousedown',this.onLeave)
     }
 
-    popup (event)
+    Tooltip.prototype["popup"] = function (event)
     {
         var br, _52_27_, _53_22_, _62_67_, _63_59_, _64_60_
 
@@ -114,7 +115,7 @@ class Tooltip
         }
     }
 
-    onLeave (event, e)
+    Tooltip.prototype["onLeave"] = function (event, e)
     {
         var _68_16_, _74_12_
 
@@ -128,6 +129,8 @@ class Tooltip
         ;(this.div != null ? this.div.remove() : undefined)
         return this.div = null
     }
-}
+
+    return Tooltip
+})()
 
 module.exports = Tooltip

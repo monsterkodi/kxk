@@ -1,27 +1,28 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var elem, keyinfo, popup, stopEvent
+var elem, keyinfo, Menu, popup, stopEvent
 
 elem = require('./kxk').elem
 keyinfo = require('./kxk').keyinfo
 popup = require('./kxk').popup
 stopEvent = require('./kxk').stopEvent
 
-class Menu
+
+Menu = (function ()
 {
-    constructor (opt)
+    function Menu (opt)
     {
         var combo, div, item, _22_25_
 
-        this.onClick = this.onClick.bind(this)
-        this.onKeyDown = this.onKeyDown.bind(this)
-        this.close = this.close.bind(this)
-        this.onFocusOut = this.onFocusOut.bind(this)
-        this.onHover = this.onHover.bind(this)
-        this.blur = this.blur.bind(this)
-        this.focus = this.focus.bind(this)
+        this["onClick"] = this["onClick"].bind(this)
+        this["onKeyDown"] = this["onKeyDown"].bind(this)
+        this["close"] = this["close"].bind(this)
+        this["onFocusOut"] = this["onFocusOut"].bind(this)
+        this["onHover"] = this["onHover"].bind(this)
+        this["blur"] = this["blur"].bind(this)
+        this["focus"] = this["focus"].bind(this)
         this.elem = elem({class:'menu',tabindex:3})
         var list = _k_.list(opt.items)
         for (var _17_17_ = 0; _17_17_ < list.length; _17_17_++)
@@ -47,7 +48,7 @@ class Menu
         this.elem.addEventListener('mouseover',this.onHover)
     }
 
-    del ()
+    Menu.prototype["del"] = function ()
     {
         var _36_13_
 
@@ -56,13 +57,13 @@ class Menu
         return this.elem = null
     }
 
-    focus ()
+    Menu.prototype["focus"] = function ()
     {
         this.focusElem = document.activeElement
         return this.elem.focus()
     }
 
-    blur ()
+    Menu.prototype["blur"] = function ()
     {
         var _50_33_, _50_40_
 
@@ -70,12 +71,12 @@ class Menu
         return ((_50_33_=this.focusElem) != null ? typeof (_50_40_=_50_33_.focus) === "function" ? _50_40_() : undefined : undefined)
     }
 
-    onHover (event)
+    Menu.prototype["onHover"] = function (event)
     {
         return this.select(event.target,{selectFirstItem:false})
     }
 
-    onFocusOut (event)
+    Menu.prototype["onFocusOut"] = function (event)
     {
         var _56_45_
 
@@ -86,12 +87,12 @@ class Menu
         }
     }
 
-    open ()
+    Menu.prototype["open"] = function ()
     {
         return this.select(this.elem.firstChild,{activate:true})
     }
 
-    close (opt = {})
+    Menu.prototype["close"] = function (opt = {})
     {
         var _76_17_, _83_26_, _83_33_
 
@@ -113,7 +114,7 @@ class Menu
         }
     }
 
-    childClosed (child, opt)
+    Menu.prototype["childClosed"] = function (child, opt)
     {
         if (child === this.popup)
         {
@@ -125,7 +126,7 @@ class Menu
         }
     }
 
-    select (item, opt = {})
+    Menu.prototype["select"] = function (item, opt = {})
     {
         var hadPopup, _102_17_, _106_17_
 
@@ -148,7 +149,7 @@ class Menu
         }
     }
 
-    activate (item, opt = {})
+    Menu.prototype["activate"] = function (item, opt = {})
     {
         var br, items, pr
 
@@ -175,7 +176,7 @@ class Menu
         }
     }
 
-    toggle (item)
+    Menu.prototype["toggle"] = function (item)
     {
         if (this.popup)
         {
@@ -188,27 +189,27 @@ class Menu
         }
     }
 
-    itemSelected (item, elem)
+    Menu.prototype["itemSelected"] = function (item, elem)
     {}
 
-    deactivate (item)
+    Menu.prototype["deactivate"] = function (item)
     {}
 
-    navigateLeft ()
+    Menu.prototype["navigateLeft"] = function ()
     {
         var _153_39_
 
         return this.select((this.selected != null ? this.selected.previousSibling : undefined),{activate:true,selectFirstItem:false})
     }
 
-    navigateRight ()
+    Menu.prototype["navigateRight"] = function ()
     {
         var _154_39_
 
         return this.select((this.selected != null ? this.selected.nextSibling : undefined),{activate:true,selectFirstItem:false})
     }
 
-    onKeyDown (event)
+    Menu.prototype["onKeyDown"] = function (event)
     {
         var combo, key, mod
 
@@ -244,10 +245,12 @@ class Menu
 
     }
 
-    onClick (e)
+    Menu.prototype["onClick"] = function (e)
     {
         return this.toggle(e.target)
     }
-}
+
+    return Menu
+})()
 
 module.exports = Menu

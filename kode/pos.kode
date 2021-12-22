@@ -8,7 +8,7 @@
 
 { clamp } = require './kxk'
 
-class Pos
+function Pos
 
     @: (@x, @y) ->
         if @x?.clientX?

@@ -34,7 +34,7 @@ if process.type == 'browser'
 else
     error "this should be used in main process only! process.type: #{process.type} grandpa: #{module.parent.parent?.filename} parent: #{module.parent.filename} module: #{module.filename}"
     
-class App
+function App
     
     @: (@opt) ->
                 

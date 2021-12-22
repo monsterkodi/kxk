@@ -1,14 +1,15 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_
 
-var clamp
+var clamp, Pos
 
 clamp = require('./kxk').clamp
 
-class Pos
+
+Pos = (function ()
 {
-    constructor (x, y)
+    function Pos (x, y)
     {
         var event, _14_13_, _14_22_, _22_22_
 
@@ -43,22 +44,22 @@ class Pos
         }
     }
 
-    copy ()
+    Pos.prototype["copy"] = function ()
     {
         return new Pos(this.x,this.y)
     }
 
-    clone ()
+    Pos.prototype["clone"] = function ()
     {
         return new Pos(this.x,this.y)
     }
 
-    reset ()
+    Pos.prototype["reset"] = function ()
     {
         return this.x = this.y = 0
     }
 
-    plus (val)
+    Pos.prototype["plus"] = function (val)
     {
         var newPos
 
@@ -71,7 +72,7 @@ class Pos
         return newPos
     }
 
-    minus (val)
+    Pos.prototype["minus"] = function (val)
     {
         var newPos
 
@@ -84,37 +85,37 @@ class Pos
         return newPos
     }
 
-    times (val)
+    Pos.prototype["times"] = function (val)
     {
         return this.copy().scale(val)
     }
 
-    clamped (lower, upper)
+    Pos.prototype["clamped"] = function (lower, upper)
     {
         return this.copy().clamp(lower,upper)
     }
 
-    rounded (v = 1.0)
+    Pos.prototype["rounded"] = function (v = 1.0)
     {
         return new Pos(Math.round(this.x / v) * v,Math.round(this.y / v) * v)
     }
 
-    to (other)
+    Pos.prototype["to"] = function (other)
     {
         return other.minus(this)
     }
 
-    mid (other)
+    Pos.prototype["mid"] = function (other)
     {
         return this.plus(other).scale(0.5)
     }
 
-    interpolate (other, f)
+    Pos.prototype["interpolate"] = function (other, f)
     {
         return this.plus(this.to(other).scale(f))
     }
 
-    min (val)
+    Pos.prototype["min"] = function (val)
     {
         var newPos
 
@@ -131,7 +132,7 @@ class Pos
         return newPos
     }
 
-    max (val)
+    Pos.prototype["max"] = function (val)
     {
         var newPos
 
@@ -148,82 +149,82 @@ class Pos
         return newPos
     }
 
-    normal ()
+    Pos.prototype["normal"] = function ()
     {
         return this.copy().normalize()
     }
 
-    neg ()
+    Pos.prototype["neg"] = function ()
     {
         return this.copy().negate()
     }
 
-    length ()
+    Pos.prototype["length"] = function ()
     {
         return Math.sqrt(this.square())
     }
 
-    dot (o)
+    Pos.prototype["dot"] = function (o)
     {
         return this.x * o.x + this.y * o.y
     }
 
-    cross (o)
+    Pos.prototype["cross"] = function (o)
     {
         return this.x * o.y - this.y * o.x
     }
 
-    square ()
+    Pos.prototype["square"] = function ()
     {
         return (this.x * this.x) + (this.y * this.y)
     }
 
-    distSquare (o)
+    Pos.prototype["distSquare"] = function (o)
     {
         return this.minus(o).square()
     }
 
-    dist (o)
+    Pos.prototype["dist"] = function (o)
     {
         return Math.sqrt(this.distSquare(o))
     }
 
-    equals (o)
+    Pos.prototype["equals"] = function (o)
     {
         return this.x === (o != null ? o.x : undefined) && this.y === (o != null ? o.y : undefined)
     }
 
-    deg2rad (d)
+    Pos.prototype["deg2rad"] = function (d)
     {
         return Math.PI * d / 180.0
     }
 
-    rad2deg (r)
+    Pos.prototype["rad2deg"] = function (r)
     {
         return r * 180.0 / Math.PI
     }
 
-    isClose (o, dist = 0.1)
+    Pos.prototype["isClose"] = function (o, dist = 0.1)
     {
         return Math.abs(this.x - o.x) + Math.abs(this.y - o.y) < dist
     }
 
-    isZero (e = 0.000001)
+    Pos.prototype["isZero"] = function (e = 0.000001)
     {
         return Math.abs(this.x) < e && Math.abs(this.y) < e
     }
 
-    angle (o = new Pos(0,1))
+    Pos.prototype["angle"] = function (o = new Pos(0,1))
     {
         return this.rad2deg(Math.acos(this.normal().dot(o.normal())))
     }
 
-    perp ()
+    Pos.prototype["perp"] = function ()
     {
         return new Pos(-this.y,this.x)
     }
 
-    rotation (o)
+    Pos.prototype["rotation"] = function (o)
     {
         var d, s
 
@@ -240,7 +241,7 @@ class Pos
         return s * this.angle(o)
     }
 
-    check ()
+    Pos.prototype["check"] = function ()
     {
         var newPos
 
@@ -256,7 +257,7 @@ class Pos
         return newPos
     }
 
-    _str ()
+    Pos.prototype["_str"] = function ()
     {
         var s
 
@@ -264,56 +265,56 @@ class Pos
         return s += (this.y ? `y:${this.y}>` : "NaN>")
     }
 
-    static isPos (o)
+    Pos["isPos"] = function (o)
     {
         var _108_29_, _108_38_
 
         return (o != null) && (o.x != null) && (o.y != null) && Number.isFinite(o.x) && Number.isFinite(o.y)
     }
 
-    fade (o, val)
+    Pos.prototype["fade"] = function (o, val)
     {
         this.x = this.x * (1 - val) + o.x * val
         this.y = this.y * (1 - val) + o.y * val
         return this
     }
 
-    scale (val)
+    Pos.prototype["scale"] = function (val)
     {
         this.x *= val
         this.y *= val
         return this
     }
 
-    mul (other)
+    Pos.prototype["mul"] = function (other)
     {
         this.x *= other.x
         this.y *= other.y
         return this
     }
 
-    div (other)
+    Pos.prototype["div"] = function (other)
     {
         this.x /= other.x
         this.y /= other.y
         return this
     }
 
-    add (other)
+    Pos.prototype["add"] = function (other)
     {
         this.x += other.x
         this.y += other.y
         return this
     }
 
-    sub (other)
+    Pos.prototype["sub"] = function (other)
     {
         this.x -= other.x
         this.y -= other.y
         return this
     }
 
-    clamp (lower, upper)
+    Pos.prototype["clamp"] = function (lower, upper)
     {
         if ((lower != null) && (upper != null))
         {
@@ -323,7 +324,7 @@ class Pos
         return this
     }
 
-    normalize ()
+    Pos.prototype["normalize"] = function ()
     {
         var l
 
@@ -337,14 +338,14 @@ class Pos
         return this
     }
 
-    negate ()
+    Pos.prototype["negate"] = function ()
     {
         this.x *= -1
         this.y *= -1
         return this
     }
 
-    rotate (angle)
+    Pos.prototype["rotate"] = function (angle)
     {
         var cos, rad, sin, x
 
@@ -368,7 +369,9 @@ class Pos
         this.y = sin * x + cos * this.y
         return this
     }
-}
+
+    return Pos
+})()
 
 
 module.exports = function (x, y)

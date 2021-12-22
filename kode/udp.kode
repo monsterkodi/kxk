@@ -8,7 +8,7 @@
 
 dgram = require 'dgram'
 
-class udp
+function udp
 
     @: (@opt) ->
                 

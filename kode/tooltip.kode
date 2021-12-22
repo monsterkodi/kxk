@@ -9,7 +9,7 @@
 kxk = require './kxk'
 { elem, kerror, $, _ } = kxk
 
-class Tooltip
+function Tooltip
     
     @: (@opt) ->
         

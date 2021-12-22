@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.195.0
+// monsterkodi/kode 0.196.0
 
 var _k_
 
-var fs, kerror, post, sds, slash, _
+var fs, kerror, post, sds, slash, Stash, _
 
 _ = require('./kxk')._
 fs = require('./kxk').fs
@@ -12,14 +12,15 @@ post = require('./kxk').post
 sds = require('./kxk').sds
 slash = require('./kxk').slash
 
-class Stash
+
+Stash = (function ()
 {
-    constructor (name, opt)
+    function Stash (name, opt)
     {
         var _20_30_, _22_40_, _23_32_, _29_63_
 
         this.name = name
-        this.save = this.save.bind(this)
+        this["save"] = this["save"].bind(this)
         if (!this.name)
         {
             return kerror('stash.constructor -- no name?')
@@ -38,12 +39,12 @@ class Stash
         }
     }
 
-    keypath (key)
+    Stash.prototype["keypath"] = function (key)
     {
         return key.split(this.sep)
     }
 
-    get (key, value)
+    Stash.prototype["get"] = function (key, value)
     {
         var _40_64_, _41_38_
 
@@ -58,7 +59,7 @@ class Stash
         return sds.get(this.data,this.keypath(key),value)
     }
 
-    set (key, value)
+    Stash.prototype["set"] = function (key, value)
     {
         var _52_71_
 
@@ -74,12 +75,12 @@ class Stash
         return this.timer = setTimeout(this.save,this.timeout)
     }
 
-    del (key)
+    Stash.prototype["del"] = function (key)
     {
         return this.set(key)
     }
 
-    clear ()
+    Stash.prototype["clear"] = function ()
     {
         this.data = {}
         clearTimeout(this.timer)
@@ -87,7 +88,7 @@ class Stash
         return fs.removeSync(this.file)
     }
 
-    load ()
+    Stash.prototype["load"] = function ()
     {
         try
         {
@@ -99,7 +100,7 @@ class Stash
         }
     }
 
-    save ()
+    Stash.prototype["save"] = function ()
     {
         var text
 
@@ -125,6 +126,8 @@ class Stash
             return kerror(`stash.save -- can't save to '${this.file}': ${err}`)
         }
     }
-}
+
+    return Stash
+})()
 
 module.exports = Stash

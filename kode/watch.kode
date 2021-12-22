@@ -11,7 +11,7 @@
 event   = require 'events'
 walkdir = require 'walkdir'
 
-class Watch extends event
+function Watch extends event
 
     @: (path, opt) ->
         

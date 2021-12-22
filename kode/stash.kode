@@ -11,7 +11,7 @@
 # simple key value store with delayed saving to userData folder
 # does not sync between processes
  
-class Stash
+function Stash
     
     @: (@name, opt) ->
 
