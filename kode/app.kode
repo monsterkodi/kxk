@@ -51,18 +51,17 @@ function App
         @app.commandLine.appendSwitch 'disable-site-isolation-trials'
         
         electron.Menu.setApplicationMenu @opt.menu
-                
-        # if @opt.tray
-            # klog.slog.icon = slash.fileUrl @resolve @opt.tray  
-            
-        argl = """
-            noprefs     don't load preferences      false
-            devtools    open developer tools        false  -D
-            watch       watch sources for changes   false
-            """
-            
-        argl = @opt.args + '\n' + argl if @opt.args
-        @argv = args.init argl
+                            
+        # argl = """
+            # noprefs     don't load preferences      = false
+            # devtools    open developer tools        = false  -D
+            # watch       watch sources for changes   = false
+            # """
+#             
+        # argl = @opt.args + '\n' + argl if @opt.args
+        dbg @opt.args
+        @argv = args.init @opt.args if @opt.args
+        dbg @argv
         
         onOther = (event, argv, dir) =>
             
