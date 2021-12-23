@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.197.0
+// monsterkodi/kode 0.199.0
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}}
 
@@ -17,6 +17,7 @@ Tooltip = (function ()
         var _16_56_, _18_19_, _19_19_
 
         this.opt = opt
+    
         this["onLeave"] = this["onLeave"].bind(this)
         this["popup"] = this["popup"].bind(this)
         this["onHover"] = this["onHover"].bind(this)

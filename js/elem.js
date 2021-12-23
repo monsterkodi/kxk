@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.197.0
+// monsterkodi/kode 0.199.0
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -18,7 +18,7 @@ elem = function (typ, opt)
     opt = (opt != null ? opt : {})
     typ = (typ != null ? typ : 'div')
     e = document.createElement(typ)
-    if ((opt.text != null) && (opt.text instanceof str || (function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(opt.text)))
+    if ((opt.text != null) && ((function(o){return (typeof o === 'string' || o instanceof String)})(opt.text) || (function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(opt.text)))
     {
         e.textContent = opt.text
         delete opt.text
@@ -75,7 +75,7 @@ elem.containsPos = function (div, pos)
     var br
 
     br = div.getBoundingClientRect()
-    return (br.left <= pos.x && pos.x <= br.left + br.width && (br.top <= pos.y && pos.y <= br.top + br.height))
+    return br.left <= pos.x <= br.left + br.width && (br.top <= pos.y && pos.y <= br.top + br.height)
 }
 
 elem.childIndex = function (e)

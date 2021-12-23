@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.197.0
+// monsterkodi/kode 0.199.0
 
 var _k_
 
@@ -20,6 +20,7 @@ Stash = (function ()
         var _20_30_, _22_40_, _23_32_, _29_63_
 
         this.name = name
+    
         this["save"] = this["save"].bind(this)
         if (!this.name)
         {

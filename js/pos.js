@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.197.0
+// monsterkodi/kode 0.199.0
 
 var _k_
 
@@ -13,8 +13,9 @@ Pos = (function ()
     {
         var event, _14_13_, _14_22_, _22_22_
 
-        this.x = x,this.y = y
-        this.x = x,this.y = y
+        this.x = x
+        this.y = y
+    
         if (((this.x != null ? this.x.clientX : undefined) != null))
         {
             event = this.x

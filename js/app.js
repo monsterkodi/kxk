@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.197.0
+// monsterkodi/kode 0.199.0
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -74,6 +74,7 @@ App = (function ()
         var argl, onOther, _75_38_, _79_50_
 
         this.opt = opt
+    
         this["onSrcChange"] = this["onSrcChange"].bind(this)
         this["stopWatcher"] = this["stopWatcher"].bind(this)
         this["startWatcher"] = this["startWatcher"].bind(this)
