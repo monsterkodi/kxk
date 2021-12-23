@@ -107,10 +107,6 @@ App = (function ()
         this.userData = this.app.getPath('userData')
         this.app.commandLine.appendSwitch('disable-site-isolation-trials')
         electron.Menu.setApplicationMenu(this.opt.menu)
-        if (this.opt.tray)
-        {
-            klog.slog.icon = slash.fileUrl(this.resolve(this.opt.tray))
-        }
         argl = `noprefs     don't load preferences      false
 devtools    open developer tools        false  -D
 watch       watch sources for changes   false`

@@ -13,4 +13,4 @@ module.exports =  ->
     s = '[ERROR] ' + (kxk.kstr(s) for s in [].slice.call arguments, 0).join " "
         
     error s
-    kxk.klog?.slog s
+    # kxk.klog?.slog s

@@ -52,8 +52,8 @@ function App
         
         electron.Menu.setApplicationMenu @opt.menu
                 
-        if @opt.tray
-            klog.slog.icon = slash.fileUrl @resolve @opt.tray  
+        # if @opt.tray
+            # klog.slog.icon = slash.fileUrl @resolve @opt.tray  
             
         argl = """
             noprefs     don't load preferences      false

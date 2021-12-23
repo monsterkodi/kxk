@@ -43,10 +43,6 @@ Win = (function ()
         this["onMoved"] = this["onMoved"].bind(this)
         sep = ((_30_34_=this.opt.prefsSeperator) != null ? _30_34_ : '▸')
         prefs.init({separator:sep})
-        if (this.opt.icon)
-        {
-            klog.slog.icon = slash.fileUrl(slash.join(this.opt.dir,this.opt.icon))
-        }
         this.id = window.winID = electron.ipcRenderer.sendSync('getWinID')
         window.win = this
         this.modifiers = ''

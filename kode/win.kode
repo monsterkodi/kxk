@@ -30,8 +30,8 @@ function Win
         sep = @opt.prefsSeperator ? '▸'
         prefs.init separator:sep
         
-        if @opt.icon
-            klog.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
+        # if @opt.icon
+            # klog.slog.icon = slash.fileUrl slash.join @opt.dir, @opt.icon
                
         @id = window.winID = electron.ipcRenderer.sendSync 'getWinID'
         window.win = @
