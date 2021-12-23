@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.200.0
+// monsterkodi/kode 0.201.0
 
-var _k_ = {dbg: function (f,l,c,m,...a) { console.log(f + ':' + l + ':' + c + (m ? ' ' + m + '\n' : '\n') + a.map(function (a) { return _k_.noon(a) }).join(' '))}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, noon: function (obj) { var pad = function (s, l) { while (s.length < l) { s += ' ' }; return s }; var esc = function (k, arry) { var es, sp; if (0 <= k.indexOf('\n')) { sp = k.split('\n'); es = sp.map(function (s) { return esc(s,arry) }); es.unshift('...'); es.push('...'); return es.join('\n') } if (k === '' || k === '...' || _k_.in(k[0],[' ','#','|']) || _k_.in(k[k.length - 1],[' ','#','|'])) { k = '|' + k + '|' } else if (arry && /  /.test(k)) { k = '|' + k + '|' }; return k }; var pretty = function (o, ind, seen) { var k, kl, l, v, mk = 4; if (Object.keys(o).length > 1) { for (k in o) { v = o[k]; if (o.hasOwnProperty(k)) { kl = parseInt(Math.ceil((k.length + 2) / 4) * 4); mk = Math.max(mk,kl); if (mk > 32) { mk = 32; break } } } }; l = []; var keyValue = function (k, v) { var i, ks, s, vs; s = ind; k = esc(k,true); if (k.indexOf('  ') > 0 && k[0] !== '|') { k = `|${k}|` } else if (k[0] !== '|' && k[k.length - 1] === '|') { k = '|' + k } else if (k[0] === '|' && k[k.length - 1] !== '|') { k += '|' }; ks = pad(k,Math.max(mk,k.length + 2)); i = pad(ind + '    ',mk); s += ks; vs = toStr(v,i,false,seen); if (vs[0] === '\n') { while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) } }; s += vs; while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) }; return s }; for (k in o) { v = o[k]; if (o.hasOwnProperty(k)) { l.push(keyValue(k,v)) } }; return l.join('\n') }; var toStr = function (o, ind = '', arry = false, seen = []) { var s, t, v; if (!(o != null)) { if (o === null) { return 'null' }; if (o === undefined) { return 'undefined' }; return '<?>' }; switch (t = typeof(o)) { case 'string': {return esc(o,arry)}; case 'object': { if (_k_.in(o,seen)) { return '<v>' }; seen.push(o); if ((o.constructor != null ? o.constructor.name : undefined) === 'Array') { s = ind !== '' && arry && '.' || ''; if (o.length && ind !== '') { s += '\n' }; s += (function () { var result = []; var list = _k_.list(o); for (var li = 0; li < list.length; li++)  { v = list[li];result.push(ind + toStr(v,ind + '    ',true,seen))  } return result }).bind(this)().join('\n') } else if ((o.constructor != null ? o.constructor.name : undefined) === 'RegExp') { return o.source } else { s = (arry && '.\n') || ((ind !== '') && '\n' || ''); s += pretty(o,ind,seen) }; return s } default: return String(o) }; return '<???>' }; return toStr(obj) }, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}}
+var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
 var about, App, args, childp, electron, fs, klog, kxk, os, post, prefs, slash, srcmap, watch, _1_20_
 
@@ -71,7 +71,7 @@ App = (function ()
 {
     function App (opt)
     {
-        var onOther, _74_38_, _78_50_
+        var onOther, _71_38_, _75_50_
 
         this.opt = opt
     
@@ -107,12 +107,10 @@ App = (function ()
         this.userData = this.app.getPath('userData')
         this.app.commandLine.appendSwitch('disable-site-isolation-trials')
         electron.Menu.setApplicationMenu(this.opt.menu)
-        _k_.dbg(".", 62, 8, "this.opt.args", this.opt.args)
         if (this.opt.args)
         {
             this.argv = args.init(this.opt.args)
         }
-        _k_.dbg(".", 64, 8, "this.argv", this.argv)
         onOther = (function (event, argv, dir)
         {
             if (this.opt.onOtherInstance)
@@ -174,7 +172,7 @@ App = (function ()
 
     App.prototype["onReady"] = function ()
     {
-        var sep, _116_38_, _123_84_
+        var sep, _113_38_, _120_84_
 
         if (this.opt.tray)
         {
@@ -184,7 +182,7 @@ App = (function ()
         this.app.setName(this.opt.pkg.name)
         if (!this.argv.noprefs)
         {
-            sep = ((_116_38_=this.opt.prefsSeperator) != null ? _116_38_ : '▸')
+            sep = ((_113_38_=this.opt.prefsSeperator) != null ? _113_38_ : '▸')
             if (this.opt.shortcut)
             {
                 prefs.init({separator:sep,defaults:{shortcut:this.opt.shortcut}})
@@ -196,7 +194,7 @@ App = (function ()
         }
         if (!_k_.empty(prefs.get('shortcut')))
         {
-            electron.globalShortcut.register(prefs.get('shortcut'),((_123_84_=this.opt.onShortcut) != null ? _123_84_ : this.showWindow))
+            electron.globalShortcut.register(prefs.get('shortcut'),((_120_84_=this.opt.onShortcut) != null ? _120_84_ : this.showWindow))
         }
         if (this.argv.watch)
         {
@@ -237,7 +235,7 @@ App = (function ()
 
     App.prototype["quitApp"] = function ()
     {
-        var _190_33_
+        var _187_33_
 
         this.stopWatcher()
         if (this.opt.saveBounds !== false)
@@ -259,14 +257,14 @@ App = (function ()
 
     App.prototype["hideDock"] = function ()
     {
-        var _204_26_
+        var _201_26_
 
         return (this.app.dock != null ? this.app.dock.hide() : undefined)
     }
 
     App.prototype["showDock"] = function ()
     {
-        var _205_26_
+        var _202_26_
 
         return (this.app.dock != null ? this.app.dock.show() : undefined)
     }
@@ -293,7 +291,7 @@ App = (function ()
 
     App.prototype["showWindow"] = function ()
     {
-        var _226_26_, _228_15_
+        var _223_26_, _225_15_
 
         ;(typeof this.opt.onWillShowWin === "function" ? this.opt.onWillShowWin() : undefined)
         if ((this.win != null))
@@ -309,16 +307,16 @@ App = (function ()
 
     App.prototype["createWindow"] = function (onReadyToShow)
     {
-        var bounds, height, width, _248_32_, _248_46_, _249_32_, _249_46_, _254_56_, _255_56_, _256_56_, _257_56_, _258_56_, _259_56_, _260_56_, _261_56_, _262_56_, _263_56_, _264_56_, _265_56_, _266_56_, _267_56_
+        var bounds, height, width, _245_32_, _245_46_, _246_32_, _246_46_, _251_56_, _252_56_, _253_56_, _254_56_, _255_56_, _256_56_, _257_56_, _258_56_, _259_56_, _260_56_, _261_56_, _262_56_, _263_56_, _264_56_
 
         onReadyToShow = (onReadyToShow != null ? onReadyToShow : this.opt.onWinReady)
         if (this.opt.saveBounds !== false)
         {
             bounds = prefs.get('bounds')
         }
-        width = ((_248_32_=(bounds != null ? bounds.width : undefined)) != null ? _248_32_ : ((_248_46_=this.opt.width) != null ? _248_46_ : 500))
-        height = ((_249_32_=(bounds != null ? bounds.height : undefined)) != null ? _249_32_ : ((_249_46_=this.opt.height) != null ? _249_46_ : 500))
-        this.win = new electron.BrowserWindow({width:width,height:height,minWidth:((_254_56_=this.opt.minWidth) != null ? _254_56_ : 250),minHeight:((_255_56_=this.opt.minHeight) != null ? _255_56_ : 250),maxWidth:((_256_56_=this.opt.maxWidth) != null ? _256_56_ : 100000),maxHeight:((_257_56_=this.opt.maxHeight) != null ? _257_56_ : 100000),backgroundColor:((_258_56_=this.opt.backgroundColor) != null ? _258_56_ : '#181818'),frame:((_259_56_=this.opt.frame) != null ? _259_56_ : false),transparent:((_260_56_=this.opt.transparent) != null ? _260_56_ : false),fullscreen:((_261_56_=this.opt.fullscreen) != null ? _261_56_ : false),fullscreenable:((_262_56_=this.opt.fullscreenable) != null ? _262_56_ : true),acceptFirstMouse:((_263_56_=this.opt.acceptFirstMouse) != null ? _263_56_ : true),resizable:((_264_56_=this.opt.resizable) != null ? _264_56_ : true),maximizable:((_265_56_=this.opt.maximizable) != null ? _265_56_ : true),minimizable:((_266_56_=this.opt.minimizable) != null ? _266_56_ : true),closable:((_267_56_=this.opt.closable) != null ? _267_56_ : true),autoHideMenuBar:true,thickFrame:false,show:false,icon:this.resolve(this.opt.icon),webPreferences:{webSecurity:false,contextIsolation:false,nodeIntegration:true,nodeIntegrationInWorker:true}})
+        width = ((_245_32_=(bounds != null ? bounds.width : undefined)) != null ? _245_32_ : ((_245_46_=this.opt.width) != null ? _245_46_ : 500))
+        height = ((_246_32_=(bounds != null ? bounds.height : undefined)) != null ? _246_32_ : ((_246_46_=this.opt.height) != null ? _246_46_ : 500))
+        this.win = new electron.BrowserWindow({width:width,height:height,minWidth:((_251_56_=this.opt.minWidth) != null ? _251_56_ : 250),minHeight:((_252_56_=this.opt.minHeight) != null ? _252_56_ : 250),maxWidth:((_253_56_=this.opt.maxWidth) != null ? _253_56_ : 100000),maxHeight:((_254_56_=this.opt.maxHeight) != null ? _254_56_ : 100000),backgroundColor:((_255_56_=this.opt.backgroundColor) != null ? _255_56_ : '#181818'),frame:((_256_56_=this.opt.frame) != null ? _256_56_ : false),transparent:((_257_56_=this.opt.transparent) != null ? _257_56_ : false),fullscreen:((_258_56_=this.opt.fullscreen) != null ? _258_56_ : false),fullscreenable:((_259_56_=this.opt.fullscreenable) != null ? _259_56_ : true),acceptFirstMouse:((_260_56_=this.opt.acceptFirstMouse) != null ? _260_56_ : true),resizable:((_261_56_=this.opt.resizable) != null ? _261_56_ : true),maximizable:((_262_56_=this.opt.maximizable) != null ? _262_56_ : true),minimizable:((_263_56_=this.opt.minimizable) != null ? _263_56_ : true),closable:((_264_56_=this.opt.closable) != null ? _264_56_ : true),autoHideMenuBar:true,thickFrame:false,show:false,icon:this.resolve(this.opt.icon),webPreferences:{webSecurity:false,contextIsolation:false,nodeIntegration:true,nodeIntegrationInWorker:true}})
         if ((bounds != null))
         {
             this.win.setPosition(bounds.x,bounds.y)
@@ -382,14 +380,14 @@ App = (function ()
 
     App.prototype["onSetWinBounds"] = function (event, bounds)
     {
-        var _313_27_
+        var _310_27_
 
         return (this.winForEvent(event) != null ? this.winForEvent(event).setBounds(bounds) : undefined)
     }
 
     App.prototype["onGetWinBounds"] = function (event)
     {
-        var _317_47_
+        var _314_47_
 
         return event.returnValue = (this.winForEvent(event) != null ? this.winForEvent(event).getBounds() : undefined)
     }
@@ -401,7 +399,7 @@ App = (function ()
 
     App.prototype["saveBounds"] = function ()
     {
-        var _321_26_
+        var _318_26_
 
         if ((this.win != null))
         {
@@ -431,9 +429,9 @@ App = (function ()
         {
             klog('no win?',event.sender.id)
             var list = _k_.list(this.allWins())
-            for (var _332_18_ = 0; _332_18_ < list.length; _332_18_++)
+            for (var _329_18_ = 0; _329_18_ < list.length; _329_18_++)
             {
-                w = list[_332_18_]
+                w = list[_329_18_]
                 klog('win',w.id,w.webContents.id)
             }
         }
@@ -548,9 +546,9 @@ App = (function ()
             return
         }
         var list = _k_.list(this.opt.dirs)
-        for (var _407_16_ = 0; _407_16_ < list.length; _407_16_++)
+        for (var _404_16_ = 0; _404_16_ < list.length; _404_16_++)
         {
-            dir = list[_407_16_]
+            dir = list[_404_16_]
             toWatch = slash.isRelative(dir) ? slash.resolve(slash.join(this.opt.dir,dir)) : slash.resolve(dir)
             watcher = watch.dir(toWatch)
             watcher.on('change',this.onSrcChange)
@@ -571,9 +569,9 @@ App = (function ()
             return
         }
         var list = _k_.list(this.watchers)
-        for (var _421_20_ = 0; _421_20_ < list.length; _421_20_++)
+        for (var _418_20_ = 0; _418_20_ < list.length; _418_20_++)
         {
-            watcher = list[_421_20_]
+            watcher = list[_418_20_]
             watcher.close()
         }
         return this.watchers = []

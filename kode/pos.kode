@@ -33,15 +33,15 @@ function Pos
     plus: (val) ->
         newPos = @copy()
         if val?
-            newPos.x += val.x  unless isNaN(val.x)
-            newPos.y += val.y  unless isNaN(val.y)
+            newPos.x += val.x if not isNaN(val.x)
+            newPos.y += val.y if not isNaN(val.y)
         newPos
 
     minus: (val) ->
         newPos = @copy()
         if val?
-            newPos.x -= val.x  unless isNaN(val.x)
-            newPos.y -= val.y  unless isNaN(val.y)
+            newPos.x -= val.x if not isNaN(val.x)
+            newPos.y -= val.y if not isNaN(val.y)
         newPos
         
     times: (val) -> @copy().scale val
@@ -55,16 +55,16 @@ function Pos
 
     min: (val) ->
         newPos = @copy()
-        return newPos unless val?
-        newPos.x = val.x  if not isNaN(val.x) and @x > val.x
-        newPos.y = val.y  if not isNaN(val.y) and @y > val.y
+        return newPos if not val?
+        newPos.x = val.x if not isNaN(val.x) and @x > val.x
+        newPos.y = val.y if not isNaN(val.y) and @y > val.y
         newPos
 
     max: (val) ->
         newPos = @copy()
-        return newPos unless val?
-        newPos.x = val.x  if not isNaN(val.x) and @x < val.x
-        newPos.y = val.y  if not isNaN(val.y) and @y < val.y
+        return newPos if not val?
+        newPos.x = val.x if not isNaN(val.x) and @x < val.x
+        newPos.y = val.y if not isNaN(val.y) and @y < val.y
         newPos
 
     normal:         -> @copy().normalize()

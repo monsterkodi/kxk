@@ -57,11 +57,8 @@ function App
             # devtools    open developer tools        = false  -D
             # watch       watch sources for changes   = false
             # """
-#             
-        # argl = @opt.args + '\n' + argl if @opt.args
-        dbg @opt.args
+
         @argv = args.init @opt.args if @opt.args
-        dbg @argv
         
         onOther = (event, argv, dir) =>
             

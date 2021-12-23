@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.200.0
+// monsterkodi/kode 0.201.0
 
 var _k_
 
@@ -67,8 +67,14 @@ Pos = (function ()
         newPos = this.copy()
         if ((val != null))
         {
-            newPos.x += val.x(unless(isNaN(val.x)))
-            newPos.y += val.y(unless(isNaN(val.y)))
+            if (!isNaN(val.x))
+            {
+                newPos.x += val.x
+            }
+            if (!isNaN(val.y))
+            {
+                newPos.y += val.y
+            }
         }
         return newPos
     }
@@ -80,8 +86,14 @@ Pos = (function ()
         newPos = this.copy()
         if ((val != null))
         {
-            newPos.x -= val.x(unless(isNaN(val.x)))
-            newPos.y -= val.y(unless(isNaN(val.y)))
+            if (!isNaN(val.x))
+            {
+                newPos.x -= val.x
+            }
+            if (!isNaN(val.y))
+            {
+                newPos.y -= val.y
+            }
         }
         return newPos
     }
@@ -121,7 +133,10 @@ Pos = (function ()
         var newPos
 
         newPos = this.copy()
-        return newPos(unless((val != null)))
+        if (!(val != null))
+        {
+            return newPos
+        }
         if (!isNaN(val.x) && this.x > val.x)
         {
             newPos.x = val.x
@@ -138,7 +153,10 @@ Pos = (function ()
         var newPos
 
         newPos = this.copy()
-        return newPos(unless((val != null)))
+        if (!(val != null))
+        {
+            return newPos
+        }
         if (!isNaN(val.x) && this.x < val.x)
         {
             newPos.x = val.x
