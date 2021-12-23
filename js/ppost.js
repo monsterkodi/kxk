@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.199.0
+// monsterkodi/kode 0.200.0
 
 var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -13,7 +13,7 @@ if (process.type === 'renderer')
     
 PostRenderer = (function ()
 {
-    _k_.extend(PostRenderer, Emitter);
+    _k_.extend(PostRenderer, Emitter)
     function PostRenderer ()
     {
         this["dispose"] = this["dispose"].bind(this)
@@ -24,7 +24,6 @@ PostRenderer = (function ()
             return this.emit.apply(this,[type].concat(argl))
         }).bind(this))
         window.addEventListener('beforeunload',this.dispose)
-        return PostRenderer.__super__.constructor.apply(this, arguments)
     }
 
     PostRenderer.prototype["dispose"] = function ()
@@ -72,7 +71,7 @@ electron = require('electron')
 
 PostMain = (function ()
 {
-    _k_.extend(PostMain, Emitter);
+    _k_.extend(PostMain, Emitter)
     function PostMain ()
     {
         var ipc
@@ -117,7 +116,6 @@ PostMain = (function ()
         {
             kerror(err)
         }
-        return PostMain.__super__.constructor.apply(this, arguments)
     }
 
     PostMain.prototype["toAll"] = function (type, ...args)

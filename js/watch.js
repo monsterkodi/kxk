@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.199.0
+// monsterkodi/kode 0.200.0
 
 var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -15,7 +15,7 @@ walkdir = require('walkdir')
 
 Watch = (function ()
 {
-    _k_.extend(Watch, event);
+    _k_.extend(Watch, event)
     function Watch (path, opt)
     {
         this["onChange"] = this["onChange"].bind(this)
@@ -30,7 +30,6 @@ Watch = (function ()
                 return this.watchDir()
             }
         }).bind(this))
-        return Watch.__super__.constructor.apply(this, arguments)
     }
 
     Watch["dir"] = function (path, opt)

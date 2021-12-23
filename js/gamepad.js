@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.199.0
+// monsterkodi/kode 0.200.0
 
 var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}}
 
@@ -8,7 +8,7 @@ events = require('events')
 
 Gamepad = (function ()
 {
-    _k_.extend(Gamepad, events);
+    _k_.extend(Gamepad, events)
     function Gamepad (doPoll = true)
     {
         this["poll"] = this["poll"].bind(this)
