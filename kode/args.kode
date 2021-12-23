@@ -18,18 +18,18 @@ else
     args = {} 
         
     # args.init = (cfg, kargOpt) ->
-    args.init = (cfg) ->
+    args.init = (cfg, pkg) ->
         
         # kargOpt ?= {}
         # pkg = kargOpt.pkg
         
-        # if not pkg?
-            # pkgDir = slash.pkg __dirname
-            # while valid(pkgDir) and slash.file(slash.dir pkgDir) == 'node_modules'
-                # pkgDir = slash.pkg slash.dir pkgDir
-            # if valid pkgDir
-                # pkgJson = slash.join pkgDir, 'package.json'
-                # pkg = require pkgJson
+        if not pkg?
+            pkgDir = slash.pkg __dirname
+            while valid(pkgDir) and slash.file(slash.dir pkgDir) == 'node_modules'
+                pkgDir = slash.pkg slash.dir pkgDir
+            if valid pkgDir
+                pkgJson = slash.join pkgDir, 'package.json'
+                pkg = require pkgJson
                 # return kerror "args -- no pkg in '#{pkgJson}'!" if empty pkg
             # else
                 # return kerror 'args -- no pkg dir!'
@@ -63,6 +63,9 @@ else
             # else
                 # kargOpt.ignoreArgs=2
         
+        if valid pkg
+            cfg += "\nversion   #{pkg.version}"
+                
         for k,v of karg cfg #kargConfig, kargOpt
             args[k] = v
             
