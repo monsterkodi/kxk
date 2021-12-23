@@ -47,12 +47,12 @@ function Prefs
             kerror "can't touch prefs file #{@store.file}"
         @watcher
         
-    @onFileChange: => @store.reload()
-    @onFileUnlink: => @unwatch(); @store.clear()
+    @onFileChange: => @store?.reload()
+    @onFileUnlink: => @unwatch(); @store?.clear()
             
     @get:  (key, value) -> if @store then @store.get(key, value) else clone value
-    @set:  (key, value) -> @unwatch(); @store.set(key, value); @watch()
-    @del:  (key, value) -> @unwatch(); @store.del(key); @watch()
+    @set:  (key, value) -> @unwatch(); @store?.set(key, value); @watch()
+    @del:  (key, value) -> @unwatch(); @store?.del(key); @watch()
     @save:              -> @store?.save()
     
     @toggle: (key, cb) -> 

@@ -73,13 +73,17 @@ Prefs = (function ()
 
     Prefs["onFileChange"] = function ()
     {
-        return this.store.reload()
+        var _50_28_
+
+        return (this.store != null ? this.store.reload() : undefined)
     }
 
     Prefs["onFileUnlink"] = function ()
     {
+        var _51_40_
+
         this.unwatch()
-        return this.store.clear()
+        return (this.store != null ? this.store.clear() : undefined)
     }
 
     Prefs["get"] = function (key, value)
@@ -96,15 +100,19 @@ Prefs = (function ()
 
     Prefs["set"] = function (key, value)
     {
+        var _54_45_
+
         this.unwatch()
-        this.store.set(key,value)
+        ;(this.store != null ? this.store.set(key,value) : undefined)
         return this.watch()
     }
 
     Prefs["del"] = function (key, value)
     {
+        var _55_45_
+
         this.unwatch()
-        this.store.del(key)
+        ;(this.store != null ? this.store.del(key) : undefined)
         return this.watch()
     }
 
