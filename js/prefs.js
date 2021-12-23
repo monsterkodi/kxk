@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.196.0
+// monsterkodi/kode 0.197.0
 
 var _k_ = {clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o);}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) {var r = {}; v.set(o,r); for (k in o) {if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k])}; }; return v.get(o) } else {return o} }}
 
@@ -16,8 +16,8 @@ Prefs = (function ()
     function Prefs ()
     {}
 
-
-
+    Prefs["store"] = null
+    Prefs["watcher"] = null
     Prefs["init"] = function (opt = {})
     {
         var _18_64_
@@ -26,18 +26,15 @@ Prefs = (function ()
         {
             return console.error('prefs.init -- duplicate stores?')
         }
-        console.log('new store')
         this.store = new store('prefs',opt)
-        console.log('store newd')
         this.store.on('willSave',this.unwatch)
         this.store.on('didSave',this.watch)
-        this.watch()
-        console.log('watch')
+        return this.watch()
     }
 
     Prefs["unwatch"] = function ()
     {
-        var _29_32_, _31_16_
+        var _28_32_, _30_16_
 
         if (!(this.store.app != null))
         {
@@ -49,7 +46,7 @@ Prefs = (function ()
 
     Prefs["watch"] = function ()
     {
-        var _36_32_
+        var _35_32_
 
         if (!(this.store.app != null))
         {
@@ -113,7 +110,7 @@ Prefs = (function ()
 
     Prefs["save"] = function ()
     {
-        var _57_33_
+        var _56_33_
 
         return (this.store != null ? this.store.save() : undefined)
     }

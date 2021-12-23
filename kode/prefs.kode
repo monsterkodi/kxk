@@ -16,13 +16,12 @@ function Prefs
     @init: (opt={}) ->
 
         return error 'prefs.init -- duplicate stores?' if @store?
-        log 'new store'
+
         @store = new store 'prefs' opt
-        log 'store newd'
+
         @store.on 'willSave' @unwatch
         @store.on 'didSave'  @watch
         @watch() 
-        log 'watch'
       
     @unwatch: =>
         

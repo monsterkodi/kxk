@@ -25,16 +25,12 @@ function Store extends Emitter
                     when 'data'
                         return @stores[name]?.data
     
-        log 'Store@addStore' @stores?, Store.stores?, store?.name
-        Store.stores[store.name] = store
+        @stores[store.name] = store
 
     @: (name, opt={}) ->
 
-        log 'Store'
-        
         super()
         
-        log 'Store.name' name
         @name = name
         opt.separator ?= ':'
         opt.timeout   ?= 4000
@@ -47,7 +43,6 @@ function Store extends Emitter
         
         if @app
             
-            log 'Store.addStore'
             Store.addStore @
             
             @timer   = null

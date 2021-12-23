@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.196.0
+// monsterkodi/kode 0.197.0
 
 var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o);}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) {var r = {}; v.set(o,r); for (k in o) {if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k])}; }; return v.get(o) } else {return o} }}
 
@@ -18,11 +18,9 @@ Emitter = require('events')
 Store = (function ()
 {
     _k_.extend(Store, Emitter);
-
+    Store["stores"] = {}
     Store["addStore"] = function (store)
     {
-        var _28_36_, _28_51_
-
         if (_k_.empty(this.stores))
         {
             post.onGet('store',(function (name, action)
@@ -36,21 +34,18 @@ Store = (function ()
 
             }).bind(this))
         }
-        console.log('Store@addStore',(this.stores != null),(Store.stores != null),(store != null ? store.name : undefined))
-        return Store.stores[store.name] = store
+        return this.stores[store.name] = store
     }
 
     function Store (name, opt = {})
     {
-        var electron, _39_22_, _40_22_, _54_32_, _80_62_
+        var electron, _35_22_, _36_22_, _49_32_, _75_62_
 
         this["save"] = this["save"].bind(this)
-        console.log('Store')
         Store.__super__.constructor.call(this)
-        console.log('Store.name',name)
         this.name = name
-        opt.separator = ((_39_22_=opt.separator) != null ? _39_22_ : ':')
-        opt.timeout = ((_40_22_=opt.timeout) != null ? _40_22_ : 4000)
+        opt.separator = ((_35_22_=opt.separator) != null ? _35_22_ : ':')
+        opt.timeout = ((_36_22_=opt.timeout) != null ? _36_22_ : 4000)
         if (!this.name)
         {
             return kerror('no name for store?')
@@ -60,10 +55,9 @@ Store = (function ()
         this.sep = opt.separator
         if (this.app)
         {
-            console.log('Store.addStore')
             Store.addStore(this)
             this.timer = null
-            this.file = ((_54_32_=opt.file) != null ? _54_32_ : slash.join(post.get('userData'),`${this.name}.noon`))
+            this.file = ((_49_32_=opt.file) != null ? _49_32_ : slash.join(post.get('userData'),`${this.name}.noon`))
             this.timeout = opt.timeout
             post.on('store',(function (name, action, ...argl)
             {
@@ -135,7 +129,7 @@ Store = (function ()
 
     Store.prototype["get"] = function (key, value)
     {
-        var _92_51_
+        var _87_51_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -146,7 +140,7 @@ Store = (function ()
 
     Store.prototype["set"] = function (key, value)
     {
-        var _103_32_, _106_14_
+        var _101_14_, _98_32_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -156,7 +150,7 @@ Store = (function ()
         {
             return
         }
-        this.data = ((_106_14_=this.data) != null ? _106_14_ : {})
+        this.data = ((_101_14_=this.data) != null ? _101_14_ : {})
         sds.set(this.data,this.keypath(key),value)
         if (this.app)
         {

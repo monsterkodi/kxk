@@ -113,24 +113,17 @@ function App
          
         @app.setName @opt.pkg.name
     
-        log 'app.onReady' args
-        
         if not args.noprefs
             sep = @opt.prefsSeperator ? '▸'
-            log 'app.onReady prefs?' prefs?, kxk.prefs?
             if @opt.shortcut
                 prefs.init separator:sep, defaults:shortcut:@opt.shortcut
             else
                 prefs.init separator:sep
-            log 'app.onReady prefs init'
     
-        log 'app.onReady3'
-                
         if valid prefs.get 'shortcut'
             electron.globalShortcut.register prefs.get('shortcut'), @opt.onShortcut ? @showWindow
              
         if args.watch
-            klog 'App.onReady startWatcher'
             @startWatcher()
         
         if @opt.onShow
@@ -138,9 +131,7 @@ function App
         else
             @showWindow()
 
-        log 'app.onReady4'
         post.emit 'appReady'
-        log 'app.onReady5'
         
     # 000000000  00000000    0000000   000   000  
     #    000     000   000  000   000   000 000   
@@ -224,8 +215,6 @@ function App
        
     onActivate: (event, hasVisibleWindows) =>
         
-        log 'app.onActivate'
-        
         if @opt.onActivate
             if @opt.onActivate event, hasVisibleWindows
                 return
@@ -235,8 +224,6 @@ function App
                 
     showWindow: =>
 
-        log 'app.showWindow'
-        
         @opt.onWillShowWin?()
         
         if @win?
@@ -254,8 +241,6 @@ function App
     
     createWindow: (onReadyToShow) =>
     
-        log 'app.createWindow'
-        
         onReadyToShow ?= @opt.onWinReady
         
         if @opt.saveBounds != false
