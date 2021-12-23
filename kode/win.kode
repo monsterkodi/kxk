@@ -18,14 +18,14 @@ function Win
     
     @: (@opt) ->
         
-        window.onerror = (msg, source, line, col, error) ->
-            
-            try
-                error 'window.onerror' msg, source, line, col
-            catch err
-                console.log 'dafuk?' err
-            # srcmap.logErr err
-            true
+        # window.onerror = (msg, source, line, col, error) ->
+#             
+            # try
+                # error 'window.onerror' msg, source, line, col
+            # catch err
+                # console.log 'dafuk?' err
+            # # srcmap.logErr err
+            # true
         
         sep = @opt.prefsSeperator ? '▸'
         prefs.init separator:sep

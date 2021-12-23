@@ -41,18 +41,6 @@ Win = (function ()
         this["onContextMenu"] = this["onContextMenu"].bind(this)
         this["onMenuAction"] = this["onMenuAction"].bind(this)
         this["onMoved"] = this["onMoved"].bind(this)
-        window.onerror = function (msg, source, line, col, error)
-        {
-            try
-            {
-                console.error('window.onerror',msg,source,line,col)
-            }
-            catch (err)
-            {
-                console.log('dafuk?',err)
-            }
-            return true
-        }
         sep = ((_30_34_=this.opt.prefsSeperator) != null ? _30_34_ : '▸')
         prefs.init({separator:sep})
         if (this.opt.icon)

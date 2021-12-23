@@ -128,11 +128,11 @@ Store = (function ()
 
     Store.prototype["get"] = function (key, value)
     {
-        var _87_51_
+        var _87_45_
 
         if (!((key != null ? key.split : undefined) != null))
         {
-            return _.cloneDeep(value)
+            return _k_.clone((value))
         }
         return _k_.clone(sds.get(this.data,this.keypath(key),value))
     }
