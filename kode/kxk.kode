@@ -170,7 +170,9 @@ module.exports.kerror      = require './error'
 module.exports.kpos        = require './pos'
 module.exports.args        = require './args'
 
-module.exports[k]          = require('./dom')[k] for k in Object.keys require './dom'
+dom = require './dom'
+for k,v of dom
+    module.exports[k] = v
 
 module.exports.drag        = require './drag'
 module.exports.elem        = require './elem'

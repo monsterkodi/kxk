@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.208.0
+// monsterkodi/kode 0.206.0
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var atomic, childp, crypto, fs, k, karg, klor, kstr, noon, open, os, post, sds, slash, walkdir, _
+var atomic, childp, crypto, dom, fs, k, karg, klor, kstr, noon, open, os, post, sds, slash, v, walkdir, _
 
 childp = require('child_process')
 crypto = require('crypto')
@@ -223,11 +223,11 @@ module.exports.klog = require('./log')
 module.exports.kerror = require('./error')
 module.exports.kpos = require('./pos')
 module.exports.args = require('./args')
-var list = _k_.list(Object.keys(require('./dom')))
-for (var _173_55_ = 0; _173_55_ < list.length; _173_55_++)
+dom = require('./dom')
+for (k in dom)
 {
-    k = list[_173_55_]
-    module.exports[k] = require('./dom')[k]
+    v = dom[k]
+    module.exports[k] = v
 }
 module.exports.drag = require('./drag')
 module.exports.elem = require('./elem')
