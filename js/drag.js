@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.208.0
+// monsterkodi/kode 0.210.0
 
 var _k_
 
@@ -132,7 +132,7 @@ Drag = (function ()
             {
                 delete this.constrain
             }
-            (typeof this.onMove === "function" ? this.onMove(this,event) : undefined)
+            ;(typeof this.onMove === "function" ? this.onMove(this,event) : undefined)
             this.lastPos = this.pos
         }
         return this
