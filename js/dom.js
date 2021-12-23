@@ -37,12 +37,10 @@ module.exports = {$:function (idOrQueryOrElement, queryOrElement = document)
     return document.body.clientHeight
 },stopEvent:function (event)
 {
-    var _32_32_, _33_33_
-
-    if ((event != null))
+    if ((event != null) && typeof(event.preventDefault) === 'function' && typeof(event.stopPropagation) === 'function')
     {
-        (typeof event.preventDefault === "function" ? event.preventDefault() : undefined)
-        (typeof event.stopPropagation === "function" ? event.stopPropagation() : undefined)
+        event.preventDefault()
+        event.stopPropagation()
     }
     return event
 },setStyle:function (selector, key, value, ssid = 0)

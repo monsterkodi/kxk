@@ -23,14 +23,14 @@ module.exports =
 
     childIndex: (e) -> Array.prototype.indexOf.call e.parentNode.childNodes, e 
 
-    sw: () -> document.body.clientWidth
-    sh: () -> document.body.clientHeight
+    sw: -> document.body.clientWidth
+    sh: -> document.body.clientHeight
 
     stopEvent: (event) ->
         
-        if event?
-            event.preventDefault?()
-            event.stopPropagation?()
+        if event? and event.preventDefault is 'function' and event.stopPropagation is 'function'
+            event.preventDefault()
+            event.stopPropagation()
         event
     
     #  0000000   0000000   0000000
