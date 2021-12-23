@@ -62,12 +62,12 @@ function App
             """
             
         argl = @opt.args + '\n' + argl if @opt.args
-        args = args.init argl
+        @argv = args.init argl
         
-        onOther = (event, args, dir) =>
+        onOther = (event, argv, dir) =>
             
             if @opt.onOtherInstance
-                @opt.onOtherInstance args, dir 
+                @opt.onOtherInstance argv, dir 
             else
                 @showWindow()
         
@@ -113,7 +113,7 @@ function App
          
         @app.setName @opt.pkg.name
     
-        if not args.noprefs
+        if not @argv.noprefs
             sep = @opt.prefsSeperator ? '▸'
             if @opt.shortcut
                 prefs.init separator:sep, defaults:shortcut:@opt.shortcut
@@ -123,7 +123,7 @@ function App
         if valid prefs.get 'shortcut'
             electron.globalShortcut.register prefs.get('shortcut'), @opt.onShortcut ? @showWindow
              
-        if args.watch
+        if @argv.watch
             @startWatcher()
         
         if @opt.onShow
@@ -286,7 +286,7 @@ function App
         @win.webContents.on 'devtools-opened' (event) -> post.toWin event.sender.id, 'devTools' true
         @win.webContents.on 'devtools-closed' (event) -> post.toWin event.sender.id, 'devTools' false
             
-        @win.webContents.openDevTools(mode:'detach') if args.devtools
+        @win.webContents.openDevTools(mode:'detach') if @argv.devtools
         if @opt.saveBounds != false
             @win.setPosition bounds.x, bounds.y if bounds?
             @win.on 'resize' @saveBounds

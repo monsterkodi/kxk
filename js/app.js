@@ -118,12 +118,12 @@ watch       watch sources for changes   false`
         {
             argl = this.opt.args + '\n' + argl
         }
-        args = args.init(argl)
-        onOther = (function (event, args, dir)
+        this.argv = args.init(argl)
+        onOther = (function (event, argv, dir)
         {
             if (this.opt.onOtherInstance)
             {
-                return this.opt.onOtherInstance(args,dir)
+                return this.opt.onOtherInstance(argv,dir)
             }
             else
             {
@@ -188,7 +188,7 @@ watch       watch sources for changes   false`
         }
         this.hideDock()
         this.app.setName(this.opt.pkg.name)
-        if (!args.noprefs)
+        if (!this.argv.noprefs)
         {
             sep = ((_117_38_=this.opt.prefsSeperator) != null ? _117_38_ : '▸')
             if (this.opt.shortcut)
@@ -204,7 +204,7 @@ watch       watch sources for changes   false`
         {
             electron.globalShortcut.register(prefs.get('shortcut'),((_124_84_=this.opt.onShortcut) != null ? _124_84_ : this.showWindow))
         }
-        if (args.watch)
+        if (this.argv.watch)
         {
             this.startWatcher()
         }
@@ -345,7 +345,7 @@ watch       watch sources for changes   false`
         {
             return post.toWin(event.sender.id,'devTools',false)
         })
-        if (args.devtools)
+        if (this.argv.devtools)
         {
             this.win.webContents.openDevTools({mode:'detach'})
         }

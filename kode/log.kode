@@ -67,43 +67,49 @@ fileLog = (info) ->
 
 slog = (s) ->
     
-    { kstr, post, slash } = require './kxk'
+    # { kstr, post, slash } = require './kxk'
     
-    try # fancy log with source-mapped files and line numbers
-        f = stack.capture()[slog.depth]
-        sorcery = require 'sorcery'
-        
-        info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
-        try
-            if chain = sorcery.loadSync(f.getFileName())
-                sorceryInfo = chain.trace(f.getLineNumber(), 0)
-                if not slash.samePath f.getScriptNameOrSourceURL(), f.getFileName()
-                    if slash.isAbsolute f.getScriptNameOrSourceURL()
-                        source = slash.path f.getScriptNameOrSourceURL()
-                    else
-                        source = slash.resolve slash.join slash.dir(f.getFileName()), f.getScriptNameOrSourceURL()
-                else
-                    source = f.getFileName()
-                sorceryInfo.source = slash.tilde source
-                info = sorceryInfo
-            else
-        catch err
-            true
+    # try # fancy log with source-mapped files and line numbers
+        # f = stack.capture()[slog.depth]
+        # sorcery = require 'sorcery'
+#         
+        # info = source: slash.tilde(f.getFileName()), line: f.getLineNumber()
+        # try
+            # if chain = sorcery.loadSync(f.getFileName())
+                # sorceryInfo = chain.trace(f.getLineNumber(), 0)
+                # if not slash.samePath f.getScriptNameOrSourceURL(), f.getFileName()
+                    # if slash.isAbsolute f.getScriptNameOrSourceURL()
+                        # source = slash.path f.getScriptNameOrSourceURL()
+                    # else
+                        # source = slash.resolve slash.join slash.dir(f.getFileName()), f.getScriptNameOrSourceURL()
+                # else
+                    # source = f.getFileName()
+                # sorceryInfo.source = slash.tilde source
+                # info = sorceryInfo
+            # else
+        # catch err
+            # true
 
-        file = kstr.lpad "#{info.source}:#{info.line}", slog.filepad
-        meth = kstr.rpad f.getFunctionName(), slog.methpad
-        info.str = s
-        s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
-        post?.emit? 'slog' s, info
-        if slog.file
-            fileLog info            
+        # file = kstr.lpad "#{info.source}:#{info.line}", slog.filepad
+        # meth = kstr.rpad f.getFunctionName(), slog.methpad
+        # info.str = s
+        # s = "#{file}#{slog.filesep}#{meth}#{slog.methsep}#{s}"
+        # post?.emit? 'slog' s, info
+        # if slog.file
+            # fileLog info            
+#             
+    # catch err
+        # error err
+        # post.emit 'slog' "!#{slog.methsep}#{s} #{err}"
+        # if slog.file
+            # fileLog str:s + err
+
+    { post } = require './kxk'
+    error err
+    post.emit 'slog' "!#{slog.methsep}#{s} #{err}"
+    if slog.file
+        fileLog str:s + err
             
-    catch err
-        error err
-        post.emit 'slog' "!#{slog.methsep}#{s} #{err}"
-        if slog.file
-            fileLog str:s + err
-
 # 000       0000000    0000000   
 # 000      000   000  000        
 # 000      000   000  000  0000  

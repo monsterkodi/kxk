@@ -2,7 +2,7 @@
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var dumpImmediately, dumpInfos, dumpTimer, fileLog, infos, klog, post, slog, stack, sutil, _157_37_
+var dumpImmediately, dumpInfos, dumpTimer, fileLog, infos, klog, post, slog, stack, sutil, _163_37_
 
 sutil = require('stack-utils')
 stack = new sutil({cwd:process.cwd(),internals:sutil.nodeInternals()})
@@ -80,75 +80,27 @@ fileLog = function (info)
 
 slog = function (s)
 {
-    var chain, f, file, info, kstr, meth, post, slash, sorcery, sorceryInfo, source, _97_18_
+    var post
 
-    kstr = require('./kxk').kstr
     post = require('./kxk').post
-    slash = require('./kxk').slash
 
-    try
+    console.error(err)
+    post.emit('slog',`!${slog.methsep}${s} ${err}`)
+    if (slog.file)
     {
-        f = stack.capture()[slog.depth]
-        sorcery = require('sorcery')
-        info = {source:slash.tilde(f.getFileName()),line:f.getLineNumber()}
-        try
-        {
-            if (chain = sorcery.loadSync(f.getFileName()))
-            {
-                sorceryInfo = chain.trace(f.getLineNumber(),0)
-                if (!slash.samePath(f.getScriptNameOrSourceURL(),f.getFileName()))
-                {
-                    if (slash.isAbsolute(f.getScriptNameOrSourceURL()))
-                    {
-                        source = slash.path(f.getScriptNameOrSourceURL())
-                    }
-                    else
-                    {
-                        source = slash.resolve(slash.join(slash.dir(f.getFileName()),f.getScriptNameOrSourceURL()))
-                    }
-                }
-                else
-                {
-                    source = f.getFileName()
-                }
-                sorceryInfo.source = slash.tilde(source)
-                info = sorceryInfo
-            }
-        }
-        catch (err)
-        {
-            true
-        }
-        file = kstr.lpad(`${info.source}:${info.line}`,slog.filepad)
-        meth = kstr.rpad(f.getFunctionName(),slog.methpad)
-        info.str = s
-        s = `${file}${slog.filesep}${meth}${slog.methsep}${s}`
-        ;(post != null ? typeof (_97_18_=post.emit) === "function" ? _97_18_('slog',s,info) : undefined : undefined)
-        if (slog.file)
-        {
-            return fileLog(info)
-        }
-    }
-    catch (err)
-    {
-        console.error(err)
-        post.emit('slog',`!${slog.methsep}${s} ${err}`)
-        if (slog.file)
-        {
-            return fileLog({str:s + err})
-        }
+        return fileLog({str:s + err})
     }
 }
 
 klog = function ()
 {
-    var kstr, post, s, _118_14_
+    var kstr, post, s, _124_14_
 
     post = require('./kxk').post
     kstr = require('./kxk').kstr
 
-    s = (function () { var result = []; var list = _k_.list([].slice.call(arguments,0)); for (var _116_23_ = 0; _116_23_ < list.length; _116_23_++)  { s = list[_116_23_];result.push(kstr(s))  } return result }).bind(this)().join(" ")
-    ;(post != null ? typeof (_118_14_=post.emit) === "function" ? _118_14_('log',s) : undefined : undefined)
+    s = (function () { var result = []; var list = _k_.list([].slice.call(arguments,0)); for (var _122_23_ = 0; _122_23_ < list.length; _122_23_++)  { s = list[_122_23_];result.push(kstr(s))  } return result }).bind(this)().join(" ")
+    ;(post != null ? typeof (_124_14_=post.emit) === "function" ? _124_14_('log',s) : undefined : undefined)
     console.log(s)
     return slog(s)
 }
