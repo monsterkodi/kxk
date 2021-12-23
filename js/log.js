@@ -2,7 +2,7 @@
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var dumpImmediately, dumpInfos, dumpTimer, fileLog, infos, klog, post, slog, stack, sutil
+var dumpImmediately, dumpInfos, dumpTimer, fileLog, infos, klog, post, slog, stack, sutil, _157_37_
 
 sutil = require('stack-utils')
 stack = new sutil({cwd:process.cwd(),internals:sutil.nodeInternals()})
@@ -181,7 +181,7 @@ try
     }
     else if (process.type === 'browser')
     {
-        slog.id = require('electron').app.getName()
+        slog.id = (require('electron') != null ? require('electron').app.getName() : undefined)
     }
 }
 catch (err)

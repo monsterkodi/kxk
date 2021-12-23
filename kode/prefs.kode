@@ -25,14 +25,14 @@ function Prefs
       
     @unwatch: =>
         
-        return if not @store.app?
+        return if not @store?.app?
         
         @watcher?.close()
         @watcher = null
         
     @watch: =>
         
-        return if not @store.app?
+        return if not @store?.app?
         
         slash.error = klog
         if slash.touch @store.file

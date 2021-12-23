@@ -34,9 +34,9 @@ Prefs = (function ()
 
     Prefs["unwatch"] = function ()
     {
-        var _28_32_, _30_16_
+        var _28_28_, _28_33_, _30_16_
 
-        if (!(this.store.app != null))
+        if (!((this.store != null ? this.store.app : undefined) != null))
         {
             return
         }
@@ -46,9 +46,9 @@ Prefs = (function ()
 
     Prefs["watch"] = function ()
     {
-        var _35_32_
+        var _35_28_, _35_33_
 
-        if (!(this.store.app != null))
+        if (!((this.store != null ? this.store.app : undefined) != null))
         {
             return
         }

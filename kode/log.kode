@@ -154,7 +154,7 @@ try
         { post } = require './kxk'
         slog.id = post.get 'appName'
     else if process.type == 'browser'
-        slog.id = require('electron').app.getName()
+        slog.id = require('electron')?.app.getName()
     # slash = require 'kslash'
     # slog.logFile = slash.join slash.userData(), 'klog.txt'
 catch err
