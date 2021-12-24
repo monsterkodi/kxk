@@ -81,6 +81,8 @@ function Win
     
     onMenuAction: (action, args) =>
 
+        dbg 'win onMenuAction' action, args
+        
         switch action.toLowerCase()
             when 'preferences' then return open prefs.store.file
           

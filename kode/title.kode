@@ -161,6 +161,8 @@ function Title
 
     onMenuAction: (action, args) =>
                 
+        dbg 'title onMenuAction' action, args
+        
         switch action.toLowerCase()
             when 'toggle menu'      then @toggleMenu()
             when 'open menu'        then @openMenu()
@@ -262,7 +264,7 @@ function Title
 
         { mod, key, combo } = keyinfo.forEvent event
         
-        # klog "mod #{mod} key #{key} combo #{combo}"
+        dbg "mod #{mod} key #{key} combo #{combo}"
         
         mainMenu = @menuTemplate()
             
@@ -280,7 +282,7 @@ function Title
             if combo in combos
                 keypath.pop()
                 item = sds.get mainMenu, keypath
-                # klog 'kxk.title.handleKey item' item
+                dbg 'kxk.title.handleKey item' item
                 post.emit 'menuAction' item.action ? item.text, item
                 return item
 

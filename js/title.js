@@ -1,6 +1,6 @@
 // monsterkodi/kode 0.217.0
 
-var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o)}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) { var k, r = {}; v.set(o,r); for (k in o) { if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k]) }; }; return v.get(o) } else {return o} }, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, dbg: function (f,l,c,m,...a) { console.log(f + ':' + l + ':' + c + (m ? ' ' + m + '\n' : '\n') + a.map(function (a) { return _k_.noon(a) }).join(' '))}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o)}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) { var k, r = {}; v.set(o,r); for (k in o) { if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k]) }; }; return v.get(o) } else {return o} }, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, noon: function (obj) { var pad = function (s, l) { while (s.length < l) { s += ' ' }; return s }; var esc = function (k, arry) { var es, sp; if (0 <= k.indexOf('\n')) { sp = k.split('\n'); es = sp.map(function (s) { return esc(s,arry) }); es.unshift('...'); es.push('...'); return es.join('\n') } if (k === '' || k === '...' || _k_.in(k[0],[' ','#','|']) || _k_.in(k[k.length - 1],[' ','#','|'])) { k = '|' + k + '|' } else if (arry && /  /.test(k)) { k = '|' + k + '|' }; return k }; var pretty = function (o, ind, seen) { var k, kl, l, v, mk = 4; if (Object.keys(o).length > 1) { for (k in o) { if (Object.hasOwn(o,k)) { kl = parseInt(Math.ceil((k.length + 2) / 4) * 4); mk = Math.max(mk,kl); if (mk > 32) { mk = 32; break } } } }; l = []; var keyValue = function (k, v) { var i, ks, s, vs; s = ind; k = esc(k,true); if (k.indexOf('  ') > 0 && k[0] !== '|') { k = `|${k}|` } else if (k[0] !== '|' && k[k.length - 1] === '|') { k = '|' + k } else if (k[0] === '|' && k[k.length - 1] !== '|') { k += '|' }; ks = pad(k,Math.max(mk,k.length + 2)); i = pad(ind + '    ',mk); s += ks; vs = toStr(v,i,false,seen); if (vs[0] === '\n') { while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) } }; s += vs; while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) }; return s }; for (k in o) { if (Object.hasOwn(o,k)) { l.push(keyValue(k,o[k])) } }; return l.join('\n') }; var toStr = function (o, ind = '', arry = false, seen = []) { var s, t, v; if (!(o != null)) { if (o === null) { return 'null' }; if (o === undefined) { return 'undefined' }; return '<?>' }; switch (t = typeof(o)) { case 'string': {return esc(o,arry)}; case 'object': { if (_k_.in(o,seen)) { return '<v>' }; seen.push(o); if ((o.constructor != null ? o.constructor.name : undefined) === 'Array') { s = ind !== '' && arry && '.' || ''; if (o.length && ind !== '') { s += '\n' }; s += (function () { var result = []; var list = _k_.list(o); for (var li = 0; li < list.length; li++)  { v = list[li];result.push(ind + toStr(v,ind + '    ',true,seen))  } return result }).bind(this)().join('\n') } else if ((o.constructor != null ? o.constructor.name : undefined) === 'RegExp') { return o.source } else { s = (arry && '.\n') || ((ind !== '') && '\n' || ''); s += pretty(o,ind,seen) }; return s } default: return String(o) }; return '<???>' }; return toStr(obj) }}
 
 var $, drag, elem, keyinfo, kstr, kxk, menu, post, prefs, scheme, sds, slash, stopEvent, Title, _
 
@@ -188,6 +188,7 @@ Title = (function ()
 
     Title.prototype["onMenuAction"] = function (action, args)
     {
+        _k_.dbg("kode/title.kode", 164, 8, null, 'title onMenuAction',action,args)
         switch (action.toLowerCase())
         {
             case 'toggle menu':
@@ -214,7 +215,7 @@ Title = (function ()
 
     Title.prototype["menuTemplate"] = function ()
     {
-        var _179_28_
+        var _181_28_
 
         if (!this.opt.dir || !this.opt.menu)
         {
@@ -244,7 +245,7 @@ Title = (function ()
             menuOrAccel = obj[text]
             item = (function ()
             {
-                var _201_37_, _201_61_
+                var _203_37_, _203_61_
 
                 if (_k_.empty(menuOrAccel) && text.startsWith('-'))
                 {
@@ -298,15 +299,15 @@ Title = (function ()
 
     Title.prototype["showMenu"] = function ()
     {
-        var _223_68_, _223_75_
+        var _225_68_, _225_75_
 
         this.menu.elem.style.display = 'inline-block'
-        return ((_223_68_=this.menu) != null ? typeof (_223_75_=_223_68_.focus) === "function" ? _223_75_() : undefined : undefined)
+        return ((_225_68_=this.menu) != null ? typeof (_225_75_=_225_68_.focus) === "function" ? _225_75_() : undefined : undefined)
     }
 
     Title.prototype["hideMenu"] = function ()
     {
-        var _224_25_
+        var _226_25_
 
         ;(this.menu != null ? this.menu.close() : undefined)
         return this.menu.elem.style.display = 'none'
@@ -354,12 +355,13 @@ Title = (function ()
 
     Title.prototype["handleKey"] = function (event)
     {
-        var accels, combo, combos, item, kepaths, key, keypath, mainMenu, mod, _284_51_
+        var accels, combo, combos, item, kepaths, key, keypath, mainMenu, mod, _286_51_
 
         mod = keyinfo.forEvent(event).mod
         key = keyinfo.forEvent(event).key
         combo = keyinfo.forEvent(event).combo
 
+        _k_.dbg("kode/title.kode", 267, 8, null, `mod ${mod} key ${key} combo ${combo}`)
         mainMenu = this.menuTemplate()
         accels = sds.find.key(mainMenu,'accel')
         combos = sds.find.key(mainMenu,'combo')
@@ -369,9 +371,9 @@ Title = (function ()
             return 'unhandled'
         }
         var list = _k_.list(kepaths)
-        for (var _277_20_ = 0; _277_20_ < list.length; _277_20_++)
+        for (var _279_20_ = 0; _279_20_ < list.length; _279_20_++)
         {
-            keypath = list[_277_20_]
+            keypath = list[_279_20_]
             combos = sds.get(mainMenu,keypath).split(' ')
             combos = combos.map(function (c)
             {
@@ -381,7 +383,8 @@ Title = (function ()
             {
                 keypath.pop()
                 item = sds.get(mainMenu,keypath)
-                post.emit('menuAction',((_284_51_=item.action) != null ? _284_51_ : item.text),item)
+                _k_.dbg("kode/title.kode", 285, 16, null, 'kxk.title.handleKey item',item)
+                post.emit('menuAction',((_286_51_=item.action) != null ? _286_51_ : item.text),item)
                 return item
             }
         }
