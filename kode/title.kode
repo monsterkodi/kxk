@@ -161,7 +161,7 @@ function Title
 
     onMenuAction: (action, args) =>
                 
-        dbg 'title onMenuAction' action, args
+        # dbg 'title onMenuAction' action, args
         
         switch action.toLowerCase()
             when 'toggle menu'      then @toggleMenu()
