@@ -94,7 +94,7 @@ Menu = (function ()
 
     Menu.prototype["close"] = function (opt = {})
     {
-        var _76_17_, _83_26_, _83_33_
+        var _76_17_
 
         if ((this.popup != null))
         {
@@ -102,16 +102,20 @@ Menu = (function ()
             delete this.popup
             if (opt.focus !== false)
             {
-                return this.elem.focus()
+                this.elem.focus()
             }
         }
         else
         {
             if (opt.focus !== false)
             {
-                return ((_83_26_=this.focusElem) != null ? typeof (_83_33_=_83_26_.focus) === "function" ? _83_33_() : undefined : undefined)
+                if (this.focusElem && typeof(this.focusElem.focus) === 'function')
+                {
+                    this.focusElem.focus()
+                }
             }
         }
+        return null
     }
 
     Menu.prototype["childClosed"] = function (child, opt)
@@ -121,14 +125,15 @@ Menu = (function ()
             delete this.popup
             if (opt.focus !== false)
             {
-                return this.elem.focus()
+                this.elem.focus()
             }
         }
+        return null
     }
 
     Menu.prototype["select"] = function (item, opt = {})
     {
-        var hadPopup, _102_17_, _106_17_
+        var hadPopup, _105_17_, _109_17_
 
         if (!(item != null))
         {
@@ -197,14 +202,14 @@ Menu = (function ()
 
     Menu.prototype["navigateLeft"] = function ()
     {
-        var _153_39_
+        var _156_39_
 
         return this.select((this.selected != null ? this.selected.previousSibling : undefined),{activate:true,selectFirstItem:false})
     }
 
     Menu.prototype["navigateRight"] = function ()
     {
-        var _154_39_
+        var _157_39_
 
         return this.select((this.selected != null ? this.selected.nextSibling : undefined),{activate:true,selectFirstItem:false})
     }
