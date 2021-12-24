@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.214.0
+// monsterkodi/kode 0.217.0
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -55,7 +55,7 @@ module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:kl
     {
         v = r1
     }
-    var _81_17_ = [Math.min(r1,r2),Math.max(r1,r2)] ; s1 = _81_17_[0]    ; s2 = _81_17_[1]
+    var _81_17_ = [Math.min(r1,r2),Math.max(r1,r2)]; s1 = _81_17_[0]; s2 = _81_17_[1]
 
     if (v < s1)
     {

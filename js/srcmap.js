@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.214.0
+// monsterkodi/kode 0.217.0
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -62,11 +62,11 @@ filePos = function (line)
             absFile = slash.resolve(slash.join(process.cwd(),'coffee',result.file))
             if (slash.fileExists(absFile))
             {
-                var _75_29_ = toJs(absFile,1,0) ; jsFile = _75_29_[0]                ; a = _75_29_[1]                ; b = _75_29_[2]
+                var _75_29_ = toJs(absFile,1,0); jsFile = _75_29_[0]; a = _75_29_[1]; b = _75_29_[2]
 
                 if (slash.fileExists(jsFile))
                 {
-                    var _77_56_ = toCoffee(jsFile,result.line,result.col) ; coffeeFile = _77_56_[0]                    ; coffeeLine = _77_56_[1]                    ; coffeeCol = _77_56_[2]
+                    var _77_56_ = toCoffee(jsFile,result.line,result.col); coffeeFile = _77_56_[0]; coffeeLine = _77_56_[1]; coffeeCol = _77_56_[2]
 
                     if (slash.fileExists(coffeeFile))
                     {
