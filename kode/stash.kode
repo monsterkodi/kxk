@@ -71,10 +71,10 @@ function Stash
     # 0000000   0000000   000   000  0000000    
     
     load: ->
-        try
-            noon.load @file
-        catch err
-            {}
+        
+        # try
+        noon.load @file
+        # catch err
         
     #  0000000   0000000   000   000  00000000
     # 000       000   000  000   000  000     
@@ -91,7 +91,8 @@ function Stash
         try
             # fs.ensureDir slash.dir(@file), (err) =>
             # if not err
-            text = noon.stringify @data, { indent: 2, maxalign: 8 }
+            # text = noon.stringify @data, { indent: 2, maxalign: 8 }
+            text = noon @data
             slash.writeText @file, text, (p) ->
                 post.toMain 'stashSaved'
         catch err
