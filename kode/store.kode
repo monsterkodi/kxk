@@ -52,11 +52,11 @@ function Store extends Emitter
             post.on 'store' (name, action, argl...) =>
                 return if @name != name
                 switch action
-                    when 'set'   then @set.apply @, argl
-                    when 'get'   then @get.apply @, argl
-                    when 'del'   then @del.apply @, argl
-                    when 'clear' then @clear()
-                    when 'save'  then @save()
+                    'set'   ➜ @set.apply @, argl
+                    'get'   ➜ @get.apply @, argl
+                    'del'   ➜ @del.apply @, argl
+                    'clear' ➜ @clear()
+                    'save'  ➜ @save()
                 @
                 
         else
@@ -66,10 +66,10 @@ function Store extends Emitter
             post.on 'store' (name, action, argl...) =>
                 return if @name != name
                 switch action
-                    when 'data' then @data = argl[0]
-                    when 'set'  then sds.set @data, @keypath(argl[0]), argl[1]
-                    when 'get'  then sds.get @data, @keypath(argl[0]), argl[1]
-                    when 'del'  then sds.del @data, @keypath(argl[0])
+                    'data' ➜ @data = argl[0]
+                    'set'  ➜ sds.set @data, @keypath(argl[0]), argl[1]
+                    'get'  ➜ sds.get @data, @keypath(argl[0]), argl[1]
+                    'del'  ➜ sds.del @data, @keypath(argl[0])
                 
         @data = @load()
         @data = _.defaults @data, opt.defaults if opt.defaults?

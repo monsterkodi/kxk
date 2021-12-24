@@ -24,9 +24,9 @@ logErr = function (err, sep = '💥')
     {
         klog.flog({str:trace.text,source:trace.lines[0].file,line:trace.lines[0].line,sep:sep})
         var list = _k_.list(trace.lines)
-        for (var _30_17_ = 0; _30_17_ < list.length; _30_17_++)
+        for (var _28_17_ = 0; _28_17_ < list.length; _28_17_++)
         {
-            line = list[_30_17_]
+            line = list[_28_17_]
             sep = slash.isAbsolute(line.file) || line.file[0] === '~' ? '🐞' : '🔼'
             if (sep === '🐞' || line.file[0] === '.')
             {
@@ -62,11 +62,11 @@ filePos = function (line)
             absFile = slash.resolve(slash.join(process.cwd(),'coffee',result.file))
             if (slash.fileExists(absFile))
             {
-                var _75_29_ = toJs(absFile,1,0); jsFile = _75_29_[0]; a = _75_29_[1]; b = _75_29_[2]
+                var _73_29_ = toJs(absFile,1,0); jsFile = _73_29_[0]; a = _73_29_[1]; b = _73_29_[2]
 
                 if (slash.fileExists(jsFile))
                 {
-                    var _77_56_ = toCoffee(jsFile,result.line,result.col); coffeeFile = _77_56_[0]; coffeeLine = _77_56_[1]; coffeeCol = _77_56_[2]
+                    var _75_56_ = toCoffee(jsFile,result.line,result.col); coffeeFile = _75_56_[0]; coffeeLine = _75_56_[1]; coffeeCol = _75_56_[2]
 
                     if (slash.fileExists(coffeeFile))
                     {
@@ -101,9 +101,9 @@ errorStack = function (err)
 
     lines = []
     var list = _k_.list(err.stack.split('\n'))
-    for (var _117_18_ = 0; _117_18_ < list.length; _117_18_++)
+    for (var _115_18_ = 0; _115_18_ < list.length; _115_18_++)
     {
-        stackLine = list[_117_18_]
+        stackLine = list[_115_18_]
         if (fp = filePos(stackLine))
         {
             lines.push(`       ${_.padEnd(fp.func,30)} ${fp.file}:${fp.line}`)
@@ -123,9 +123,9 @@ errorTrace = function (err)
     lines = []
     text = []
     var list = _k_.list(err.stack.split('\n'))
-    for (var _137_18_ = 0; _137_18_ < list.length; _137_18_++)
+    for (var _135_18_ = 0; _135_18_ < list.length; _135_18_++)
     {
-        stackLine = list[_137_18_]
+        stackLine = list[_135_18_]
         if (fp = filePos(stackLine))
         {
             lines.push(fp)
@@ -144,7 +144,7 @@ decode = function (segment)
 
     rs = []
     sh = rc = 0
-    for (var _157_14_ = i = 0, _157_18_ = segment.length; (_157_14_ <= _157_18_ ? i < segment.length : i > segment.length); (_157_14_ <= _157_18_ ? ++i : --i))
+    for (var _155_14_ = i = 0, _155_18_ = segment.length; (_155_14_ <= _155_18_ ? i < segment.length : i > segment.length); (_155_14_ <= _155_18_ ? ++i : --i))
     {
         cc = segment.charCodeAt(i) - 65
         if (cc >= 32)
@@ -191,9 +191,9 @@ readMap = function (jsFile)
     urlVar = '//# sourceURL='
     mapVar = '//# sourceMappingURL='
     var list = _k_.list(source.split(/\r?\n/))
-    for (var _186_10_ = 0; _186_10_ < list.length; _186_10_++)
+    for (var _184_10_ = 0; _184_10_ < list.length; _184_10_++)
     {
-        l = list[_186_10_]
+        l = list[_184_10_]
         if (!url && l.startsWith(urlVar))
         {
             url = l.split(urlVar)[1]
@@ -229,16 +229,16 @@ coffeePos = function (mapData, sjsLine, sjsCol)
     coLine = 1
     coCol = 0
     var list = _k_.list(lines)
-    for (var _210_13_ = 0; _210_13_ < list.length; _210_13_++)
+    for (var _208_13_ = 0; _208_13_ < list.length; _208_13_++)
     {
-        line = list[_210_13_]
+        line = list[_208_13_]
         jsCol = 0
         if (line.length)
         {
             var list1 = _k_.list(line.split(','))
-            for (var _213_24_ = 0; _213_24_ < list1.length; _213_24_++)
+            for (var _211_24_ = 0; _211_24_ < list1.length; _211_24_++)
             {
-                segment = list1[_213_24_]
+                segment = list1[_211_24_]
                 seg = decode(segment)
                 jsCol += seg[0]
                 coLine += seg[2]
@@ -320,16 +320,16 @@ jsPosition = function (mapData, coffeeLine, coffeeCol)
     dfMin = {line:lines.length,col:9999}
     result = {line:0,col:0}
     var list = _k_.list(lines)
-    for (var _299_13_ = 0; _299_13_ < list.length; _299_13_++)
+    for (var _297_13_ = 0; _297_13_ < list.length; _297_13_++)
     {
-        line = list[_299_13_]
+        line = list[_297_13_]
         jsCol = 0
         if (line.length)
         {
             var list1 = _k_.list(line.split(','))
-            for (var _302_24_ = 0; _302_24_ < list1.length; _302_24_++)
+            for (var _300_24_ = 0; _300_24_ < list1.length; _300_24_++)
             {
-                segment = list1[_302_24_]
+                segment = list1[_300_24_]
                 seg = decode(segment)
                 jsCol += seg[0]
                 coLine += seg[2]

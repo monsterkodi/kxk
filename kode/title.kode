@@ -147,11 +147,11 @@ function Title
     onTitlebar: (action) =>
         
         switch action
-            when 'showTitle'   then @showTitle()
-            when 'hideTitle'   then @hideTitle()
-            when 'showMenu'    then @showMenu()
-            when 'hideMenu'    then @hideMenu()
-            when 'toggleMenu'  then @toggleMenu()
+            'showTitle'   ➜ @showTitle()
+            'hideTitle'   ➜ @hideTitle()
+            'showMenu'    ➜ @showMenu()
+            'hideMenu'    ➜ @hideMenu()
+            'toggleMenu'  ➜ @toggleMenu()
             
     # 00     00  00000000  000   000  000   000  
     # 000   000  000       0000  000  000   000  
@@ -164,12 +164,12 @@ function Title
         # dbg 'title onMenuAction' action, args
         
         switch action.toLowerCase()
-            when 'toggle menu'      then @toggleMenu()
-            when 'open menu'        then @openMenu()
-            when 'show menu'        then @showMenu()
-            when 'hide menu'        then @hideMenu()
-            when 'toggle scheme'    
-                if @opt.scheme != false then scheme.toggle()
+            'toggle menu' ➜ @toggleMenu()
+            'open menu'   ➜ @openMenu()
+            'show menu'   ➜ @showMenu()
+            'hide menu'   ➜ @hideMenu()
+            'toggle scheme'    
+                if @opt.scheme != false ➜ scheme.toggle()
 
     menuTemplate: ->
         

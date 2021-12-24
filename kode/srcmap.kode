@@ -20,11 +20,9 @@ regex2     = /^\s+at\s+(.*):(\d+):(\d+)/
 
 logErr = (err, sep='💥') ->
     
-    # log errorStack err
     console.log "#{err}"
     return
     trace = errorTrace err
-    # console.log 'trace:', kstr(trace)
     if valid trace?.lines
         klog.flog str:trace.text, source:trace.lines[0].file, line:trace.lines[0].line, sep:sep
         for line in trace.lines
