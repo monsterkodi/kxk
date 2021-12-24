@@ -79,43 +79,33 @@ class Keyinfo
     @keynameForEvent: (event) ->
         
         switch event.code
-            when 'IntlBackslash' 'Backslash'    then '\\'
-            when 'Equal'                        then '=' 
-            when 'Minus'                        then '-' 
-            when 'Plus'                         then '+'
-            when 'Slash'                        then '/'
-            when 'Quote'                        then "'"
-            when 'Comma'                        then ','
-            when 'Period'                       then '.'
-            when 'Space'                        then 'space'
-            when 'Escape'                       then 'esc'
-            when 'Semicolon'                    then ';'
-            when 'BracketLeft'                  then '[' 
-            when 'BracketRight'                 then ']' 
-            when 'Backquote'                    then '`'
-            else
-                if not event.key?
-                    ''
-                else if event.key.startsWith 'Arrow'
-                    event.key.slice(5).toLowerCase()
-                else if event.code.startsWith 'Key'
-                    event.code.slice(3).toLowerCase()
-                else if event.code.startsWith 'Digit'
-                    event.code.slice(5)
-                else if event.key in ['Delete' 'Insert' 'Enter' 'Backspace' 'Home' 'End']
-                    event.key.toLowerCase()
-                else if event.key == 'PageUp'
-                    'page up'
-                else if event.key == 'PageDown'
-                    'page down'
-                else if event.key == 'Control'
-                    'ctrl'
-                else if event.key == 'Meta'
-                    'command'
-                else if @characterForEvent(event)?.length == 1              
-                    @characterForEvent(event).toLowerCase()
-                else                                    
-                    event.key.toLowerCase()        
+            'IntlBackslash' 'Backslash' ➜ '\\'
+            'Equal'                     ➜ '=' 
+            'Minus'                     ➜ '-' 
+            'Plus'                      ➜ '+'
+            'Slash'                     ➜ '/'
+            'Quote'                     ➜ "'"
+            'Comma'                     ➜ ','
+            'Period'                    ➜ '.'
+            'Space'                     ➜ 'space'
+            'Escape'                    ➜ 'esc'
+            'Semicolon'                 ➜ ';'
+            'BracketLeft'               ➜ '[' 
+            'BracketRight'              ➜ ']' 
+            'Backquote'                 ➜ '`'
+            ➜
+                if 
+                    not event.key?                  ➜ ''
+                    event.key.startsWith 'Arrow'    ➜ event.key.slice(5).toLowerCase()
+                    event.code.startsWith 'Key'     ➜ event.code.slice(3).toLowerCase()
+                    event.code.startsWith 'Digit'   ➜ event.code.slice(5)
+                    event.key in ['Delete' 'Insert' 'Enter' 'Backspace' 'Home' 'End'] ➜ event.key.toLowerCase()
+                    event.key == 'PageUp'           ➜ 'page up'
+                    event.key == 'PageDown'         ➜ 'page down'
+                    event.key == 'Control'          ➜ 'ctrl'
+                    event.key == 'Meta'             ➜ 'command'
+                    @characterForEvent(event)?.length == 1 ➜ @characterForEvent(event).toLowerCase()
+                    else event.key.toLowerCase()        
 
     @characterForEvent: (event) ->
 

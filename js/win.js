@@ -154,7 +154,6 @@ Win = (function ()
         {
             return post.once('saveFileDialogResult',function (r)
             {
-                klog('r',r)
                 if (!r.cancelled && !_k_.empty(r.filePath))
                 {
                     return cb(r.filePath)
@@ -165,15 +164,15 @@ Win = (function ()
 
     Win.prototype["messageBox"] = function (options)
     {
-        var cb, _141_28_, _142_28_, _143_28_, _144_28_, _145_28_, _146_28_, _147_28_
+        var cb, _141_26_, _142_26_, _143_26_, _144_26_, _145_26_, _146_26_, _147_26_
 
-        options.type = ((_141_28_=options.type) != null ? _141_28_ : 'warning')
-        options.buttons = ((_142_28_=options.buttons) != null ? _142_28_ : ['Ok'])
-        options.defaultId = ((_143_28_=options.defaultId) != null ? _143_28_ : 0)
-        options.cancelId = ((_144_28_=options.cancelId) != null ? _144_28_ : 0)
-        options.title = ((_145_28_=options.title) != null ? _145_28_ : '')
-        options.message = ((_146_28_=options.message) != null ? _146_28_ : 'no message!')
-        options.detail = ((_147_28_=options.detail) != null ? _147_28_ : 'no details!')
+        options.type = ((_141_26_=options.type) != null ? _141_26_ : 'warning')
+        options.buttons = ((_142_26_=options.buttons) != null ? _142_26_ : ['Ok'])
+        options.defaultId = ((_143_26_=options.defaultId) != null ? _143_26_ : 0)
+        options.cancelId = ((_144_26_=options.cancelId) != null ? _144_26_ : 0)
+        options.title = ((_145_26_=options.title) != null ? _145_26_ : '')
+        options.message = ((_146_26_=options.message) != null ? _146_26_ : 'no message!')
+        options.detail = ((_147_26_=options.detail) != null ? _147_26_ : 'no details!')
         cb = options.cb
         delete options.cb
         post.toMain('messageBox',options)
@@ -197,7 +196,6 @@ Win = (function ()
         info = keyinfo.forEvent(event)
         this.modifiers = info.mod
         info.event = event
-        _k_.dbg("kode/win.kode", 167, 8, null, 'emit combo',info.combo,info)
         return post.emit('combo',info.combo,info)
     }
 

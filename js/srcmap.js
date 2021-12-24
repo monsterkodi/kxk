@@ -2,7 +2,7 @@
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
-var coffeePos, decode, errorStack, errorTrace, filePos, jsPosition, klog, kxk, logErr, readMap, regex1, regex2, sh, slash, toCoffee, toJs, _
+var coffeePos, decode, errorStack, errorTrace, filePos, jsPosition, klog, kodePos, kxk, logErr, readMap, regex1, regex2, sh, slash, toCoffee, toJs, toKode, _
 
 kxk = require('./kxk')
 _ = kxk._
@@ -258,6 +258,11 @@ coffeePos = function (mapData, sjsLine, sjsCol)
     return {line:0,col:0}
 }
 
+kodePos = function (mapData, sjsLine, sjsCol)
+{
+    return coffeePos(mapData,sjsLine,sjsCol)
+}
+
 toCoffee = function (jsFile, jsLine, jsCol = 0)
 {
     var coffeeCol, coffeeFile, coffeeLine, coPos, mapData
@@ -281,6 +286,29 @@ toCoffee = function (jsFile, jsLine, jsCol = 0)
     return [coffeeFile,coffeeLine,coffeeCol]
 }
 
+toKode = function (jsFile, jsLine, jsCol = 0)
+{
+    var coPos, kodeCol, kodeFile, kodeLine, mapData
+
+    jsLine = parseInt(jsLine)
+    jsCol = parseInt(jsCol)
+    kodeFile = jsFile.replace(/\/js\//,'/kode/')
+    kodeFile = kodeFile.replace(/\.js$/,'.kode')
+    kodeLine = jsLine
+    kodeCol = jsCol
+    if (slash.fileExists(jsFile))
+    {
+        if (!_k_.empty((mapData = readMap(jsFile))))
+        {
+            coPos = kodePos(mapData,jsLine,jsCol)
+            kodeFile = slash.tilde(slash.join(mapData.sourceRoot,mapData.sources[0]))
+            kodeLine = coPos.line
+            kodeCol = coPos.col
+        }
+    }
+    return [kodeFile,kodeLine,kodeCol]
+}
+
 jsPosition = function (mapData, coffeeLine, coffeeCol)
 {
     var coCol, coLine, dfCol, dfLine, dfMin, jsCol, jsLine, line, lines, result, seg, segment
@@ -292,16 +320,16 @@ jsPosition = function (mapData, coffeeLine, coffeeCol)
     dfMin = {line:lines.length,col:9999}
     result = {line:0,col:0}
     var list = _k_.list(lines)
-    for (var _263_13_ = 0; _263_13_ < list.length; _263_13_++)
+    for (var _299_13_ = 0; _299_13_ < list.length; _299_13_++)
     {
-        line = list[_263_13_]
+        line = list[_299_13_]
         jsCol = 0
         if (line.length)
         {
             var list1 = _k_.list(line.split(','))
-            for (var _266_24_ = 0; _266_24_ < list1.length; _266_24_++)
+            for (var _302_24_ = 0; _302_24_ < list1.length; _302_24_++)
             {
-                segment = list1[_266_24_]
+                segment = list1[_302_24_]
                 seg = decode(segment)
                 jsCol += seg[0]
                 coLine += seg[2]
@@ -344,4 +372,4 @@ toJs = function (coffeeFile, coffeeLine, coffeeCol = 0)
         return [jsFile,null,null]
     }
 }
-module.exports = {toJs:toJs,toCoffee:toCoffee,errorStack:errorStack,errorTrace:errorTrace,logErr:logErr}
+module.exports = {toJs:toJs,toKode:toKode,toCoffee:toCoffee,errorStack:errorStack,errorTrace:errorTrace,logErr:logErr}

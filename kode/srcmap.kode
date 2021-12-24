@@ -221,6 +221,16 @@ coffeePos = (mapData, sjsLine, sjsCol) ->
             return line:coLine, col:0
         jsLine++
     line:0, col:0
+
+# 000   000   0000000   0000000    00000000  00000000    0000000    0000000  
+# 000  000   000   000  000   000  000       000   000  000   000  000       
+# 0000000    000   000  000   000  0000000   00000000   000   000  0000000   
+# 000  000   000   000  000   000  000       000        000   000       000  
+# 000   000   0000000   0000000    00000000  000         0000000   0000000   
+
+kodePos = (mapData, sjsLine, sjsCol) ->
+    
+    return coffeePos mapData, sjsLine, sjsCol
     
 # 000000000   0000000          0000000   0000000   00000000  00000000  00000000  00000000  
 #    000     000   000        000       000   000  000       000       000       000       
@@ -244,8 +254,34 @@ toCoffee = (jsFile, jsLine, jsCol=0) ->
             coffeeFile = slash.tilde slash.join mapData.sourceRoot, mapData.sources[0]
             coffeeLine = coPos.line 
             coffeeCol  = coPos.col
+            
     [coffeeFile, coffeeLine, coffeeCol]
 
+# 000000000   0000000       000   000   0000000   0000000    00000000  
+#    000     000   000      000  000   000   000  000   000  000       
+#    000     000   000      0000000    000   000  000   000  0000000   
+#    000     000   000      000  000   000   000  000   000  000       
+#    000      0000000       000   000   0000000   0000000    00000000  
+
+toKode = (jsFile, jsLine, jsCol=0) ->
+
+    jsLine = parseInt jsLine
+    jsCol  = parseInt jsCol
+    
+    kodeFile = jsFile.replace /\/js\//, '/kode/'
+    kodeFile = kodeFile.replace /\.js$/, '.kode'
+    kodeLine = jsLine
+    kodeCol  = jsCol
+    
+    if slash.fileExists jsFile
+        if valid (mapData = readMap jsFile)
+            coPos = kodePos mapData, jsLine, jsCol
+            kodeFile = slash.tilde slash.join mapData.sourceRoot, mapData.sources[0]
+            kodeLine = coPos.line 
+            kodeCol  = coPos.col
+            
+    [kodeFile, kodeLine, kodeCol]
+    
 #       000   0000000       00000000    0000000    0000000  
 #       000  000            000   000  000   000  000       
 #       000  0000000        00000000   000   000  0000000   
@@ -305,6 +341,7 @@ toJs = (coffeeFile, coffeeLine, coffeeCol=0) ->
         
 module.exports =
     toJs:       toJs
+    toKode:     toKode
     toCoffee:   toCoffee
     errorStack: errorStack
     errorTrace: errorTrace

@@ -124,7 +124,7 @@ class Keyinfo
 
     static keynameForEvent (event)
     {
-        var _115_49_, _97_32_
+        var _107_45_, _98_33_
 
         switch (event.code)
         {
@@ -222,7 +222,7 @@ class Keyinfo
 
     static characterForEvent (event)
     {
-        var _122_20_
+        var _112_20_
 
         if ((event.key != null ? event.key.length : undefined) === 1)
         {
@@ -239,7 +239,7 @@ class Keyinfo
         var i
 
         combo = this.convertCmdCtrl(combo.toLowerCase())
-        for (var _130_18_ = i = 0, _130_22_ = this.iconKeyNames.length; (_130_18_ <= _130_22_ ? i < this.iconKeyNames.length : i > this.iconKeyNames.length); (_130_18_ <= _130_22_ ? ++i : --i))
+        for (var _120_18_ = i = 0, _120_22_ = this.iconKeyNames.length; (_120_18_ <= _120_22_ ? i < this.iconKeyNames.length : i > this.iconKeyNames.length); (_120_18_ <= _120_22_ ? ++i : --i))
         {
             combo = combo.replace(new RegExp(this.iconKeyNames[i],'gi'),this.iconKeyChars[i])
         }

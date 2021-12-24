@@ -134,17 +134,17 @@ function Win
         delete options.cb
         
         post.toMain 'saveFileDialog' options
-        if cb is 'function' then post.once 'saveFileDialogResult' (r) -> klog 'r' r; if not r.cancelled and valid r.filePath then cb r.filePath
+        if cb is 'function' then post.once 'saveFileDialogResult' (r) -> if not r.cancelled and valid r.filePath then cb r.filePath
 
     messageBox: (options) ->
             
-        options.type        ?= 'warning'
-        options.buttons     ?= ['Ok']
-        options.defaultId   ?= 0
-        options.cancelId    ?= 0
-        options.title       ?= ''
-        options.message     ?= 'no message!'
-        options.detail      ?= 'no details!'
+        options.type      ?= 'warning'
+        options.buttons   ?= ['Ok']
+        options.defaultId ?= 0
+        options.cancelId  ?= 0
+        options.title     ?= ''
+        options.message   ?= 'no message!'
+        options.detail    ?= 'no details!'
         cb = options.cb
         delete options.cb
         post.toMain 'messageBox' options
@@ -164,7 +164,7 @@ function Win
         @modifiers = info.mod
         
         info.event = event
-        dbg 'emit combo' info.combo, info
+        # dbg 'emit combo' info.combo, info
         post.emit 'combo' info.combo, info
     
     onKeyUp: (event) =>
