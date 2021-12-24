@@ -162,6 +162,7 @@ function Win
         @modifiers = info.mod
         
         info.event = event
+        dbg 'emit combo' info.combo, info
         post.emit 'combo' info.combo, info
     
     onKeyUp: (event) =>
