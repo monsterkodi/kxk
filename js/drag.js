@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.210.0
+// monsterkodi/kode 0.211.0
 
 var _k_
 
@@ -43,15 +43,15 @@ Drag = (function ()
         {
             this.useScreenPos = true
         }
-        if ((this.onStart != null) && !typeof(this.onStart) === 'function')
+        if ((this.onStart != null) && !(typeof(this.onStart) === 'function'))
         {
             kerror("Drag -- onStart not a function?")
         }
-        if ((this.onMove != null) && !typeof(this.onMove) === 'function')
+        if ((this.onMove != null) && !(typeof(this.onMove) === 'function'))
         {
             kerror("Drag -- onMove not a function?")
         }
-        if ((this.onEnd != null) && !typeof(this.onEnd) === 'function')
+        if ((this.onEnd != null) && !(typeof(this.onEnd) === 'function'))
         {
             kerror("Drag -- onEnd not a function?")
         }

@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.210.0
+// monsterkodi/kode 0.211.0
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -34,7 +34,7 @@ ranges = function (regexes, text, flags)
 {
     var arg, gi, gs, i, j, match, r, reg, rgs, s, value, _69_35_
 
-    if (!regexes instanceof Array)
+    if (!(regexes instanceof Array))
     {
         if ((function(o){return (typeof o === 'string' || o instanceof String)})(regexes))
         {
@@ -45,7 +45,7 @@ ranges = function (regexes, text, flags)
             regexes = [[regexes,'found']]
         }
     }
-    else if (!_k_.empty((regexes)) && !regexes[0] instanceof Array)
+    else if (!_k_.empty((regexes)) && !(regexes[0] instanceof Array))
     {
         regexes = [regexes]
     }
