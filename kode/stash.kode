@@ -90,10 +90,10 @@ function Stash
         @timer = null
         try
             # fs.ensureDir slash.dir(@file), (err) =>
-            if not err
-                text = noon.stringify @data, { indent: 2, maxalign: 8 }
-                slash.writeText @file, text, (p) ->
-                    post.toMain 'stashSaved'
+            # if not err
+            text = noon.stringify @data, { indent: 2, maxalign: 8 }
+            slash.writeText @file, text, (p) ->
+                post.toMain 'stashSaved'
         catch err
             kerror "stash.save -- can't save to '#{@file}': #{err}"
         

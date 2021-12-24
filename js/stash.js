@@ -113,14 +113,11 @@ Stash = (function ()
         this.timer = null
         try
         {
-            if (!err)
+            text = noon.stringify(this.data,{indent:2,maxalign:8})
+            return slash.writeText(this.file,text,function (p)
             {
-                text = noon.stringify(this.data,{indent:2,maxalign:8})
-                return slash.writeText(this.file,text,function (p)
-                {
-                    return post.toMain('stashSaved')
-                })
-            }
+                return post.toMain('stashSaved')
+            })
         }
         catch (err)
         {
