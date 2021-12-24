@@ -361,7 +361,6 @@ Title = (function ()
         key = keyinfo.forEvent(event).key
         combo = keyinfo.forEvent(event).combo
 
-        _k_.dbg("kode/title.kode", 267, 8, null, `mod ${mod} key ${key} combo ${combo}`)
         mainMenu = this.menuTemplate()
         accels = sds.find.key(mainMenu,'accel')
         combos = sds.find.key(mainMenu,'combo')
@@ -383,7 +382,6 @@ Title = (function ()
             {
                 keypath.pop()
                 item = sds.get(mainMenu,keypath)
-                _k_.dbg("kode/title.kode", 285, 16, null, 'kxk.title.handleKey item',item)
                 post.emit('menuAction',((_286_51_=item.action) != null ? _286_51_ : item.text),item)
                 return item
             }

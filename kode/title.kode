@@ -264,7 +264,7 @@ function Title
 
         { mod, key, combo } = keyinfo.forEvent event
         
-        dbg "mod #{mod} key #{key} combo #{combo}"
+        # dbg "mod #{mod} key #{key} combo #{combo}"
         
         mainMenu = @menuTemplate()
             
@@ -282,7 +282,7 @@ function Title
             if combo in combos
                 keypath.pop()
                 item = sds.get mainMenu, keypath
-                dbg 'kxk.title.handleKey item' item
+                # dbg 'kxk.title.handleKey item' item
                 post.emit 'menuAction' item.action ? item.text, item
                 return item
 
