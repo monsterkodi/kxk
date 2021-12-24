@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.211.0
+// monsterkodi/kode 0.214.0
 
 var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -12,7 +12,7 @@ config = function (patterns, flags)
 {
     var a, p
 
-    return (function () { var result = []; for (var p in patterns)  { var a = patterns[p];result.push([new RegExp(p,flags),a])  } return result }).bind(this)()
+    return (function () { var _21__66_ = []; for (var p in patterns)  { var a = patterns[p];_21__66_.push([new RegExp(p,flags),a])  } return _21__66_ }).bind(this)()
 }
 
 sortRanges = function (rgs)

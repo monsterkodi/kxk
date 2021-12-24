@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.211.0
+// monsterkodi/kode 0.214.0
 
 var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -29,7 +29,7 @@ toHexString = function (num)
             r = red > 0 ? red * 40 + 55 : 0
             g = green > 0 ? green * 40 + 55 : 0
             b = blue > 0 ? blue * 40 + 55 : 0
-            rgb = (function () { var result = []; var list = [r,g,b]; for (var _59_40_ = 0; _59_40_ < list.length; _59_40_++)  { n = list[_59_40_];result.push(toHexString(n))  } return result }).bind(this)().join('')
+            rgb = (function () { var _59__40_ = []; var list = [r,g,b]; for (var _59_40_ = 0; _59_40_ < list.length; _59_40_++)  { n = list[_59_40_];_59__40_.push(toHexString(n))  } return _59__40_ }).bind(this)().join('')
             STYLES[`f${c}`] = `color:#${rgb}`
             return STYLES[`b${c}`] = `background-color:#${rgb}`
         })

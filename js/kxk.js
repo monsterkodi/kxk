@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.211.0
+// monsterkodi/kode 0.214.0
 
 var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -185,7 +185,7 @@ module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:kl
 {
     var l
 
-    return (function () { var result = []; var list = _k_.list(script.split("\n")); for (var _136_72_ = 0; _136_72_ < list.length; _136_72_++)  { l = list[_136_72_];result.push(`-e \"${l.replace(/\"/g,"\\\"")}\"`)  } return result }).bind(this)().join(" ")
+    return (function () { var _136__72_ = []; var list = _k_.list(script.split("\n")); for (var _136_72_ = 0; _136_72_ < list.length; _136_72_++)  { l = list[_136_72_];_136__72_.push(`-e \"${l.replace(/\"/g,"\\\"")}\"`)  } return _136__72_ }).bind(this)().join(" ")
 }}
 if (!String.prototype.splice)
 {

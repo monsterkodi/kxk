@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.211.0
+// monsterkodi/kode 0.214.0
 
 var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o);}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) {var r = {}; v.set(o,r); for (k in o) {if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k])}; }; return v.get(o) } else {return o} }}
 
@@ -62,7 +62,7 @@ fileList = function (paths, opt)
             if (stat.isDirectory())
             {
                 children = fs.readdirSync(p)
-                children = (function () { var result = []; var list1 = _k_.list(children); for (var _54_50_ = 0; _54_50_ < list1.length; _54_50_++)  { f = list1[_54_50_];result.push(slash.join(p,f))  } return result }).bind(this)()
+                children = (function () { var _54__50_ = []; var list1 = _k_.list(children); for (var _54_50_ = 0; _54_50_ < list1.length; _54_50_++)  { f = list1[_54_50_];_54__50_.push(slash.join(p,f))  } return _54__50_ }).bind(this)()
                 childdirs = []
                 var list2 = _k_.list(children)
                 for (var _56_22_ = 0; _56_22_ < list2.length; _56_22_++)
