@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.218.0
+// monsterkodi/kode 0.222.0
 
 var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o)}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) { var k, r = {}; v.set(o,r); for (k in o) { if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k]) }; }; return v.get(o) } else {return o} }, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
 
@@ -236,15 +236,15 @@ Title = (function ()
 
     Title.prototype["makeTemplate"] = function (obj)
     {
-        var item, menuOrAccel, text, tmpl
+        var menuOrAccel, text, tmpl
 
         tmpl = []
         for (text in obj)
         {
             menuOrAccel = obj[text]
-            item = (function ()
+            tmpl.push(((function ()
             {
-                var _203_37_, _203_61_
+                var item, _202_33_, _202_57_
 
                 if (_k_.empty(menuOrAccel) && text.startsWith('-'))
                 {
@@ -272,8 +272,7 @@ Title = (function ()
                 {
                     return {text:text,menu:this.makeTemplate(menuOrAccel)}
                 }
-            }).bind(this)
-            tmpl.push(item())
+            }).bind(this))())
         }
         return tmpl
     }
@@ -298,15 +297,15 @@ Title = (function ()
 
     Title.prototype["showMenu"] = function ()
     {
-        var _225_68_, _225_75_
+        var _223_68_, _223_75_
 
         this.menu.elem.style.display = 'inline-block'
-        return ((_225_68_=this.menu) != null ? typeof (_225_75_=_225_68_.focus) === "function" ? _225_75_() : undefined : undefined)
+        return ((_223_68_=this.menu) != null ? typeof (_223_75_=_223_68_.focus) === "function" ? _223_75_() : undefined : undefined)
     }
 
     Title.prototype["hideMenu"] = function ()
     {
-        var _226_25_
+        var _224_25_
 
         ;(this.menu != null ? this.menu.close() : undefined)
         return this.menu.elem.style.display = 'none'
@@ -354,7 +353,7 @@ Title = (function ()
 
     Title.prototype["handleKey"] = function (event)
     {
-        var accels, combo, combos, item, kepaths, key, keypath, mainMenu, mod, _286_51_
+        var accels, combo, combos, item, kepaths, key, keypath, mainMenu, mod, _284_51_
 
         mod = keyinfo.forEvent(event).mod
         key = keyinfo.forEvent(event).key
@@ -369,9 +368,9 @@ Title = (function ()
             return 'unhandled'
         }
         var list = _k_.list(kepaths)
-        for (var _279_20_ = 0; _279_20_ < list.length; _279_20_++)
+        for (var _277_20_ = 0; _277_20_ < list.length; _277_20_++)
         {
-            keypath = list[_279_20_]
+            keypath = list[_277_20_]
             combos = sds.get(mainMenu,keypath).split(' ')
             combos = combos.map(function (c)
             {
@@ -381,7 +380,7 @@ Title = (function ()
             {
                 keypath.pop()
                 item = sds.get(mainMenu,keypath)
-                post.emit('menuAction',((_286_51_=item.action) != null ? _286_51_ : item.text),item)
+                post.emit('menuAction',((_284_51_=item.action) != null ? _284_51_ : item.text),item)
                 return item
             }
         }

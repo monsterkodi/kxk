@@ -187,27 +187,25 @@ function Title
         
         tmpl = []
         for text,menuOrAccel of obj
-            item = =>
-                if
-                    empty menuOrAccel and text.startsWith '-'
-                        text: ''
-                    menuOrAccel is num
-                        text:text
-                        accel:kstr menuOrAccel
-                    menuOrAccel is str
-                        text:text
-                        accel:keyinfo.convertCmdCtrl menuOrAccel
-                    empty menuOrAccel
-                        text:text
-                        accel: ''
-                    menuOrAccel.accel? or menuOrAccel.command? # needs better test!
-                        item = clone menuOrAccel
-                        item.text = text
-                        item
-                    else
-                        text:text
-                        menu:@makeTemplate menuOrAccel
-            tmpl.push item()
+            tmpl.push if
+                empty menuOrAccel and text.startsWith '-'
+                    text: ''
+                menuOrAccel is num
+                    text:text
+                    accel:kstr menuOrAccel
+                menuOrAccel is str
+                    text:text
+                    accel:keyinfo.convertCmdCtrl menuOrAccel
+                empty menuOrAccel
+                    text:text
+                    accel: ''
+                menuOrAccel.accel? or menuOrAccel.command? # needs better test!
+                    item = clone menuOrAccel
+                    item.text = text
+                    item
+                else
+                    text:text
+                    menu:@makeTemplate menuOrAccel
         tmpl
 
     initMenu: (items) ->
