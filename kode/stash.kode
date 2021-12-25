@@ -92,6 +92,8 @@ function Stash
             # fs.ensureDir slash.dir(@file), (err) =>
             # if not err
             # text = noon.stringify @data, { indent: 2, maxalign: 8 }
+            log @data
+            dbg @data
             text = noon @data
             dbg text
             slash.writeText @file, text, (p) ->
