@@ -129,7 +129,9 @@ function App
 
         post.emit 'appReady'
 
-    onWinClose: ->
+    onWinClose: (e) => 
+        dbg 'onWinClose' e.sender.id
+        @hideDock() if @opt.single
         
     # 000000000  00000000    0000000   000   000  
     #    000     000   000  000   000   000 000   
@@ -290,7 +292,7 @@ function App
             @win.on 'resize' @saveBounds
             @win.on 'move'   @saveBounds
         @win.on 'closed' => delete @win
-        @win.on 'close'  (e) => @onWinClose e.sender; @hideDock() if @opt.single
+        @win.on 'close'  @onWinClose
         @win.on 'moved'  (event) => post.toWin event.sender, 'winMoved' event.sender.getBounds()
         @win.on 'ready-to-show' ((w, orts) -> -> 
             orts? w
