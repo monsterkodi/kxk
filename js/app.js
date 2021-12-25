@@ -211,6 +211,9 @@ App = (function ()
         return post.emit('appReady')
     }
 
+    App.prototype["onWinClose"] = function ()
+    {}
+
     App.prototype["initTray"] = function ()
     {
         var template, trayImg
@@ -235,7 +238,7 @@ App = (function ()
 
     App.prototype["quitApp"] = function ()
     {
-        var _187_33_
+        var _189_33_
 
         this.stopWatcher()
         if (this.opt.saveBounds !== false)
@@ -257,14 +260,14 @@ App = (function ()
 
     App.prototype["hideDock"] = function ()
     {
-        var _201_26_
+        var _203_26_
 
         return (this.app.dock != null ? this.app.dock.hide() : undefined)
     }
 
     App.prototype["showDock"] = function ()
     {
-        var _202_26_
+        var _204_26_
 
         return (this.app.dock != null ? this.app.dock.show() : undefined)
     }
@@ -291,7 +294,7 @@ App = (function ()
 
     App.prototype["showWindow"] = function ()
     {
-        var _223_26_, _225_15_
+        var _225_26_, _227_15_
 
         ;(typeof this.opt.onWillShowWin === "function" ? this.opt.onWillShowWin() : undefined)
         if ((this.win != null))
@@ -307,16 +310,16 @@ App = (function ()
 
     App.prototype["createWindow"] = function (onReadyToShow)
     {
-        var bounds, height, width, _245_32_, _245_46_, _246_32_, _246_46_, _251_56_, _252_56_, _253_56_, _254_56_, _255_56_, _256_56_, _257_56_, _258_56_, _259_56_, _260_56_, _261_56_, _262_56_, _263_56_, _264_56_
+        var bounds, height, width, _247_32_, _247_46_, _248_32_, _248_46_, _253_56_, _254_56_, _255_56_, _256_56_, _257_56_, _258_56_, _259_56_, _260_56_, _261_56_, _262_56_, _263_56_, _264_56_, _265_56_, _266_56_
 
         onReadyToShow = (onReadyToShow != null ? onReadyToShow : this.opt.onWinReady)
         if (this.opt.saveBounds !== false)
         {
             bounds = prefs.get('bounds')
         }
-        width = ((_245_32_=(bounds != null ? bounds.width : undefined)) != null ? _245_32_ : ((_245_46_=this.opt.width) != null ? _245_46_ : 500))
-        height = ((_246_32_=(bounds != null ? bounds.height : undefined)) != null ? _246_32_ : ((_246_46_=this.opt.height) != null ? _246_46_ : 500))
-        this.win = new electron.BrowserWindow({width:width,height:height,minWidth:((_251_56_=this.opt.minWidth) != null ? _251_56_ : 250),minHeight:((_252_56_=this.opt.minHeight) != null ? _252_56_ : 250),maxWidth:((_253_56_=this.opt.maxWidth) != null ? _253_56_ : 100000),maxHeight:((_254_56_=this.opt.maxHeight) != null ? _254_56_ : 100000),backgroundColor:((_255_56_=this.opt.backgroundColor) != null ? _255_56_ : '#181818'),frame:((_256_56_=this.opt.frame) != null ? _256_56_ : false),transparent:((_257_56_=this.opt.transparent) != null ? _257_56_ : false),fullscreen:((_258_56_=this.opt.fullscreen) != null ? _258_56_ : false),fullscreenable:((_259_56_=this.opt.fullscreenable) != null ? _259_56_ : true),acceptFirstMouse:((_260_56_=this.opt.acceptFirstMouse) != null ? _260_56_ : true),resizable:((_261_56_=this.opt.resizable) != null ? _261_56_ : true),maximizable:((_262_56_=this.opt.maximizable) != null ? _262_56_ : true),minimizable:((_263_56_=this.opt.minimizable) != null ? _263_56_ : true),closable:((_264_56_=this.opt.closable) != null ? _264_56_ : true),autoHideMenuBar:true,thickFrame:false,show:false,icon:this.resolve(this.opt.icon),webPreferences:{webSecurity:false,contextIsolation:false,nodeIntegration:true,nodeIntegrationInWorker:true}})
+        width = ((_247_32_=(bounds != null ? bounds.width : undefined)) != null ? _247_32_ : ((_247_46_=this.opt.width) != null ? _247_46_ : 500))
+        height = ((_248_32_=(bounds != null ? bounds.height : undefined)) != null ? _248_32_ : ((_248_46_=this.opt.height) != null ? _248_46_ : 500))
+        this.win = new electron.BrowserWindow({width:width,height:height,minWidth:((_253_56_=this.opt.minWidth) != null ? _253_56_ : 250),minHeight:((_254_56_=this.opt.minHeight) != null ? _254_56_ : 250),maxWidth:((_255_56_=this.opt.maxWidth) != null ? _255_56_ : 100000),maxHeight:((_256_56_=this.opt.maxHeight) != null ? _256_56_ : 100000),backgroundColor:((_257_56_=this.opt.backgroundColor) != null ? _257_56_ : '#181818'),frame:((_258_56_=this.opt.frame) != null ? _258_56_ : false),transparent:((_259_56_=this.opt.transparent) != null ? _259_56_ : false),fullscreen:((_260_56_=this.opt.fullscreen) != null ? _260_56_ : false),fullscreenable:((_261_56_=this.opt.fullscreenable) != null ? _261_56_ : true),acceptFirstMouse:((_262_56_=this.opt.acceptFirstMouse) != null ? _262_56_ : true),resizable:((_263_56_=this.opt.resizable) != null ? _263_56_ : true),maximizable:((_264_56_=this.opt.maximizable) != null ? _264_56_ : true),minimizable:((_265_56_=this.opt.minimizable) != null ? _265_56_ : true),closable:((_266_56_=this.opt.closable) != null ? _266_56_ : true),autoHideMenuBar:true,thickFrame:false,show:false,icon:this.resolve(this.opt.icon),webPreferences:{webSecurity:false,contextIsolation:false,nodeIntegration:true,nodeIntegrationInWorker:true}})
         if ((bounds != null))
         {
             this.win.setPosition(bounds.x,bounds.y)
@@ -354,13 +357,17 @@ App = (function ()
         {
             return this.win = null
         }).bind(this))
-        this.win.on('close',(function ()
+        this.win.on('close',((function (w)
         {
-            if (this.opt.single)
+            return (function ()
             {
-                return this.hideDock()
-            }
-        }).bind(this))
+                if (this.opt.single)
+                {
+                    this.hideDock()
+                    return this.onWinClose(w)
+                }
+            }).bind(this)
+        }).bind(this))(this.win))
         this.win.on('moved',(function (event)
         {
             return post.toWin(event.sender,'winMoved',event.sender.getBounds())
@@ -380,14 +387,14 @@ App = (function ()
 
     App.prototype["onSetWinBounds"] = function (event, bounds)
     {
-        var _310_27_
+        var _312_27_
 
         return (this.winForEvent(event) != null ? this.winForEvent(event).setBounds(bounds) : undefined)
     }
 
     App.prototype["onGetWinBounds"] = function (event)
     {
-        var _314_47_
+        var _316_47_
 
         return event.returnValue = (this.winForEvent(event) != null ? this.winForEvent(event).getBounds() : undefined)
     }
@@ -399,7 +406,7 @@ App = (function ()
 
     App.prototype["saveBounds"] = function ()
     {
-        var _318_26_
+        var _320_26_
 
         if ((this.win != null))
         {
@@ -429,9 +436,9 @@ App = (function ()
         {
             klog('no win?',event.sender.id)
             var list = _k_.list(this.allWins())
-            for (var _329_18_ = 0; _329_18_ < list.length; _329_18_++)
+            for (var _331_18_ = 0; _331_18_ < list.length; _331_18_++)
             {
-                w = list[_329_18_]
+                w = list[_331_18_]
                 klog('win',w.id,w.webContents.id)
             }
         }
@@ -545,9 +552,9 @@ App = (function ()
             return
         }
         var list = _k_.list(this.opt.dirs)
-        for (var _404_16_ = 0; _404_16_ < list.length; _404_16_++)
+        for (var _406_16_ = 0; _406_16_ < list.length; _406_16_++)
         {
-            dir = list[_404_16_]
+            dir = list[_406_16_]
             toWatch = slash.isRelative(dir) ? slash.resolve(slash.join(this.opt.dir,dir)) : slash.resolve(dir)
             watcher = watch.dir(toWatch)
             watcher.on('change',this.onSrcChange)
@@ -568,9 +575,9 @@ App = (function ()
             return
         }
         var list = _k_.list(this.watchers)
-        for (var _418_20_ = 0; _418_20_ < list.length; _418_20_++)
+        for (var _420_20_ = 0; _420_20_ < list.length; _420_20_++)
         {
-            watcher = list[_418_20_]
+            watcher = list[_420_20_]
             watcher.close()
         }
         return this.watchers = []
