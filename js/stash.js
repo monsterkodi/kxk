@@ -17,7 +17,7 @@ Stash = (function ()
 {
     function Stash (name, opt)
     {
-        var _20_30_, _22_40_, _23_32_, _29_63_
+        var _20_30_, _22_40_, _23_32_, _30_63_
 
         this.name = name
     
@@ -34,10 +34,15 @@ Stash = (function ()
         fs.ensureDir(slash.dir(this.file),function ()
         {})
         this.data = this.load()
+        if (!((function(o){return !(o == null || typeof o != 'object' || o.constructor.name !== 'Object')})(this.data)))
+        {
+            this.data = {}
+        }
         if (((opt != null ? opt.defaults : undefined) != null))
         {
             this.data = _.defaults(this.data,opt.defaults)
         }
+        _k_.dbg("kode/stash.kode", 31, 8, "this.data", this.data)
     }
 
     Stash.prototype["keypath"] = function (key)
@@ -47,7 +52,7 @@ Stash = (function ()
 
     Stash.prototype["get"] = function (key, value)
     {
-        var _40_64_, _41_38_
+        var _42_64_, _43_38_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -62,7 +67,7 @@ Stash = (function ()
 
     Stash.prototype["set"] = function (key, value)
     {
-        var _52_71_
+        var _54_71_
 
         if (!((key != null ? key.split : undefined) != null))
         {
@@ -96,7 +101,7 @@ Stash = (function ()
 
     Stash.prototype["save"] = function ()
     {
-        var text
+        var text, text0
 
         if (!this.file)
         {
@@ -106,13 +111,14 @@ Stash = (function ()
         this.timer = null
         try
         {
+            text0 = noon.stringify(this.data,{indent:2,maxalign:8})
             console.log(this.data)
-            _k_.dbg("kode/stash.kode", 96, 12, "this.data", this.data)
+            console.log(text0)
             text = _k_.noon(this.data)
-            _k_.dbg("kode/stash.kode", 98, 12, "text", text)
+            _k_.dbg("kode/stash.kode", 100, 12, "text", text)
             return slash.writeText(this.file,text,function (p)
             {
-                _k_.dbg("kode/stash.kode", 100, 16, null, 'stashSaved')
+                _k_.dbg("kode/stash.kode", 102, 16, null, 'stashSaved')
                 return post.toMain('stashSaved')
             })
         }

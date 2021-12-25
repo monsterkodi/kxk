@@ -26,7 +26,9 @@ function Stash
         # fs.ensureDirSync slash.dirname @file
         fs.ensureDir slash.dir(@file), ->
         @data = @load()
+        @data = {} if not @data is obj
         @data = _.defaults @data, opt.defaults if opt?.defaults?
+        dbg @data
 
     keypath: (key) -> key.split @sep
     
@@ -91,9 +93,9 @@ function Stash
         try
             # fs.ensureDir slash.dir(@file), (err) =>
             # if not err
-            # text = noon.stringify @data, { indent: 2, maxalign: 8 }
+            text0 = noon.stringify @data, { indent: 2, maxalign: 8 }
             log @data
-            dbg @data
+            log text0
             text = noon @data
             dbg text
             slash.writeText @file, text, (p) ->
