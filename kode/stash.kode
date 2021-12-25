@@ -93,13 +93,13 @@ function Stash
         try
             # fs.ensureDir slash.dir(@file), (err) =>
             # if not err
-            text0 = noon.stringify @data, { indent: 2, maxalign: 8 }
-            log @data
-            log text0
+            # text0 = noon.stringify @data, { indent: 2, maxalign: 8 }
+            # log @data
+            # log text0
             text = noon @data
-            dbg text
+            # dbg text
             slash.writeText @file, text, (p) ->
-                dbg 'stashSaved'
+                # dbg 'stashSaved'
                 post.toMain 'stashSaved'
         catch err
             kerror "stash.save -- can't save to '#{@file}': #{err}"

@@ -101,7 +101,7 @@ Stash = (function ()
 
     Stash.prototype["save"] = function ()
     {
-        var text, text0
+        var text
 
         if (!this.file)
         {
@@ -111,14 +111,9 @@ Stash = (function ()
         this.timer = null
         try
         {
-            text0 = noon.stringify(this.data,{indent:2,maxalign:8})
-            console.log(this.data)
-            console.log(text0)
             text = _k_.noon(this.data)
-            _k_.dbg("kode/stash.kode", 100, 12, "text", text)
             return slash.writeText(this.file,text,function (p)
             {
-                _k_.dbg("kode/stash.kode", 102, 16, null, 'stashSaved')
                 return post.toMain('stashSaved')
             })
         }
