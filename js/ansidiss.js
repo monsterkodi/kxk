@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {each_r: function (o) {return o instanceof Array ? [] : typeof o == 'string' ? o.split('') : {}}, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
 var STYLES, toHexString, _
 
@@ -17,33 +17,77 @@ toHexString = function (num)
     }
     return num
 }
-;[0,1,2,3,4,5].forEach(function (red)
-{
-    return [0,1,2,3,4,5].forEach(function (green)
+;(function (o) {
+    var r = _k_.each_r(o)
+    for (var k in o)
+    {   
+        var m = (function (red)
     {
-        return [0,1,2,3,4,5].forEach(function (blue)
+        return         (function (o) {
+            var r = _k_.each_r(o)
+            for (var k in o)
+            {   
+                var m = (function (green)
+            {
+                return                 (function (o) {
+                    var r = _k_.each_r(o)
+                    for (var k in o)
+                    {   
+                        var m = (function (blue)
+                    {
+                        var b, c, g, n, r, rgb
+
+                        c = 16 + (red * 36) + (green * 6) + blue
+                        r = red > 0 ? red * 40 + 55 : 0
+                        g = green > 0 ? green * 40 + 55 : 0
+                        b = blue > 0 ? blue * 40 + 55 : 0
+                        rgb = (function () { var _59__40_ = []; var list = [r,g,b]; for (var _59_40_ = 0; _59_40_ < list.length; _59_40_++)  { n = list[_59_40_];_59__40_.push(toHexString(n))  } return _59__40_ }).bind(this)().join('')
+                        STYLES[`f${c}`] = `color:#${rgb}`
+                        return STYLES[`b${c}`] = `background-color:#${rgb}`
+                    })(o[k])
+                        if (m != null)
+                        {
+                            r[k] = m
+                        }
+                    }
+                    return typeof o == 'string' ? r.join('') : r
+                })([0,1,2,3,4,5])
+            })(o[k])
+                if (m != null)
+                {
+                    r[k] = m
+                }
+            }
+            return typeof o == 'string' ? r.join('') : r
+        })([0,1,2,3,4,5])
+    })(o[k])
+        if (m != null)
         {
-            var b, c, g, n, r, rgb
+            r[k] = m
+        }
+    }
+    return typeof o == 'string' ? r.join('') : r
+})([0,1,2,3,4,5])
+;(function (o) {
+    var r = _k_.each_r(o)
+    for (var k in o)
+    {   
+        var m = (function (gray)
+    {
+        var c, l
 
-            c = 16 + (red * 36) + (green * 6) + blue
-            r = red > 0 ? red * 40 + 55 : 0
-            g = green > 0 ? green * 40 + 55 : 0
-            b = blue > 0 ? blue * 40 + 55 : 0
-            rgb = (function () { var _59__40_ = []; var list = [r,g,b]; for (var _59_40_ = 0; _59_40_ < list.length; _59_40_++)  { n = list[_59_40_];_59__40_.push(toHexString(n))  } return _59__40_ }).bind(this)().join('')
-            STYLES[`f${c}`] = `color:#${rgb}`
-            return STYLES[`b${c}`] = `background-color:#${rgb}`
-        })
-    })
-})
-;(function() { var r = []; for (var i = 0; i <= 23; i++){ r.push(i); } return r; }).apply(this).forEach(function (gray)
-{
-    var c, l
-
-    c = gray + 232
-    l = toHexString(gray * 10 + 8)
-    STYLES[`f${c}`] = `color:#${l}${l}${l}`
-    return STYLES[`b${c}`] = `background-color:#${l}${l}${l}`
-})
+        c = gray + 232
+        l = toHexString(gray * 10 + 8)
+        STYLES[`f${c}`] = `color:#${l}${l}${l}`
+        return STYLES[`b${c}`] = `background-color:#${l}${l}${l}`
+    })(o[k])
+        if (m != null)
+        {
+            r[k] = m
+        }
+    }
+    return typeof o == 'string' ? r.join('') : r
+})((function() { var r = []; for (var i = 0; i <= 23; i++){ r.push(i); } return r; }).apply(this))
 class AnsiDiss
 {
     static ansi2html (s)
@@ -203,10 +247,12 @@ class AnsiDiss
                 else if (code === 38)
                 {
                     fg = STYLES[`f${cs[2]}`]
+                    break
                 }
                 else if (code === 48)
                 {
                     bg = STYLES[`b${cs[2]}`]
+                    break
                 }
                 else if ((30 <= code && code <= 37))
                 {
@@ -232,10 +278,6 @@ class AnsiDiss
                 {
                     delStyle('font-weight:bold')
                     delStyle('opacity:0.5')
-                }
-                if (_k_.in(code,[38,48]))
-                {
-                    break
                 }
             }
             return ''

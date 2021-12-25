@@ -62,9 +62,9 @@ module.exports =
 
     filter: (o, f) ->
 
-        if _.isArray o
+        if o is arr
             _.filter o, f
-        else if _.isObject o
+        else if o is obj
             _.pickBy o, f
         else
             o

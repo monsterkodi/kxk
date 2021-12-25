@@ -23,12 +23,11 @@ function Stash
         @timeout = opt?.timeout ? 4000
         @changes = []
         
-        # fs.ensureDirSync slash.dirname @file
         fs.ensureDir slash.dir(@file), ->
         @data = @load()
         @data = {} if not @data is obj
         @data = _.defaults @data, opt.defaults if opt?.defaults?
-        dbg @data
+        # dbg @data
 
     keypath: (key) -> key.split @sep
     
@@ -74,9 +73,9 @@ function Stash
     
     load: ->
         
-        # try
-        noon.load @file
-        # catch err
+        if slash.isFile @file
+            return noon.load @file
+        {}
         
     #  0000000   0000000   000   000  00000000
     # 000       000   000  000   000  000     
@@ -91,15 +90,8 @@ function Stash
         clearTimeout @timer
         @timer = null
         try
-            # fs.ensureDir slash.dir(@file), (err) =>
-            # if not err
-            # text0 = noon.stringify @data, { indent: 2, maxalign: 8 }
-            # log @data
-            # log text0
             text = noon @data
-            # dbg text
             slash.writeText @file, text, (p) ->
-                # dbg 'stashSaved'
                 post.toMain 'stashSaved'
         catch err
             kerror "stash.save -- can't save to '#{@file}': #{err}"

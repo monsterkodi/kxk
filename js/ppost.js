@@ -1,10 +1,9 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {extend: function (c,p) {for (var k in p) { if (Object.hasOwn(p, k)) c[k] = p[k] } function ctor() { this.constructor = c; } ctor.prototype = p.prototype; c.prototype = new ctor(); c.__super__ = p.prototype; return c;}, isFunc: function (o) {return typeof o === 'function'}, isNum: function (o) {return !isNaN(o) && !isNaN(parseFloat(o)) && (isFinite(o) || o === Infinity || o === -Infinity)}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
-var electron, Emitter, POST, PostMain, PostRenderer, _
+var electron, Emitter, POST, PostMain, PostRenderer
 
-_ = require('lodash')
 Emitter = require('events')
 POST = '__POST__'
 if (process.type === 'renderer')
@@ -48,6 +47,11 @@ PostRenderer = (function ()
         return this.send('toOtherWins',type,args)
     }
 
+    PostRenderer.prototype["toWins"] = function (type, ...args)
+    {
+        return this.send('toWins',type,args)
+    }
+
     PostRenderer.prototype["get"] = function (type, ...args)
     {
         return this.ipc.sendSync(POST,'get',type,args)
@@ -55,7 +59,7 @@ PostRenderer = (function ()
 
     PostRenderer.prototype["send"] = function (receivers, type, args, id)
     {
-        var _41_49_
+        var _42_49_
 
         return (this.ipc != null ? this.ipc.send(POST,receivers,type,args,id) : undefined)
     }
@@ -98,12 +102,15 @@ PostMain = (function ()
                     case 'toOtherWins':
                         return this.sendToWins(type,argl,id)
 
+                    case 'toWins':
+                        return this.sendToWins(type,argl)
+
                     case 'get':
                         if (type === 'winID')
                         {
                             return event.returnValue = id
                         }
-                        else if (_.isFunction(this.getCallbacks[type]))
+                        else if (_k_.isFunc(this.getCallbacks[type]))
                         {
                             retval = this.getCallbacks[type].apply(this.getCallbacks[type],argl)
                             return event.returnValue = (retval != null ? retval : [])
@@ -137,9 +144,9 @@ PostMain = (function ()
 
     PostMain.prototype["toWin"] = function (id, type, ...args)
     {
-        var w, _83_26_
+        var w, _85_26_
 
-        if ((function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(id))
+        if (_k_.isNum(id))
         {
             w = electron.BrowserWindow.fromId(id)
         }
@@ -147,7 +154,7 @@ PostMain = (function ()
         {
             w = id
         }
-        return (w != null ? (_83_26_=w.webContents) != null ? _83_26_.send(POST,type,args) : undefined : undefined)
+        return (w != null ? (_85_26_=w.webContents) != null ? _85_26_.send(POST,type,args) : undefined : undefined)
     }
 
     PostMain.prototype["onGet"] = function (type, cb)
@@ -173,9 +180,9 @@ PostMain = (function ()
         var win
 
         var list = _k_.list(electron.BrowserWindow.getAllWindows())
-        for (var _97_20_ = 0; _97_20_ < list.length; _97_20_++)
+        for (var _99_20_ = 0; _99_20_ < list.length; _99_20_++)
         {
-            win = list[_97_20_]
+            win = list[_99_20_]
             if (win.id !== except)
             {
                 win.webContents.send(POST,type,argl)

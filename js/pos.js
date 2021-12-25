@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_
+var _k_ = {clamp: function (l,h,v) { var ll = Math.min(l,h), hh = Math.max(l,h); if (!_k_.isNum(v)) { v = ll }; if (v < ll) { v = ll }; if (v > hh) { v = hh }; if (!_k_.isNum(v)) { v = ll }; return v }, isNum: function (o) {return !isNaN(o) && !isNaN(parseFloat(o)) && (isFinite(o) || o === Infinity || o === -Infinity)}}
 
-var clamp, Pos
+var Pos
 
 clamp = require('./kxk').clamp
 
@@ -337,8 +337,8 @@ Pos = (function ()
     {
         if ((lower != null) && (upper != null))
         {
-            this.x = clamp(lower.x,upper.x,this.x)
-            this.y = clamp(lower.y,upper.y,this.y)
+            this.x = _k_.clamp(lower.x,upper.x,this.x)
+            this.y = _k_.clamp(lower.y,upper.y,this.y)
         }
         return this
     }

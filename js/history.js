@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_
+var _k_ = {last: function (o) {return o != null ? o.length ? o[o.length-1] : undefined : o}}
 
-var def, last, _
+var def, _
 
 def = require('./kxk').def
 last = require('./kxk').last
@@ -40,7 +40,7 @@ class History
 
     current ()
     {
-        return last(this.list)
+        return _k_.last(this.list)
     }
 }
 

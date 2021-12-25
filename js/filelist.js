@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o)}; return v.get(o) } else if (typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) { var k, r = {}; v.set(o,r); for (k in o) { if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k]) }; }; return v.get(o) } else {return o} }}
+var _k_ = {isStr: function (o) {return typeof o === 'string' || o instanceof String}, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}, isNum: function (o) {return !isNaN(o) && !isNaN(parseFloat(o)) && (isFinite(o) || o === Infinity || o === -Infinity)}, clone: function (o,v) { v ??= new Map(); if (o instanceof Array) { if (!v.has(o)) {var r = []; v.set(o,r); for (var i=0; i < o.length; i++) {if (!v.has(o[i])) { v.set(o[i],_k_.clone(o[i],v)) }; r.push(v.get(o[i]))}}; return v.get(o) } else if (typeof o == 'string') { if (!v.has(o)) {v.set(o,''+o)}; return v.get(o) } else if (o != null && typeof o == 'object' && o.constructor.name == 'Object') { if (!v.has(o)) { var k, r = {}; v.set(o,r); for (k in o) { if (!v.has(o[k])) { v.set(o[k],_k_.clone(o[k],v)) }; r[k] = v.get(o[k]) }; }; return v.get(o) } else {return o} }}
 
 var fileList, filter, fs, slash
 
@@ -17,7 +17,7 @@ fileList = function (paths, opt)
     opt.ignoreHidden = ((_27_21_=opt.ignoreHidden) != null ? _27_21_ : true)
     opt.logError = ((_28_21_=opt.logError) != null ? _28_21_ : true)
     files = []
-    if ((function(o){return (typeof o === 'string' || o instanceof String)})(paths))
+    if (_k_.isStr(paths))
     {
         paths = [paths]
     }
@@ -35,7 +35,7 @@ fileList = function (paths, opt)
         }
         else if ((opt.matchExt != null))
         {
-            if ((function(o){return (typeof o === 'string' || o instanceof String)})(opt.matchExt) && slash.ext(p) !== opt.matchExt)
+            if (_k_.isStr(opt.matchExt) && slash.ext(p) !== opt.matchExt)
             {
                 return true
             }
@@ -88,7 +88,7 @@ fileList = function (paths, opt)
                         }
                     }
                 }
-                if ((function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(opt.depth) && opt.depth > 0)
+                if (_k_.isNum(opt.depth) && opt.depth > 0)
                 {
                     copt = _k_.clone(opt)
                     copt.depth -= 1

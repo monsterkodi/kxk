@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {isStr: function (o) {return typeof o === 'string' || o instanceof String}, isNum: function (o) {return !isNaN(o) && !isNaN(parseFloat(o)) && (isFinite(o) || o === Infinity || o === -Infinity)}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
 var elem, _
 
@@ -18,12 +18,12 @@ elem = function (typ, opt)
     opt = (opt != null ? opt : {})
     typ = (typ != null ? typ : 'div')
     e = document.createElement(typ)
-    if ((opt.text != null) && ((function(o){return (typeof o === 'string' || o instanceof String)})(opt.text) || (function(o){return !isNaN(o) && !isNaN(parseFloat(o)) && isFinite(o)})(opt.text)))
+    if ((opt.text != null) && (_k_.isStr(opt.text) || _k_.isNum(opt.text)))
     {
         e.textContent = opt.text
         delete opt.text
     }
-    if ((opt.html != null) && (function(o){return (typeof o === 'string' || o instanceof String)})(opt.html))
+    if ((opt.html != null) && _k_.isStr(opt.html))
     {
         e.innerHTML = opt.html
         delete opt.html

@@ -5,7 +5,7 @@
 000        000   000       000     000       
 000         0000000   0000000      000       
 ###
-_        = require 'lodash'
+
 Emitter  = require 'events'
 POST     = '__POST__'
 
@@ -35,6 +35,7 @@ if process.type == 'renderer'
         toAll:       (type, args...) -> @send 'toAll'       type, args
         toMain:      (type, args...) -> @send 'toMain'      type, args
         toOtherWins: (type, args...) -> @send 'toOtherWins' type, args
+        toWins:      (type, args...) -> @send 'toWins'      type, args
         
         get:         (type, args...) -> @ipc.sendSync POST, 'get' type, args
             
@@ -65,10 +66,11 @@ else if process.type == 'browser'
                         when 'toAll'       then @sendToWins(type, argl).sendToMain(type, argl, id)
                         when 'toMain'      then @sendToMain type, argl, id
                         when 'toOtherWins' then @sendToWins type, argl, id
+                        when 'toWins'      then @sendToWins type, argl
                         when 'get'
                             if type == 'winID'
                                 event.returnValue = id
-                            else if _.isFunction @getCallbacks[type]
+                            else if @getCallbacks[type] is func
                                 retval = @getCallbacks[type].apply @getCallbacks[type], argl
                                 event.returnValue = retval ? []
             catch err

@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_
+var _k_ = {isStr: function (o) {return typeof o === 'string' || o instanceof String}}
 
 var $, def, Drag, kerror, kpos, stopEvent, _
 
@@ -26,7 +26,7 @@ Drag = (function ()
         this["dragStart"] = this["dragStart"].bind(this)
         this["eventPos"] = this["eventPos"].bind(this)
         _.extend(this,def(cfg,{target:null,handle:null,onStart:null,onMove:null,onStop:null,active:true,stopEvent:true}))
-        if ((function(o){return (typeof o === 'string' || o instanceof String)})(this.target))
+        if (_k_.isStr(this.target))
         {
             t = $(this.target)
             if (!(t != null))
@@ -57,7 +57,7 @@ Drag = (function ()
         }
         this.dragging = false
         this.listening = false
-        if ((function(o){return (typeof o === 'string' || o instanceof String)})(this.handle))
+        if (_k_.isStr(this.handle))
         {
             this.handle = $(this.handle)
         }

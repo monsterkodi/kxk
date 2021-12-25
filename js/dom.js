@@ -1,13 +1,13 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_ = {in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {isStr: function (o) {return typeof o === 'string' || o instanceof String}, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
 var _
 
 _ = require('lodash')
 module.exports = {$:function (idOrQueryOrElement, queryOrElement = document)
 {
-    if ((function(o){return (typeof o === 'string' || o instanceof String)})(idOrQueryOrElement))
+    if (_k_.isStr(idOrQueryOrElement))
     {
         if (_k_.in(idOrQueryOrElement[0],['.',"#"]) || queryOrElement !== document)
         {
@@ -18,7 +18,7 @@ module.exports = {$:function (idOrQueryOrElement, queryOrElement = document)
             return document.getElementById(idOrQueryOrElement)
         }
     }
-    else if (_.isElement(idOrQueryOrElement) && (function(o){return (typeof o === 'string' || o instanceof String)})(queryOrElement))
+    else if (_.isElement(idOrQueryOrElement) && _k_.isStr(queryOrElement))
     {
         return idOrQueryOrElement.querySelector(queryOrElement)
     }

@@ -49,9 +49,9 @@ toHexString = (num) ->
     while num.length < 2 then num = "0#{num}"
     num
 
-[0..5].forEach (red) ->
-    [0..5].forEach (green) ->
-        [0..5].forEach (blue) ->
+[0..5] each (red) ->
+    [0..5] each (green) ->
+        [0..5] each (blue) ->
             c = 16 + (red * 36) + (green * 6) + blue
             r = if red   > 0 then red   * 40 + 55 else 0
             g = if green > 0 then green * 40 + 55 else 0
@@ -60,7 +60,7 @@ toHexString = (num) ->
             STYLES["f#{c}"] = "color:##{rgb}"
             STYLES["b#{c}"] = "background-color:##{rgb}"
 
-[0..23].forEach (gray) ->
+[0..23] each (gray) ->
     c = gray+232
     l = toHexString(gray*10 + 8)
     STYLES["f#{c}"] = "color:##{l}#{l}#{l}"
@@ -145,26 +145,21 @@ class AnsiDiss
                 code = parseInt code, 10
                 if 
                     code == 0          ➜ resetStyle()
-                    code == 1          
-                        addStyle 'font-weight:bold'
-                        fg = toHighIntensity fg
+                    code == 1          ➜ addStyle 'font-weight:bold'; fg = toHighIntensity fg
                     code == 2          ➜ addStyle 'opacity:0.5'
                     code == 4          ➜ addStyle 'text-decoration:underline'
                     code == 8          ➜ addStyle 'display:none'
                     code == 9          ➜ addStyle 'text-decoration:line-through'
                     code == 39         ➜ fg = STYLES["f15"] # default foreground
                     code == 49         ➜ bg = STYLES["b0"]  # default background
-                    code == 38         ➜ fg = STYLES["f#{cs[2]}"] # extended fg 38;5;[0-255]
-                    code == 48         ➜ bg = STYLES["b#{cs[2]}"] # extended bg 48;5;[0-255]
+                    code == 38         ➜ fg = STYLES["f#{cs[2]}"]; break # extended fg 38;5;[0-255]
+                    code == 48         ➜ bg = STYLES["b#{cs[2]}"]; break # extended bg 48;5;[0-255]
                     30 <= code <= 37   ➜ fg = STYLES["f#{code - 30}"] # normal intensity
                     40 <= code <= 47   ➜ bg = STYLES["b#{code - 40}"]
                     90 <= code <= 97   ➜ fg = STYLES["f#{8+code - 90}"]  # high intensity
                     100 <= code <= 107 ➜ bg = STYLES["b#{8+code - 100}"]
                     code == 28         ➜ delStyle 'display:none'
-                    code == 22         
-                        delStyle 'font-weight:bold'
-                        delStyle 'opacity:0.5'
-                break if code in [38, 48]
+                    code == 22         ➜ delStyle 'font-weight:bold'; delStyle 'opacity:0.5'
             ''
             
         tokens = [

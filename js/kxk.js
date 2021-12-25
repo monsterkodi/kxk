@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_ = {list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {isArr: function (o) {return Array.isArray(o)}, isObj: function (o) {return !(o == null || typeof o != 'object' || o.constructor.name !== 'Object')}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
 var atomic, childp, crypto, dom, fs, k, karg, klor, kstr, noon, open, os, post, sds, slash, v, walkdir, _
 
@@ -35,11 +35,11 @@ module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:kl
     }
 },filter:function (o, f)
 {
-    if (_.isArray(o))
+    if (_k_.isArr(o))
     {
         return _.filter(o,f)
     }
-    else if (_.isObject(o))
+    else if (_k_.isObj(o))
     {
         return _.pickBy(o,f)
     }

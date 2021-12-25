@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
 var coffeePos, decode, errorStack, errorTrace, filePos, jsPosition, klog, kodePos, kxk, logErr, readMap, regex1, regex2, sh, slash, toCoffee, toJs, toKode, _
 

@@ -1,8 +1,8 @@
-// monsterkodi/kode 0.223.0
+// monsterkodi/kode 0.230.0
 
-var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}}
+var _k_ = {isStr: function (o) {return typeof o === 'string' || o instanceof String}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, isObj: function (o) {return !(o == null || typeof o != 'object' || o.constructor.name !== 'Object')}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
-var config, dissect, kxk, last, merge, ranges, sortRanges
+var config, dissect, kxk, merge, ranges, sortRanges
 
 kxk = require('./kxk')
 last = kxk.last
@@ -36,7 +36,7 @@ ranges = function (regexes, text, flags)
 
     if (!(regexes instanceof Array))
     {
-        if ((function(o){return (typeof o === 'string' || o instanceof String)})(regexes))
+        if (_k_.isStr(regexes))
         {
             regexes = [[new RegExp(regexes,flags),'found']]
         }
@@ -91,7 +91,7 @@ ranges = function (regexes, text, flags)
                     {
                         value = value[j]
                     }
-                    else if ((function(o){return !(o == null || typeof o != 'object' || o.constructor.name !== 'Object')})(value) && j < Object.keys(value).length)
+                    else if (_k_.isObj(value) && j < Object.keys(value).length)
                     {
                         value = [Object.keys(value)[j],value[Object.keys(value)[j]]]
                     }
