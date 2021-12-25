@@ -289,8 +289,8 @@ function App
             @win.setPosition bounds.x, bounds.y if bounds?
             @win.on 'resize' @saveBounds
             @win.on 'move'   @saveBounds
-        @win.on 'closed' => @win = null
-        @win.on 'close'  ((w) => => if @opt.single then @hideDock(); @onWinClose w) @win
+        @win.on 'closed' => delete @win
+        @win.on 'close'  (e) => @onWinClose e.sender; @hideDock() if @opt.single
         @win.on 'moved'  (event) => post.toWin event.sender, 'winMoved' event.sender.getBounds()
         @win.on 'ready-to-show' ((w, orts) -> -> 
             orts? w

@@ -355,19 +355,16 @@ App = (function ()
         }
         this.win.on('closed',(function ()
         {
-            return this.win = null
+            return delete this.win
         }).bind(this))
-        this.win.on('close',((function (w)
+        this.win.on('close',(function (e)
         {
-            return (function ()
+            this.onWinClose(e.sender)
+            if (this.opt.single)
             {
-                if (this.opt.single)
-                {
-                    this.hideDock()
-                    return this.onWinClose(w)
-                }
-            }).bind(this)
-        }).bind(this))(this.win))
+                return this.hideDock()
+            }
+        }).bind(this))
         this.win.on('moved',(function (event)
         {
             return post.toWin(event.sender,'winMoved',event.sender.getBounds())
