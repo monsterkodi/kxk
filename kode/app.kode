@@ -59,6 +59,7 @@ function App
             # """
 
         @argv = args.init @opt.args if @opt.args
+        @argv ?= {}
         
         onOther = (event, argv, dir) =>
             

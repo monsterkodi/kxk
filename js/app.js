@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.230.0
+// monsterkodi/kode 0.211.0
 
-var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, dbg: function (f,l,c,m,...a) { console.log(f + ':' + l + ':' + c + (m ? ' ' + m + '\n' : '\n') + a.map(function (a) { return _k_.noon(a) }).join(' '))}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}, noon: function (obj) { var pad = function (s, l) { while (s.length < l) { s += ' ' }; return s }; var esc = function (k, arry) { var es, sp; if (0 <= k.indexOf('\n')) { sp = k.split('\n'); es = sp.map(function (s) { return esc(s,arry) }); es.unshift('...'); es.push('...'); return es.join('\n') } if (k === '' || k === '...' || _k_.in(k[0],[' ','#','|']) || _k_.in(k[k.length - 1],[' ','#','|'])) { k = '|' + k + '|' } else if (arry && /  /.test(k)) { k = '|' + k + '|' }; return k }; var pretty = function (o, ind, seen) { var k, kl, l, v, mk = 4; if (Object.keys(o).length > 1) { for (k in o) { if (Object.hasOwn(o,k)) { kl = parseInt(Math.ceil((k.length + 2) / 4) * 4); mk = Math.max(mk,kl); if (mk > 32) { mk = 32; break } } } }; l = []; var keyValue = function (k, v) { var i, ks, s, vs; s = ind; k = esc(k,true); if (k.indexOf('  ') > 0 && k[0] !== '|') { k = `|${k}|` } else if (k[0] !== '|' && k[k.length - 1] === '|') { k = '|' + k } else if (k[0] === '|' && k[k.length - 1] !== '|') { k += '|' }; ks = pad(k,Math.max(mk,k.length + 2)); i = pad(ind + '    ',mk); s += ks; vs = toStr(v,i,false,seen); if (vs[0] === '\n') { while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) } }; s += vs; while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) }; return s }; for (k in o) { if (Object.hasOwn(o,k)) { l.push(keyValue(k,o[k])) } }; return l.join('\n') }; var toStr = function (o, ind = '', arry = false, seen = []) { var s, t, v; if (!(o != null)) { if (o === null) { return 'null' }; if (o === undefined) { return 'undefined' }; return '<?>' }; switch (t = typeof(o)) { case 'string': {return esc(o,arry)}; case 'object': { if (_k_.in(o,seen)) { return '<v>' }; seen.push(o); if ((o.constructor != null ? o.constructor.name : undefined) === 'Array') { s = ind !== '' && arry && '.' || ''; if (o.length && ind !== '') { s += '\n' }; s += (function () { var result = []; var list = _k_.list(o); for (var li = 0; li < list.length; li++)  { v = list[li];result.push(ind + toStr(v,ind + '    ',true,seen))  } return result }).bind(this)().join('\n') } else if ((o.constructor != null ? o.constructor.name : undefined) === 'RegExp') { return o.source } else { s = (arry && '.\n') || ((ind !== '') && '\n' || ''); s += pretty(o,ind,seen) }; return s } default: return String(o) }; return '<???>' }; return toStr(obj) }, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}}
+var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, dbg: function (f,l,c,m,...a) { console.log(f + ':' + l + ':' + c + (m ? ' ' + m + '\n' : '\n') + a.map(function (a) { return _k_.noon(a) }).join(' '))}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, noon: function (obj) { var pad = function (s, l) { while (s.length < l) { s += ' ' }; return s }; var esc = function (k, arry) { var es, sp; if (0 <= k.indexOf('\n')) { sp = k.split('\n'); es = sp.map(function (s) { return esc(s,arry) }); es.unshift('...'); es.push('...'); return es.join('\n') } if (k === '' || k === '...' || _k_.in(k[0],[' ','#','|']) || _k_.in(k[k.length - 1],[' ','#','|'])) { k = '|' + k + '|' } else if (arry && /  /.test(k)) { k = '|' + k + '|' }; return k }; var pretty = function (o, ind, seen) { var k, kl, l, v, mk = 4; if (Object.keys(o).length > 1) { for (k in o) { v = o[k]; if (o.hasOwnProperty(k)) { kl = parseInt(Math.ceil((k.length + 2) / 4) * 4); mk = Math.max(mk,kl); if (mk > 32) { mk = 32; break } } } }; l = []; var keyValue = function (k, v) { var i, ks, s, vs; s = ind; k = esc(k,true); if (k.indexOf('  ') > 0 && k[0] !== '|') { k = `|${k}|` } else if (k[0] !== '|' && k[k.length - 1] === '|') { k = '|' + k } else if (k[0] === '|' && k[k.length - 1] !== '|') { k += '|' }; ks = pad(k,Math.max(mk,k.length + 2)); i = pad(ind + '    ',mk); s += ks; vs = toStr(v,i,false,seen); if (vs[0] === '\n') { while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) } }; s += vs; while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) }; return s }; for (k in o) { v = o[k]; if (o.hasOwnProperty(k)) { l.push(keyValue(k,v)) } }; return l.join('\n') }; var toStr = function (o, ind = '', arry = false, seen = []) { var s, t, v; if (!(o != null)) { if (o === null) { return 'null' }; if (o === undefined) { return 'undefined' }; return '<?>' }; switch (t = typeof(o)) { case 'string': {return esc(o,arry)}; case 'object': { if (_k_.in(o,seen)) { return '<v>' }; seen.push(o); if ((o.constructor != null ? o.constructor.name : undefined) === 'Array') { s = ind !== '' && arry && '.' || ''; if (o.length && ind !== '') { s += '\n' }; s += (function () { var result = []; var list = _k_.list(o); for (var li = 0; li < list.length; li++)  { v = list[li];result.push(ind + toStr(v,ind + '    ',true,seen))  } return result }).bind(this)().join('\n') } else if ((o.constructor != null ? o.constructor.name : undefined) === 'RegExp') { return o.source } else { s = (arry && '.\n') || ((ind !== '') && '\n' || ''); s += pretty(o,ind,seen) }; return s } default: return String(o) }; return '<???>' }; return toStr(obj) }, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}}
 
 var about, App, args, childp, electron, fs, klog, kxk, os, post, prefs, slash, srcmap, watch, _1_20_
 
@@ -71,7 +71,7 @@ App = (function ()
 {
     function App (opt)
     {
-        var onOther, _71_38_, _75_50_
+        var onOther, _62_14_, _72_38_, _76_50_
 
         this.opt = opt
     
@@ -112,6 +112,7 @@ App = (function ()
         {
             this.argv = args.init(this.opt.args)
         }
+        this.argv = ((_62_14_=this.argv) != null ? _62_14_ : {})
         onOther = (function (event, argv, dir)
         {
             if (this.opt.onOtherInstance)
@@ -173,7 +174,7 @@ App = (function ()
 
     App.prototype["onReady"] = function ()
     {
-        var sep, _113_38_, _120_84_
+        var sep, _114_38_, _121_84_
 
         if (this.opt.tray)
         {
@@ -183,7 +184,7 @@ App = (function ()
         this.app.setName(this.opt.pkg.name)
         if (!this.argv.noprefs)
         {
-            sep = ((_113_38_=this.opt.prefsSeperator) != null ? _113_38_ : '▸')
+            sep = ((_114_38_=this.opt.prefsSeperator) != null ? _114_38_ : '▸')
             if (this.opt.shortcut)
             {
                 prefs.init({separator:sep,defaults:{shortcut:this.opt.shortcut}})
@@ -195,7 +196,7 @@ App = (function ()
         }
         if (!_k_.empty(prefs.get('shortcut')))
         {
-            electron.globalShortcut.register(prefs.get('shortcut'),((_120_84_=this.opt.onShortcut) != null ? _120_84_ : this.showWindow))
+            electron.globalShortcut.register(prefs.get('shortcut'),((_121_84_=this.opt.onShortcut) != null ? _121_84_ : this.showWindow))
         }
         if (this.argv.watch)
         {
@@ -214,7 +215,7 @@ App = (function ()
 
     App.prototype["onWinClose"] = function (e)
     {
-        _k_.dbg("kode/app.kode", 133, 8, null, 'onWinClose',e.sender.id)
+        _k_.dbg(".", 134, 8, null, 'onWinClose',e.sender.id)
         if (this.opt.single)
         {
             return this.hideDock()
@@ -245,7 +246,7 @@ App = (function ()
 
     App.prototype["quitApp"] = function ()
     {
-        var _191_33_
+        var _192_33_
 
         this.stopWatcher()
         if (this.opt.saveBounds !== false)
@@ -267,14 +268,14 @@ App = (function ()
 
     App.prototype["hideDock"] = function ()
     {
-        var _205_26_
+        var _206_26_
 
         return (this.app.dock != null ? this.app.dock.hide() : undefined)
     }
 
     App.prototype["showDock"] = function ()
     {
-        var _206_26_
+        var _207_26_
 
         return (this.app.dock != null ? this.app.dock.show() : undefined)
     }
@@ -301,7 +302,7 @@ App = (function ()
 
     App.prototype["showWindow"] = function ()
     {
-        var _227_26_, _229_15_
+        var _228_26_, _230_15_
 
         ;(typeof this.opt.onWillShowWin === "function" ? this.opt.onWillShowWin() : undefined)
         if ((this.win != null))
@@ -317,16 +318,16 @@ App = (function ()
 
     App.prototype["createWindow"] = function (onReadyToShow)
     {
-        var bounds, height, width, _249_32_, _249_46_, _250_32_, _250_46_, _255_56_, _256_56_, _257_56_, _258_56_, _259_56_, _260_56_, _261_56_, _262_56_, _263_56_, _264_56_, _265_56_, _266_56_, _267_56_, _268_56_
+        var bounds, height, width, _250_32_, _250_46_, _251_32_, _251_46_, _256_56_, _257_56_, _258_56_, _259_56_, _260_56_, _261_56_, _262_56_, _263_56_, _264_56_, _265_56_, _266_56_, _267_56_, _268_56_, _269_56_
 
         onReadyToShow = (onReadyToShow != null ? onReadyToShow : this.opt.onWinReady)
         if (this.opt.saveBounds !== false)
         {
             bounds = prefs.get('bounds')
         }
-        width = ((_249_32_=(bounds != null ? bounds.width : undefined)) != null ? _249_32_ : ((_249_46_=this.opt.width) != null ? _249_46_ : 500))
-        height = ((_250_32_=(bounds != null ? bounds.height : undefined)) != null ? _250_32_ : ((_250_46_=this.opt.height) != null ? _250_46_ : 500))
-        this.win = new electron.BrowserWindow({width:width,height:height,minWidth:((_255_56_=this.opt.minWidth) != null ? _255_56_ : 250),minHeight:((_256_56_=this.opt.minHeight) != null ? _256_56_ : 250),maxWidth:((_257_56_=this.opt.maxWidth) != null ? _257_56_ : 100000),maxHeight:((_258_56_=this.opt.maxHeight) != null ? _258_56_ : 100000),backgroundColor:((_259_56_=this.opt.backgroundColor) != null ? _259_56_ : '#181818'),frame:((_260_56_=this.opt.frame) != null ? _260_56_ : false),transparent:((_261_56_=this.opt.transparent) != null ? _261_56_ : false),fullscreen:((_262_56_=this.opt.fullscreen) != null ? _262_56_ : false),fullscreenable:((_263_56_=this.opt.fullscreenable) != null ? _263_56_ : true),acceptFirstMouse:((_264_56_=this.opt.acceptFirstMouse) != null ? _264_56_ : true),resizable:((_265_56_=this.opt.resizable) != null ? _265_56_ : true),maximizable:((_266_56_=this.opt.maximizable) != null ? _266_56_ : true),minimizable:((_267_56_=this.opt.minimizable) != null ? _267_56_ : true),closable:((_268_56_=this.opt.closable) != null ? _268_56_ : true),autoHideMenuBar:true,thickFrame:false,show:false,icon:this.resolve(this.opt.icon),webPreferences:{webSecurity:false,contextIsolation:false,nodeIntegration:true,nodeIntegrationInWorker:true}})
+        width = ((_250_32_=(bounds != null ? bounds.width : undefined)) != null ? _250_32_ : ((_250_46_=this.opt.width) != null ? _250_46_ : 500))
+        height = ((_251_32_=(bounds != null ? bounds.height : undefined)) != null ? _251_32_ : ((_251_46_=this.opt.height) != null ? _251_46_ : 500))
+        this.win = new electron.BrowserWindow({width:width,height:height,minWidth:((_256_56_=this.opt.minWidth) != null ? _256_56_ : 250),minHeight:((_257_56_=this.opt.minHeight) != null ? _257_56_ : 250),maxWidth:((_258_56_=this.opt.maxWidth) != null ? _258_56_ : 100000),maxHeight:((_259_56_=this.opt.maxHeight) != null ? _259_56_ : 100000),backgroundColor:((_260_56_=this.opt.backgroundColor) != null ? _260_56_ : '#181818'),frame:((_261_56_=this.opt.frame) != null ? _261_56_ : false),transparent:((_262_56_=this.opt.transparent) != null ? _262_56_ : false),fullscreen:((_263_56_=this.opt.fullscreen) != null ? _263_56_ : false),fullscreenable:((_264_56_=this.opt.fullscreenable) != null ? _264_56_ : true),acceptFirstMouse:((_265_56_=this.opt.acceptFirstMouse) != null ? _265_56_ : true),resizable:((_266_56_=this.opt.resizable) != null ? _266_56_ : true),maximizable:((_267_56_=this.opt.maximizable) != null ? _267_56_ : true),minimizable:((_268_56_=this.opt.minimizable) != null ? _268_56_ : true),closable:((_269_56_=this.opt.closable) != null ? _269_56_ : true),autoHideMenuBar:true,thickFrame:false,show:false,icon:this.resolve(this.opt.icon),webPreferences:{webSecurity:false,contextIsolation:false,nodeIntegration:true,nodeIntegrationInWorker:true}})
         if ((bounds != null))
         {
             this.win.setPosition(bounds.x,bounds.y)
@@ -384,14 +385,14 @@ App = (function ()
 
     App.prototype["onSetWinBounds"] = function (event, bounds)
     {
-        var _314_27_
+        var _315_27_
 
         return (this.winForEvent(event) != null ? this.winForEvent(event).setBounds(bounds) : undefined)
     }
 
     App.prototype["onGetWinBounds"] = function (event)
     {
-        var _318_47_
+        var _319_47_
 
         return event.returnValue = (this.winForEvent(event) != null ? this.winForEvent(event).getBounds() : undefined)
     }
@@ -403,7 +404,7 @@ App = (function ()
 
     App.prototype["saveBounds"] = function ()
     {
-        var _322_26_
+        var _323_26_
 
         if ((this.win != null))
         {
@@ -433,9 +434,9 @@ App = (function ()
         {
             klog('no win?',event.sender.id)
             var list = _k_.list(this.allWins())
-            for (var _333_18_ = 0; _333_18_ < list.length; _333_18_++)
+            for (var _334_18_ = 0; _334_18_ < list.length; _334_18_++)
             {
-                w = list[_333_18_]
+                w = list[_334_18_]
                 klog('win',w.id,w.webContents.id)
             }
         }
@@ -472,7 +473,8 @@ App = (function ()
                     return this.screenshot(w)
 
                 case 'fullscreen':
-                    return w.setFullScreen(!w.isFullScreen())
+                    w.setFullScreen
+                    return !w.isFullScreen()
 
                 case 'devtools':
                     return this.toggleDevTools(w.webContents)
@@ -549,9 +551,9 @@ App = (function ()
             return
         }
         var list = _k_.list(this.opt.dirs)
-        for (var _408_16_ = 0; _408_16_ < list.length; _408_16_++)
+        for (var _409_16_ = 0; _409_16_ < list.length; _409_16_++)
         {
-            dir = list[_408_16_]
+            dir = list[_409_16_]
             toWatch = slash.isRelative(dir) ? slash.resolve(slash.join(this.opt.dir,dir)) : slash.resolve(dir)
             watcher = watch.dir(toWatch)
             watcher.on('change',this.onSrcChange)
@@ -572,9 +574,9 @@ App = (function ()
             return
         }
         var list = _k_.list(this.watchers)
-        for (var _422_20_ = 0; _422_20_ < list.length; _422_20_++)
+        for (var _423_20_ = 0; _423_20_ < list.length; _423_20_++)
         {
-            watcher = list[_422_20_]
+            watcher = list[_423_20_]
             watcher.close()
         }
         return this.watchers = []
