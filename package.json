@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.475.0",
+  "version": "0.476.0",
   "description": "kodi's tool kit",
   "keywords": [
     "kode",
@@ -21,22 +21,22 @@
   },
   "repository": "github:monsterkodi/kxk",
   "dependencies": {
+    "fs-extra": "^10.0.1",
+    "html-entities": "^2.3.2",
+    "isbinaryfile": "^4.0.8",
     "karg": "monsterkodi/karg",
     "klor": "monsterkodi/klor",
     "kslash": "monsterkodi/kslash",
     "kstr": "monsterkodi/kstr",
-    "noon": "monsterkodi/noon",
-    "sds": "monsterkodi/sds",
-    "fs-extra": "^10.0.0",
-    "html-entities": "^2.3.2",
-    "isbinaryfile": "^4.0.8",
     "lodash": "^4.17.21",
+    "noon": "monsterkodi/noon",
     "opener": "^1.5.2",
+    "sds": "monsterkodi/sds",
     "sorcery": "^0.10.0",
     "stack-utils": "^2.0.5",
     "textextensions": "^5.14.0",
     "walkdir": "0.4.1",
-    "write-file-atomic": "^3.0.3"
+    "write-file-atomic": "^4.0.1"
   },
   "devDependencies": {
     "kode": "monsterkodi/kode"

@@ -19,7 +19,7 @@ elem = (typ, opt) ->
 
     e = document.createElement typ
     
-    if opt.text? and (opt.text is str or opt.text is num)
+    if opt.text is str or opt.text is num
         e.textContent = opt.text
         delete opt.text
     

@@ -1,4 +1,4 @@
-// monsterkodi/kode 0.230.0
+// monsterkodi/kode 0.237.0
 
 var _k_ = {isStr: function (o) {return typeof o === 'string' || o instanceof String}, isNum: function (o) {return !isNaN(o) && !isNaN(parseFloat(o)) && (isFinite(o) || o === Infinity || o === -Infinity)}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
@@ -8,7 +8,7 @@ _ = require('lodash')
 
 elem = function (typ, opt)
 {
-    var c, e, event, k, _22_15_, _26_15_, _30_16_, _34_19_, _39_17_
+    var c, e, event, k, _26_15_, _30_16_, _34_19_, _39_17_
 
     if (typ && typeof(typ) === 'object')
     {
@@ -18,7 +18,7 @@ elem = function (typ, opt)
     opt = (opt != null ? opt : {})
     typ = (typ != null ? typ : 'div')
     e = document.createElement(typ)
-    if ((opt.text != null) && (_k_.isStr(opt.text) || _k_.isNum(opt.text)))
+    if (_k_.isStr(opt.text) || _k_.isNum(opt.text))
     {
         e.textContent = opt.text
         delete opt.text

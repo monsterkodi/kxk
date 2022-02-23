@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.211.0
+// monsterkodi/kode 0.237.0
 
-var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, valid: undefined, dbg: function (f,l,c,m,...a) { console.log(f + ':' + l + ':' + c + (m ? ' ' + m + '\n' : '\n') + a.map(function (a) { return _k_.noon(a) }).join(' '))}, list: function (l) {return (l != null ? typeof l.length === 'number' ? l : [] : [])}, noon: function (obj) { var pad = function (s, l) { while (s.length < l) { s += ' ' }; return s }; var esc = function (k, arry) { var es, sp; if (0 <= k.indexOf('\n')) { sp = k.split('\n'); es = sp.map(function (s) { return esc(s,arry) }); es.unshift('...'); es.push('...'); return es.join('\n') } if (k === '' || k === '...' || _k_.in(k[0],[' ','#','|']) || _k_.in(k[k.length - 1],[' ','#','|'])) { k = '|' + k + '|' } else if (arry && /  /.test(k)) { k = '|' + k + '|' }; return k }; var pretty = function (o, ind, seen) { var k, kl, l, v, mk = 4; if (Object.keys(o).length > 1) { for (k in o) { v = o[k]; if (o.hasOwnProperty(k)) { kl = parseInt(Math.ceil((k.length + 2) / 4) * 4); mk = Math.max(mk,kl); if (mk > 32) { mk = 32; break } } } }; l = []; var keyValue = function (k, v) { var i, ks, s, vs; s = ind; k = esc(k,true); if (k.indexOf('  ') > 0 && k[0] !== '|') { k = `|${k}|` } else if (k[0] !== '|' && k[k.length - 1] === '|') { k = '|' + k } else if (k[0] === '|' && k[k.length - 1] !== '|') { k += '|' }; ks = pad(k,Math.max(mk,k.length + 2)); i = pad(ind + '    ',mk); s += ks; vs = toStr(v,i,false,seen); if (vs[0] === '\n') { while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) } }; s += vs; while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) }; return s }; for (k in o) { v = o[k]; if (o.hasOwnProperty(k)) { l.push(keyValue(k,v)) } }; return l.join('\n') }; var toStr = function (o, ind = '', arry = false, seen = []) { var s, t, v; if (!(o != null)) { if (o === null) { return 'null' }; if (o === undefined) { return 'undefined' }; return '<?>' }; switch (t = typeof(o)) { case 'string': {return esc(o,arry)}; case 'object': { if (_k_.in(o,seen)) { return '<v>' }; seen.push(o); if ((o.constructor != null ? o.constructor.name : undefined) === 'Array') { s = ind !== '' && arry && '.' || ''; if (o.length && ind !== '') { s += '\n' }; s += (function () { var result = []; var list = _k_.list(o); for (var li = 0; li < list.length; li++)  { v = list[li];result.push(ind + toStr(v,ind + '    ',true,seen))  } return result }).bind(this)().join('\n') } else if ((o.constructor != null ? o.constructor.name : undefined) === 'RegExp') { return o.source } else { s = (arry && '.\n') || ((ind !== '') && '\n' || ''); s += pretty(o,ind,seen) }; return s } default: return String(o) }; return '<???>' }; return toStr(obj) }, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}}
+var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, dbg: function (f,l,c,m,...a) { console.log(f + ':' + l + ':' + c + (m ? ' ' + m + '\n' : '\n') + a.map(function (a) { return _k_.noon(a) }).join(' '))}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}, noon: function (obj) { var pad = function (s, l) { while (s.length < l) { s += ' ' }; return s }; var esc = function (k, arry) { var es, sp; if (0 <= k.indexOf('\n')) { sp = k.split('\n'); es = sp.map(function (s) { return esc(s,arry) }); es.unshift('...'); es.push('...'); return es.join('\n') } if (k === '' || k === '...' || _k_.in(k[0],[' ','#','|']) || _k_.in(k[k.length - 1],[' ','#','|'])) { k = '|' + k + '|' } else if (arry && /  /.test(k)) { k = '|' + k + '|' }; return k }; var pretty = function (o, ind, seen) { var k, kl, l, v, mk = 4; if (Object.keys(o).length > 1) { for (k in o) { if (Object.hasOwn(o,k)) { kl = parseInt(Math.ceil((k.length + 2) / 4) * 4); mk = Math.max(mk,kl); if (mk > 32) { mk = 32; break } } } }; l = []; var keyValue = function (k, v) { var i, ks, s, vs; s = ind; k = esc(k,true); if (k.indexOf('  ') > 0 && k[0] !== '|') { k = `|${k}|` } else if (k[0] !== '|' && k[k.length - 1] === '|') { k = '|' + k } else if (k[0] === '|' && k[k.length - 1] !== '|') { k += '|' }; ks = pad(k,Math.max(mk,k.length + 2)); i = pad(ind + '    ',mk); s += ks; vs = toStr(v,i,false,seen); if (vs[0] === '\n') { while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) } }; s += vs; while (s[s.length - 1] === ' ') { s = s.substr(0,s.length - 1) }; return s }; for (k in o) { if (Object.hasOwn(o,k)) { l.push(keyValue(k,o[k])) } }; return l.join('\n') }; var toStr = function (o, ind = '', arry = false, seen = []) { var s, t, v; if (!(o != null)) { if (o === null) { return 'null' }; if (o === undefined) { return 'undefined' }; return '<?>' }; switch (t = typeof(o)) { case 'string': {return esc(o,arry)}; case 'object': { if (_k_.in(o,seen)) { return '<v>' }; seen.push(o); if ((o.constructor != null ? o.constructor.name : undefined) === 'Array') { s = ind !== '' && arry && '.' || ''; if (o.length && ind !== '') { s += '\n' }; s += (function () { var result = []; var list = _k_.list(o); for (var li = 0; li < list.length; li++)  { v = list[li];result.push(ind + toStr(v,ind + '    ',true,seen))  } return result }).bind(this)().join('\n') } else if ((o.constructor != null ? o.constructor.name : undefined) === 'RegExp') { return o.source } else { s = (arry && '.\n') || ((ind !== '') && '\n' || ''); s += pretty(o,ind,seen) }; return s } default: return String(o) }; return '<???>' }; return toStr(obj) }, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}}
 
 var about, App, args, childp, electron, fs, klog, kxk, os, post, prefs, slash, srcmap, watch, _1_20_
 
@@ -71,7 +71,7 @@ App = (function ()
 {
     function App (opt)
     {
-        var onOther, _62_14_, _72_38_, _76_50_
+        var onOther, _55_18_, _72_38_, _76_50_
 
         this.opt = opt
     
@@ -80,6 +80,7 @@ App = (function ()
         this["startWatcher"] = this["startWatcher"].bind(this)
         this["onMenuAction"] = this["onMenuAction"].bind(this)
         this["winForEvent"] = this["winForEvent"].bind(this)
+        this["onWinResize"] = this["onWinResize"].bind(this)
         this["saveBounds"] = this["saveBounds"].bind(this)
         this["onGetWinID"] = this["onGetWinID"].bind(this)
         this["onGetWinBounds"] = this["onGetWinBounds"].bind(this)
@@ -108,11 +109,11 @@ App = (function ()
         this.userData = this.app.getPath('userData')
         this.app.commandLine.appendSwitch('disable-site-isolation-trials')
         electron.Menu.setApplicationMenu(this.opt.menu)
-        if (this.opt.args)
-        {
-            this.argv = args.init(this.opt.args)
-        }
-        this.argv = ((_62_14_=this.argv) != null ? _62_14_ : {})
+        this.opt.args = ((_55_18_=this.opt.args) != null ? _55_18_ : `app
+    noprefs     don't load preferences      = false
+    devtools    open developer tools        = false  -D
+    watch       watch sources for changes   = false`)
+        this.argv = args.init(this.opt.args)
         onOther = (function (event, argv, dir)
         {
             if (this.opt.onOtherInstance)
@@ -352,15 +353,13 @@ App = (function ()
         {
             this.win.webContents.openDevTools({mode:'detach'})
         }
-        if (this.opt.saveBounds !== false)
+        this.win.on('resize',((function (w)
         {
-            if ((bounds != null))
+            return (function ()
             {
-                this.win.setPosition(bounds.x,bounds.y)
-            }
-            this.win.on('resize',this.saveBounds)
-            this.win.on('move',this.saveBounds)
-        }
+                return this.onWinResize(w)
+            }).bind(this)
+        }).bind(this))(this.win))
         this.win.on('closed',(function ()
         {
             return delete this.win
@@ -385,14 +384,14 @@ App = (function ()
 
     App.prototype["onSetWinBounds"] = function (event, bounds)
     {
-        var _315_27_
+        var _317_27_
 
         return (this.winForEvent(event) != null ? this.winForEvent(event).setBounds(bounds) : undefined)
     }
 
     App.prototype["onGetWinBounds"] = function (event)
     {
-        var _319_47_
+        var _321_47_
 
         return event.returnValue = (this.winForEvent(event) != null ? this.winForEvent(event).getBounds() : undefined)
     }
@@ -404,13 +403,16 @@ App = (function ()
 
     App.prototype["saveBounds"] = function ()
     {
-        var _323_26_
+        var _325_26_
 
         if ((this.win != null))
         {
             return prefs.set('bounds',this.win.getBounds())
         }
     }
+
+    App.prototype["onWinResize"] = function (win)
+    {}
 
     App.prototype["screenSize"] = function ()
     {
@@ -434,9 +436,9 @@ App = (function ()
         {
             klog('no win?',event.sender.id)
             var list = _k_.list(this.allWins())
-            for (var _334_18_ = 0; _334_18_ < list.length; _334_18_++)
+            for (var _337_18_ = 0; _337_18_ < list.length; _337_18_++)
             {
-                w = list[_334_18_]
+                w = list[_337_18_]
                 klog('win',w.id,w.webContents.id)
             }
         }
@@ -473,8 +475,7 @@ App = (function ()
                     return this.screenshot(w)
 
                 case 'fullscreen':
-                    w.setFullScreen
-                    return !w.isFullScreen()
+                    return w.setFullScreen(!w.isFullScreen())
 
                 case 'devtools':
                     return this.toggleDevTools(w.webContents)
@@ -551,9 +552,9 @@ App = (function ()
             return
         }
         var list = _k_.list(this.opt.dirs)
-        for (var _409_16_ = 0; _409_16_ < list.length; _409_16_++)
+        for (var _412_16_ = 0; _412_16_ < list.length; _412_16_++)
         {
-            dir = list[_409_16_]
+            dir = list[_412_16_]
             toWatch = slash.isRelative(dir) ? slash.resolve(slash.join(this.opt.dir,dir)) : slash.resolve(dir)
             watcher = watch.dir(toWatch)
             watcher.on('change',this.onSrcChange)
@@ -574,9 +575,9 @@ App = (function ()
             return
         }
         var list = _k_.list(this.watchers)
-        for (var _423_20_ = 0; _423_20_ < list.length; _423_20_++)
+        for (var _426_20_ = 0; _426_20_ < list.length; _426_20_++)
         {
-            watcher = list[_423_20_]
+            watcher = list[_426_20_]
             watcher.close()
         }
         return this.watchers = []

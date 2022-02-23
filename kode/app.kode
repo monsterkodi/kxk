@@ -52,14 +52,14 @@ function App
         
         electron.Menu.setApplicationMenu @opt.menu
                             
-        # argl = """
-            # noprefs     don't load preferences      = false
-            # devtools    open developer tools        = false  -D
-            # watch       watch sources for changes   = false
-            # """
-
-        @argv = args.init @opt.args if @opt.args
-        @argv ?= {}
+        @opt.args ?= """
+            app
+                noprefs     don't load preferences      = false
+                devtools    open developer tools        = false  -D
+                watch       watch sources for changes   = false
+            """
+            
+        @argv = args.init @opt.args
         
         onOther = (event, argv, dir) =>
             
@@ -288,10 +288,12 @@ function App
         @win.webContents.on 'devtools-closed' (event) -> post.toWin event.sender.id, 'devTools' false
             
         @win.webContents.openDevTools(mode:'detach') if @argv.devtools
-        if @opt.saveBounds != false
-            @win.setPosition bounds.x, bounds.y if bounds?
-            @win.on 'resize' @saveBounds
-            @win.on 'move'   @saveBounds
+        # if @opt.saveBounds != false
+            # @win.setPosition bounds.x, bounds.y if bounds?
+            # @win.on 'resize' @saveBounds
+            # @win.on 'move'   @saveBounds
+        
+        @win.on 'resize' ((w) => => @onWinResize w) @win
         @win.on 'closed' => delete @win
         @win.on 'close'  @onWinClose
         @win.on 'moved'  (event) => post.toWin event.sender, 'winMoved' event.sender.getBounds()
@@ -321,6 +323,7 @@ function App
     onGetWinID: (event) => event.returnValue = event.sender.id
  
     saveBounds: => if @win? then prefs.set 'bounds' @win.getBounds()
+    onWinResize: (win) =>
         
     screenSize: -> electron.screen.getPrimaryDisplay().workAreaSize
         
@@ -353,7 +356,7 @@ function App
         # klog 'kxk.app.onMenuAction' action, event.sender.id
         
         if w = @winForEvent event
-            
+
             switch action.toLowerCase()
                 'about'       ➜ @showAbout()
                 'quit'        ➜ @quitApp()
