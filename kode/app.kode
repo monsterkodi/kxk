@@ -320,7 +320,12 @@ function App
         
         event.returnValue = @winForEvent(event)?.getBounds()
        
-    onGetWinID: (event) => event.returnValue = event.sender.id
+    onGetWinID: (event) =>
+        
+        for w in @allWins()
+            if w.webContents == event.sender
+                event.returnValue = w.id
+                return w.id
  
     saveBounds: => if @win? then prefs.set 'bounds' @win.getBounds()
     onWinResize: (win) =>

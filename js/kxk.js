@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.230.0
+// monsterkodi/kode 0.243.0
 
-var _k_ = {isArr: function (o) {return Array.isArray(o)}, isObj: function (o) {return !(o == null || typeof o != 'object' || o.constructor.name !== 'Object')}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
+var _k_ = {empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}, isArr: function (o) {return Array.isArray(o)}, isObj: function (o) {return !(o == null || typeof o != 'object' || o.constructor.name !== 'Object')}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}}
 
 var atomic, childp, crypto, dom, fs, k, karg, klor, kstr, noon, open, os, post, sds, slash, v, walkdir, _
 
@@ -19,6 +19,7 @@ slash = require('kslash')
 karg = require('karg')
 kstr = require('kstr')
 klor = require('klor')
+_k_.empty([])
 module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:klor.kolor,atomic:atomic,walkdir:walkdir,open:open,post:post,slash:slash,noon:noon,childp:childp,def:function (c, d)
 {
     if ((c != null))
@@ -55,7 +56,7 @@ module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:kl
     {
         v = r1
     }
-    var _81_17_ = [Math.min(r1,r2),Math.max(r1,r2)]; s1 = _81_17_[0]; s2 = _81_17_[1]
+    var _83_17_ = [Math.min(r1,r2),Math.max(r1,r2)]; s1 = _83_17_[0]; s2 = _83_17_[1]
 
     if (v < s1)
     {
@@ -100,6 +101,9 @@ module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:kl
 },first:function (a)
 {
     return _.first(a)
+},empty:_k_.empty,valid:function (a)
+{
+    return !_k_.empty(a)
 },absMax:function (a, b)
 {
     if (Math.abs(a) >= Math.abs(b))
@@ -185,7 +189,7 @@ module.exports = {_:_,os:os,fs:fs,sds:sds,karg:karg,kstr:kstr,klor:klor,kolor:kl
 {
     var l
 
-    return (function () { var _136__72_ = []; var list = _k_.list(script.split("\n")); for (var _136_72_ = 0; _136_72_ < list.length; _136_72_++)  { l = list[_136_72_];_136__72_.push(`-e \"${l.replace(/\"/g,"\\\"")}\"`)  } return _136__72_ }).bind(this)().join(" ")
+    return (function () { var r_140_72_ = []; var list = _k_.list(script.split("\n")); for (var _140_72_ = 0; _140_72_ < list.length; _140_72_++)  { l = list[_140_72_];r_140_72_.push(`-e \"${l.replace(/\"/g,"\\\"")}\"`)  } return r_140_72_ }).bind(this)().join(" ")
 }}
 if (!String.prototype.splice)
 {
