@@ -60,6 +60,13 @@ function App
             """
             
         @argv = args.init @opt.args
+
+        if not @argv.noprefs
+            sep = @opt.prefsSeperator ? '▸'
+            if @opt.shortcut
+                prefs.init separator:sep, defaults:shortcut:@opt.shortcut
+            else
+                prefs.init separator:sep
         
         onOther = (event, argv, dir) =>
             
@@ -109,13 +116,6 @@ function App
         @hideDock()
          
         @app.setName @opt.pkg.name
-    
-        if not @argv.noprefs
-            sep = @opt.prefsSeperator ? '▸'
-            if @opt.shortcut
-                prefs.init separator:sep, defaults:shortcut:@opt.shortcut
-            else
-                prefs.init separator:sep
     
         if valid prefs.get 'shortcut'
             electron.globalShortcut.register prefs.get('shortcut'), @opt.onShortcut ? @showWindow

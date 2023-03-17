@@ -71,7 +71,7 @@ App = (function ()
 {
     function App (opt)
     {
-        var onOther, _55_18_, _72_38_, _76_50_
+        var onOther, sep, _55_18_, _65_38_, _79_38_, _83_50_
 
         this.opt = opt
     
@@ -114,6 +114,18 @@ App = (function ()
     devtools    open developer tools        = false  -D
     watch       watch sources for changes   = false`)
         this.argv = args.init(this.opt.args)
+        if (!this.argv.noprefs)
+        {
+            sep = ((_65_38_=this.opt.prefsSeperator) != null ? _65_38_ : '▸')
+            if (this.opt.shortcut)
+            {
+                prefs.init({separator:sep,defaults:{shortcut:this.opt.shortcut}})
+            }
+            else
+            {
+                prefs.init({separator:sep})
+            }
+        }
         onOther = (function (event, argv, dir)
         {
             if (this.opt.onOtherInstance)
@@ -175,7 +187,7 @@ App = (function ()
 
     App.prototype["onReady"] = function ()
     {
-        var sep, _114_38_, _121_84_
+        var _121_84_
 
         if (this.opt.tray)
         {
@@ -183,18 +195,6 @@ App = (function ()
         }
         this.hideDock()
         this.app.setName(this.opt.pkg.name)
-        if (!this.argv.noprefs)
-        {
-            sep = ((_114_38_=this.opt.prefsSeperator) != null ? _114_38_ : '▸')
-            if (this.opt.shortcut)
-            {
-                prefs.init({separator:sep,defaults:{shortcut:this.opt.shortcut}})
-            }
-            else
-            {
-                prefs.init({separator:sep})
-            }
-        }
         if (!_k_.empty(prefs.get('shortcut')))
         {
             electron.globalShortcut.register(prefs.get('shortcut'),((_121_84_=this.opt.onShortcut) != null ? _121_84_ : this.showWindow))
