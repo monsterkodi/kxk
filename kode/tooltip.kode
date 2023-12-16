@@ -6,14 +6,13 @@
    000      0000000    0000000   0000000     000     000  000      
 ###
 
-kxk = require './kxk'
-{ elem, kerror, $ } = kxk
+{ elem, empty } = require './kxk'
 
 function Tooltip
     
     @: (@opt) ->
         
-        return kerror "no elem for tooltip?" if not @opt?.elem
+        return error "no elem for tooltip?" if not @opt?.elem
         
         @opt.delay ?= 700
         @opt.html  ?= @opt.text
@@ -22,18 +21,30 @@ function Tooltip
         @elem =$ @opt.elem if @opt.elem is str
         @elem.tooltip = @      
 
-        @elem.addEventListener 'mouseenter', @onHover
-        @elem.addEventListener 'DOMNodeRemoved', @del
+        @observer = new MutationObserver @mut
+        @observer.observe @elem.parentElement, childList:true
+        
+        @elem.addEventListener 'mouseenter' @onHover
 
+    mut: (mutationList, observer) =>
+
+        for mutation in mutationList
+            if mutation.type == "childList"
+                if @elem in mutation.removedNodes
+                    @del()
+                    return
+        
     del: (event) => 
         
         return if @opt.keep
         return if not @elem?
         
         if empty(event) or event?.target == @elem
+            @elem.removeEventListener  'mouseenter' @onLeave
             delete @elem.tooltip
             @onLeave()
-            @elem.removeEventListener 'DOMNodeRemoved', @del
+            @observer.disconnect()
+            delete @observer
             @elem = null
 
     onHover: (event) =>
@@ -44,14 +55,14 @@ function Tooltip
         clearTimeout @timer
         @timer = setTimeout @popup, @opt.delay
         
-        @elem.addEventListener 'mouseleave', @onLeave
-        @elem.addEventListener 'mousedown',  @onLeave
+        @elem.addEventListener 'mouseleave' @onLeave
+        @elem.addEventListener 'mousedown'  @onLeave
 
     popup: (event) =>
         
         return if not @elem?
         return if @div?
-        @div = elem id:'tooltip', class:'tooltip', html: @opt.html
+        @div = elem id:'tooltip' class:'tooltip' html: @opt.html
         if @opt.parent
             @opt.parent.appendChild @div
         else
@@ -66,8 +77,8 @@ function Tooltip
     onLeave: (event, e) =>
         
         if @elem?
-            @elem.removeEventListener  'mouseleave', @onLeave
-            @elem.removeEventListener  'mousedown',  @onLeave
+            @elem.removeEventListener  'mouseleave' @onLeave
+            @elem.removeEventListener  'mousedown'  @onLeave
             
         clearTimeout @timer
         @timer = null

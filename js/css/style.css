@@ -141,6 +141,10 @@ body {
 .popupItem:first-child {
   padding-top: 6px;
 }
+.popupImage {
+  position: absolute;
+  left: 0;
+}
 .popupCombo {
   pointer-events: none;
   position: absolute;

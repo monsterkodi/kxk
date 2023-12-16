@@ -1,20 +1,18 @@
-// monsterkodi/kode 0.230.0
+// monsterkodi/kode 0.245.0
 
-var _k_ = {isStr: function (o) {return typeof o === 'string' || o instanceof String}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}}
+var _k_ = {isStr: function (o) {return typeof o === 'string' || o instanceof String}, list: function (l) {return l != null ? typeof l.length === 'number' ? l : [] : []}, in: function (a,l) {return (typeof l === 'string' && typeof a === 'string' && a.length ? '' : []).indexOf.call(l,a) >= 0}, empty: function (l) {return l==='' || l===null || l===undefined || l!==l || typeof(l) === 'object' && Object.keys(l).length === 0}}
 
-var $, elem, kerror, kxk, Tooltip
+var elem, Tooltip
 
-kxk = require('./kxk')
-elem = kxk.elem
-kerror = kxk.kerror
-$ = kxk.$
+elem = require('./kxk').elem
+empty = require('./kxk').empty
 
 
 Tooltip = (function ()
 {
     function Tooltip (opt)
     {
-        var _16_56_, _18_19_, _19_19_
+        var _15_55_, _17_19_, _18_19_
 
         this.opt = opt
     
@@ -22,25 +20,46 @@ Tooltip = (function ()
         this["popup"] = this["popup"].bind(this)
         this["onHover"] = this["onHover"].bind(this)
         this["del"] = this["del"].bind(this)
+        this["mut"] = this["mut"].bind(this)
         if (!(this.opt != null ? this.opt.elem : undefined))
         {
-            return kerror("no elem for tooltip?")
+            return console.error("no elem for tooltip?")
         }
-        this.opt.delay = ((_18_19_=this.opt.delay) != null ? _18_19_ : 700)
-        this.opt.html = ((_19_19_=this.opt.html) != null ? _19_19_ : this.opt.text)
+        this.opt.delay = ((_17_19_=this.opt.delay) != null ? _17_19_ : 700)
+        this.opt.html = ((_18_19_=this.opt.html) != null ? _18_19_ : this.opt.text)
         this.elem = this.opt.elem
         if (_k_.isStr(this.opt.elem))
         {
             this.elem = $(this.opt.elem)
         }
         this.elem.tooltip = this
+        this.observer = new MutationObserver(this.mut)
+        this.observer.observe(this.elem.parentElement,{childList:true})
         this.elem.addEventListener('mouseenter',this.onHover)
-        this.elem.addEventListener('DOMNodeRemoved',this.del)
+    }
+
+    Tooltip.prototype["mut"] = function (mutationList, observer)
+    {
+        var mutation
+
+        var list = _k_.list(mutationList)
+        for (var _31_21_ = 0; _31_21_ < list.length; _31_21_++)
+        {
+            mutation = list[_31_21_]
+            if (mutation.type === "childList")
+            {
+                if (_k_.in(this.elem,mutation.removedNodes))
+                {
+                    this.del()
+                    return
+                }
+            }
+        }
     }
 
     Tooltip.prototype["del"] = function (event)
     {
-        var _31_27_
+        var _40_27_
 
         if (this.opt.keep)
         {
@@ -52,16 +71,18 @@ Tooltip = (function ()
         }
         if (_k_.empty((event)) || (event != null ? event.target : undefined) === this.elem)
         {
+            this.elem.removeEventListener('mouseenter',this.onLeave)
             delete this.elem.tooltip
             this.onLeave()
-            this.elem.removeEventListener('DOMNodeRemoved',this.del)
+            this.observer.disconnect()
+            delete this.observer
             return this.elem = null
         }
     }
 
     Tooltip.prototype["onHover"] = function (event)
     {
-        var _41_27_, _42_22_
+        var _52_27_, _53_22_
 
         if (!(this.elem != null))
         {
@@ -79,7 +100,7 @@ Tooltip = (function ()
 
     Tooltip.prototype["popup"] = function (event)
     {
-        var br, _52_27_, _53_22_, _62_67_, _63_59_, _64_60_
+        var br, _63_27_, _64_22_, _73_67_, _74_59_, _75_60_
 
         if (!(this.elem != null))
         {
@@ -117,7 +138,7 @@ Tooltip = (function ()
 
     Tooltip.prototype["onLeave"] = function (event, e)
     {
-        var _68_16_, _74_12_
+        var _79_16_, _85_12_
 
         if ((this.elem != null))
         {

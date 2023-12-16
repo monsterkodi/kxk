@@ -1,6 +1,6 @@
-// monsterkodi/kode 0.230.0
+// monsterkodi/kode 0.243.0
 
-var _k_ = {clamp: function (l,h,v) { var ll = Math.min(l,h), hh = Math.max(l,h); if (!_k_.isNum(v)) { v = ll }; if (v < ll) { v = ll }; if (v > hh) { v = hh }; if (!_k_.isNum(v)) { v = ll }; return v }, isNum: function (o) {return !isNaN(o) && !isNaN(parseFloat(o)) && (isFinite(o) || o === Infinity || o === -Infinity)}}
+var _k_ = {isFunc: function (o) {return typeof o === 'function'}, clamp: function (l,h,v) { var ll = Math.min(l,h), hh = Math.max(l,h); if (!_k_.isNum(v)) { v = ll }; if (v < ll) { v = ll }; if (v > hh) { v = hh }; if (!_k_.isNum(v)) { v = ll }; return v }, isNum: function (o) {return !isNaN(o) && !isNaN(parseFloat(o)) && (isFinite(o) || o === Infinity || o === -Infinity)}}
 
 var Pos
 
@@ -11,7 +11,7 @@ Pos = (function ()
 {
     function Pos (x, y)
     {
-        var event, _14_13_, _14_22_, _22_22_
+        var br, event, _14_13_, _14_22_, _26_22_
 
         this.x = x
         this.y = y
@@ -29,6 +29,12 @@ Pos = (function ()
                 this.x = event.clientX + window.scrollX + 1
                 this.y = event.clientY + window.scrollY + 1
             }
+        }
+        else if (_k_.isFunc(this.x.getBoundingClientRect))
+        {
+            br = this.x.getBoundingClientRect()
+            this.x = br.left
+            this.y = br.top
         }
         else if (!(this.y != null) && Pos.isPos(this.x))
         {
@@ -286,7 +292,7 @@ Pos = (function ()
 
     Pos["isPos"] = function (o)
     {
-        var _108_29_, _108_38_
+        var _112_29_, _112_38_
 
         return (o != null) && (o.x != null) && (o.y != null) && Number.isFinite(o.x) && Number.isFinite(o.y)
     }

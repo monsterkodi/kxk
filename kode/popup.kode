@@ -8,7 +8,7 @@
 
 kxk = require './kxk'
 
-{ elem, keyinfo, os, post, stopEvent } = kxk
+{ elem, keyinfo, os, post, slash, stopEvent } = kxk
 
 function Popup
     
@@ -23,12 +23,20 @@ function Popup
         
         for item in opt.items
             continue if item.hide
-            if empty(item.text) and empty(item.html)
+            if empty(item.text) and empty(item.html) and empty(item.child) and empty(item.children) and empty(item.img)
                 div = elem 'hr' class: 'popupItem separator'
             else
                 div = elem class:'popupItem' text:item.text
                 if not empty item.html
                     div.innerHTML = item.html 
+                else 
+                    if item.img
+                        div.appendChild elem 'img' class:'popupImage' src:slash.fileUrl item.img
+                    if item.child
+                        div.appendChild item.child
+                    if item.children
+                        for child in item.children
+                            div.appendChild child
                 div.item = item
                 div.addEventListener 'click' @onClick
                 if item.combo ? item.accel
@@ -70,8 +78,9 @@ function Popup
     close: (opt={}) =>
         
         if empty(@parent) or @parentMenu()?.elem?.classList.contains 'menu'
+            if 'skip' == @onClose?()
+                return
             post.emit 'popup' 'closed'
-            @onClose?()
         
         @popup?.close focus:false
         delete @popup
