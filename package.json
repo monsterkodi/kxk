@@ -1,6 +1,6 @@
 {
   "name": "kxk",
-  "version": "0.476.1",
+  "version": "0.477.0",
   "description": "kodi's tool kit",
   "keywords": [
     "kode",
@@ -21,24 +21,24 @@
   },
   "repository": "github:monsterkodi/kxk",
   "dependencies": {
-    "fs-extra": "^10.0.1",
-    "html-entities": "^2.3.2",
-    "isbinaryfile": "^4.0.8",
-    "karg": "monsterkodi/karg",
-    "klor": "monsterkodi/klor",
-    "kslash": "monsterkodi/kslash",
-    "kstr": "monsterkodi/kstr",
+    "fs-extra": "^10.1.0",
+    "html-entities": "^2.4.0",
+    "isbinaryfile": "^4.0.10",
+    "karg": "github:monsterkodi/karg",
+    "klor": "github:monsterkodi/klor",
+    "kslash": "github:monsterkodi/kslash",
+    "kstr": "github:monsterkodi/kstr",
     "lodash": "^4.17.21",
-    "noon": "monsterkodi/noon",
+    "noon": "github:monsterkodi/noon",
     "opener": "^1.5.2",
-    "sds": "monsterkodi/sds",
+    "sds": "github:monsterkodi/sds",
     "sorcery": "^0.10.0",
-    "stack-utils": "^2.0.5",
-    "textextensions": "^5.14.0",
+    "stack-utils": "^2.0.6",
+    "textextensions": "^5.16.0",
     "walkdir": "0.4.1",
-    "write-file-atomic": "^4.0.1"
+    "write-file-atomic": "^4.0.2"
   },
   "devDependencies": {
-    "kode": "monsterkodi/kode"
+    "kode": "github:monsterkodi/kode"
   }
 }
